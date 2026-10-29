@@ -375,16 +375,16 @@ function renderJobCard(job) {
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs text-slate-600 pt-1">
           <div class="flex items-center gap-2">
-            <i class="bi bi-cash-stack text-[#087A55] text-base"></i>
-            <span class="font-extrabold text-[#087A55]">${job.salary}</span>
+            <i class="bi bi-cash-stack text-[#087A55] text-base flex-shrink-0"></i>
+            <span class="font-extrabold text-[#087A55] whitespace-nowrap">${job.salary}</span>
           </div>
           <div class="flex items-center gap-2">
-            <i class="bi bi-geo-alt-fill text-slate-400"></i>
-            <span class="truncate">${job.location}</span>
+            <i class="bi bi-geo-alt-fill text-slate-400 flex-shrink-0"></i>
+            <span class="truncate whitespace-nowrap">${job.location}</span>
           </div>
           <div class="flex items-center gap-2">
-            <i class="bi bi-calendar-event text-slate-400"></i>
-            <span>Hạn nộp: <strong class="text-slate-800">${job.deadline}</strong></span>
+            <i class="bi bi-calendar-event text-slate-400 flex-shrink-0"></i>
+            <span class="whitespace-nowrap">Hạn nộp: <strong class="text-slate-800">${job.deadline}</strong></span>
           </div>
         </div>
 
@@ -394,15 +394,15 @@ function renderJobCard(job) {
       </div>
 
       <div class="pt-5 mt-5 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
-        <span class="text-[11px] text-slate-400 font-medium">Mã tin: <strong class="text-slate-600">${job.id}</strong> &bull; Đăng: ${job.date}</span>
+        <span class="text-[11px] text-slate-400 font-medium whitespace-nowrap">Mã tin: <strong class="text-slate-600">${job.id}</strong> &bull; Đăng: ${job.date}</span>
         <div class="flex items-center gap-2">
           ${isClosed ? `
-            <span class="px-4 py-2 bg-slate-100 text-slate-500 font-bold text-xs rounded-xl cursor-not-allowed">Đã Hết Hạn Tuyển</span>
+            <span class="px-4 py-2 bg-slate-100 text-slate-500 font-bold text-xs rounded-xl cursor-not-allowed whitespace-nowrap">Đã Hết Hạn Tuyển</span>
           ` : `
-            <a href="job-detail.html?id=${job.id}" class="px-4 py-2 text-xs font-bold text-slate-700 hover:text-[#087A55] hover:bg-emerald-50 rounded-xl transition">
+            <a href="job-detail.html?id=${job.id}" class="px-4 py-2 text-xs font-bold text-slate-700 hover:text-[#087A55] hover:bg-emerald-50 rounded-xl transition whitespace-nowrap">
               Xem Chi Tiết
             </a>
-            <a href="apply.html?job=${encodeURIComponent(job.title)}" class="px-5 py-2.5 bg-[#087A55] hover:bg-[#006837] text-white font-extrabold text-xs rounded-xl shadow-md transition transform hover:-translate-y-0.5">
+            <a href="apply.html?job=${encodeURIComponent(job.title)}" class="px-5 py-2.5 bg-[#087A55] hover:bg-[#006837] text-white font-extrabold text-xs rounded-xl shadow-md transition transform hover:-translate-y-0.5 whitespace-nowrap">
               Ứng Tuyển Ngay
             </a>
           `}
