@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tại Sao Chọn TEX-GIANG | Môi Trường & Đãi Ngộ Vượt Trội</title>
+  <meta name="description" content="Khám phá 4 giá trị khác biệt tại CÔNG TY CỔ PHẦN TEX-GIANG: Thu nhập cạnh tranh, an toàn chuẩn quốc tế, đào tạo nghề miễn phí có lương, xe đưa đón tận nhà.">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              200: '#bbf7d0',
+              300: '#86efac',
+              400: '#4ade80',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#0e6e38',
+              800: '#006837', // Official Brand Green
+              900: '#064e26',
+              950: '#022c15',
+            },
+            navy: {
+              DEFAULT: '#12345A',
+              dark: '#0B223D',
+            },
+            accent: {
+              500: '#f26522',
+              600: '#d95314',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="assets/css/custom.css">
+</head>
+<body class="bg-[#F5F7FA] text-[#1F2937] antialiased selection:bg-brand-800 selection:text-white">
+
+  <!-- TOP BAR -->
+  <div class="bg-[#0B223D] text-emerald-100 text-xs py-2 border-b border-white/10 no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+      <div class="flex items-center space-x-6">
+        <span><i class="bi bi-telephone-fill text-amber-400 mr-1.5"></i> Hotline: <strong class="text-white">0277 388 9999</strong> - <strong class="text-white">0918 123 456</strong> <span class="text-[10px] text-emerald-400 font-normal">[Demo]</span></span>
+        <span class="hidden sm:inline"><i class="bi bi-envelope-fill text-emerald-400 mr-1.5"></i> tuyendung@texgiang.com.vn</span>
+      </div>
+      <div class="flex items-center space-x-4">
+        <a href="https://texgiang.com.vn" target="_blank" class="hover:text-amber-300 underline decoration-emerald-400">TEX-GIANG</a>
+        <span class="text-emerald-700">|</span>
+        <a href="https://tgapparel.com.vn" target="_blank" class="hover:text-amber-300 underline decoration-emerald-400">TG APPAREL</a>
+        <span class="text-emerald-700">|</span>
+        <a href="admin/login.html" class="text-amber-300 hover:text-white font-medium">HR Portal</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVIGATION HEADER -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur shadow-sm border-b border-emerald-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-20">
+        <a href="index.html" class="flex items-center gap-3.5 group">
+          <img src="assets/images/logo-tgi.png" alt="Logo TEX-GIANG" class="h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300">
+          <div class="border-l-2 border-emerald-200 pl-3">
+            <div class="text-lg sm:text-xl font-black tracking-tight text-[#087A55] leading-none">
+              TEX-GIANG
+            </div>
+            <p class="text-[11px] text-[#12345A] font-bold tracking-wide uppercase mt-1">Cổng Tuyển Dụng Chính Thức</p>
+          </div>
+        </a>
+
+        <nav class="hidden lg:flex items-center space-x-1 font-semibold text-sm text-slate-700">
+          <a href="index.html" class="px-3.5 py-2 rounded-xl hover:text-[#087A55] hover:bg-emerald-50 transition">Trang Chủ</a>
+          <a href="about.html" class="px-3.5 py-2 rounded-xl hover:text-[#087A55] hover:bg-emerald-50 transition">Về Chúng Tôi</a>
+          <a href="jobs.html" class="px-3.5 py-2 rounded-xl hover:text-[#087A55] hover:bg-emerald-50 transition">Danh Sách Việc Làm</a>
+          <a href="why-tex-giang.html" class="px-3.5 py-2 rounded-xl text-[#087A55] bg-emerald-50 font-bold transition">Tại Sao Chọn Chúng Tôi</a>
+          <a href="news.html" class="px-3.5 py-2 rounded-xl hover:text-[#087A55] hover:bg-emerald-50 transition">Tin Tức Nghề Nghiệp</a>
+          <a href="contact.html" class="px-3.5 py-2 rounded-xl hover:text-[#087A55] hover:bg-emerald-50 transition">Liên Hệ</a>
+        </nav>
+
+        <div class="hidden sm:flex items-center space-x-3">
+          <a href="apply.html" class="px-5 py-2.5 rounded-xl font-bold text-sm text-white bg-[#087A55] hover:bg-[#006837] shadow-md transition">
+            Ứng Tuyển Ngay
+          </a>
+        </div>
+
+        <div class="lg:hidden flex items-center">
+          <button id="mobile-menu-btn" class="p-2 rounded-xl text-slate-600 hover:bg-slate-100">
+            <i class="bi bi-list text-2xl"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown -->
+    <div id="mobile-menu" class="hidden lg:hidden bg-white border-b border-emerald-100 px-4 pt-3 pb-6 space-y-2">
+      <a href="index.html" class="block px-3.5 py-2.5 rounded-xl font-medium text-slate-700">Trang Chủ</a>
+      <a href="about.html" class="block px-3.5 py-2.5 rounded-xl font-medium text-slate-700">Về Chúng Tôi</a>
+      <a href="jobs.html" class="block px-3.5 py-2.5 rounded-xl font-medium text-slate-700">Danh Sách Việc Làm</a>
+      <a href="why-tex-giang.html" class="block px-3.5 py-2.5 rounded-xl font-bold text-[#087A55] bg-emerald-50">Tại Sao Chọn Chúng Tôi</a>
+      <a href="news.html" class="block px-3.5 py-2.5 rounded-xl font-medium text-slate-700">Tin Tức Nghề Nghiệp</a>
+      <a href="contact.html" class="block px-3.5 py-2.5 rounded-xl font-medium text-slate-700">Liên Hệ</a>
+      <a href="apply.html" class="block text-center py-3 rounded-xl font-bold text-white bg-[#087A55]">Nộp Hồ Sơ Trực Tuyến</a>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="bg-gradient-to-r from-[#0B223D] via-[#12345A] to-[#087A55] text-white py-16">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+      <span class="inline-block px-3.5 py-1.5 rounded-full bg-emerald-500/30 text-amber-300 font-extrabold text-xs uppercase tracking-wider mb-3 border border-emerald-400/30">Văn Hóa & Phúc Lợi</span>
+      <h1 class="text-3xl sm:text-5xl font-black">Tại Sao Bạn Nên Chọn Làm Việc Tại TEX-GIANG?</h1>
+      <p class="text-emerald-100 text-base mt-3 max-w-2xl mx-auto">
+        <em>"Kiến tạo giá trị - Cùng phát triển bền vững"</em>. Môi trường may mặc xuất khẩu an toàn, thu nhập cao, công bằng và tôn trọng người lao động.
+      </p>
+    </div>
+  </section>
+
+  <!-- 4 CORE PILLARS -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+
+      <!-- Trụ cột 1: Môi trường an toàn -->
+      <div class="bg-white rounded-3xl p-8 border border-emerald-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+        <div class="space-y-4">
+          <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-[#087A55] flex items-center justify-center font-black text-2xl">
+            <i class="bi bi-shield-check"></i>
+          </div>
+          <h3 class="text-xl font-black text-slate-900">Môi Trường Làm Việc Hiện Đại, An Toàn Chuẩn Quốc Tế</h3>
+          <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+            Hệ thống nhà xưởng may tại KCN Tân Hương (Nhà máy Tân Hương 2) được trang bị hệ thống điều hòa không khí làm mát liên tục, ánh sáng chuẩn bảo vệ mắt, hệ thống hút bụi vải hiện đại và PCCC tự động.
+          </p>
+          <ul class="text-xs text-slate-700 space-y-2 pt-2">
+            <li class="flex items-center gap-2">
+              <i class="bi bi-check-circle-fill text-[#087A55]"></i>
+              <span>Đạt tiêu chuẩn an toàn lao động quốc tế WRAP và SA8000.</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <i class="bi bi-check-circle-fill text-[#087A55]"></i>
+              <span>Cung cấp đồng phục, bảo hộ lao động và nước uống tinh khiết miễn phí.</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <i class="bi bi-check-circle-fill text-[#087A55]"></i>
+              <span>Phòng y tế túc trực chăm sóc sức khỏe ban đầu 24/7.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Trụ cột 2: Lương thưởng -->
+      <div class="bg-white rounded-3xl p-8 border border-emerald-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+        <div class="space-y-4">
+          <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-[#087A55] flex items-center justify-center font-black text-2xl">
+            <i class="bi bi-currency-dollar"></i>
+          </div>
+          <h3 class="text-xl font-black text-slate-900">Chính Sách Lương Thưởng & Đãi Ngộ Cạnh Tranh Hàng Đầu</h3>
+          <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+            Thu nhập tại TEX-GIANG được tính toán minh bạch theo sản phẩm và năng suất chuyền. Người có tay nghề cao luôn đạt mức thu nhập từ 12 đến trên 16 triệu đồng/tháng. Lương trả đúng ngày mùng 10 qua thẻ ATM ngân hàng.
+          </p>
+          <ul class="text-xs text-slate-700 space-y-2 pt-2">
+            <li class="flex items-center gap-2">
+              <i class="bi bi-check-circle-fill text-[#087A55]"></i>
+              <span>Thưởng nóng 2.000.000đ khi vào làm việc đợt tuyển 2026.</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <i class="bi bi-check-circle-fill text-[#087A55]"></i>
+              <span>Thưởng chuyên cần 500.000đ/tháng + Phụ cấp nuôi con nhỏ + Xăng xe.</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <i class="bi bi-check-circle-fill text-[#087A55]"></i>
+              <span>Thưởng Tết lương tháng 13, quà Tết cho gia đình và vé xe về quê.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Trụ cột 3: Đào tạo & Thăng tiến -->
+      <div class="bg-white rounded-3xl p-8 border border-emerald-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+        <div class="space-y-4">
+          <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-[#087A55] flex items-center justify-center font-black text-2xl">
+            <i class="bi bi-mortarboard-fill"></i>
+          </div>
+          <h3 class="text-xl font-black text-slate-900">Đào Tạo Nghề Miễn Phí & Lộ Trình Thăng Tiến Rõ Ràng</h3>
+          <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+            Bạn chưa từng may vá? Đừng lo lắng! Trung tâm đào tạo nghề nội bộ của TEX-GIANG tiếp nhận và đào tạo bài bản các kỹ năng may máy 1 kim, 2 kim, vắt sổ trong vòng 1-2 tuần, được hưởng lương hỗ trợ đầy đủ.
+          </p>
+          <ul class="text-xs text-slate-700 space-y-2 pt-2">
+            <li class="flex items-center gap-2">
+              <i class="bi bi-check-circle-fill text-[#087A55]"></i>
+              <span>Đánh giá tay nghề nâng bậc lương định kỳ 6 tháng/lần.</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <i class="bi bi-check-circle-fill text-[#087A55]"></i>
+              <span>Cơ hội học tập lên Chuyền phó, Chuyền trưởng, Kỹ thuật viên mẫu rập.</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <i class="bi bi-check-circle-fill text-[#087A55]"></i>
+              <span>Đào tạo kỹ năng quản lý và công nghệ cải tiến Lean Manufacturing.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Trụ cột 4: Xe đưa đón & Bữa ăn ca -->
+      <div class="bg-white rounded-3xl p-8 border border-emerald-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+        <div class="space-y-4">
+          <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-[#087A55] flex items-center justify-center font-black text-2xl">
+            <i class="bi bi-bus-front-fill"></i>
+          </div>
+          <h3 class="text-xl font-black text-slate-900">Phúc Lợi Toàn Diện: Xe Đưa Rước & Bữa Ăn Ca Dinh Dưỡng</h3>
+          <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+            Hệ thống xe đưa đón miễn phí tại các xã thuộc Châu Thành, Cai Lậy, Mỹ Tho đến nhà máy Tân Hương 2, bảo đảm an toàn đi lại và tiết kiệm chi phí xăng xe.
+          </p>
+          <ul class="text-xs text-slate-700 space-y-2 pt-2">
+            <li class="flex items-center gap-2">
+              <i class="bi bi-check-circle-fill text-[#087A55]"></i>
+              <span>Bếp ăn tập thể sạch sẽ, thực đơn 4 món luân phiên phong phú.</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <i class="bi bi-check-circle-fill text-[#087A55]"></i>
+              <span>Cung cấp sữa tươi, trái cây tráng miệng và trà giải nhiệt.</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <i class="bi bi-check-circle-fill text-[#087A55]"></i>
+              <span>Hội thao, văn nghệ, du lịch nghỉ dưỡng hàng năm cùng công ty.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- BENEFIT COMPARISON TABLE -->
+    <div class="bg-white rounded-3xl border border-emerald-100 p-6 sm:p-8 shadow-sm mb-16">
+      <div class="text-center max-w-xl mx-auto mb-8">
+        <span class="text-[#087A55] font-bold text-xs uppercase tracking-widest">Bảng So Sánh Minh Bạch</span>
+        <h3 class="text-2xl font-black text-slate-900 mt-1">Sự Khác Biệt Tại TEX-GIANG</h3>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs text-left border-collapse">
+          <thead>
+            <tr class="border-b-2 border-slate-200 bg-slate-50 text-slate-700 uppercase font-bold">
+              <th class="p-3.5">Hạng Mục Phúc Lợi</th>
+              <th class="p-3.5 text-[#087A55] bg-emerald-50 font-black">Tại TEX-GIANG & TG APPAREL</th>
+              <th class="p-3.5 text-slate-400">Nơi Khác Thường Thấy</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-slate-600">
+            <tr>
+              <td class="p-3.5 font-bold text-slate-900">Thưởng nóng tuyển dụng mới</td>
+              <td class="p-3.5 text-[#087A55] font-bold bg-emerald-50/40">Thưởng ngay 2.000.000 VNĐ tiền mặt</td>
+              <td class="p-3.5 text-slate-400">Không có hoặc điều kiện khắt khe</td>
+            </tr>
+            <tr>
+              <td class="p-3.5 font-bold text-slate-900">Hỗ trợ đào tạo người chưa biết may</td>
+              <td class="p-3.5 text-[#087A55] font-bold bg-emerald-50/40">Đào tạo miễn phí + Hưởng lương học việc</td>
+              <td class="p-3.5 text-slate-400">Chỉ tuyển thợ tay nghề sẵn</td>
+            </tr>
+            <tr>
+              <td class="p-3.5 font-bold text-slate-900">Xe đưa đón công nhân viên</td>
+              <td class="p-3.5 text-[#087A55] font-bold bg-emerald-50/40">Đưa rước miễn phí nhiều tuyến đường</td>
+              <td class="p-3.5 text-slate-400">Tự túc phương tiện di chuyển</td>
+            </tr>
+            <tr>
+              <td class="p-3.5 font-bold text-slate-900">Bữa ăn ca & Tăng ca</td>
+              <td class="p-3.5 text-[#087A55] font-bold bg-emerald-50/40">Miễn phí 100%, thực đơn đổi món mỗi ngày</td>
+              <td class="p-3.5 text-slate-400">Trừ tiền cơm vào lương</td>
+            </tr>
+            <tr>
+              <td class="p-3.5 font-bold text-slate-900">Thời gian trả lương</td>
+              <td class="p-3.5 text-[#087A55] font-bold bg-emerald-50/40">Đúng ngày mùng 10 hàng tháng qua ATM</td>
+              <td class="p-3.5 text-slate-400">Hay trễ hạn hoặc chia đợt</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- BOTTOM CTA BANNER -->
+    <div class="bg-gradient-to-r from-[#0B223D] to-[#087A55] rounded-3xl p-8 sm:p-10 text-white text-center shadow-xl border border-emerald-500/30">
+      <h3 class="text-2xl sm:text-3xl font-black">Hãy Bắt Đầu Sự Nghiệp Vững Bền Ngay Hôm Nay</h3>
+      <p class="text-emerald-100 text-sm mt-2 max-w-xl mx-auto">Nộp hồ sơ ngay để nhận thưởng nóng 2.000.000đ và hưởng đầy đủ mọi chế độ phúc lợi tại TEX-GIANG.</p>
+      <div class="mt-6 flex flex-wrap justify-center gap-4">
+        <a href="apply.html" class="px-8 py-3.5 bg-amber-400 hover:bg-amber-300 text-[#0B223D] font-black text-xs rounded-xl shadow-lg transition">
+          Nộp Hồ Sơ Trực Tuyến &rarr;
+        </a>
+        <a href="jobs.html" class="px-8 py-3.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-extrabold text-xs rounded-xl shadow-lg transition backdrop-blur">
+          Tìm Vị Trí Phù Hợp
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-[#0B223D] text-emerald-100 py-8 border-t border-white/10 text-xs text-center">
+    <div class="max-w-7xl mx-auto px-4">
+      <p>&copy; 2026 CÔNG TY CỔ PHẦN TEX-GIANG & TG APPAREL. Thiết kế bởi IT-P.KT-NS.</p>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

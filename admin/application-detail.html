@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chi Tiết Hồ Sơ Ứng Viên | TEX-GIANG HR Portal</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              200: '#bbf7d0',
+              300: '#86efac',
+              400: '#4ade80',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#0e6e38',
+              800: '#006837', // Official Brand Green
+              900: '#064e26',
+              950: '#022c15',
+            },
+            navy: {
+              DEFAULT: '#12345A',
+              dark: '#0B223D',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="../assets/css/custom.css">
+</head>
+<body class="bg-[#F5F7FA] text-[#1F2937] font-sans antialiased min-h-screen flex">
+
+  <!-- ADMIN SIDEBAR -->
+  <aside id="admin-sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col justify-between p-4">
+    <div class="space-y-6">
+      <div class="flex items-center gap-3 px-2 py-1 border-b border-slate-100 pb-4">
+        <img src="../assets/images/logo-tgi.png" alt="Logo TGI" class="h-10 w-auto">
+        <div>
+          <div class="font-black text-sm text-[#087A55] leading-none">TEX-GIANG</div>
+          <p class="text-[10px] text-[#12345A] font-extrabold uppercase mt-1">Quản Trị Tuyển Dụng</p>
+        </div>
+      </div>
+
+      <nav class="space-y-1 text-xs">
+        <a href="dashboard.html" class="admin-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-slate-600 hover:bg-slate-50 transition">
+          <i class="bi bi-grid-1x2-fill text-base"></i>
+          <span>Dashboard Thống Kê</span>
+        </a>
+        <a href="jobs.html" class="admin-nav-link flex items-center justify-between px-3.5 py-2.5 rounded-xl font-medium text-slate-600 hover:bg-slate-50 transition">
+          <span class="flex items-center gap-3">
+            <i class="bi bi-briefcase-fill text-base"></i>
+            <span>Quản Lý Việc Làm</span>
+          </span>
+          <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[10px]">24</span>
+        </a>
+        <a href="applications.html" class="admin-nav-link active flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold transition">
+          <span class="flex items-center gap-3">
+            <i class="bi bi-people-fill text-base text-[#087A55]"></i>
+            <span>Hồ Sơ Ứng Viên</span>
+          </span>
+          <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold text-[10px]">142</span>
+        </a>
+        <a href="content.html" class="admin-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-slate-600 hover:bg-slate-50 transition">
+          <i class="bi bi-file-earmark-richtext-fill text-base"></i>
+          <span>Quản Lý Nội Dung</span>
+        </a>
+        <a href="banners.html" class="admin-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-slate-600 hover:bg-slate-50 transition">
+          <i class="bi bi-images text-base"></i>
+          <span>Quản Lý Banner & Popup</span>
+        </a>
+        <a href="settings.html" class="admin-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-slate-600 hover:bg-slate-50 transition">
+          <i class="bi bi-gear-fill text-base"></i>
+          <span>Cài Đặt Hệ Thống</span>
+        </a>
+      </nav>
+    </div>
+
+    <div class="pt-4 border-t border-slate-100 space-y-3">
+      <div class="flex items-center justify-between px-2">
+        <a href="../index.html" target="_blank" class="text-xs font-bold text-[#087A55] hover:underline flex items-center gap-1">
+          <i class="bi bi-box-arrow-up-right"></i> Xem Website
+        </a>
+        <a href="login.html" class="text-xs font-bold text-rose-600 hover:underline">Đăng xuất</a>
+      </div>
+    </div>
+  </aside>
+
+  <div id="sidebar-overlay" class="hidden fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden"></div>
+
+  <!-- MAIN WRAPPER -->
+  <div class="flex-1 lg:pl-64 flex flex-col min-h-screen">
+
+    <!-- TOPBAR -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 px-4 sm:px-8 py-3.5 flex justify-between items-center shadow-sm">
+      <div class="flex items-center gap-3">
+        <button id="toggle-sidebar-btn" class="lg:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100 focus:outline-none">
+          <i class="bi bi-list text-2xl"></i>
+        </button>
+        <div>
+          <nav class="flex items-center space-x-1.5 text-xs text-slate-400 mb-0.5">
+            <a href="applications.html" class="hover:text-[#087A55]">Ứng viên</a>
+            <span>/</span>
+            <span class="text-slate-800 font-bold">Chi tiết hồ sơ</span>
+          </nav>
+          <h2 class="font-black text-slate-900 text-base sm:text-lg">Hồ Sơ Ứng Viên: Lê Thị Mai</h2>
+        </div>
+      </div>
+
+      <a href="applications.html" class="px-4 py-2 border border-slate-300 hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-xl transition flex items-center gap-1.5">
+        <i class="bi bi-arrow-left"></i> Quay lại danh sách
+      </a>
+    </header>
+
+    <!-- CONTENT BODY -->
+    <main class="p-4 sm:p-8 space-y-6 flex-1 max-w-5xl">
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+        <!-- LEFT COLUMN: CANDIDATE INFO (8 COLS) -->
+        <div class="lg:col-span-8 space-y-6">
+
+          <!-- Main Info Card -->
+          <div class="bg-white rounded-3xl border border-emerald-100 p-6 sm:p-8 shadow-sm space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-slate-100 gap-4">
+              <div class="flex items-center gap-4">
+                <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-[#087A55] font-black text-2xl flex items-center justify-center">
+                  LM
+                </div>
+                <div>
+                  <h1 class="text-xl font-black text-slate-900">Lê Thị Mai</h1>
+                  <p class="text-xs text-slate-500 mt-0.5">Nộp hồ sơ trực tuyến &bull; Ngày 29/10/2026 lúc 13:10</p>
+                </div>
+              </div>
+              <span class="px-3.5 py-1.5 rounded-full bg-amber-100 text-amber-800 font-bold text-xs self-start sm:self-auto">
+                Trạng thái: Mới tiếp nhận
+              </span>
+            </div>
+
+            <!-- Profile Fields -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+              <div class="p-3.5 bg-slate-50 rounded-2xl">
+                <span class="text-slate-400 block font-medium">Số điện thoại:</span>
+                <strong class="text-slate-900 text-sm font-bold">0918 223 344</strong>
+              </div>
+              <div class="p-3.5 bg-slate-50 rounded-2xl">
+                <span class="text-slate-400 block font-medium">Email liên hệ:</span>
+                <strong class="text-slate-900 text-sm font-bold">lethimai.dongthap@demo.vn</strong>
+              </div>
+              <div class="p-3.5 bg-slate-50 rounded-2xl">
+                <span class="text-slate-400 block font-medium">Năm sinh / Giới tính:</span>
+                <strong class="text-slate-900 text-sm font-bold">1998 &bull; Nữ</strong>
+              </div>
+              <div class="p-3.5 bg-slate-50 rounded-2xl">
+                <span class="text-slate-400 block font-medium">Vị trí ứng tuyển:</span>
+                <strong class="text-[#087A55] text-sm font-bold">Công Nhân May Chuyền (Áo Polo, Jacket)</strong>
+              </div>
+              <div class="sm:col-span-2 p-3.5 bg-slate-50 rounded-2xl">
+                <span class="text-slate-400 block font-medium">Địa chỉ thường trú:</span>
+                <strong class="text-slate-900 text-sm font-bold">Ấp Tân Thạnh, Xã An Nhơn, Huyện Châu Thành, Tỉnh Đồng Tháp</strong>
+              </div>
+            </div>
+
+            <!-- Self introduction -->
+            <div class="space-y-2 text-xs">
+              <h3 class="font-bold text-slate-900 text-sm">Lời Nhắn & Giới Thiệu Bản Thân:</h3>
+              <div class="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100 text-slate-700 leading-relaxed italic">
+                "Dạ em chào anh/chị tuyển dụng TEX-GIANG. Em trước giờ làm nông ở Châu Thành, chưa từng đi may công nghiệp nhưng rất chịu khó và muốn học nghề lâu dài. Nhà em gần tuyến xe đưa đón tại xã An Nhơn, mong công ty xem xét cho em vào học việc lớp may có lương ạ."
+              </div>
+            </div>
+
+            <!-- Attached File Card -->
+            <div class="space-y-2 text-xs">
+              <h3 class="font-bold text-slate-900 text-sm">Tệp CV / Ảnh Hồ Sơ Đính Kèm:</h3>
+              <div class="flex items-center justify-between p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+                <div class="flex items-center gap-3">
+                  <i class="bi bi-file-earmark-pdf-fill text-2xl text-rose-500"></i>
+                  <div>
+                    <strong class="text-slate-900 font-bold block">HoSo_CCCD_LeThiMai.pdf</strong>
+                    <span class="text-[11px] text-slate-400">1.8 MB &bull; Tải lên trực tiếp qua cổng ứng tuyển</span>
+                  </div>
+                </div>
+                <button onclick="showToast('Đang tải tệp hồ sơ ứng viên xuống máy...', 'success')" class="px-4 py-2 bg-[#087A55] hover:bg-[#006837] text-white font-bold rounded-xl shadow transition">
+                  <i class="bi bi-download mr-1"></i> Tải Về
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Processing History -->
+          <div class="bg-white rounded-3xl border border-emerald-100 p-6 sm:p-8 shadow-sm space-y-4 text-xs">
+            <h3 class="font-black text-slate-900 text-sm pb-3 border-b border-slate-100">Lịch Sử Xử Lý Hồ Sơ [Demo Timeline]</h3>
+            <div class="space-y-3 pl-2 border-l-2 border-emerald-200 ml-2">
+              <div class="relative pl-4">
+                <span class="absolute -left-[21px] top-1 w-3 h-3 rounded-full bg-[#087A55]"></span>
+                <strong class="text-slate-900 block font-bold">Ứng viên nộp hồ sơ qua Website</strong>
+                <span class="text-slate-400 text-[11px]">29/10/2026 - 13:10 &bull; Hệ thống tự động ghi nhận</span>
+              </div>
+              <div class="relative pl-4">
+                <span class="absolute -left-[21px] top-1 w-3 h-3 rounded-full bg-slate-300"></span>
+                <strong class="text-slate-700 block font-bold">Chờ cán bộ nhân sự gọi điện tư vấn và xếp lịch phỏng vấn</strong>
+                <span class="text-slate-400 text-[11px]">Hiện tại</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN: STATUS & INTERNAL NOTES (4 COLS) -->
+        <div class="lg:col-span-4 space-y-6">
+
+          <!-- Action box -->
+          <div class="bg-white rounded-3xl border border-emerald-100 p-6 shadow-sm space-y-4 text-xs">
+            <h3 class="font-black text-slate-900 text-sm pb-2 border-b border-slate-100">Cập Nhật Trạng Thái Xử Lý</h3>
+
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Quy trình xử lý:</label>
+              <select id="update-cand-status" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-300 rounded-xl font-bold text-slate-800">
+                <option value="new" selected>Mới tiếp nhận</option>
+                <option value="called">Đã liên hệ điện thoại</option>
+                <option value="interview">Hẹn phỏng vấn / Test may</option>
+                <option value="passed">Đạt & Hẹn ngày nhận việc</option>
+                <option value="rejected">Không phù hợp / Hủy hồ sơ</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Ghi chú nội bộ của HR:</label>
+              <textarea id="update-cand-note" rows="4" placeholder="Ví dụ: Đã gọi lúc 14h, bạn Mai xác nhận có thể đi xe tuyến An Nhơn, hẹn sáng thứ 6 lên nhà máy..." class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl">Chưa có kinh nghiệm may, đăng ký lớp học nghề có lương, cần tuyến xe Châu Thành.</textarea>
+            </div>
+
+            <button onclick="showToast('Đã cập nhật trạng thái và ghi chú nội bộ thành công!', 'success')" class="w-full py-3 bg-[#087A55] hover:bg-[#006837] text-white font-extrabold rounded-xl shadow transition">
+              Lưu Thay Đổi
+            </button>
+          </div>
+
+          <!-- Quick contact helper -->
+          <div class="bg-[#12345A] text-white rounded-3xl p-6 shadow-sm space-y-3 text-xs">
+            <h4 class="font-bold text-amber-300 text-sm">Liên Hệ Trực Tiếp Với Ứng Viên:</h4>
+            <div class="space-y-2">
+              <a href="tel:0918223344" class="w-full py-2.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl flex items-center justify-center gap-2 transition">
+                <i class="bi bi-telephone-fill"></i> Gọi: 0918 223 344
+              </a>
+              <a href="https://zalo.me" target="_blank" class="w-full py-2.5 px-3 bg-[#0068ff] hover:bg-blue-600 text-white font-bold rounded-xl flex items-center justify-center gap-2 transition">
+                Nhắn Zalo Với Ứng Viên
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full"></div>
+
+  <script src="../assets/js/main.js"></script>
+  <script src="../assets/js/admin.js"></script>
+</body>
+</html>

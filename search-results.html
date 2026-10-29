@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kết Quả Tìm Kiếm Việc Làm | TEX-GIANG</title>
+  <meta name="description" content="Kết quả tìm kiếm vị trí tuyển dụng tại CÔNG TY CỔ PHẦN TEX-GIANG và TG APPAREL.">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              200: '#bbf7d0',
+              300: '#86efac',
+              400: '#4ade80',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#0e6e38',
+              800: '#006837',
+              900: '#064e26',
+              950: '#022c15',
+            },
+            navy: {
+              DEFAULT: '#12345A',
+              dark: '#0B223D',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="assets/css/custom.css">
+</head>
+<body class="bg-[#F5F7FA] text-[#1F2937] antialiased">
+
+  <!-- TOP BAR -->
+  <div class="bg-[#0B223D] text-emerald-100 text-xs py-2 border-b border-white/10 no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+      <div class="flex items-center space-x-6">
+        <span><i class="bi bi-telephone-fill text-amber-400 mr-1.5"></i> Hotline: <strong class="text-white">0277 388 9999</strong> - <strong class="text-white">0918 123 456</strong></span>
+      </div>
+      <div class="flex items-center space-x-4">
+        <a href="index.html" class="hover:text-amber-300">Về Trang Chủ</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVIGATION HEADER -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur shadow-sm border-b border-emerald-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-20">
+        <a href="index.html" class="flex items-center gap-3.5">
+          <img src="assets/images/logo-tgi.png" alt="Logo TEX-GIANG" class="h-12 w-auto">
+          <div class="border-l-2 border-emerald-200 pl-3">
+            <div class="text-lg sm:text-xl font-black text-[#087A55] leading-none">TEX-GIANG</div>
+            <p class="text-[11px] text-[#12345A] font-bold uppercase mt-1">Kết Quả Tìm Kiếm</p>
+          </div>
+        </a>
+
+        <nav class="hidden lg:flex items-center space-x-1 font-semibold text-sm text-slate-700">
+          <a href="index.html" class="px-3.5 py-2 rounded-xl hover:text-[#087A55]">Trang Chủ</a>
+          <a href="jobs.html" class="px-3.5 py-2 rounded-xl text-[#087A55] bg-emerald-50">Tất Cả Việc Làm</a>
+          <a href="apply.html" class="px-3.5 py-2 rounded-xl hover:text-[#087A55]">Ứng Tuyển Nhanh</a>
+          <a href="contact.html" class="px-3.5 py-2 rounded-xl hover:text-[#087A55]">Liên Hệ</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- SEARCH HEADER BANNER -->
+  <div class="bg-gradient-to-r from-[#0B223D] to-[#087A55] text-white py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav class="flex items-center space-x-2 text-xs text-emerald-300 mb-2">
+        <a href="index.html" class="hover:text-white">Trang Chủ</a>
+        <span>/</span>
+        <a href="jobs.html" class="hover:text-white">Việc Làm</a>
+        <span>/</span>
+        <span class="text-amber-300 font-semibold">Kết Quả Tìm Kiếm</span>
+      </nav>
+
+      <h1 class="text-2xl sm:text-3xl font-black">
+        Kết Quả Tìm Kiếm Cho: <span id="search-query-text" class="text-amber-300 italic">"Công Nhân May"</span>
+      </h1>
+      <p class="text-xs text-emerald-100 mt-1">Tìm thấy <strong id="search-result-count" class="text-white">3</strong> vị trí phù hợp với tiêu chí của bạn</p>
+    </div>
+  </div>
+
+  <!-- SEARCH RESULTS MAIN CONTENT -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+      <!-- LEFT SIDEBAR: REFINE SEARCH -->
+      <aside class="lg:col-span-4 bg-white rounded-3xl border border-emerald-100 p-6 shadow-sm space-y-4">
+        <h3 class="font-black text-slate-900 text-sm pb-3 border-b border-slate-100 flex items-center gap-2">
+          <i class="bi bi-funnel-fill text-[#087A55]"></i> Tinh Chỉnh Tìm Kiếm
+        </h3>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Từ khóa khác</label>
+          <input type="text" id="refine-keyword" value="Công Nhân May" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-[#087A55]">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Đơn vị thành viên</label>
+          <select class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs">
+            <option>Tất cả đơn vị</option>
+            <option>CÔNG TY CỔ PHẦN TEX-GIANG</option>
+            <option>CÔNG TY TNHH TG APPAREL</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Khu vực làm việc</label>
+          <select class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs">
+            <option>Tất cả địa điểm</option>
+            <option>KCN Tân Hương (Nhà máy Tân Hương 2)</option>
+            <option>TP.HCM (Văn phòng đại diện)</option>
+          </select>
+        </div>
+
+        <button onclick="window.location.href='jobs.html'" class="w-full py-2.5 bg-[#087A55] hover:bg-[#006837] text-white font-bold rounded-xl text-xs transition shadow-sm">
+          Lọc Lại Kết Quả
+        </button>
+      </aside>
+
+      <!-- RIGHT COLUMN: RESULTS LIST -->
+      <section class="lg:col-span-8 space-y-4">
+
+        <!-- Result 1 -->
+        <article class="bg-white rounded-3xl border border-emerald-100 p-6 shadow-sm hover:shadow-lg transition flex flex-col justify-between">
+          <div class="space-y-2">
+            <div class="flex items-center gap-2 text-xs font-bold text-[#087A55]">
+              <span class="px-2.5 py-0.5 rounded-md bg-emerald-50 border border-emerald-200">TEX-GIANG</span>
+              <span class="text-slate-400">&bull;</span>
+              <span class="text-slate-500">Khối Sản Xuất</span>
+              <span class="px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 text-[10px] uppercase font-black ml-auto">Tuyển Gấp</span>
+            </div>
+            <h3 class="text-lg font-black text-slate-900 hover:text-[#087A55] transition">
+              <a href="job-detail.html">300 Công Nhân May Chuyền May Công Nghiệp (Áo Polo, Jacket Xuất Khẩu)</a>
+            </h3>
+            <div class="flex flex-wrap items-center gap-4 text-xs text-slate-600">
+              <span class="font-extrabold text-[#087A55]">💰 8.000.000 - 16.000.000 VNĐ</span>
+              <span>📍 Nhà máy Tân Hương 2, Đồng Tháp</span>
+              <span>⏰ Hạn nộp: 30/11/2026</span>
+            </div>
+          </div>
+          <div class="pt-4 mt-4 border-t border-slate-100 flex justify-between items-center">
+            <span class="text-[11px] text-slate-400">Mã: TG-01 [Demo]</span>
+            <div class="flex gap-2">
+              <a href="job-detail.html" class="px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-slate-100 rounded-lg">Chi tiết</a>
+              <a href="apply.html?job=Công%20Nhân%20May" class="px-4 py-1.5 bg-[#087A55] text-white font-bold text-xs rounded-lg shadow">Ứng tuyển</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Result 2 -->
+        <article class="bg-white rounded-3xl border border-emerald-100 p-6 shadow-sm hover:shadow-lg transition flex flex-col justify-between">
+          <div class="space-y-2">
+            <div class="flex items-center gap-2 text-xs font-bold text-[#087A55]">
+              <span class="px-2.5 py-0.5 rounded-md bg-emerald-50 border border-emerald-200">TEX-GIANG</span>
+              <span class="text-slate-400">&bull;</span>
+              <span class="text-slate-500">Đào Tạo Nghề</span>
+            </div>
+            <h3 class="text-lg font-black text-slate-900 hover:text-[#087A55] transition">
+              <a href="job-detail.html">100 Học Nghề May Miễn Phí (Được Trợ Cấp Lương Học Việc)</a>
+            </h3>
+            <div class="flex flex-wrap items-center gap-4 text-xs text-slate-600">
+              <span class="font-extrabold text-[#087A55]">💰 Hỗ trợ lương học việc + Cơm ca</span>
+              <span>📍 Trung tâm đào tạo Tân Hương 2</span>
+              <span>⏰ Hạn nộp: 30/11/2026</span>
+            </div>
+          </div>
+          <div class="pt-4 mt-4 border-t border-slate-100 flex justify-between items-center">
+            <span class="text-[11px] text-slate-400">Mã: TG-07 [Demo]</span>
+            <div class="flex gap-2">
+              <a href="job-detail.html" class="px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-slate-100 rounded-lg">Chi tiết</a>
+              <a href="apply.html?job=Học%20Nghề%20May" class="px-4 py-1.5 bg-[#087A55] text-white font-bold text-xs rounded-lg shadow">Ứng tuyển</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Suggested keywords -->
+        <div class="p-6 bg-white rounded-3xl border border-slate-200 text-xs space-y-2">
+          <strong class="text-slate-800 text-sm block">Gợi ý từ khóa tìm kiếm liên quan:</strong>
+          <div class="flex flex-wrap gap-2">
+            <a href="jobs.html?keyword=QC" class="px-3 py-1 rounded-full bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-[#087A55] font-semibold">Kiểm phẩm QC</a>
+            <a href="jobs.html?keyword=IE" class="px-3 py-1 rounded-full bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-[#087A55] font-semibold">Kỹ sư IE</a>
+            <a href="jobs.html?keyword=Bảo%20trì" class="px-3 py-1 rounded-full bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-[#087A55] font-semibold">Bảo trì máy may</a>
+            <a href="jobs.html?keyword=Kế%20toán" class="px-3 py-1 rounded-full bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-[#087A55] font-semibold">Kế toán</a>
+          </div>
+        </div>
+
+      </section>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-[#0B223D] text-emerald-100 py-8 border-t border-white/10 text-xs text-center mt-12">
+    <div class="max-w-7xl mx-auto px-4">
+      <p>&copy; 2026 CÔNG TY CỔ PHẦN TEX-GIANG & TG APPAREL. Thiết kế bởi IT-P.KT-NS.</p>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

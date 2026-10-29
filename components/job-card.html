@@ -1,0 +1,62 @@
+<!-- ============================================== -->
+<!-- REUSABLE COMPONENT: JOB CARD -->
+<!-- Location: components/job-card.html -->
+<!-- Used across index.html, jobs.html, search-results.html -->
+<!-- ============================================== -->
+
+<article class="bg-white rounded-3xl border border-emerald-100 hover:border-emerald-300 p-6 sm:p-7 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group relative overflow-hidden">
+  <!-- Status Badge Ribbon -->
+  <div class="absolute top-0 right-0">
+    <span class="bg-[#087A55] text-white text-[11px] font-black px-3.5 py-1 rounded-bl-2xl tracking-wider uppercase">
+      Đang Tuyển
+    </span>
+  </div>
+
+  <div class="space-y-3">
+    <!-- Company & Department -->
+    <div class="flex items-center gap-2 text-xs font-bold text-[#087A55]">
+      <span class="px-2.5 py-0.5 rounded-md bg-emerald-50 border border-emerald-200">CÔNG TY CỔ PHẦN TEX-GIANG</span>
+      <span class="text-slate-300">&bull;</span>
+      <span class="text-slate-500 font-medium">Khối Sản Xuất</span>
+    </div>
+
+    <!-- Title -->
+    <h3 class="text-lg sm:text-xl font-black text-slate-900 group-hover:text-[#087A55] transition leading-snug">
+      <a href="job-detail.html">Công Nhân May Chuyền May Công Nghiệp (Áo Polo, Jacket Xuất Khẩu)</a>
+    </h3>
+
+    <!-- Meta Details Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs text-slate-600 pt-1">
+      <div class="flex items-center gap-2">
+        <i class="bi bi-cash-stack text-[#087A55] text-base"></i>
+        <span class="font-extrabold text-[#087A55]">8.000.000 - 16.000.000 đ</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <i class="bi bi-geo-alt-fill text-slate-400"></i>
+        <span class="truncate">Nhà máy Tân Hương 2, Đồng Tháp</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <i class="bi bi-calendar-event text-slate-400"></i>
+        <span>Hạn: <strong class="text-slate-800">30/11/2026</strong></span>
+      </div>
+    </div>
+
+    <!-- Description snippet -->
+    <p class="text-slate-600 text-xs sm:text-sm leading-relaxed line-clamp-2 pt-1">
+      Vận hành máy may 1 kim, 2 kim, vắt sổ theo công đoạn. Hưởng lương sản phẩm + thưởng năng suất + ăn trưa miễn phí + xe đưa rước. Chưa biết may được đào tạo có lương.
+    </p>
+  </div>
+
+  <!-- Bottom CTA Row -->
+  <div class="pt-5 mt-5 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+    <span class="text-[11px] text-slate-400 font-medium">Mã: <strong>TG-01</strong> &bull; [Dữ liệu mẫu demo]</span>
+    <div class="flex items-center gap-2">
+      <a href="job-detail.html" class="px-4 py-2 text-xs font-bold text-slate-700 hover:text-[#087A55] hover:bg-emerald-50 rounded-xl transition">
+        Xem Chi Tiết
+      </a>
+      <a href="apply.html?job=Công%20Nhân%20May" class="px-5 py-2.5 bg-[#087A55] hover:bg-[#006837] text-white font-extrabold text-xs rounded-xl shadow-md transition transform hover:-translate-y-0.5">
+        Ứng Tuyển Ngay
+      </a>
+    </div>
+  </div>
+</article>

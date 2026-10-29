@@ -1,0 +1,141 @@
+<!-- ============================================== -->
+<!-- REUSABLE COMPONENT: FOOTER -->
+<!-- Location: components/footer.html -->
+<!-- Ready for PHP include: <?php include 'components/footer.html'; ?> -->
+<!-- ============================================== -->
+
+<footer class="bg-[#0B223D] text-emerald-100 pt-16 pb-12 border-t border-emerald-900/60 no-print">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 pb-12 border-b border-white/10">
+
+      <!-- Column 1: Corporate Profile & Address -->
+      <div class="lg:col-span-5 space-y-4">
+        <div class="flex items-center gap-3">
+          <img src="assets/images/logo-tgi.png" alt="Logo TGI" class="h-10 w-auto bg-white p-1 rounded-xl">
+          <span class="text-lg font-black text-white tracking-tight">CÔNG TY CỔ PHẦN TEX-GIANG</span>
+        </div>
+        <p class="text-xs text-emerald-200 leading-relaxed max-w-md">
+          Doanh nghiệp sản xuất dệt may xuất khẩu uy tín hàng đầu. Định hướng phát triển bền vững với phương châm: <em>"Vì con người - Vì chất lượng - Vì tương lai bền vững"</em>.
+        </p>
+
+        <div class="space-y-2.5 text-xs text-emerald-100">
+          <p class="flex items-start gap-2.5">
+            <i class="bi bi-geo-alt-fill text-amber-400 text-sm mt-0.5 flex-shrink-0"></i>
+            <span><strong>Địa chỉ:</strong> Lô BII-8, Đường D3, KCN Tân Hương, Xã Tân Hương, Huyện Châu Thành, Tỉnh Đồng Tháp</span>
+          </p>
+          <p class="flex items-center gap-2.5">
+            <i class="bi bi-telephone-fill text-amber-400 text-sm flex-shrink-0"></i>
+            <span>Hotline tuyển dụng: <strong class="text-white">0277 388 9999</strong> - <strong class="text-white">0918 123 456</strong> <span class="text-[10px] text-emerald-400">[Demo]</span></span>
+          </p>
+          <p class="flex items-center gap-2.5">
+            <i class="bi bi-envelope-fill text-amber-400 text-sm flex-shrink-0"></i>
+            <span>Email: <strong class="text-white">tuyendung@texgiang.com.vn</strong></span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Column 2: Career Navigation -->
+      <div class="lg:col-span-2 space-y-3">
+        <h4 class="text-white font-bold text-sm tracking-wider uppercase">Cơ Hội Việc Làm</h4>
+        <ul class="space-y-2 text-xs">
+          <li><a href="jobs.html?department=production" class="hover:text-white transition">Việc làm may chuyền</a></li>
+          <li><a href="jobs.html?department=qc" class="hover:text-white transition">Kiểm phẩm QC/QA</a></li>
+          <li><a href="jobs.html?department=ie" class="hover:text-white transition">Kỹ sư công nghiệp IE</a></li>
+          <li><a href="jobs.html?department=maintenance" class="hover:text-white transition">Bảo trì cơ điện</a></li>
+          <li><a href="jobs.html?department=office" class="hover:text-white transition">Khối văn phòng & HR</a></li>
+          <li><a href="apply.html" class="text-amber-300 font-bold hover:underline">Nộp hồ sơ tự do &rarr;</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 3: About Links -->
+      <div class="lg:col-span-2 space-y-3">
+        <h4 class="text-white font-bold text-sm tracking-wider uppercase">Về Doanh Nghiệp</h4>
+        <ul class="space-y-2 text-xs">
+          <li><a href="about.html" class="hover:text-white transition">Tổng quan TEX-GIANG</a></li>
+          <li><a href="about.html#tam-nhin" class="hover:text-white transition">Tầm nhìn & Sứ mệnh</a></li>
+          <li><a href="why-tex-giang.html" class="hover:text-white transition">Chế độ đãi ngộ & Phúc lợi</a></li>
+          <li><a href="news.html" class="hover:text-white transition">Tin tức & Hoạt động</a></li>
+          <li><a href="contact.html" class="hover:text-white transition">Bản đồ & Xe đưa đón</a></li>
+          <li><a href="admin/login.html" class="text-emerald-300 font-medium hover:underline">Đăng nhập Quản trị HR</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 4: Channels & Share -->
+      <div class="lg:col-span-3 space-y-4">
+        <h4 class="text-white font-bold text-sm tracking-wider uppercase">Kênh Kết Nối Tuyển Dụng</h4>
+        <p class="text-xs text-emerald-200">Theo dõi thông báo tuyển dụng và liên hệ trực tiếp phòng nhân sự:</p>
+
+        <div class="flex items-center space-x-2.5">
+          <button onclick="shareFacebook()" class="w-9 h-9 rounded-xl bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center transition" title="Chia sẻ qua Facebook">
+            <i class="bi bi-facebook text-base"></i>
+          </button>
+          <button onclick="shareZalo()" class="w-9 h-9 rounded-xl bg-[#0068ff] hover:bg-blue-600 text-white flex items-center justify-center transition" title="Chat Zalo tuyển dụng">
+            <span class="text-[11px] font-black">Zalo</span>
+          </button>
+          <button class="open-qr-modal w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition" title="Mã QR">
+            <i class="bi bi-qr-code text-base"></i>
+          </button>
+          <button onclick="copyLink()" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-semibold text-emerald-100 transition">
+            Sao chép link
+          </button>
+        </div>
+
+        <div class="pt-2">
+          <span class="text-xs text-emerald-300">Website thành viên:</span>
+          <div class="flex gap-3 text-xs mt-1">
+            <a href="https://texgiang.com.vn" target="_blank" class="text-amber-300 hover:underline">TEX-GIANG Web</a>
+            <span class="text-emerald-700">&bull;</span>
+            <a href="https://tgapparel.com.vn" target="_blank" class="text-amber-300 hover:underline">TG APPAREL Web</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Copyright -->
+    <div class="pt-8 flex flex-col sm:flex-row justify-between items-center text-xs text-emerald-300 gap-4">
+      <p>&copy; 2026 CÔNG TY CỔ PHẦN TEX-GIANG & TG APPAREL. Tất cả các quyền được bảo lưu.</p>
+      <p>Thiết kế bởi: <span class="text-white font-semibold">Senior Frontend & UI/UX Specialist</span> | Phiên bản Demo Giao Diện Tĩnh</p>
+    </div>
+  </div>
+</footer>
+
+<!-- FLOATING FAST ACCESS UTILITIES (HOTLINE, ZALO, QR, BACK-TO-TOP) -->
+<div class="fixed bottom-6 right-6 z-40 flex flex-col items-center space-y-3 no-print">
+  <!-- QR Code Modal Button -->
+  <button class="open-qr-modal w-12 h-12 rounded-full bg-[#12345A] hover:bg-[#0B223D] text-white shadow-xl flex items-center justify-center transition transform hover:scale-110" title="Mã QR Tuyển Dụng">
+    <i class="bi bi-qr-code text-xl"></i>
+  </button>
+
+  <!-- Zalo Chat -->
+  <a href="https://zalo.me" target="_blank" class="w-13 h-13 p-3 rounded-full bg-[#0068ff] text-white shadow-xl flex items-center justify-center pulse-zalo transition transform hover:scale-110" title="Chat Zalo Tuyển Dụng">
+    <span class="text-xs font-black">Zalo</span>
+  </a>
+
+  <!-- Hotline Call Button -->
+  <a href="tel:0918123456" class="w-13 h-13 p-3 rounded-full bg-[#087A55] text-white shadow-xl flex items-center justify-center pulse-hotline transition transform hover:scale-110" title="Gọi Hotline Tuyển Dụng">
+    <i class="bi bi-telephone-fill text-lg"></i>
+  </a>
+
+  <!-- Back to top button -->
+  <button id="back-to-top" class="opacity-0 pointer-events-none w-10 h-10 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-700 shadow flex items-center justify-center transition-all duration-300" title="Lên đầu trang">
+    <i class="bi bi-arrow-up text-lg"></i>
+  </button>
+</div>
+
+<!-- QR CODE MODAL DIALOG -->
+<div id="qr-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm items-center justify-center p-4">
+  <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl relative">
+    <button id="close-qr-btn" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+      <i class="bi bi-x-lg text-lg"></i>
+    </button>
+    <h3 class="text-lg font-black text-slate-900 mb-1">Mã QR Tin Tuyển Dụng</h3>
+    <p class="text-xs text-slate-500 mb-4">Quét mã bằng camera điện thoại hoặc Zalo để mở nhanh</p>
+    <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-200 inline-block">
+      <img id="qr-code-img" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://texgiang.com.vn" alt="QR Code" class="w-48 h-48 mx-auto">
+    </div>
+    <p id="qr-target-url" class="text-[11px] text-slate-400 mt-3 truncate font-mono"></p>
+    <button onclick="copyLink()" class="mt-4 w-full py-2.5 bg-[#087A55] hover:bg-[#006837] text-white font-bold text-xs rounded-xl transition">
+      Sao Chép Đường Dẫn
+    </button>
+  </div>
+</div>

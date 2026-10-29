@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Về Chúng Tôi | TEX-GIANG & TG APPAREL</title>
+  <meta name="description" content="Khám phá lịch sử hình thành, tầm nhìn, sứ mệnh, giá trị cốt lõi và môi trường làm việc chuẩn quốc tế tại CÔNG TY CỔ PHẦN TEX-GIANG & TG APPAREL.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              200: '#bbf7d0',
+              300: '#86efac',
+              400: '#4ade80',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#0e6e38',
+              800: '#006837', // Official Brand Green
+              900: '#064e26',
+              950: '#022c15',
+            },
+            tgi: {
+              blue: '#174873',
+              dark: '#0f3354',
+              light: '#2563eb',
+            },
+            accent: {
+              500: '#f26522',
+              600: '#d95314',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="assets/css/custom.css">
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-brand-800 selection:text-white">
+
+  <!-- TOP BAR -->
+  <div class="bg-brand-950 text-emerald-100 text-xs py-2 border-b border-brand-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+      <div class="flex items-center space-x-6">
+        <span>Hotline Tuyển Dụng: <strong class="text-white">0277 388 9999</strong> - <strong class="text-white">0918 123 456</strong></span>
+        <span class="hidden sm:inline">Email: tuyendung@texgiang.com.vn</span>
+      </div>
+      <div class="flex items-center space-x-4">
+        <a href="https://texgiang.com.vn" target="_blank" class="hover:text-amber-300 underline decoration-emerald-400">TEX-GIANG</a>
+        <span class="text-emerald-700">|</span>
+        <a href="https://tgapparel.com.vn" target="_blank" class="hover:text-amber-300 underline decoration-emerald-400">TG APPAREL</a>
+        <span class="text-emerald-700">|</span>
+        <a href="admin.html" class="text-amber-300 hover:text-white font-medium">HR Portal</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVIGATION HEADER -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur shadow-sm border-b border-emerald-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-20">
+        <a href="index.html" class="flex items-center gap-3.5 group">
+          <img src="assets/images/logo-tgi.png" alt="Logo TEX-GIANG" class="h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300">
+          <div class="border-l-2 border-emerald-200 pl-3">
+            <div class="text-lg sm:text-xl font-black tracking-tight text-brand-800 leading-none">
+              TEX-GIANG
+            </div>
+            <p class="text-[11px] text-tgi-blue font-bold tracking-wide uppercase mt-1">Cổng Tuyển Dụng Chính Thức</p>
+          </div>
+        </a>
+
+        <nav class="hidden lg:flex items-center space-x-1 font-semibold text-sm text-slate-700">
+          <a href="index.html" class="px-3.5 py-2 rounded-xl hover:text-brand-800 hover:bg-emerald-50 transition">Trang Chủ</a>
+          <a href="about.html" class="px-3.5 py-2 rounded-xl text-brand-800 bg-brand-50 transition">Về Chúng Tôi</a>
+          <a href="jobs.html" class="px-3.5 py-2 rounded-xl hover:text-brand-800 hover:bg-emerald-50 transition">Danh Sách Việc Làm</a>
+          <a href="why-tex-giang.html" class="px-3.5 py-2 rounded-xl hover:text-brand-800 hover:bg-emerald-50 transition">Tại Sao Chọn Chúng Tôi</a>
+          <a href="news.html" class="px-3.5 py-2 rounded-xl hover:text-brand-800 hover:bg-emerald-50 transition">Tin Tức Nghề Nghiệp</a>
+          <a href="contact.html" class="px-3.5 py-2 rounded-xl hover:text-brand-800 hover:bg-emerald-50 transition">Liên Hệ</a>
+        </nav>
+
+        <div class="hidden sm:flex items-center space-x-3">
+          <a href="jobs.html" class="px-5 py-2.5 rounded-xl font-bold text-sm text-white bg-brand-800 hover:bg-brand-900 shadow-md transition">
+            Xem 24+ Việc Làm
+          </a>
+        </div>
+
+        <div class="lg:hidden flex items-center">
+          <button id="mobile-menu-btn" class="p-2 rounded-lg text-slate-600 hover:bg-slate-100">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ABOUT HERO BANNER -->
+  <section class="relative bg-gradient-to-br from-brand-950 via-brand-900 to-brand-800 text-white py-16 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+      <span class="inline-block px-3.5 py-1.5 rounded-full bg-emerald-500/30 text-amber-300 font-extrabold text-xs uppercase tracking-wider mb-3 border border-emerald-400/30">Về Chúng Tôi</span>
+      <h1 class="text-3xl sm:text-5xl font-black tracking-tight">CÔNG TY CỔ PHẦN TEX-GIANG & TG APPAREL</h1>
+      <p class="text-emerald-100 text-base sm:text-lg max-w-3xl mx-auto mt-4 leading-relaxed">
+        <em>"Kiến tạo giá trị - Cùng phát triển bền vững"</em>. Hơn 15 năm kiến tạo thương hiệu dệt may xuất khẩu uy tín hàng đầu tại Đồng Tháp và khu vực Tây Nam Bộ.
+      </p>
+    </div>
+  </section>
+
+  <!-- BANNER SHOWCASE CARD -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
+    <div class="rounded-3xl overflow-hidden shadow-2xl border-2 border-emerald-500/20">
+      <img src="assets/images/banner-texgiang.png" alt="Nhà máy Tân Hương 2 - TEX GIANG" class="w-full h-auto object-cover max-h-[420px]">
+    </div>
+  </div>
+
+  <!-- OVERVIEW & SCALE STATS -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="bg-white rounded-3xl p-6 border border-emerald-100 shadow-sm text-center">
+        <div class="text-3xl font-black text-brand-800">15+ Năm</div>
+        <div class="text-xs text-slate-500 mt-1 font-medium">Kinh nghiệm may xuất khẩu toàn cầu</div>
+      </div>
+      <div class="bg-white rounded-3xl p-6 border border-emerald-100 shadow-sm text-center">
+        <div class="text-3xl font-black text-tgi-blue">3.500+</div>
+        <div class="text-xs text-slate-500 mt-1 font-medium">Cán bộ, kỹ sư & công nhân viên</div>
+      </div>
+      <div class="bg-white rounded-3xl p-6 border border-emerald-100 shadow-sm text-center">
+        <div class="text-3xl font-black text-brand-700">45.000 m²</div>
+        <div class="text-xs text-slate-500 mt-1 font-medium">Diện tích nhà xưởng Tân Hương 2</div>
+      </div>
+      <div class="bg-white rounded-3xl p-6 border border-emerald-100 shadow-sm text-center">
+        <div class="text-3xl font-black text-accent-500">100% Xuất Khẩu</div>
+        <div class="text-xs text-slate-500 mt-1 font-medium">Thị trường Mỹ, EU, Nhật Bản</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STORY & CORPORATE PROFILE -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div class="space-y-6">
+        <span class="text-brand-800 font-bold text-xs uppercase tracking-widest">Hành Trình Phát Triển</span>
+        <h2 class="text-3xl font-black text-slate-900 leading-tight">
+          Nền Tảng May Mặc Bền Vững Tại Khu Công Nghiệp Tân Hương
+        </h2>
+        <p class="text-slate-600 text-sm leading-relaxed">
+          Tọa lạc tại <strong>Lô BII-8, Đường D3, KCN Tân Hương, Xã Tân Hương, Huyện Châu Thành, Tỉnh Đồng Tháp</strong>, Công ty Cổ phần TEX-GIANG cùng đơn vị thành viên TG APPAREL đã khẳng định vị thế là một trong những đối tác sản xuất hàng may mặc uy tín của các thương hiệu thời trang thể thao lớn trên toàn cầu.
+        </p>
+        <p class="text-slate-600 text-sm leading-relaxed">
+          Nhà máy Tân Hương 2 được trang bị dây chuyền may điện tử tự động, chuyền treo may hiện đại, phòng mẫu CAD/CAM rập vi tính, hệ thống kiểm tra chất lượng tự động cùng quy trình quản lý Lean Manufacturing đạt chuẩn quốc tế WRAP và ISO 9001.
+        </p>
+        <div class="p-4 rounded-2xl bg-brand-50 border border-brand-200 flex items-center gap-4">
+          <img src="assets/images/logo-tgi.png" alt="Logo TGI" class="h-10 w-auto bg-white p-1 rounded-xl flex-shrink-0">
+          <div class="text-xs text-brand-900">
+            <strong class="text-sm block font-bold">Phương châm phát triển bền vững</strong>
+            <em>"Vì con người - Vì chất lượng - Vì tương lai bền vững"</em>. Người lao động là tài sản vô giá của TEX-GIANG.
+          </div>
+        </div>
+      </div>
+
+      <!-- Factory & Team photos gallery -->
+      <div class="grid grid-cols-2 gap-4">
+        <div class="rounded-2xl overflow-hidden shadow-md">
+          <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80" alt="Chuyền may hiện đại" class="w-full h-52 object-cover hover:scale-105 transition duration-300">
+        </div>
+        <div class="rounded-2xl overflow-hidden shadow-md">
+          <img src="https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=600&q=80" alt="Kiểm tra chất lượng may" class="w-full h-52 object-cover hover:scale-105 transition duration-300">
+        </div>
+        <div class="rounded-2xl overflow-hidden shadow-md">
+          <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80" alt="Họp thảo luận kỹ thuật" class="w-full h-52 object-cover hover:scale-105 transition duration-300">
+        </div>
+        <div class="rounded-2xl overflow-hidden shadow-md">
+          <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80" alt="Văn phòng làm việc chuyên nghiệp" class="w-full h-52 object-cover hover:scale-105 transition duration-300">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISION - MISSION - CORE VALUES -->
+  <section class="bg-white py-16 border-y border-emerald-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-14">
+        <span class="text-brand-800 font-bold text-xs uppercase tracking-widest">Định Hướng Chiến Lược</span>
+        <h2 class="text-3xl font-black text-slate-900 mt-2">Tầm Nhìn, Sứ Mệnh & Giá Trị Cốt Lõi</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Vision -->
+        <div class="bg-emerald-50/40 rounded-3xl p-8 border border-emerald-100 text-center space-y-4 hover:shadow-lg transition">
+          <div class="w-16 h-16 rounded-2xl bg-brand-800 text-white mx-auto flex items-center justify-center font-black text-2xl">
+            👁️
+          </div>
+          <h3 class="text-xl font-bold text-slate-900">Tầm Nhìn</h3>
+          <p class="text-slate-600 text-xs leading-relaxed">
+            Trở thành tập đoàn may mặc xuất khẩu hàng đầu khu vực miền Nam, tiên phong áp dụng công nghệ số và sản xuất xanh, là nơi làm việc lý tưởng và hạnh phúc nhất cho mọi người lao động.
+          </p>
+        </div>
+
+        <!-- Mission -->
+        <div class="bg-emerald-50/40 rounded-3xl p-8 border border-emerald-100 text-center space-y-4 hover:shadow-lg transition">
+          <div class="w-16 h-16 rounded-2xl bg-brand-800 text-white mx-auto flex items-center justify-center font-black text-2xl">
+            🎯
+          </div>
+          <h3 class="text-xl font-bold text-slate-900">Sứ Mệnh</h3>
+          <p class="text-slate-600 text-xs leading-relaxed">
+            Mang đến cho khách hàng quốc tế những sản phẩm may mặc chuẩn mực chất lượng cao, đồng thời xây dựng môi trường làm việc công bằng, văn minh, nâng cao chất lượng cuộc sống người lao động địa phương.
+          </p>
+        </div>
+
+        <!-- Core Values -->
+        <div class="bg-emerald-50/40 rounded-3xl p-8 border border-emerald-100 text-center space-y-4 hover:shadow-lg transition">
+          <div class="w-16 h-16 rounded-2xl bg-brand-800 text-white mx-auto flex items-center justify-center font-black text-2xl">
+            ⭐
+          </div>
+          <h3 class="text-xl font-bold text-slate-900">Giá Trị Cốt Lõi</h3>
+          <p class="text-slate-600 text-xs leading-relaxed">
+            <strong>Tâm - Tín - Tinh - Đoàn - Nghĩa:</strong> Tận tâm với công việc, giữ trọn chữ tín với khách hàng, tinh gọn trong sản xuất, đoàn kết nội bộ và nghĩa tình sâu sắc với công nhân viên.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-brand-950 text-emerald-100 py-8 border-t border-brand-900 text-xs text-center">
+    <div class="max-w-7xl mx-auto px-4">
+      <p>&copy; 2026 CÔNG TY CỔ PHẦN TEX-GIANG & TG APPAREL. Thiết kế bởi IT-P.KT-NS.</p>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
