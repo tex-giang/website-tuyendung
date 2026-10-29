@@ -42,19 +42,33 @@
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased selection:bg-brand-800 selection:text-white">
 
-  <!-- TOP BAR -->
-  <div class="bg-brand-950 text-emerald-100 text-xs py-2 border-b border-brand-900">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-      <div class="flex items-center space-x-6">
-        <span>Hotline Tuyển Dụng: <strong class="text-white">0277 388 9999</strong> - <strong class="text-white">0918 123 456</strong></span>
-        <span class="hidden sm:inline">Email: tuyendung@texgiang.com.vn</span>
+  <!-- TOP UTILITY BAR -->
+  <div class="bg-[#0B223D] text-emerald-100 text-xs py-2 border-b border-white/10 no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap justify-between items-center gap-2">
+      <div class="flex items-center space-x-6 flex-wrap">
+        <span class="flex items-center gap-1.5 hover:text-white transition whitespace-nowrap">
+          <i class="bi bi-telephone-fill text-amber-400"></i>
+          <span>Hotline: <strong class="text-white whitespace-nowrap">0277 388 9999</strong> - <strong class="text-white whitespace-nowrap">0918 123 456</strong> <span class="text-[10px] text-emerald-400 font-normal whitespace-nowrap">[Demo]</span></span>
+        </span>
+        <span class="hidden md:flex items-center gap-1.5 hover:text-white transition whitespace-nowrap">
+          <i class="bi bi-envelope-fill text-emerald-400"></i>
+          <span>Email: tuyendung@texgiang.com.vn</span>
+        </span>
+        <span class="hidden lg:flex items-center gap-1.5 text-emerald-300">
+          <i class="bi bi-geo-alt-fill text-emerald-400 flex-shrink-0"></i>
+          <span>KCN Tân Hương, Xã Tân Hương, Tỉnh Đồng Tháp</span>
+        </span>
       </div>
       <div class="flex items-center space-x-4">
-        <a href="https://texgiang.com.vn" target="_blank" class="hover:text-amber-300 underline decoration-emerald-400">TEX-GIANG</a>
+        <span class="text-emerald-400 hidden sm:inline whitespace-nowrap">Hệ sinh thái:</span>
+        <a href="https://texgiang.com.vn" target="_blank" class="text-white font-medium hover:text-amber-300 transition underline underline-offset-4 decoration-emerald-400 whitespace-nowrap">TEX-GIANG</a>
         <span class="text-emerald-700">|</span>
-        <a href="https://tgapparel.com.vn" target="_blank" class="hover:text-amber-300 underline decoration-emerald-400">TG APPAREL</a>
+        <a href="https://tgapparel.com.vn" target="_blank" class="text-white font-medium hover:text-amber-300 transition underline underline-offset-4 decoration-emerald-400 whitespace-nowrap">TG APPAREL</a>
         <span class="text-emerald-700">|</span>
-        <a href="admin.html" class="text-amber-300 hover:text-white font-medium">HR Portal</a>
+        <a href="admin/login.html" class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#12345A] text-amber-300 hover:bg-[#087A55] transition font-bold text-[11px] whitespace-nowrap">
+          <i class="bi bi-shield-lock-fill"></i>
+          <span>Cổng Quản Trị</span>
+        </a>
       </div>
     </div>
   </div>
@@ -64,35 +78,50 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-20">
         <a href="index.html" class="flex items-center gap-3.5 group">
-          <img src="assets/images/logo-tgi.png" alt="Logo TEX-GIANG" class="h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300">
+          <img src="assets/images/logo-tgi.png" alt="Logo TEX-GIANG" class="h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300 flex-shrink-0">
           <div class="border-l-2 border-emerald-200 pl-3">
-            <div class="text-lg sm:text-xl font-black tracking-tight text-brand-800 leading-none">
-              TEX-GIANG
+            <div class="text-base sm:text-xl font-black tracking-tight text-[#087A55] leading-none whitespace-nowrap">
+              CÔNG TY CỔ PHẦN TEX-GIANG
             </div>
-            <p class="text-[11px] text-tgi-blue font-bold tracking-wide uppercase mt-1">Cổng Tuyển Dụng Chính Thức</p>
+            <p class="text-[10px] sm:text-[11px] text-[#12345A] font-bold tracking-wide uppercase mt-1 whitespace-nowrap">Cổng Tuyển Dụng Chính Thức</p>
           </div>
         </a>
 
         <nav class="hidden lg:flex items-center space-x-1 font-semibold text-sm text-slate-700">
-          <a href="index.html" class="px-3.5 py-2 rounded-xl hover:text-brand-800 hover:bg-emerald-50 transition">Trang Chủ</a>
-          <a href="about.html" class="px-3.5 py-2 rounded-xl text-brand-800 bg-brand-50 transition">Về Chúng Tôi</a>
-          <a href="jobs.html" class="px-3.5 py-2 rounded-xl hover:text-brand-800 hover:bg-emerald-50 transition">Danh Sách Việc Làm</a>
-          <a href="why-tex-giang.html" class="px-3.5 py-2 rounded-xl hover:text-brand-800 hover:bg-emerald-50 transition">Tại Sao Chọn Chúng Tôi</a>
-          <a href="news.html" class="px-3.5 py-2 rounded-xl hover:text-brand-800 hover:bg-emerald-50 transition">Tin Tức Nghề Nghiệp</a>
-          <a href="contact.html" class="px-3.5 py-2 rounded-xl hover:text-brand-800 hover:bg-emerald-50 transition">Liên Hệ</a>
+          <a href="index.html" class="px-3.5 py-2 rounded-xl hover:text-[#087A55] hover:bg-emerald-50 transition whitespace-nowrap">Trang Chủ</a>
+          <a href="about.html" class="px-3.5 py-2 rounded-xl text-[#087A55] bg-emerald-50 font-bold transition whitespace-nowrap">Về Chúng Tôi</a>
+          <a href="jobs.html" class="px-3.5 py-2 rounded-xl hover:text-[#087A55] hover:bg-emerald-50 transition whitespace-nowrap">Danh Sách Việc Làm</a>
+          <a href="why-tex-giang.html" class="px-3.5 py-2 rounded-xl hover:text-[#087A55] hover:bg-emerald-50 transition whitespace-nowrap">Tại Sao Chọn Chúng Tôi</a>
+          <a href="news.html" class="px-3.5 py-2 rounded-xl hover:text-[#087A55] hover:bg-emerald-50 transition whitespace-nowrap">Tin Tức Nghề Nghiệp</a>
+          <a href="contact.html" class="px-3.5 py-2 rounded-xl hover:text-[#087A55] hover:bg-emerald-50 transition whitespace-nowrap">Liên Hệ</a>
         </nav>
 
         <div class="hidden sm:flex items-center space-x-3">
-          <a href="jobs.html" class="px-5 py-2.5 rounded-xl font-bold text-sm text-white bg-brand-800 hover:bg-brand-900 shadow-md transition">
+          <a href="jobs.html" class="inline-flex items-center justify-center px-5 py-2.5 rounded-xl font-extrabold text-sm text-white bg-gradient-to-r from-[#087A55] to-[#006837] hover:from-[#006837] hover:to-[#0B223D] shadow-md shadow-emerald-800/20 hover:shadow-lg transition-all transform hover:-translate-y-0.5 whitespace-nowrap">
+            <i class="bi bi-briefcase-fill mr-2 text-amber-300"></i>
             Xem 24+ Việc Làm
           </a>
         </div>
 
         <div class="lg:hidden flex items-center">
-          <button id="mobile-menu-btn" class="p-2 rounded-lg text-slate-600 hover:bg-slate-100">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          <button id="mobile-menu-btn" class="p-2 rounded-xl text-slate-600 hover:text-[#087A55] hover:bg-slate-100 focus:outline-none">
+            <i class="bi bi-list text-2xl"></i>
           </button>
         </div>
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown Navigation -->
+    <div id="mobile-menu" class="hidden lg:hidden bg-white border-b border-emerald-100 px-4 pt-3 pb-6 space-y-2">
+      <a href="index.html" class="block px-3.5 py-2.5 rounded-xl font-medium text-slate-700">Trang Chủ</a>
+      <a href="about.html" class="block px-3.5 py-2.5 rounded-xl font-bold text-[#087A55] bg-emerald-50">Về Chúng Tôi</a>
+      <a href="jobs.html" class="block px-3.5 py-2.5 rounded-xl font-medium text-slate-700">Danh Sách Việc Làm</a>
+      <a href="why-tex-giang.html" class="block px-3.5 py-2.5 rounded-xl font-medium text-slate-700">Tại Sao Chọn Chúng Tôi</a>
+      <a href="news.html" class="block px-3.5 py-2.5 rounded-xl font-medium text-slate-700">Tin Tức Nghề Nghiệp</a>
+      <a href="contact.html" class="block px-3.5 py-2.5 rounded-xl font-medium text-slate-700">Liên Hệ</a>
+      <div class="pt-2 flex flex-col gap-2">
+        <a href="apply.html" class="w-full text-center py-3 rounded-xl font-bold text-white bg-[#087A55]">Nộp Hồ Sơ Trực Tuyến</a>
+        <a href="admin/login.html" class="w-full text-center py-2.5 rounded-xl font-bold text-[#12345A] bg-slate-100">Đăng Nhập Quản Trị HR</a>
       </div>
     </div>
   </header>
