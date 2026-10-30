@@ -74,6 +74,10 @@
 .tg-public footer a { overflow-wrap: anywhere; }
 .tg-public .tg-modal { z-index: 80; }
 body.has-dialog { overflow: hidden; }
+@media (max-width:767px) {
+  .tg-public header > .tg-container > a:first-child > img { width:60px; height:60px; object-fit:contain; }
+  .tg-public header > .tg-container > a:first-child > span { display:none; }
+}
 @media (min-width:1024px) and (max-width:1279px) {
   .tg-public #jobs-filter-form { grid-template-columns: repeat(3,minmax(0,1fr)); }
   .tg-public #jobs-filter-form > button { grid-column: auto; }

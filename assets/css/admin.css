@@ -94,6 +94,16 @@ body.admin-app {
   gap: 10px;
   color: var(--admin-muted);
 }
+.admin-mobile-logo { display: none; }
+@media (max-width: 767px) {
+  .admin-mobile-logo { display: flex; flex: none; width: 60px; height: 60px; }
+  .admin-mobile-logo img { width: 60px; height: 60px; object-fit: contain; }
+  .admin-app .admin-topbar { height: 80px; padding-block: 10px; }
+  .topbar-context > span { display: none; }
+  .topbar-right > .admin-badge { display: none; }
+  .admin-app .admin-brand > div, .admin-app .login-brand > div { display: none; }
+  .admin-app .admin-brand img, .admin-app .login-brand img { width: 60px; height: 60px; object-fit: contain; }
+}
 .topbar-right {
   display: flex;
   align-items: center;
