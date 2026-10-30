@@ -1,5 +1,5 @@
 module.exports = {
-  content: ['./*.html', './assets/js/*.js'],
+  content: ['./*.html', './admin/**/*.html', './assets/js/*.js', './tools/build-admin.mjs'],
   theme: {
     extend: {
       colors: {

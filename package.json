@@ -4,7 +4,11 @@
   "version": "1.0.0",
   "scripts": {
     "build:css": "tailwindcss -i assets/css/tailwind.source.css -o assets/css/utilities.css --minify",
-    "audit:public": "node tools/audit-public.mjs"
+    "audit:public": "node tools/audit-public.mjs",
+    "build:admin": "node tools/build-admin.mjs",
+    "build": "npm run build:admin && npm run build:css",
+    "audit:admin": "node tools/audit-admin.mjs",
+    "preview": "node tools/serve.mjs"
   },
   "devDependencies": {
     "tailwindcss": "3.4.17",

@@ -1,0 +1,412 @@
+{
+  "results": [
+    {
+      "name": "dashboard",
+      "width": 1440,
+      "title": "Bảng điều khiển",
+      "overflow": false,
+      "mainWidth": 1178,
+      "rows": [
+        3
+      ],
+      "smallText": 0,
+      "unlabelled": [],
+      "emptyButtons": 0,
+      "brokenImages": [],
+      "errors": []
+    },
+    {
+      "name": "dashboard",
+      "width": 1024,
+      "title": "Bảng điều khiển",
+      "overflow": false,
+      "mainWidth": 762,
+      "rows": [
+        3
+      ],
+      "smallText": 0,
+      "unlabelled": [],
+      "emptyButtons": 0,
+      "brokenImages": [],
+      "errors": []
+    },
+    {
+      "name": "dashboard",
+      "width": 390,
+      "title": "Bảng điều khiển",
+      "overflow": true,
+      "mainWidth": 376,
+      "rows": [
+        3
+      ],
+      "smallText": 0,
+      "unlabelled": [],
+      "emptyButtons": 0,
+      "brokenImages": [],
+      "errors": []
+    },
+    {
+      "name": "jobs",
+      "width": 1440,
+      "title": "Tin tuyển dụng",
+      "overflow": false,
+      "mainWidth": 1178,
+      "rows": [
+        4
+      ],
+      "smallText": 0,
+      "unlabelled": [
+        "SELECT",
+        "SELECT"
+      ],
+      "emptyButtons": 0,
+      "brokenImages": [],
+      "errors": []
+    },
+    {
+      "name": "jobs",
+      "width": 1024,
+      "title": "Tin tuyển dụng",
+      "overflow": false,
+      "mainWidth": 762,
+      "rows": [
+        4
+      ],
+      "smallText": 0,
+      "unlabelled": [
+        "SELECT",
+        "SELECT"
+      ],
+      "emptyButtons": 0,
+      "brokenImages": [],
+      "errors": []
+    },
+    {
+      "name": "jobs",
+      "width": 390,
+      "title": "Tin tuyển dụng",
+      "overflow": false,
+      "mainWidth": 376,
+      "rows": [
+        4
+      ],
+      "smallText": 0,
+      "unlabelled": [
+        "SELECT",
+        "SELECT"
+      ],
+      "emptyButtons": 0,
+      "brokenImages": [],
+      "errors": []
+    },
+    {
+      "name": "job-form",
+      "width": 1440,
+      "title": "Soạn tin tuyển dụng",
+      "overflow": false,
+      "mainWidth": 1178,
+      "rows": [],
+      "smallText": 0,
+      "unlabelled": [],
+      "emptyButtons": 5,
+      "brokenImages": [],
+      "errors": []
+    },
+    {
+      "name": "job-form",
+      "width": 1024,
+      "title": "Soạn tin tuyển dụng",
+      "overflow": false,
+      "mainWidth": 762,
+      "rows": [],
+      "smallText": 0,
+      "unlabelled": [],
+      "emptyButtons": 5,
+      "brokenImages": [],
+      "errors": []
+    },
+    {
+      "name": "job-form",
+      "width": 390,
+      "title": "Soạn tin tuyển dụng",
+      "overflow": false,
+      "mainWidth": 376,
+      "rows": [],
+      "smallText": 0,
+      "unlabelled": [],
+      "emptyButtons": 5,
+      "brokenImages": [],
+      "errors": []
+    },
+    {
+      "name": "applications",
+      "width": 1440,
+      "title": "Hồ sơ ứng viên",
+      "overflow": false,
+      "mainWidth": 1178,
+      "rows": [
+        4
+      ],
+      "smallText": 0,
+      "unlabelled": [
+        "admin-status-filter",
+        "SELECT"
+      ],
+      "emptyButtons": 0,
+      "brokenImages": [],
+      "errors": []
+    },
+    {
+      "name": "applications",
+      "width": 1024,
+      "title": "Hồ sơ ứng viên",
+      "overflow": false,
+      "mainWidth": 762,
+      "rows": [
+        4
+      ],
+      "smallText": 0,
+      "unlabelled": [
+        "admin-status-filter",
+        "SELECT"
+      ],
+      "emptyButtons": 0,
+      "brokenImages": [],
+      "errors": []
+    },
+    {
+      "name": "applications",
+      "width": 390,
+      "title": "Hồ sơ ứng viên",
+      "overflow": false,
+      "mainWidth": 376,
+      "rows": [
+        4
+      ],
+      "smallText": 0,
+      "unlabelled": [
+        "admin-status-filter",
+        "SELECT"
+      ],
+      "emptyButtons": 0,
+      "brokenImages": [],
+      "errors": []
+    },
+    {
+      "name": "application-detail",
+      "width": 1440,
+      "title": "Hồ sơ ứng viên",
+      "overflow": false,
+      "mainWidth": 1178,
+      "rows": [],
+      "smallText": 0,
+      "unlabelled": [],
+      "emptyButtons": 0,
+      "brokenImages": [],
+      "errors": []
+    },
+    {
+      "name": "application-detail",
+      "width": 1024,
+      "title": "Hồ sơ ứng viên",
+      "overflow": false,
+      "mainWidth": 762,
+      "rows": [],
+      "smallText": 0,
+      "unlabelled": [],
+      "emptyButtons": 0,
+      "brokenImages": [],
+      "errors": []
+    },
+    {
+      "name": "application-detail",
+      "width": 390,
+      "title": "Hồ sơ ứng viên",
+      "overflow": false,
+      "mainWidth": 376,
+      "rows": [],
+      "smallText": 0,
+      "unlabelled": [],
+      "emptyButtons": 0,
+      "brokenImages": [],
+      "errors": []
+    },
+    {
+      "name": "content",
+      "width": 1440,
+      "title": "Nội dung website",
+      "overflow": false,
+      "mainWidth": 1178,
+      "rows": [
+        3
+      ],
+      "smallText": 0,
+      "unlabelled": [],
+      "emptyButtons": 0,
+      "brokenImages": [],
+      "errors": []
+    },
+    {
+      "name": "content",
+      "width": 1024,
+      "title": "Nội dung website",
+      "overflow": false,
+      "mainWidth": 762,
+      "rows": [
+        3
+      ],
+      "smallText": 0,
+      "unlabelled": [],
+      "emptyButtons": 0,
+      "brokenImages": [],
+      "errors": []
+    },
+    {
+      "name": "content",
+      "width": 390,
+      "title": "Nội dung website",
+      "overflow": false,
+      "mainWidth": 376,
+      "rows": [
+        3
+      ],
+      "smallText": 0,
+      "unlabelled": [],
+      "emptyButtons": 0,
+      "brokenImages": [],
+      "errors": []
+    },
+    {
+      "name": "banners",
+      "width": 1440,
+      "title": "Banner & popup",
+      "overflow": false,
+      "mainWidth": 1178,
+      "rows": [],
+      "smallText": 0,
+      "unlabelled": [],
+      "emptyButtons": 0,
+      "brokenImages": [],
+      "errors": []
+    },
+    {
+      "name": "banners",
+      "width": 1024,
+      "title": "Banner & popup",
+      "overflow": false,
+      "mainWidth": 762,
+      "rows": [],
+      "smallText": 0,
+      "unlabelled": [],
+      "emptyButtons": 0,
+      "brokenImages": [],
+      "errors": []
+    },
+    {
+      "name": "banners",
+      "width": 390,
+      "title": "Banner & popup",
+      "overflow": false,
+      "mainWidth": 376,
+      "rows": [],
+      "smallText": 0,
+      "unlabelled": [],
+      "emptyButtons": 0,
+      "brokenImages": [],
+      "errors": []
+    },
+    {
+      "name": "settings",
+      "width": 1440,
+      "title": "Cài đặt hệ thống",
+      "overflow": false,
+      "mainWidth": 1178,
+      "rows": [],
+      "smallText": 0,
+      "unlabelled": [],
+      "emptyButtons": 0,
+      "brokenImages": [],
+      "errors": []
+    },
+    {
+      "name": "settings",
+      "width": 1024,
+      "title": "Cài đặt hệ thống",
+      "overflow": false,
+      "mainWidth": 762,
+      "rows": [],
+      "smallText": 0,
+      "unlabelled": [],
+      "emptyButtons": 0,
+      "brokenImages": [],
+      "errors": []
+    },
+    {
+      "name": "settings",
+      "width": 390,
+      "title": "Cài đặt hệ thống",
+      "overflow": false,
+      "mainWidth": 376,
+      "rows": [],
+      "smallText": 0,
+      "unlabelled": [],
+      "emptyButtons": 0,
+      "brokenImages": [],
+      "errors": []
+    },
+    {
+      "name": "login",
+      "width": 1440,
+      "title": "Cổng quản trị tuyển dụng",
+      "overflow": false,
+      "mainWidth": 420,
+      "rows": [],
+      "smallText": 0,
+      "unlabelled": [],
+      "emptyButtons": 0,
+      "brokenImages": [],
+      "errors": []
+    },
+    {
+      "name": "login",
+      "width": 1024,
+      "title": "Cổng quản trị tuyển dụng",
+      "overflow": false,
+      "mainWidth": 420,
+      "rows": [],
+      "smallText": 0,
+      "unlabelled": [],
+      "emptyButtons": 0,
+      "brokenImages": [],
+      "errors": []
+    },
+    {
+      "name": "login",
+      "width": 390,
+      "title": "Cổng quản trị tuyển dụng",
+      "overflow": false,
+      "mainWidth": 344,
+      "rows": [],
+      "smallText": 0,
+      "unlabelled": [],
+      "emptyButtons": 0,
+      "brokenImages": [],
+      "errors": []
+    }
+  ],
+  "interactions": {
+    "initialCandidates": 4,
+    "afterSearchMai": 1,
+    "afterSearchAndNew": 1,
+    "firstJobToggleText": " Đóng tin",
+    "firstJobBadge": "Đang tuyển",
+    "detail2Title": "Hồ sơ ứng viên",
+    "contradictoryFilterNames": [
+      "Trần Quốc Bảo\nNộp 29/10/2026 · 11:20"
+    ],
+    "modalOpenedFor": "Trần Quốc Bảo",
+    "modalSelectedState": "new",
+    "detail2Candidate": "Lê Thị Mai",
+    "editorTG02Title": "Công nhân may chuyền (áo polo, jacket xuất khẩu)"
+  }
+}

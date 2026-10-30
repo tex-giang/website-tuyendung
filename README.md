@@ -1,4 +1,19 @@
 # HỆ THỐNG WEBSITE TUYỂN DỤNG CÔNG TY CỔ PHẦN TEX-GIANG & TG APPAREL
+
+## Admin frontend — cập nhật 30/10/2026
+
+9 trang quản trị dùng shell chung, CSS/icon local và dữ liệu demo lưu theo phiên trình duyệt. Nguồn sinh HTML: `tools/build-admin.mjs`; CSS: `assets/css/admin.css`; tương tác và repository: `assets/js/admin.js`, `assets/js/admin-data.js`.
+
+```powershell
+npm ci
+npm run build
+npm run preview
+```
+
+Mở `http://127.0.0.1:4173/admin/` rồi chọn **Vào bản demo**. Kiểm tra lại bằng `npm run audit:admin`. Không có xác thực, lưu DB hoặc gửi hồ sơ thật; các thao tác lưu chỉ thay đổi phiên demo, không xuất bản website công khai. Chọn **Đặt lại dữ liệu demo** để khôi phục fixtures.
+
+Kết quả và giới hạn: [docs/admin-implementation.md](docs/admin-implementation.md). Kế hoạch: [docs/admin-redesign-plan.md](docs/admin-redesign-plan.md).
+
 > **Phong cách:** Corporate Recruitment Website kết hợp Modern Industrial Branding  
 > **Đơn vị thực hiện:** IT-P.KT-NS & Senior UI/UX Frontend Specialist  
 > **Địa bàn:** Nhà máy Tân Hương 2, Lô BII-8, KCN Tân Hương, Xã Tân Hương, Huyện Châu Thành, Tỉnh Đồng Tháp  
@@ -7,8 +22,8 @@
 
 ## 1. CÔNG NGHỆ & THƯ VIỆN SỬ DỤNG
 - **HTML5:** Cấu trúc ngữ nghĩa (semantic), phân cấp heading, tối ưu accessibility và SEO.
-- **Tailwind CSS (CDN):** Thiết kế layout, responsive mobile-first, bảng màu thương hiệu chuẩn.
-- **Bootstrap Icons (v1.11.3 CDN):** Hệ thống biểu tượng thống nhất toàn trang.
+- **Tailwind CSS build cục bộ:** `npm run build:css` sinh `assets/css/utilities.css`, quét cả public và admin.
+- **Bootstrap Icons SVG local:** Tái sử dụng bộ icon trong `assets/images/icons` (MIT).
 - **Google Fonts (Be Vietnam Pro):** Font chữ hỗ trợ tiếng Việt hoàn hảo, dễ đọc cho người lao động.
 - **JavaScript thuần (Vanilla JS):** Tương tác frontend mượt mà, độc lập, không phụ thuộc framework nặng nề.
 - **Tài sản thương hiệu thực tế:**

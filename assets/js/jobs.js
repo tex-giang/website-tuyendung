@@ -14,6 +14,10 @@ let currentFilters = {
   sort: 'newest'
 };
 
+// Phân trang phía client: mỗi trang 6 tin
+const PAGE_SIZE = 6;
+let currentPage = 1;
+
 document.addEventListener('DOMContentLoaded', function () {
   initJobFilters();
   renderJobs();
@@ -103,12 +107,14 @@ function initJobFilters() {
   if (sortSelect) {
     sortSelect.addEventListener('change', function () {
       currentFilters.sort = this.value;
+      currentPage = 1;
       renderJobs();
     });
   }
 }
 
 function applyFilters() {
+  currentPage = 1;
   currentFilters.keyword = (document.getElementById('filter-keyword')?.value || '').trim();
   currentFilters.company = document.getElementById('filter-company')?.value || '';
   currentFilters.location = document.getElementById('filter-location')?.value || '';
@@ -138,10 +144,12 @@ function resetFilters() {
   if (form) form.reset();
   const sort = document.getElementById('filter-sort');
   if (sort) sort.value = 'newest';
+  currentPage = 1;
   renderJobs();
 }
 
 function removeFilter(key) {
+  currentPage = 1;
   currentFilters[key] = '';
   const input = document.getElementById(`filter-${key}`);
   if (input) input.value = '';
@@ -242,14 +250,85 @@ function renderJobs() {
     }
   }
 
-  // Render Job Cards or Empty State
+  // Render Job Cards or Empty State (có phân trang)
+  const pager = document.getElementById('jobs-pager');
+
   if (filtered.length === 0) {
     listContainer.innerHTML = '';
     if (emptyState) emptyState.classList.remove('hidden');
-  } else {
-    if (emptyState) emptyState.classList.add('hidden');
-    listContainer.innerHTML = filtered.map(renderJobCard).join('');
+    if (pager) {
+      pager.innerHTML = '';
+      pager.classList.add('hidden');
+    }
+    return;
   }
+
+  if (emptyState) emptyState.classList.add('hidden');
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  if (currentPage > totalPages) currentPage = totalPages;
+  if (currentPage < 1) currentPage = 1;
+
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const pageItems = filtered.slice(start, start + PAGE_SIZE);
+
+  listContainer.innerHTML = pageItems.map(renderJobCard).join('');
+
+  renderPager(pager, filtered.length, totalPages);
+}
+
+function renderPager(pager, total, totalPages) {
+  if (!pager) return;
+
+  if (totalPages <= 1) {
+    pager.innerHTML = '';
+    pager.classList.add('hidden');
+    return;
+  }
+
+  pager.classList.remove('hidden');
+  pager.innerHTML = '';
+
+  const start = (currentPage - 1) * PAGE_SIZE + 1;
+  const end = Math.min(currentPage * PAGE_SIZE, total);
+
+  const summary = document.createElement('p');
+  summary.className = 'text-[14px] text-muted';
+  summary.textContent = `Hiển thị ${start}–${end} trong ${total} vị trí`;
+  pager.appendChild(summary);
+
+  const controls = document.createElement('div');
+  controls.className = 'flex items-center gap-2';
+
+  const makeButton = (label, page, options) => {
+    const opts = options || {};
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = opts.current
+      ? 'grid h-9 min-w-9 place-items-center rounded-lg bg-accent-soft px-3 text-[14px] font-medium text-accent'
+      : 'grid h-9 min-w-9 place-items-center rounded-lg border border-line px-3 text-[14px] text-body transition-colors hover:border-accent hover:text-accent disabled:cursor-not-allowed disabled:opacity-40';
+    button.innerHTML = label;
+    if (opts.disabled) button.disabled = true;
+    if (opts.current) button.setAttribute('aria-current', 'page');
+    if (!opts.disabled && !opts.current) {
+      button.addEventListener('click', () => {
+        currentPage = page;
+        renderJobs();
+        document.getElementById('jobs-list-container')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }
+    return button;
+  };
+
+  controls.appendChild(makeButton('Trước', currentPage - 1, { disabled: currentPage === 1 }));
+
+  for (let page = 1; page <= totalPages; page += 1) {
+    controls.appendChild(makeButton(String(page), page, { current: page === currentPage }));
+  }
+
+  controls.appendChild(makeButton('Sau', currentPage + 1, { disabled: currentPage === totalPages }));
+
+  pager.appendChild(controls);
 }
 
 function renderJobCard(job) {

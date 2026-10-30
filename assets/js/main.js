@@ -44,18 +44,32 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // 3. Recruitment Announcement Popup (Shows after 1.5s once per session)
+  // 3. Banner pop-up tuyển dụng: chỉ hiện sau khi người dùng đã cuộn (không che màn đầu),
+  //    tối đa một lần mỗi phiên và có nút tắt.
   const popupBanner = document.getElementById('recruitment-popup');
   const closePopupBtn = document.getElementById('close-popup-btn');
   const dontShowAgainBtn = document.getElementById('popup-dont-show-again');
 
   if (popupBanner) {
     const isDismissed = sessionStorage.getItem('texgiang_popup_seen');
+    let popupShown = false;
+
+    const showPopup = () => {
+      if (popupShown || sessionStorage.getItem('texgiang_popup_seen')) return;
+      popupShown = true;
+      popupBanner.classList.remove('hidden');
+      popupBanner.classList.add('flex');
+      window.removeEventListener('scroll', onScroll);
+    };
+
+    const onScroll = () => {
+      if (window.scrollY > window.innerHeight * 0.6) showPopup();
+    };
+
     if (!isDismissed) {
-      setTimeout(() => {
-        popupBanner.classList.remove('hidden');
-        popupBanner.classList.add('flex');
-      }, 1500);
+      window.addEventListener('scroll', onScroll, { passive: true });
+      // Dự phòng cho người chỉ đọc màn đầu rồi rời tab
+      setTimeout(showPopup, 25000);
     }
 
     const hidePopup = () => {
