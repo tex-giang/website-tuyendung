@@ -3,307 +3,174 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quản Lý Tin Tuyển Dụng | TEX-GIANG HR Portal</title>
+  <title>Tin tuyển dụng | Quản trị TEX-GIANG</title>
+  <meta name="robots" content="noindex">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="../assets/css/app.css">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              50: '#f0fdf4',
-              100: '#dcfce7',
-              200: '#bbf7d0',
-              300: '#86efac',
-              400: '#4ade80',
-              500: '#22c55e',
-              600: '#16a34a',
-              700: '#0e6e38',
-              800: '#006837', // Official Brand Green
-              900: '#064e26',
-              950: '#022c15',
-            },
-            navy: {
-              DEFAULT: '#12345A',
-              dark: '#0B223D',
-            }
-          }
-        }
-      }
-    }
-  </script>
+  <script src="../assets/js/tw.config.js"></script>
   <link rel="stylesheet" href="../assets/css/custom.css">
 </head>
-<body class="bg-[#F5F7FA] text-[#1F2937] font-sans antialiased min-h-screen flex">
+<body class="bg-surface font-sans text-body antialiased">
 
-  <!-- ADMIN SIDEBAR -->
-  <aside id="admin-sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col justify-between p-4">
-    <div class="space-y-6">
-      <div class="flex items-center gap-3 px-2 py-1 border-b border-slate-100 pb-4">
-        <img src="../assets/images/logo-tgi.png" alt="Logo TGI" class="h-10 w-auto">
+  <aside id="admin-sidebar" class="admin-sidebar -translate-x-full transition-transform duration-300 lg:translate-x-0" aria-label="Menu quản trị">
+    <div>
+      <div class="admin-brand">
+        <img src="../assets/images/logo-tgi.png" alt="Logo TEX-GIANG">
         <div>
-          <div class="font-black text-sm text-[#087A55] leading-none">TEX-GIANG</div>
-          <p class="text-[10px] text-[#12345A] font-extrabold uppercase mt-1">Quản Trị Tuyển Dụng</p>
+          <strong>TEX-GIANG</strong>
+          <span>Quản trị tuyển dụng</span>
         </div>
       </div>
 
-      <nav class="space-y-1 text-xs">
-        <div class="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Tổng Quan</div>
-        <a href="dashboard.html" class="admin-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-slate-600 hover:bg-slate-50 transition">
-          <i class="bi bi-grid-1x2-fill text-base"></i>
-          <span>Dashboard Thống Kê</span>
-        </a>
+      <nav class="mt-2">
+        <p class="admin-section-label">Tổng quan</p>
+        <a href="dashboard.html" class="admin-nav-link"><span class="flex items-center gap-2.5"><i class="bi bi-grid-1x2"></i> Bảng điều khiển</span></a>
 
-        <div class="pt-3 px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Tuyển Dụng & Ứng Viên</div>
-        <a href="jobs.html" class="admin-nav-link active flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold transition">
-          <span class="flex items-center gap-3">
-            <i class="bi bi-briefcase-fill text-base text-[#087A55]"></i>
-            <span>Quản Lý Việc Làm</span>
-          </span>
-          <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[10px]">24</span>
-        </a>
-        <a href="job-form.html" class="admin-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-slate-600 hover:bg-slate-50 transition">
-          <i class="bi bi-plus-circle-fill text-base"></i>
-          <span>Đăng Tin Mới</span>
-        </a>
-        <a href="applications.html" class="admin-nav-link flex items-center justify-between px-3.5 py-2.5 rounded-xl font-medium text-slate-600 hover:bg-slate-50 transition">
-          <span class="flex items-center gap-3">
-            <i class="bi bi-people-fill text-base"></i>
-            <span>Hồ Sơ Ứng Viên</span>
-          </span>
-          <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold text-[10px]">142</span>
-        </a>
+        <p class="admin-section-label">Tuyển dụng</p>
+        <a href="jobs.html" class="admin-nav-link is-active" aria-current="page"><span class="flex items-center gap-2.5"><i class="bi bi-briefcase"></i> Tin tuyển dụng</span><span class="count">24</span></a>
+        <a href="job-form.html" class="admin-nav-link"><span class="flex items-center gap-2.5"><i class="bi bi-plus-square"></i> Đăng tin mới</span></a>
+        <a href="applications.html" class="admin-nav-link"><span class="flex items-center gap-2.5"><i class="bi bi-people"></i> Hồ sơ ứng viên</span><span class="count">142</span></a>
 
-        <div class="pt-3 px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Nội Dung & Cấu Hình</div>
-        <a href="content.html" class="admin-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-slate-600 hover:bg-slate-50 transition">
-          <i class="bi bi-file-earmark-richtext-fill text-base"></i>
-          <span>Quản Lý Nội Dung</span>
-        </a>
-        <a href="banners.html" class="admin-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-slate-600 hover:bg-slate-50 transition">
-          <i class="bi bi-images text-base"></i>
-          <span>Quản Lý Banner & Popup</span>
-        </a>
-        <a href="settings.html" class="admin-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-slate-600 hover:bg-slate-50 transition">
-          <i class="bi bi-gear-fill text-base"></i>
-          <span>Cài Đặt Hệ Thống</span>
-        </a>
+        <p class="admin-section-label">Nội dung</p>
+        <a href="content.html" class="admin-nav-link"><span class="flex items-center gap-2.5"><i class="bi bi-file-earmark-text"></i> Nội dung website</span></a>
+        <a href="banners.html" class="admin-nav-link"><span class="flex items-center gap-2.5"><i class="bi bi-images"></i> Banner &amp; popup</span></a>
+        <a href="settings.html" class="admin-nav-link"><span class="flex items-center gap-2.5"><i class="bi bi-gear"></i> Cài đặt hệ thống</span></a>
       </nav>
     </div>
 
-    <div class="pt-4 border-t border-slate-100 space-y-3">
-      <div class="flex items-center justify-between px-2">
-        <a href="../index.html" target="_blank" class="text-xs font-bold text-[#087A55] hover:underline flex items-center gap-1">
-          <i class="bi bi-box-arrow-up-right"></i> Xem Trang Chủ
-        </a>
-        <a href="login.html" class="text-xs font-bold text-rose-600 hover:underline">Đăng xuất</a>
-      </div>
+    <div class="admin-sidebar-foot">
+      <a href="../index.html" target="_blank" rel="noopener"><i class="bi bi-box-arrow-up-right"></i> Xem website</a>
+      <a href="login.html"><i class="bi bi-box-arrow-right"></i> Đăng xuất</a>
     </div>
   </aside>
 
-  <div id="sidebar-overlay" class="hidden fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden"></div>
+  <div id="sidebar-overlay" class="fixed inset-0 z-40 hidden bg-black/40 lg:hidden"></div>
 
-  <!-- MAIN WRAPPER -->
-  <div class="flex-1 lg:pl-64 flex flex-col min-h-screen">
-
-    <!-- TOPBAR -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 px-4 sm:px-8 py-3.5 flex justify-between items-center shadow-sm">
+  <div class="min-h-screen lg:pl-[248px]">
+    <header class="admin-topbar">
       <div class="flex items-center gap-3">
-        <button id="toggle-sidebar-btn" class="lg:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100 focus:outline-none">
-          <i class="bi bi-list text-2xl"></i>
+        <button id="toggle-sidebar-btn" class="admin-icon-btn lg:hidden" aria-label="Mở menu">
+          <i class="bi bi-list text-[18px]"></i>
         </button>
         <div>
-          <h2 class="font-black text-slate-900 text-base sm:text-lg">Danh Sách Tin Tuyển Dụng</h2>
-          <p class="text-[11px] text-slate-400 hidden sm:block">Quản lý toàn bộ vị trí đang mở và lịch sử tuyển dụng</p>
+          <h1>Tin tuyển dụng</h1>
+          <p class="hidden sm:block">Toàn bộ vị trí đang mở và lịch sử đăng tin</p>
         </div>
       </div>
-
-      <a href="job-form.html" class="px-4 py-2 bg-[#087A55] hover:bg-[#006837] text-white font-bold text-xs rounded-xl shadow flex items-center gap-1.5 transition">
-        <i class="bi bi-plus-lg"></i>
-        <span>Đăng Tin Mới</span>
-      </a>
+      <a href="job-form.html" class="tg-btn tg-btn--primary h-9 px-3 text-[14px]"><i class="bi bi-plus-lg"></i> Đăng tin mới</a>
     </header>
 
-    <!-- CONTENT BODY -->
-    <main class="p-4 sm:p-8 space-y-6 flex-1">
+    <main class="admin-content">
 
-      <!-- Filter Controls Toolbar -->
-      <div class="bg-white rounded-3xl border border-emerald-100 p-4 sm:p-5 flex flex-wrap items-center justify-between gap-4 text-xs shadow-sm">
-        <div class="flex-1 min-w-[240px] relative">
-          <input type="text" id="admin-job-search" placeholder="Tìm theo chức danh, mã tin..." class="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#087A55]">
-          <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
-            <i class="bi bi-search"></i>
-          </span>
+      <section class="admin-panel">
+        <div class="admin-panel-head">
+          <div class="flex flex-1 flex-wrap items-center gap-3">
+            <label class="relative flex-1 min-w-[220px]">
+              <span class="sr-only">Tìm tin tuyển dụng</span>
+              <i class="bi bi-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[14px] text-muted"></i>
+              <input type="search" id="admin-job-search" placeholder="Tìm theo chức danh, mã tin…" class="form-input pl-9">
+            </label>
+            <select class="form-input w-auto py-2 text-[14px]">
+              <option>Tất cả trạng thái</option>
+              <option>Đang tuyển</option>
+              <option>Tuyển gấp</option>
+              <option>Hết hạn</option>
+              <option>Đã đóng tuyển</option>
+            </select>
+            <select class="form-input w-auto py-2 text-[14px]">
+              <option>Tất cả công ty</option>
+              <option>TEX-GIANG</option>
+              <option>TG APPAREL</option>
+            </select>
+          </div>
         </div>
 
-        <div class="flex flex-wrap items-center gap-2">
-          <select class="px-3 py-2.5 bg-slate-50 border border-slate-300 rounded-xl">
-            <option>Tất cả trạng thái</option>
-            <option>Đang tuyển</option>
-            <option>Tuyển gấp</option>
-            <option>Hết hạn</option>
-            <option>Đã đóng tuyển</option>
-          </select>
-
-          <select class="px-3 py-2.5 bg-slate-50 border border-slate-300 rounded-xl">
-            <option>Tất cả công ty</option>
-            <option>TEX-GIANG</option>
-            <option>TG APPAREL</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Jobs Data Table -->
-      <div class="bg-white rounded-3xl border border-emerald-100 overflow-hidden shadow-sm">
         <div class="overflow-x-auto">
-          <table class="w-full text-xs text-left">
+          <table class="admin-table">
             <thead>
-              <tr class="bg-emerald-50/50 border-b border-emerald-100 text-slate-600 uppercase font-bold">
-                <th class="p-4 whitespace-nowrap">Chức Danh / Vị Trí</th>
-                <th class="p-4 whitespace-nowrap">Đơn Vị</th>
-                <th class="p-4 whitespace-nowrap">Mức Lương</th>
-                <th class="p-4 whitespace-nowrap">Hạn Nộp</th>
-                <th class="p-4 whitespace-nowrap">Hồ Sơ</th>
-                <th class="p-4 whitespace-nowrap">Trạng Thái</th>
-                <th class="p-4 text-right whitespace-nowrap">Thao Tác</th>
+              <tr>
+                <th>Chức danh</th>
+                <th>Đơn vị</th>
+                <th>Mức lương</th>
+                <th>Hạn nộp</th>
+                <th>Hồ sơ</th>
+                <th>Trạng thái</th>
+                <th class="text-right">Thao tác</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-slate-100 text-slate-700">
-
-              <!-- Row 1 -->
-              <tr class="hover:bg-slate-50 transition">
-                <td class="p-4">
-                  <strong class="text-slate-900 text-sm block">300 Công Nhân May Chuyền (Áo Polo, Jacket)</strong>
-                  <span class="text-[10px] text-slate-400">Mã: TG-01 &bull; Đăng: 15/10/2026</span>
-                </td>
-                <td class="p-4 font-bold text-[#087A55]">TEX-GIANG</td>
-                <td class="p-4 font-semibold text-[#087A55]">8 - 16 Triệu</td>
-                <td class="p-4 font-bold text-slate-800">30/11/2026</td>
-                <td class="p-4 font-black text-amber-600">78 CV</td>
-                <td class="p-4">
-                  <span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[10px]">Đang tuyển</span>
-                </td>
-                <td class="p-4 text-right space-x-1 whitespace-nowrap">
-                  <a href="../job-detail.html" target="_blank" class="p-1.5 text-slate-600 hover:text-[#087A55] rounded-lg" title="Xem trước trang công khai">
-                    <i class="bi bi-eye"></i>
-                  </a>
-                  <a href="job-form.html?id=TG-01" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg" title="Sửa tin">
-                    <i class="bi bi-pencil-square"></i>
-                  </a>
-                  <button onclick="showToast('Đã nhân bản tin [Bản sao] thành công!', 'success')" class="p-1.5 text-purple-600 hover:bg-purple-50 rounded-lg" title="Nhân bản">
-                    <i class="bi bi-copy"></i>
-                  </button>
-                  <button onclick="toggleJobStatus(this, '300 Công Nhân May Chuyền')" class="p-1.5 text-amber-600 hover:bg-amber-50 rounded-lg" title="Đóng tin">
-                    <i class="bi bi-lock"></i>
-                  </button>
-                  <button onclick="confirmDeleteJob('300 Công Nhân May Chuyền')" class="p-1.5 text-rose-600 hover:bg-rose-50 rounded-lg" title="Xóa tin">
-                    <i class="bi bi-trash"></i>
-                  </button>
+            <tbody>
+              <tr>
+                <td class="cell-strong">300 công nhân may chuyền<span class="cell-sub">TG-01 · đăng 15/10/2026</span></td>
+                <td>TEX-GIANG</td>
+                <td>8 – 16 triệu</td>
+                <td>30/11/2026</td>
+                <td class="font-medium">78 CV</td>
+                <td><span class="admin-badge is-open">Đang tuyển</span></td>
+                <td class="text-right whitespace-nowrap">
+                  <a href="../job-detail.html" target="_blank" rel="noopener" class="admin-icon-btn inline-grid" aria-label="Xem tin công khai"><i class="bi bi-eye"></i></a>
+                  <a href="job-form.html?id=TG-01" class="admin-icon-btn inline-grid" aria-label="Sửa tin"><i class="bi bi-pencil"></i></a>
+                  <button type="button" onclick="toggleJobStatus(this, '300 công nhân may chuyền')" class="admin-icon-btn inline-grid" aria-label="Đóng hoặc mở tin"><i class="bi bi-lock"></i></button>
+                  <button type="button" onclick="confirmDeleteJob('300 công nhân may chuyền')" class="admin-icon-btn inline-grid" aria-label="Xoá tin"><i class="bi bi-trash"></i></button>
                 </td>
               </tr>
-
-              <!-- Row 2 -->
-              <tr class="hover:bg-slate-50 transition">
-                <td class="p-4">
-                  <strong class="text-slate-900 text-sm block">Giám Sát Kiểm Phẩm QC May Mặc</strong>
-                  <span class="text-[10px] text-slate-400">Mã: TG-02 &bull; Đăng: 18/10/2026</span>
-                </td>
-                <td class="p-4 font-bold text-[#12345A]">TG APPAREL</td>
-                <td class="p-4 font-semibold text-[#087A55]">12 - 18 Triệu</td>
-                <td class="p-4 font-bold text-slate-800">25/11/2026</td>
-                <td class="p-4 font-black text-amber-600">24 CV</td>
-                <td class="p-4">
-                  <span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[10px]">Đang tuyển</span>
-                </td>
-                <td class="p-4 text-right space-x-1 whitespace-nowrap">
-                  <a href="../job-detail.html" target="_blank" class="p-1.5 text-slate-600 hover:text-[#087A55] rounded-lg">
-                    <i class="bi bi-eye"></i>
-                  </a>
-                  <a href="job-form.html?id=TG-02" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg">
-                    <i class="bi bi-pencil-square"></i>
-                  </a>
-                  <button onclick="showToast('Đã nhân bản tin [Bản sao] thành công!', 'success')" class="p-1.5 text-purple-600 hover:bg-purple-50 rounded-lg">
-                    <i class="bi bi-copy"></i>
-                  </button>
-                  <button onclick="toggleJobStatus(this, 'Giám Sát QC')" class="p-1.5 text-amber-600 hover:bg-amber-50 rounded-lg">
-                    <i class="bi bi-lock"></i>
-                  </button>
-                  <button onclick="confirmDeleteJob('Giám Sát QC')" class="p-1.5 text-rose-600 hover:bg-rose-50 rounded-lg">
-                    <i class="bi bi-trash"></i>
-                  </button>
+              <tr>
+                <td class="cell-strong">Giám sát kiểm phẩm QC<span class="cell-sub">TG-02 · đăng 18/10/2026</span></td>
+                <td>TG APPAREL</td>
+                <td>12 – 18 triệu</td>
+                <td>25/11/2026</td>
+                <td class="font-medium">24 CV</td>
+                <td><span class="admin-badge is-open">Đang tuyển</span></td>
+                <td class="text-right whitespace-nowrap">
+                  <a href="../job-detail.html" target="_blank" rel="noopener" class="admin-icon-btn inline-grid" aria-label="Xem tin công khai"><i class="bi bi-eye"></i></a>
+                  <a href="job-form.html?id=TG-02" class="admin-icon-btn inline-grid" aria-label="Sửa tin"><i class="bi bi-pencil"></i></a>
+                  <button type="button" onclick="toggleJobStatus(this, 'Giám sát QC')" class="admin-icon-btn inline-grid" aria-label="Đóng hoặc mở tin"><i class="bi bi-lock"></i></button>
+                  <button type="button" onclick="confirmDeleteJob('Giám sát QC')" class="admin-icon-btn inline-grid" aria-label="Xoá tin"><i class="bi bi-trash"></i></button>
                 </td>
               </tr>
-
-              <!-- Row 3 -->
-              <tr class="hover:bg-slate-50 transition">
-                <td class="p-4">
-                  <strong class="text-slate-900 text-sm block">Kỹ Sư Công Nghiệp & Định Mức IE</strong>
-                  <span class="text-[10px] text-slate-400">Mã: TG-03 &bull; Đăng: 20/10/2026</span>
-                </td>
-                <td class="p-4 font-bold text-[#087A55]">TEX-GIANG</td>
-                <td class="p-4 font-semibold text-[#087A55]">15 - 22 Triệu</td>
-                <td class="p-4 font-bold text-slate-800">28/11/2026</td>
-                <td class="p-4 font-black text-amber-600">12 CV</td>
-                <td class="p-4">
-                  <span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[10px]">Đang tuyển</span>
-                </td>
-                <td class="p-4 text-right space-x-1 whitespace-nowrap">
-                  <a href="../job-detail.html" target="_blank" class="p-1.5 text-slate-600 hover:text-[#087A55] rounded-lg">
-                    <i class="bi bi-eye"></i>
-                  </a>
-                  <a href="job-form.html?id=TG-03" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg">
-                    <i class="bi bi-pencil-square"></i>
-                  </a>
-                  <button onclick="showToast('Đã nhân bản tin [Bản sao] thành công!', 'success')" class="p-1.5 text-purple-600 hover:bg-purple-50 rounded-lg">
-                    <i class="bi bi-copy"></i>
-                  </button>
-                  <button onclick="toggleJobStatus(this, 'Kỹ Sư IE')" class="p-1.5 text-amber-600 hover:bg-amber-50 rounded-lg">
-                    <i class="bi bi-lock"></i>
-                  </button>
-                  <button onclick="confirmDeleteJob('Kỹ Sư IE')" class="p-1.5 text-rose-600 hover:bg-rose-50 rounded-lg">
-                    <i class="bi bi-trash"></i>
-                  </button>
+              <tr>
+                <td class="cell-strong">Kỹ sư công nghiệp &amp; định mức IE<span class="cell-sub">TG-03 · đăng 20/10/2026</span></td>
+                <td>TEX-GIANG</td>
+                <td>15 – 22 triệu</td>
+                <td>28/11/2026</td>
+                <td class="font-medium">12 CV</td>
+                <td><span class="admin-badge is-urgent">Tuyển gấp</span></td>
+                <td class="text-right whitespace-nowrap">
+                  <a href="../job-detail.html" target="_blank" rel="noopener" class="admin-icon-btn inline-grid" aria-label="Xem tin công khai"><i class="bi bi-eye"></i></a>
+                  <a href="job-form.html?id=TG-03" class="admin-icon-btn inline-grid" aria-label="Sửa tin"><i class="bi bi-pencil"></i></a>
+                  <button type="button" onclick="toggleJobStatus(this, 'Kỹ sư IE')" class="admin-icon-btn inline-grid" aria-label="Đóng hoặc mở tin"><i class="bi bi-lock"></i></button>
+                  <button type="button" onclick="confirmDeleteJob('Kỹ sư IE')" class="admin-icon-btn inline-grid" aria-label="Xoá tin"><i class="bi bi-trash"></i></button>
                 </td>
               </tr>
-
-              <!-- Row 4: Expired -->
-              <tr class="hover:bg-slate-50 transition bg-slate-50/50 opacity-80">
-                <td class="p-4">
-                  <strong class="text-slate-600 text-sm block">Lái Xe Đưa Đón Cán Bộ Công Nhân Viên</strong>
-                  <span class="text-[10px] text-slate-400">Mã: TG-08 &bull; Hết hạn: 20/10/2026</span>
-                </td>
-                <td class="p-4 font-semibold text-slate-500">TG APPAREL</td>
-                <td class="p-4 text-slate-500">9 - 11 Triệu</td>
-                <td class="p-4 text-slate-400">20/10/2026</td>
-                <td class="p-4 font-bold text-slate-500">18 CV</td>
-                <td class="p-4">
-                  <span class="px-2.5 py-1 rounded-full bg-slate-200 text-slate-700 font-bold text-[10px]">Đã đóng tuyển</span>
-                </td>
-                <td class="p-4 text-right space-x-1 whitespace-nowrap">
-                  <button onclick="toggleJobStatus(this, 'Lái Xe')" class="px-2.5 py-1 text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-lg font-bold text-xs">
-                    <i class="bi bi-unlock"></i> Mở lại
-                  </button>
+              <tr>
+                <td class="cell-strong text-muted">Lái xe đưa đón CBCNV<span class="cell-sub">TG-08 · hết hạn 20/10/2026</span></td>
+                <td class="text-muted">TG APPAREL</td>
+                <td class="text-muted">9 – 11 triệu</td>
+                <td class="text-muted">20/10/2026</td>
+                <td class="text-muted">18 CV</td>
+                <td><span class="admin-badge is-closed">Đã đóng</span></td>
+                <td class="text-right whitespace-nowrap">
+                  <button type="button" onclick="toggleJobStatus(this, 'Lái xe đưa đón')" class="tg-btn tg-btn--ghost h-8 px-3 text-[13px]"><i class="bi bi-unlock"></i> Mở lại</button>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <!-- Pagination -->
-        <div class="p-4 border-t border-slate-100 flex justify-between items-center text-xs text-slate-500">
-          <span>Hiển thị <strong>1 - 4</strong> trong tổng số <strong>24</strong> tin đăng</span>
-          <div class="flex items-center gap-1 font-bold">
-            <span class="w-7 h-7 rounded-lg bg-[#087A55] text-white flex items-center justify-center">1</span>
-            <button class="w-7 h-7 rounded-lg hover:bg-slate-100 flex items-center justify-center">2</button>
-            <button class="w-7 h-7 rounded-lg hover:bg-slate-100 flex items-center justify-center">3</button>
+        <div class="mt-4 flex flex-wrap items-center justify-between gap-3 text-[13px] text-muted">
+          <span>Hiển thị <strong class="font-medium text-body">1 – 4</strong> trong <strong class="font-medium text-body">24</strong> tin</span>
+          <div class="flex items-center gap-1">
+            <span class="grid h-8 w-8 place-items-center rounded-lg bg-accent-soft text-[13px] font-medium text-accent">1</span>
+            <button type="button" class="grid h-8 w-8 place-items-center rounded-lg text-[13px] hover:bg-surface">2</button>
+            <button type="button" class="grid h-8 w-8 place-items-center rounded-lg text-[13px] hover:bg-surface">3</button>
           </div>
         </div>
-      </div>
+      </section>
 
     </main>
   </div>
 
-  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full"></div>
+  <div id="toast-container"></div>
 
   <script src="../assets/js/main.js"></script>
   <script src="../assets/js/admin.js"></script>

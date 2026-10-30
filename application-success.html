@@ -3,84 +3,68 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ứng Tuyển Thành Công | TEX-GIANG</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              800: '#006837',
-              700: '#087A55',
-            },
-            navy: '#12345A'
-          }
-        }
-      }
-    }
-  </script>
-  <link rel="stylesheet" href="assets/css/custom.css">
-</head>
-<body class="bg-[#F5F7FA] text-[#1F2937] min-h-screen flex flex-col justify-between">
+  <title>Đã gửi hồ sơ | Tuyển dụng TEX-GIANG</title>
+  <meta name="robots" content="noindex">
 
-  <!-- Header -->
-  <header class="bg-white border-b border-emerald-100 py-4">
-    <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
-      <a href="index.html" class="flex items-center gap-3">
-        <img src="assets/images/logo-tgi.png" alt="Logo TGI" class="h-10 w-auto">
-        <span class="font-black text-sm text-[#087A55]">CÔNG TY CỔ PHẦN TEX-GIANG</span>
+  <link rel="stylesheet" href="assets/css/app.css">
+  <link rel="stylesheet" href="assets/css/utilities.css">
+  <link rel="stylesheet" href="assets/css/custom.css">
+  <link rel="stylesheet" href="assets/css/public.css">
+  <link rel="icon" href="assets/images/logo-tgi.png" type="image/png">
+</head>
+<body class="tg-public page-application-success flex min-h-screen flex-col bg-white font-sans text-body antialiased selection:bg-accent selection:text-white">
+
+  <header>
+    <div class="tg-container flex h-16 items-center justify-between gap-4">
+      <a href="index.html" class="flex items-center gap-2.5">
+        <img src="assets/images/logo-tgi.png" alt="Logo TEX-GIANG" width="32" height="32" class="h-8 w-auto object-contain">
+        <span class="text-[16px] font-semibold leading-none text-ink">TEX-GIANG</span>
       </a>
-      <a href="index.html" class="text-xs font-bold text-[#087A55] hover:underline">Về Trang Chủ &rarr;</a>
+      <a href="jobs.html" class="tg-link text-[15px]">Việc làm <img src="assets/images/icons/arrow-right.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[13px]"></a>
     </div>
   </header>
 
-  <!-- Success Card -->
-  <main class="max-w-xl mx-auto px-4 py-12">
-    <div class="bg-white rounded-3xl border border-emerald-200 p-8 sm:p-10 shadow-xl text-center space-y-6">
-      <div class="w-20 h-20 rounded-full bg-emerald-100 text-[#087A55] mx-auto flex items-center justify-center text-4xl shadow-inner">
-        <i class="bi bi-check-lg"></i>
-      </div>
+  <a class="skip-link" href="#main-content">Đến nội dung chính</a>
+  <main id="main-content" class="notice-main">
+    <div class="tg-container">
+      <div class="mx-auto max-w-[640px]">
+        <h1 class="mt-3 text-[clamp(2.25rem,5vw,4.5rem)] font-medium leading-[1.15] tracking-[-0.02em] text-ink">
+          Hoàn tất gửi hồ sơ mẫu
+        </h1>
 
-      <div class="space-y-2">
-        <span class="text-xs font-extrabold text-[#087A55] uppercase tracking-wider">Xác Nhận Nộp Hồ Sơ</span>
-        <h1 class="text-2xl sm:text-3xl font-black text-slate-900">Gửi Hồ Sơ Ứng Tuyển Thành Công!</h1>
-        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
-          Cảm ơn bạn đã quan tâm đến cơ hội nghề nghiệp tại <strong>CÔNG TY CỔ PHẦN TEX-GIANG</strong>. Thông tin ứng tuyển của bạn đã được ghi nhận.
+        <p class="mt-4 max-w-[56ch] text-[18px] leading-[1.6] text-muted">
+          Cảm ơn bạn đã ứng tuyển tại TEX-GIANG. Bộ phận nhân sự xem hồ sơ và gọi lại theo số điện thoại bạn đã để lại.
+        </p>
+
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="jobs.html" class="tg-btn tg-btn--primary">Xem vị trí khác</a>
+          <a href="index.html" class="tg-btn tg-btn--ghost">Về trang chủ</a>
+        </div>
+
+        <div class="mt-10 rounded-card bg-surface p-6 lg:p-8">
+          <h2 class="text-[16px] font-medium text-ink">Các bước tiếp theo</h2>
+          <ol class="mt-4 space-y-4 text-[16px] leading-[1.6] text-muted">
+            <li><span class="block font-medium text-body">Trong 24 – 48 giờ làm việc</span> Nhân sự gọi xác nhận thông tin và sắp lịch.</li>
+            <li><span class="block font-medium text-body">Buổi phỏng vấn tại nhà máy</span> Mang CCCD, gặp trực tiếp tại Nhà máy Tân Hương 2.</li>
+            <li><span class="block font-medium text-body">Nhận việc</span> Thử tay nghề hoặc vào lớp đào tạo nghề có lương.</li>
+          </ol>
+        </div>
+
+        <p class="mt-6 max-w-[62ch] text-[14px] leading-[1.7] text-muted">
+          Cần hỏi gấp? Gọi <a href="tel:02773889999" class="text-body underline underline-offset-2 hover:text-accent">0277 388 9999</a>
+          hoặc Zalo <a href="tel:0918123456" class="text-body underline underline-offset-2 hover:text-accent">0918 123 456</a>.
+        </p>
+
+        <p class="mt-6 max-w-[62ch] text-[14px] leading-[1.7] text-muted">
+          * Biểu mẫu demo: hồ sơ chưa lưu vào cơ sở dữ liệu, đây là mô phỏng luồng gửi hồ sơ.
         </p>
       </div>
-
-      <!-- Information box -->
-      <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-200 text-xs text-left space-y-2 text-slate-700">
-        <div class="font-bold text-[#087A55] flex items-center gap-1.5">
-          <i class="bi bi-info-circle-fill"></i> Các bước tiếp theo:
-        </div>
-        <ul class="space-y-1 list-disc pl-4 text-slate-600">
-          <li>Bộ phận Nhân sự sẽ kiểm tra hồ sơ và liên hệ với bạn trong vòng <strong>24 - 48 giờ làm việc</strong> qua số điện thoại đã đăng ký.</li>
-          <li>Bạn sẽ được thông báo lịch phỏng vấn hoặc kiểm tra tay nghề may tại Nhà máy Tân Hương 2.</li>
-          <li>Hotline hỗ trợ ứng viên: <strong>0277 388 9999</strong> hoặc Zalo <strong>0918 123 456</strong>.</li>
-        </ul>
-      </div>
-
-      <!-- Demo disclaimer notice -->
-      <p class="text-[11px] text-amber-600 bg-amber-50 p-2.5 rounded-xl border border-amber-200 italic">
-        * Lưu ý: Đây là phiên bản mô phỏng giao diện tĩnh Frontend (Demo Mode). Trong môi trường sản xuất, dữ liệu sẽ được lưu an toàn vào cơ sở dữ liệu MySQL của hệ thống HR.
-      </p>
-
-      <div class="pt-2 flex flex-wrap justify-center gap-3">
-        <a href="jobs.html" class="px-6 py-3 bg-[#087A55] hover:bg-[#006837] text-white font-bold text-xs rounded-xl shadow transition">
-          Xem Thêm Việc Làm Khác
-        </a>
-        <a href="index.html" class="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition">
-          Trở Về Trang Chủ
-        </a>
-      </div>
+    <img class="notice-art" src="assets/images/application-success.svg" width="400" height="330" alt="" aria-hidden="true">
     </div>
   </main>
 
-  <footer class="bg-[#0B223D] text-emerald-200 py-6 text-xs text-center">
-    <p>&copy; 2026 CÔNG TY CỔ PHẦN TEX-GIANG & TG APPAREL.</p>
+  <footer class="bg-surface py-6">
+    <div class="tg-container text-[14px] text-muted">© 2026 Công ty Cổ phần TEX-GIANG &amp; TG APPAREL</div>
   </footer>
 
 </body>

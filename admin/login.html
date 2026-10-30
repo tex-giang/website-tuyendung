@@ -3,90 +3,66 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Đăng Nhập Quản Trị Tuyển Dụng | TEX-GIANG</title>
+  <title>Đăng nhập quản trị | TEX-GIANG</title>
+  <meta name="robots" content="noindex">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="../assets/css/app.css">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              800: '#006837',
-              700: '#087A55',
-            },
-            navy: '#12345A'
-          }
-        }
-      }
-    }
-  </script>
+  <script src="../assets/js/tw.config.js"></script>
   <link rel="stylesheet" href="../assets/css/custom.css">
 </head>
-<body class="bg-gradient-to-br from-[#0B223D] via-[#12345A] to-[#087A55] min-h-screen flex items-center justify-center p-4">
+<body class="flex min-h-screen items-center justify-center bg-surface p-4 font-sans text-body antialiased">
 
-  <div class="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8 sm:p-10 border border-white/20 relative">
-    <!-- Brand Logo -->
-    <div class="text-center space-y-2 mb-8">
-      <img src="../assets/images/logo-tgi.png" alt="Logo TGI" class="h-14 mx-auto object-contain">
-      <h1 class="text-xl font-black text-slate-900 tracking-tight">CỔNG QUẢN TRỊ TUYỂN DỤNG</h1>
-      <p class="text-xs text-[#087A55] font-bold uppercase tracking-wider">CÔNG TY CỔ PHẦN TEX-GIANG</p>
+  <main class="w-full max-w-[420px] rounded-media bg-white p-8 sm:p-10">
+    <div class="text-center">
+      <img src="../assets/images/logo-tgi.png" alt="Logo TEX-GIANG" class="mx-auto h-12 w-auto object-contain">
+      <h1 class="mt-4 text-[22px] font-medium leading-tight text-ink">Cổng quản trị tuyển dụng</h1>
+      <p class="mt-1 text-[14px] text-muted">Công ty Cổ phần TEX-GIANG</p>
     </div>
 
-    <!-- Demo Disclaimer Notice -->
-    <div class="mb-6 p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-900 flex items-start gap-2">
-      <i class="bi bi-info-circle-fill text-amber-600 mt-0.5"></i>
-      <div>
-        <strong>Chế độ giao diện Demo:</strong> Nhấn "Đăng nhập hệ thống" để trải nghiệm giao diện quản trị mà không cần nhập mật khẩu thật.
-      </div>
-    </div>
+    <p class="mt-6 rounded-card bg-accent-soft px-4 py-3 text-[14px] leading-[1.6] text-muted">
+      <strong class="font-medium text-accent">Chế độ demo:</strong> bấm “Đăng nhập” để vào giao diện quản trị, không cần mật khẩu thật.
+    </p>
 
-    <!-- Login Form -->
-    <form id="admin-login-form" onsubmit="handleLogin(event)" class="space-y-4 text-xs">
+    <form id="admin-login-form" onsubmit="handleLogin(event)" class="mt-6 space-y-4">
       <div>
-        <label class="block font-bold text-slate-700 mb-1">Tên đăng nhập / Email *</label>
-        <div class="relative">
-          <input type="text" id="login-username" value="admin@texgiang.demo.vn" required class="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-300 rounded-xl font-medium focus:ring-2 focus:ring-[#087A55] focus:outline-none">
-          <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
-            <i class="bi bi-person-fill"></i>
-          </span>
-        </div>
+        <label class="form-label" for="login-username">Tên đăng nhập hoặc email <span class="req">*</span></label>
+        <input type="text" id="login-username" value="admin@texgiang.demo.vn" required autocomplete="username"
+               class="form-input">
       </div>
 
       <div>
-        <label class="block font-bold text-slate-700 mb-1">Mật khẩu *</label>
+        <label class="form-label" for="login-password">Mật khẩu <span class="req">*</span></label>
         <div class="relative">
-          <input type="password" id="login-password" value="••••••••••••" required class="w-full pl-9 pr-10 py-2.5 bg-slate-50 border border-slate-300 rounded-xl font-medium focus:ring-2 focus:ring-[#087A55] focus:outline-none">
-          <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
-            <i class="bi bi-lock-fill"></i>
-          </span>
-          <button type="button" onclick="togglePasswordVisibility()" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 focus:outline-none">
+          <input type="password" id="login-password" value="demo12345678" required autocomplete="current-password"
+                 class="form-input pr-11">
+          <button type="button" onclick="togglePasswordVisibility()" aria-label="Hiện hoặc ẩn mật khẩu"
+                  class="absolute inset-y-0 right-0 grid w-10 place-items-center text-muted transition-colors hover:text-ink">
             <i id="password-toggle-icon" class="bi bi-eye"></i>
           </button>
         </div>
       </div>
 
-      <div class="flex items-center justify-between pt-1">
-        <label class="flex items-center gap-2 cursor-pointer text-slate-600">
-          <input type="checkbox" checked class="rounded text-[#087A55] focus:ring-[#087A55]">
+      <div class="flex flex-wrap items-center justify-between gap-3 text-[14px] text-muted">
+        <label class="flex cursor-pointer items-center gap-2">
+          <input type="checkbox" checked class="h-4 w-4 rounded border-line text-accent focus:ring-accent">
           <span>Ghi nhớ đăng nhập</span>
         </label>
-        <a href="#" onclick="showToast('Vui lòng liên hệ IT-P.KT-NS để cấp lại mật khẩu!', 'error')" class="font-bold text-[#087A55] hover:underline">Quên mật khẩu?</a>
+        <a href="#" onclick="showToast('Liên hệ IT-P.KT-NS để cấp lại mật khẩu.', 'error'); return false;"
+           class="font-medium text-accent hover:underline">Quên mật khẩu?</a>
       </div>
 
-      <button type="submit" class="w-full py-3.5 bg-[#087A55] hover:bg-[#006837] text-white font-black text-sm rounded-xl shadow-lg transition transform hover:-translate-y-0.5">
-        Đăng Nhập Hệ Thống &rarr;
+      <button type="submit" class="tg-btn tg-btn--primary w-full">
+        Đăng nhập hệ thống <i class="bi bi-arrow-right text-[14px]"></i>
       </button>
     </form>
 
-    <div class="pt-6 mt-6 border-t border-slate-100 text-center text-xs">
-      <a href="../index.html" class="font-bold text-slate-500 hover:text-[#087A55] flex items-center justify-center gap-1">
-        <i class="bi bi-arrow-left"></i> Quay lại website tuyển dụng
-      </a>
-    </div>
-  </div>
+    <p class="mt-6 text-center">
+      <a href="../index.html" class="tg-link text-[14px]"><i class="bi bi-arrow-left text-[13px]"></i> Về website tuyển dụng</a>
+    </p>
+  </main>
 
-  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full"></div>
+  <div id="toast-container"></div>
 
   <script src="../assets/js/main.js"></script>
   <script>
@@ -104,10 +80,10 @@
 
     function handleLogin(e) {
       e.preventDefault();
-      showToast('Đăng nhập thành công! Đang chuyển hướng vào Dashboard...', 'success');
-      setTimeout(() => {
+      showToast('Đăng nhập thành công. Đang vào bảng điều khiển…', 'success');
+      setTimeout(function () {
         window.location.href = 'dashboard.html';
-      }, 1000);
+      }, 900);
     }
   </script>
 </body>

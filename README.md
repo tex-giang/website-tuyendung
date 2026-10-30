@@ -113,3 +113,11 @@ E:\websitetuyendung\
    - Kiểm tra định dạng tệp CV nghiêm ngặt ở tầng backend (MIME type `application/pdf`, `application/vnd.openxmlformats-officedocument.wordprocessingml.document`, giới hạn 10MB) và lưu file vào thư mục upload được bảo vệ.
    - Chống CSRF token trên toàn bộ form ứng tuyển và quản trị.
    - Chuẩn bị sẵn API Endpoint JSON cho ứng tuyển nhanh trên điện thoại.
+# Cập nhật audit public — 30/10/2026
+
+Các trang public hiện dùng utility CSS build sẵn tại `assets/css/utilities.css`, component CSS tại `assets/css/app.css`, và phần hoàn thiện tại `assets/css/public.css`. Icon dùng SVG local; các trang admin giữ cách nạp hiện có.
+
+- Báo cáo thay đổi, kiểm tra, nguồn ảnh và nội dung demo cần xác nhận: [docs/public-ui-audit-2026-10-30.md](docs/public-ui-audit-2026-10-30.md).
+- Sau khi sửa class HTML/JS: `npm ci` rồi `npm run build:css`.
+- Kiểm tra lại giao diện: mở server local ở cổng 4173 rồi chạy `npm run audit:public` (cần Microsoft Edge).
+

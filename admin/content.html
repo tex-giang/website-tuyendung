@@ -3,226 +3,160 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quản Lý Nội Dung CMS | TEX-GIANG HR Portal</title>
+  <title>Nội dung website | Quản trị TEX-GIANG</title>
+  <meta name="robots" content="noindex">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="../assets/css/app.css">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              50: '#f0fdf4',
-              100: '#dcfce7',
-              200: '#bbf7d0',
-              300: '#86efac',
-              400: '#4ade80',
-              500: '#22c55e',
-              600: '#16a34a',
-              700: '#0e6e38',
-              800: '#006837', // Official Brand Green
-              900: '#064e26',
-              950: '#022c15',
-            },
-            navy: {
-              DEFAULT: '#12345A',
-              dark: '#0B223D',
-            }
-          }
-        }
-      }
-    }
-  </script>
+  <script src="../assets/js/tw.config.js"></script>
   <link rel="stylesheet" href="../assets/css/custom.css">
 </head>
-<body class="bg-[#F5F7FA] text-[#1F2937] font-sans antialiased min-h-screen flex">
+<body class="bg-surface font-sans text-body antialiased">
 
-  <!-- ADMIN SIDEBAR -->
-  <aside id="admin-sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col justify-between p-4">
-    <div class="space-y-6">
-      <div class="flex items-center gap-3 px-2 py-1 border-b border-slate-100 pb-4">
-        <img src="../assets/images/logo-tgi.png" alt="Logo TGI" class="h-10 w-auto">
+  <aside id="admin-sidebar" class="admin-sidebar -translate-x-full transition-transform duration-300 lg:translate-x-0" aria-label="Menu quản trị">
+    <div>
+      <div class="admin-brand">
+        <img src="../assets/images/logo-tgi.png" alt="Logo TEX-GIANG">
         <div>
-          <div class="font-black text-sm text-[#087A55] leading-none">TEX-GIANG</div>
-          <p class="text-[10px] text-[#12345A] font-extrabold uppercase mt-1">Quản Trị Tuyển Dụng</p>
+          <strong>TEX-GIANG</strong>
+          <span>Quản trị tuyển dụng</span>
         </div>
       </div>
 
-      <nav class="space-y-1 text-xs">
-        <a href="dashboard.html" class="admin-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-slate-600 hover:bg-slate-50 transition">
-          <i class="bi bi-grid-1x2-fill text-base"></i>
-          <span>Dashboard Thống Kê</span>
-        </a>
-        <a href="jobs.html" class="admin-nav-link flex items-center justify-between px-3.5 py-2.5 rounded-xl font-medium text-slate-600 hover:bg-slate-50 transition">
-          <span class="flex items-center gap-3">
-            <i class="bi bi-briefcase-fill text-base"></i>
-            <span>Quản Lý Việc Làm</span>
-          </span>
-          <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[10px]">24</span>
-        </a>
-        <a href="applications.html" class="admin-nav-link flex items-center justify-between px-3.5 py-2.5 rounded-xl font-medium text-slate-600 hover:bg-slate-50 transition">
-          <span class="flex items-center gap-3">
-            <i class="bi bi-people-fill text-base"></i>
-            <span>Hồ Sơ Ứng Viên</span>
-          </span>
-          <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold text-[10px]">142</span>
-        </a>
-        <a href="content.html" class="admin-nav-link active flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-bold transition">
-          <i class="bi bi-file-earmark-richtext-fill text-base text-[#087A55]"></i>
-          <span>Quản Lý Nội Dung</span>
-        </a>
-        <a href="banners.html" class="admin-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-slate-600 hover:bg-slate-50 transition">
-          <i class="bi bi-images text-base"></i>
-          <span>Quản Lý Banner & Popup</span>
-        </a>
-        <a href="settings.html" class="admin-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-slate-600 hover:bg-slate-50 transition">
-          <i class="bi bi-gear-fill text-base"></i>
-          <span>Cài Đặt Hệ Thống</span>
-        </a>
+      <nav class="mt-2">
+        <p class="admin-section-label">Tổng quan</p>
+        <a href="dashboard.html" class="admin-nav-link"><span class="flex items-center gap-2.5"><i class="bi bi-grid-1x2"></i> Bảng điều khiển</span></a>
+
+        <p class="admin-section-label">Tuyển dụng</p>
+        <a href="jobs.html" class="admin-nav-link"><span class="flex items-center gap-2.5"><i class="bi bi-briefcase"></i> Tin tuyển dụng</span><span class="count">24</span></a>
+        <a href="job-form.html" class="admin-nav-link"><span class="flex items-center gap-2.5"><i class="bi bi-plus-square"></i> Đăng tin mới</span></a>
+        <a href="applications.html" class="admin-nav-link"><span class="flex items-center gap-2.5"><i class="bi bi-people"></i> Hồ sơ ứng viên</span><span class="count">142</span></a>
+
+        <p class="admin-section-label">Nội dung</p>
+        <a href="content.html" class="admin-nav-link is-active" aria-current="page"><span class="flex items-center gap-2.5"><i class="bi bi-file-earmark-text"></i> Nội dung website</span></a>
+        <a href="banners.html" class="admin-nav-link"><span class="flex items-center gap-2.5"><i class="bi bi-images"></i> Banner &amp; popup</span></a>
+        <a href="settings.html" class="admin-nav-link"><span class="flex items-center gap-2.5"><i class="bi bi-gear"></i> Cài đặt hệ thống</span></a>
       </nav>
     </div>
 
-    <div class="pt-4 border-t border-slate-100 space-y-3">
-      <div class="flex items-center justify-between px-2">
-        <a href="../index.html" target="_blank" class="text-xs font-bold text-[#087A55] hover:underline flex items-center gap-1">
-          <i class="bi bi-box-arrow-up-right"></i> Xem Website
-        </a>
-        <a href="login.html" class="text-xs font-bold text-rose-600 hover:underline">Đăng xuất</a>
-      </div>
+    <div class="admin-sidebar-foot">
+      <a href="../index.html" target="_blank" rel="noopener"><i class="bi bi-box-arrow-up-right"></i> Xem website</a>
+      <a href="login.html"><i class="bi bi-box-arrow-right"></i> Đăng xuất</a>
     </div>
   </aside>
 
-  <div id="sidebar-overlay" class="hidden fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden"></div>
+  <div id="sidebar-overlay" class="fixed inset-0 z-40 hidden bg-black/40 lg:hidden"></div>
 
-  <!-- MAIN WRAPPER -->
-  <div class="flex-1 lg:pl-64 flex flex-col min-h-screen">
-
-    <!-- TOPBAR -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 px-4 sm:px-8 py-3.5 flex justify-between items-center shadow-sm">
+  <div class="min-h-screen lg:pl-[248px]">
+    <header class="admin-topbar">
       <div class="flex items-center gap-3">
-        <button id="toggle-sidebar-btn" class="lg:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100 focus:outline-none">
-          <i class="bi bi-list text-2xl"></i>
+        <button id="toggle-sidebar-btn" class="admin-icon-btn lg:hidden" aria-label="Mở menu">
+          <i class="bi bi-list text-[18px]"></i>
         </button>
         <div>
-          <h2 class="font-black text-slate-900 text-base sm:text-lg">Quản Lý Nội Dung Website (CMS)</h2>
-          <p class="text-[11px] text-slate-400 hidden sm:block">Chủ động cập nhật các chuyên mục website mà không cần can thiệp mã nguồn</p>
+          <h1>Nội dung website</h1>
+          <p class="hidden sm:block">Khẩu hiệu, bài viết và thông tin liên hệ hiển thị công khai</p>
         </div>
       </div>
+      <button type="button" onclick="showToast('Đã lưu nội dung [Demo]', 'success')" class="tg-btn tg-btn--primary h-9 px-3 text-[14px]">Lưu thay đổi</button>
     </header>
 
-    <!-- CONTENT BODY -->
-    <main class="p-4 sm:p-8 space-y-8 flex-1 max-w-5xl">
+    <main class="admin-content">
 
-      <!-- 1. Nội dung trang chủ -->
-      <section class="bg-white rounded-3xl border border-emerald-100 p-6 sm:p-8 shadow-sm space-y-4 text-xs">
-        <div class="flex justify-between items-center pb-3 border-b border-slate-100">
-          <h3 class="font-black text-slate-900 text-sm">1. Khẩu Hiệu & Thông Điệp Trang Chủ</h3>
-          <span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 font-bold rounded-full">Đang kích hoạt</span>
+      <section class="admin-panel">
+        <div class="admin-panel-head">
+          <h2>Khẩu hiệu &amp; thông điệp trang chủ</h2>
+          <a href="../index.html" target="_blank" rel="noopener" class="tg-link text-[14px]">Xem trang <i class="bi bi-box-arrow-up-right text-[12px]"></i></a>
         </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="space-y-4">
           <div>
-            <label class="block font-bold text-slate-700 mb-1">Khẩu hiệu chính (Slogan) *</label>
-            <input type="text" value="Kiến tạo giá trị - Cùng phát triển bền vững" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl font-bold text-[#087A55]">
+            <label class="form-label" for="cms-slogan">Khẩu hiệu chính <span class="req">*</span></label>
+            <input type="text" id="cms-slogan" value="Một công việc ổn định. Thu nhập xứng đáng." class="form-input">
           </div>
           <div>
-            <label class="block font-bold text-slate-700 mb-1">Triết lý hoạt động *</label>
-            <input type="text" value="VÌ CON NGƯỜI - VÌ CHẤT LƯỢNG - VÌ TƯƠNG LAI BỀN VỮNG" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl font-bold text-[#087A55]">
+            <label class="form-label" for="cms-philosophy">Triết lý hoạt động <span class="req">*</span></label>
+            <input type="text" id="cms-philosophy" value="Vì con người — Vì chất lượng — Vì tương lai bền vững" class="form-input">
           </div>
-          <div class="sm:col-span-2">
-            <label class="block font-bold text-slate-700 mb-1">Đoạn văn giới thiệu ngắn dưới Hero *</label>
-            <textarea rows="2" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl">Môi trường may mặc xuất khẩu hiện đại, thu nhập từ 8 - 18 triệu/tháng, thưởng năng suất hàng tháng, xe đưa đón tận nơi và lộ trình thăng tiến rõ ràng.</textarea>
+          <div>
+            <label class="form-label" for="cms-hero">Đoạn giới thiệu dưới tiêu đề <span class="req">*</span></label>
+            <textarea id="cms-hero" rows="3" class="form-input">Cổng tuyển dụng chính thức của TEX-GIANG và TG APPAREL — may mặc xuất khẩu tại Nhà máy Tân Hương 2, Đồng Tháp.</textarea>
           </div>
-        </div>
-
-        <div class="pt-2 flex justify-end">
-          <button onclick="showToast('Đã lưu nội dung trang chủ thành công!', 'success')" class="px-5 py-2.5 bg-[#087A55] hover:bg-[#006837] text-white font-bold rounded-xl shadow transition">
-            Lưu Nội Dung Trang Chủ
-          </button>
         </div>
       </section>
 
-      <!-- 2. Quản lý Tin Tức & Hoạt Động -->
-      <section class="bg-white rounded-3xl border border-emerald-100 p-6 sm:p-8 shadow-sm space-y-4 text-xs">
-        <div class="flex justify-between items-center pb-3 border-b border-slate-100">
-          <h3 class="font-black text-slate-900 text-sm">2. Danh Sách Bài Viết Tin Tức & Hoạt Động</h3>
-          <button onclick="showToast('Mở form thêm bài viết tin tức mới [Demo]', 'success')" class="px-3.5 py-1.5 bg-[#087A55] text-white font-bold rounded-xl flex items-center gap-1">
-            <i class="bi bi-plus-lg"></i> Thêm Bài Mới
-          </button>
+      <section class="admin-panel">
+        <div class="admin-panel-head">
+          <h2>Bài viết tin tức</h2>
+          <a href="../news.html" target="_blank" rel="noopener" class="tg-link text-[14px]">Xem trang tin <i class="bi bi-box-arrow-up-right text-[12px]"></i></a>
         </div>
-
         <div class="overflow-x-auto">
-          <table class="w-full text-xs text-left">
+          <table class="admin-table">
             <thead>
-              <tr class="bg-slate-50 text-slate-500 font-bold border-b border-slate-200 uppercase">
-                <th class="p-3">Tiêu Đề Bài Viết</th>
-                <th class="p-3">Chuyên Mục</th>
-                <th class="p-3">Ngày Đăng</th>
-                <th class="p-3">Trạng Thái</th>
-                <th class="p-3 text-right">Thao Tác</th>
+              <tr>
+                <th>Tiêu đề</th>
+                <th>Chuyên mục</th>
+                <th>Ngày đăng</th>
+                <th>Trạng thái</th>
+                <th class="text-right">Thao tác</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-slate-100 text-slate-700">
+            <tbody>
               <tr>
-                <td class="p-3 font-bold text-slate-900">TEX-GIANG Tham Gia Ngày Hội Việc Làm Huyện Châu Thành 2026</td>
-                <td class="p-3 text-[#087A55] font-semibold">Sự Kiện Tuyển Dụng</td>
-                <td class="p-3 text-slate-400">28/10/2026</td>
-                <td class="p-3"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[10px]">Hiển thị</span></td>
-                <td class="p-3 text-right space-x-1">
-                  <a href="../news-detail.html" target="_blank" class="p-1 text-slate-600 hover:text-[#087A55]"><i class="bi bi-eye"></i></a>
-                  <button onclick="showToast('Mở form sửa bài viết [Demo]', 'success')" class="p-1 text-blue-600"><i class="bi bi-pencil-square"></i></button>
-                  <button onclick="showToast('Đã xóa bài viết [Demo]', 'success')" class="p-1 text-rose-600"><i class="bi bi-trash"></i></button>
-                </td>
+                <td class="cell-strong">Ngày hội việc làm Châu Thành 2026</td>
+                <td>Sự kiện việc làm</td>
+                <td>28/10/2026</td>
+                <td><span class="admin-badge is-open">Đã đăng</span></td>
+                <td class="text-right"><a href="../news-detail.html" target="_blank" rel="noopener" class="tg-link text-[14px]">Xem</a></td>
               </tr>
               <tr>
-                <td class="p-3 font-bold text-slate-900">Công Đoàn TEX-GIANG Tổ Chức Lễ Kỷ Niệm 20/10 Cho Nữ Lao Động</td>
-                <td class="p-3 text-[#087A55] font-semibold">Hoạt Động Nội Bộ</td>
-                <td class="p-3 text-slate-400">20/10/2026</td>
-                <td class="p-3"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[10px]">Hiển thị</span></td>
-                <td class="p-3 text-right space-x-1">
-                  <a href="../news-detail.html" target="_blank" class="p-1 text-slate-600 hover:text-[#087A55]"><i class="bi bi-eye"></i></a>
-                  <button onclick="showToast('Mở form sửa bài viết [Demo]', 'success')" class="p-1 text-blue-600"><i class="bi bi-pencil-square"></i></button>
-                  <button onclick="showToast('Đã xóa bài viết [Demo]', 'success')" class="p-1 text-rose-600"><i class="bi bi-trash"></i></button>
-                </td>
+                <td class="cell-strong">Công đoàn kỷ niệm 20/10 và trao thưởng nữ lao động giỏi</td>
+                <td>Hoạt động nội bộ</td>
+                <td>20/10/2026</td>
+                <td><span class="admin-badge is-open">Đã đăng</span></td>
+                <td class="text-right"><a href="../news-detail.html" target="_blank" rel="noopener" class="tg-link text-[14px]">Xem</a></td>
+              </tr>
+              <tr>
+                <td class="cell-strong">Phỏng vấn và kiểm tra tay nghề may: chuẩn bị những gì</td>
+                <td>Cẩm nang</td>
+                <td>15/10/2026</td>
+                <td><span class="admin-badge">Bản nháp</span></td>
+                <td class="text-right"><a href="../news-detail.html" target="_blank" rel="noopener" class="tg-link text-[14px]">Xem</a></td>
               </tr>
             </tbody>
           </table>
         </div>
       </section>
 
-      <!-- 3. Liên hệ & Mạng Xã Hội -->
-      <section class="bg-white rounded-3xl border border-emerald-100 p-6 sm:p-8 shadow-sm space-y-4 text-xs">
-        <h3 class="font-black text-slate-900 text-sm pb-3 border-b border-slate-100">3. Thông Tin Liên Hệ & Kênh Truyền Thông</h3>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">Hotline máy bàn *</label>
-            <input type="text" value="0277 388 9999" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl font-bold text-[#087A55]">
-          </div>
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">Di động / Zalo Tuyển Dụng *</label>
-            <input type="text" value="0918 123 456" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl font-bold text-amber-600">
-          </div>
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">Email phòng nhân sự *</label>
-            <input type="email" value="tuyendung@texgiang.com.vn" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl">
-          </div>
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">Fanpage Facebook Tuyển Dụng</label>
-            <input type="text" value="https://facebook.com/texgiang.recruitment" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl">
-          </div>
+      <section class="admin-panel">
+        <div class="admin-panel-head">
+          <h2>Thông tin liên hệ &amp; kênh truyền thông</h2>
         </div>
-
-        <div class="pt-2 flex justify-end">
-          <button onclick="showToast('Đã lưu kênh thông tin liên hệ thành công!', 'success')" class="px-5 py-2.5 bg-[#087A55] hover:bg-[#006837] text-white font-bold rounded-xl shadow transition">
-            Lưu Kênh Liên Hệ
-          </button>
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label class="form-label" for="cms-hotline">Hotline máy bàn <span class="req">*</span></label>
+            <input type="text" id="cms-hotline" value="0277 388 9999" class="form-input">
+          </div>
+          <div>
+            <label class="form-label" for="cms-zalo">Di động / Zalo <span class="req">*</span></label>
+            <input type="text" id="cms-zalo" value="0918 123 456" class="form-input">
+          </div>
+          <div>
+            <label class="form-label" for="cms-email">Email nhân sự <span class="req">*</span></label>
+            <input type="email" id="cms-email" value="tuyendung@texgiang.com.vn" class="form-input">
+          </div>
+          <div>
+            <label class="form-label" for="cms-fanpage">Fanpage Facebook</label>
+            <input type="url" id="cms-fanpage" value="https://facebook.com/texgiang" class="form-input">
+          </div>
         </div>
       </section>
+
+      <p class="text-[13px] text-muted">* Dữ liệu demo, chưa nối CMS thật.</p>
 
     </main>
   </div>
 
-  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full"></div>
+  <div id="toast-container"></div>
 
   <script src="../assets/js/main.js"></script>
   <script src="../assets/js/admin.js"></script>

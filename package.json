@@ -1,0 +1,13 @@
+{
+  "name": "tex-giang-recruitment",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "build:css": "tailwindcss -i assets/css/tailwind.source.css -o assets/css/utilities.css --minify",
+    "audit:public": "node tools/audit-public.mjs"
+  },
+  "devDependencies": {
+    "tailwindcss": "3.4.17",
+    "playwright": "1.56.1"
+  }
+}

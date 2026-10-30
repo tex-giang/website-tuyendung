@@ -3,263 +3,281 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tin Tức Nghề Nghiệp & Hoạt Động | TEX-GIANG & TG APPAREL</title>
-  <meta name="description" content="Cập nhật tin tức tuyển dụng mới nhất, sự kiện ngày hội việc làm, hoạt động công đoàn và cẩm nang phỏng vấn tại CÔNG TY CỔ PHẦN TEX-GIANG.">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              50: '#f0fdf4',
-              100: '#dcfce7',
-              200: '#bbf7d0',
-              300: '#86efac',
-              400: '#4ade80',
-              500: '#22c55e',
-              600: '#16a34a',
-              700: '#0e6e38',
-              800: '#006837', // Official Brand Green
-              900: '#064e26',
-              950: '#022c15',
-            },
-            tgi: {
-              blue: '#174873',
-              dark: '#0f3354',
-              light: '#2563eb',
-            },
-            accent: {
-              500: '#f26522',
-              600: '#d95314',
-            }
-          }
-        }
-      }
-    }
-  </script>
-  <link rel="stylesheet" href="assets/css/custom.css">
-</head>
-<body class="bg-slate-50 text-slate-800 antialiased selection:bg-brand-800 selection:text-white">
+  <title>Tin tức &amp; tuyển dụng | Tuyển dụng TEX-GIANG</title>
+  <meta name="description" content="Thông báo tuyển dụng, hoạt động nội bộ và cẩm nang phỏng vấn tại Công ty Cổ phần TEX-GIANG, KCN Tân Hương, Đồng Tháp.">
 
-  <!-- TOP UTILITY BAR -->
-  <div class="bg-[#0B223D] text-emerald-100 text-xs py-2 border-b border-white/10 no-print">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap justify-between items-center gap-2">
-      <div class="flex items-center space-x-6 flex-wrap">
-        <span class="flex items-center gap-1.5 hover:text-white transition whitespace-nowrap">
-          <i class="bi bi-telephone-fill text-amber-400"></i>
-          <span>Hotline: <strong class="text-white whitespace-nowrap">0277 388 9999</strong> - <strong class="text-white whitespace-nowrap">0918 123 456</strong> <span class="text-[10px] text-emerald-400 font-normal whitespace-nowrap">[Demo]</span></span>
-        </span>
-        <span class="hidden md:flex items-center gap-1.5 hover:text-white transition whitespace-nowrap">
-          <i class="bi bi-envelope-fill text-emerald-400"></i>
-          <span>Email: tuyendung@texgiang.com.vn</span>
-        </span>
-        <span class="hidden lg:flex items-center gap-1.5 text-emerald-300">
-          <i class="bi bi-geo-alt-fill text-emerald-400 flex-shrink-0"></i>
-          <span>KCN Tân Hương, Xã Tân Hương, Tỉnh Đồng Tháp</span>
-        </span>
-      </div>
-      <div class="flex items-center space-x-4">
-        <span class="text-emerald-400 hidden sm:inline whitespace-nowrap">Hệ sinh thái:</span>
-        <a href="https://texgiang.com.vn" target="_blank" class="text-white font-medium hover:text-amber-300 transition underline underline-offset-4 decoration-emerald-400 whitespace-nowrap">TEX-GIANG</a>
-        <span class="text-emerald-700">|</span>
-        <a href="https://tgapparel.com.vn" target="_blank" class="text-white font-medium hover:text-amber-300 transition underline underline-offset-4 decoration-emerald-400 whitespace-nowrap">TG APPAREL</a>
-        <span class="text-emerald-700">|</span>
-        <a href="admin/login.html" class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#12345A] text-amber-300 hover:bg-[#087A55] transition font-bold text-[11px] whitespace-nowrap">
-          <i class="bi bi-shield-lock-fill"></i>
-          <span>Cổng Quản Trị</span>
-        </a>
+  <link rel="stylesheet" href="assets/css/app.css">
+  <link rel="stylesheet" href="assets/css/utilities.css">
+  <link rel="stylesheet" href="assets/css/custom.css">
+  <link rel="stylesheet" href="assets/css/public.css">
+  <link rel="icon" href="assets/images/logo-tgi.png" type="image/png">
+</head>
+<body class="tg-public page-news bg-white font-sans text-body antialiased selection:bg-accent selection:text-white">
+
+  <div id="announce-strip" class="bg-accent-soft no-print">
+    <div class="tg-container flex min-h-[44px] items-center justify-between gap-4 py-2.5">
+      <p class="text-[14px] leading-snug text-body">
+        <strong class="font-semibold text-accent">Thưởng nóng 2.000.000đ</strong> cho công nhân may mới — đào tạo miễn phí, có lương ngay tháng đầu.
+      </p>
+      <div class="flex shrink-0 items-center gap-3">
+        <a href="apply.html" class="tg-link hidden text-[14px] sm:inline-flex">Xem điều kiện <img src="assets/images/icons/arrow-right.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[13px]"></a>
+        <button id="announce-close" type="button" aria-label="Đóng thông báo"
+                class="grid h-7 w-7 place-items-center rounded-md text-muted transition-colors hover:bg-black/5 hover:text-ink">
+          <img src="assets/images/icons/x-lg.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[13px]">
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- NAVIGATION HEADER -->
-  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur shadow-sm border-b border-emerald-100">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between items-center h-20">
-        <a href="index.html" class="flex items-center gap-3.5 group">
-          <img src="assets/images/logo-tgi.png" alt="Logo TEX-GIANG" class="h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300 flex-shrink-0">
-          <div class="border-l-2 border-emerald-200 pl-3">
-            <div class="text-base sm:text-xl font-black tracking-tight text-[#087A55] leading-none whitespace-nowrap">
-              CÔNG TY CỔ PHẦN TEX-GIANG
-            </div>
-            <p class="text-[10px] sm:text-[11px] text-[#12345A] font-bold tracking-wide uppercase mt-1 whitespace-nowrap">Cổng Tuyển Dụng Chính Thức</p>
-          </div>
-        </a>
+  <header id="site-nav" class="sticky top-0 z-40 border-b border-transparent bg-white transition-colors no-print">
+    <div class="tg-container flex h-16 items-center justify-between gap-6 lg:h-[72px]">
+      <a href="index.html" class="flex shrink-0 items-center gap-2.5" aria-label="TEX-GIANG — trang chủ">
+        <img src="assets/images/logo-tgi.png" alt="Logo TEX-GIANG" width="32" height="32" class="h-8 w-auto object-contain">
+        <span class="text-[16px] font-semibold leading-none text-ink">TEX-GIANG</span>
+      </a>
 
-        <nav class="hidden lg:flex items-center space-x-1 font-semibold text-sm text-slate-700">
-          <a href="index.html" class="px-3.5 py-2 rounded-xl hover:text-[#087A55] hover:bg-emerald-50 transition whitespace-nowrap">Trang Chủ</a>
-          <a href="about.html" class="px-3.5 py-2 rounded-xl hover:text-[#087A55] hover:bg-emerald-50 transition whitespace-nowrap">Về Chúng Tôi</a>
-          <a href="jobs.html" class="px-3.5 py-2 rounded-xl hover:text-[#087A55] hover:bg-emerald-50 transition whitespace-nowrap">Danh Sách Việc Làm</a>
-          <a href="why-tex-giang.html" class="px-3.5 py-2 rounded-xl hover:text-[#087A55] hover:bg-emerald-50 transition whitespace-nowrap">Tại Sao Chọn Chúng Tôi</a>
-          <a href="news.html" class="px-3.5 py-2 rounded-xl text-[#087A55] bg-emerald-50 font-bold transition whitespace-nowrap">Tin Tức Nghề Nghiệp</a>
-          <a href="contact.html" class="px-3.5 py-2 rounded-xl hover:text-[#087A55] hover:bg-emerald-50 transition whitespace-nowrap">Liên Hệ</a>
-        </nav>
+      <nav class="hidden items-center gap-7 lg:flex xl:gap-8" aria-label="Điều hướng chính">
+        <a href="index.html" class="nav-link">Trang chủ</a>
+        <a href="jobs.html" class="nav-link">Việc làm</a>
+        <a href="about.html" class="nav-link">Về chúng tôi</a>
+        <a href="why-tex-giang.html" class="nav-link">Phúc lợi</a>
+        <a href="news.html" class="nav-link is-active" aria-current="page">Tin tức</a>
+        <a href="contact.html" class="nav-link">Liên hệ</a>
+      </nav>
 
-        <div class="hidden sm:flex items-center space-x-3">
-          <a href="apply.html" class="inline-flex items-center justify-center px-5 py-2.5 rounded-xl font-extrabold text-sm text-white bg-gradient-to-r from-[#087A55] to-[#006837] hover:from-[#006837] hover:to-[#0B223D] shadow-md shadow-emerald-800/20 hover:shadow-lg transition-all transform hover:-translate-y-0.5 whitespace-nowrap">
-            <i class="bi bi-send-fill mr-2 text-amber-300"></i>
-            Nộp Hồ Sơ
-          </a>
-        </div>
-
-        <div class="lg:hidden flex items-center">
-          <button id="mobile-menu-btn" class="p-2 rounded-xl text-slate-600 hover:text-[#087A55] hover:bg-slate-100 focus:outline-none">
-            <i class="bi bi-list text-2xl"></i>
-          </button>
-        </div>
+      <div class="flex items-center gap-3.5">
+        <a href="tel:02773889999" class="hidden text-[14px] text-muted xl:inline-flex">Hotline <strong class="ml-1 font-medium text-body">0277 388 9999</strong></a>
+        <a href="apply.html" class="tg-btn tg-btn--primary h-10 px-4 text-[16px]">Ứng tuyển</a>
+        <button id="mobile-menu-btn" type="button" aria-label="Mở menu" aria-expanded="false" aria-controls="mobile-menu"
+                class="grid h-10 w-10 place-items-center rounded-lg border border-line text-body transition-colors hover:border-accent hover:text-accent lg:hidden">
+          <img src="assets/images/icons/list.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[20px]">
+        </button>
       </div>
     </div>
 
-    <!-- Mobile Dropdown Navigation -->
-    <div id="mobile-menu" class="hidden lg:hidden bg-white border-b border-emerald-100 px-4 pt-3 pb-6 space-y-2">
-      <a href="index.html" class="block px-3.5 py-2.5 rounded-xl font-medium text-slate-700">Trang Chủ</a>
-      <a href="about.html" class="block px-3.5 py-2.5 rounded-xl font-medium text-slate-700">Về Chúng Tôi</a>
-      <a href="jobs.html" class="block px-3.5 py-2.5 rounded-xl font-medium text-slate-700">Danh Sách Việc Làm</a>
-      <a href="why-tex-giang.html" class="block px-3.5 py-2.5 rounded-xl font-medium text-slate-700">Tại Sao Chọn Chúng Tôi</a>
-      <a href="news.html" class="block px-3.5 py-2.5 rounded-xl font-bold text-[#087A55] bg-emerald-50">Tin Tức Nghề Nghiệp</a>
-      <a href="contact.html" class="block px-3.5 py-2.5 rounded-xl font-medium text-slate-700">Liên Hệ</a>
-      <div class="pt-2 flex flex-col gap-2">
-        <a href="apply.html" class="w-full text-center py-3 rounded-xl font-bold text-white bg-[#087A55]">Nộp Hồ Sơ Trực Tuyến</a>
-        <a href="admin/login.html" class="w-full text-center py-2.5 rounded-xl font-bold text-[#12345A] bg-slate-100">Đăng Nhập Quản Trị HR</a>
-      </div>
+    <div id="mobile-menu" class="nav-mobile hidden border-t border-line bg-white px-6 pb-6 pt-2">
+      <a href="index.html" class="block border-b border-line py-3 text-[16px] text-body">Trang chủ</a>
+      <a href="jobs.html" class="block border-b border-line py-3 text-[16px] text-body">Việc làm</a>
+      <a href="about.html" class="block border-b border-line py-3 text-[16px] text-body">Về chúng tôi</a>
+      <a href="why-tex-giang.html" class="block border-b border-line py-3 text-[16px] text-body">Phúc lợi</a>
+      <a href="news.html" class="block border-b border-line py-3 text-[16px] font-medium text-accent">Tin tức</a>
+      <a href="contact.html" class="block border-b border-line py-3 text-[16px] text-body">Liên hệ</a>
+      <a href="admin/login.html" class="block border-b border-line py-3 text-[16px] text-body">Cổng quản trị HR</a>
+      <a href="apply.html" class="tg-btn tg-btn--primary mt-4 w-full">Ứng tuyển ngay</a>
     </div>
   </header>
 
-  <!-- PAGE HEADER -->
-  <div class="bg-gradient-to-r from-brand-950 via-brand-900 to-brand-800 text-white py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <nav class="flex items-center space-x-2 text-xs text-emerald-300 mb-2">
-        <a href="index.html" class="hover:text-white">Trang Chủ</a>
-        <span>/</span>
-        <span class="text-amber-300 font-semibold">Tin Tức Nghề Nghiệp</span>
+  <a class="skip-link" href="#main-content">Đến nội dung chính</a>
+  <main id="main-content">
+
+    <section class="tg-container pt-14 lg:pt-20" data-reveal>
+      <nav aria-label="Breadcrumb" class="text-[14px] text-muted">
+        <a href="index.html" class="transition-colors hover:text-accent">Trang chủ</a>
+        <span class="mx-1.5" aria-hidden="true">/</span>
+        <span class="text-body">Tin tức</span>
       </nav>
-      <h1 class="text-3xl font-black">Tin Tức Tuyển Dụng & Đời Sống Doanh Nghiệp</h1>
-      <p class="text-emerald-100 text-sm mt-1">Cập nhật các hoạt động nội bộ, thông báo tuyển dụng và cẩm nang phỏng vấn mới nhất tại TEX-GIANG</p>
-    </div>
-  </div>
 
-  <!-- MAIN NEWS LAYOUT -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <h1 class="mt-4 max-w-[820px] text-[clamp(2rem,5vw,4.5rem)] font-medium leading-[1.1] tracking-[-0.02em] text-ink" data-reveal>
+        Tin tức &amp; tuyển dụng
+      </h1>
+      <p class="mt-4 max-w-[62ch] text-[18px] leading-[1.6] text-muted" data-reveal>
+        Thông báo đợt tuyển, hoạt động nội bộ và kinh nghiệm phỏng vấn tại Nhà máy Tân Hương 2.
+      </p>
+    </section>
 
-      <!-- ARTICLES LIST -->
-      <div class="lg:col-span-8 space-y-8">
+    <section class="tg-container pb-20 pt-12 lg:pb-28">
+      <div class="grid items-start gap-12 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-16">
 
-        <!-- FEATURED POST -->
-        <article class="bg-white rounded-3xl overflow-hidden border border-emerald-100 shadow-sm hover:shadow-xl transition-all duration-300 group">
-          <div class="relative h-64 sm:h-80 overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=1200&q=80" alt="Ngày hội việc làm Đồng Tháp" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-            <div class="absolute top-4 left-4">
-              <span class="px-3 py-1 rounded-full bg-brand-800 text-white text-xs font-bold uppercase tracking-wider shadow">Tin Nổi Bật</span>
-            </div>
-          </div>
-          <div class="p-6 sm:p-8 space-y-3">
-            <div class="flex items-center gap-3 text-xs text-slate-400">
-              <span>📅 28/10/2026</span>
-              <span>&bull;</span>
-              <span>✍️ Ban Tuyển Dụng Nhân Sự</span>
-              <span>&bull;</span>
-              <span class="text-brand-800 font-semibold">Sự Kiện Việc Làm</span>
-            </div>
-            <h2 class="text-xl sm:text-2xl font-black text-slate-900 group-hover:text-brand-800 transition leading-snug">
-              <a href="news-detail.html">TEX-GIANG Tham Gia Ngày Hội Việc Làm Huyện Châu Thành Năm 2026: Phỏng Vấn Trực Tiếp, Nhận Việc Ngay</a>
+        <div>
+          <!-- BÀI NỔI BẬT -->
+          <article class="group" data-reveal>
+            <a href="news-detail.html" class="block overflow-hidden rounded-media">
+              <img src="assets/images/banner-texgiang.webp" srcset="assets/images/banner-texgiang-800.webp 800w, assets/images/banner-texgiang.webp 2048w" sizes="(max-width: 768px) 100vw, 1200px"
+                   alt="Cổng Nhà máy Tân Hương 2 — ảnh minh hoạ bài viết"
+                   width="2048" height="768" loading="lazy"
+                   class="aspect-[4/3] w-full object-cover object-right transition-transform duration-500 group-hover:scale-[1.02]">
+            </a>
+            <h2 class="mt-6 max-w-[26ch] text-[clamp(1.5rem,2.6vw,2rem)] font-medium leading-[1.3] text-ink">
+              <a href="news-detail.html" class="transition-colors hover:text-accent">Ngày hội việc làm Châu Thành 2026</a>
             </h2>
-            <p class="text-slate-600 text-xs sm:text-sm leading-relaxed line-clamp-3">
-              Nhằm đáp ứng kế hoạch mở rộng các chuyền may xuất khẩu tại Nhà máy Tân Hương 2 trong quý 4/2026, Công ty Cổ phần TEX-GIANG chính thức có mặt tại Ngày hội việc làm huyện Châu Thành với 500 chỉ tiêu công nhân may và QC...
+            <div class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[14px] text-muted">
+              <span class="text-accent">Sự kiện việc làm</span>
+              <span>28/10/2026</span>
+              <span aria-hidden="true">·</span>
+              <span>Ban tuyển dụng</span>
+            </div>
+            <p class="mt-3 max-w-[62ch] text-[16px] leading-[1.7] text-muted">
+              Mang 500 chỉ tiêu công nhân may và QC đến ngày hội: phỏng vấn trực tiếp tại gian hàng, nhận việc ngay trong tuần, có xe đưa đón tham quan nhà máy.
             </p>
-            <div class="pt-2 flex items-center justify-between">
-              <a href="news-detail.html" class="inline-flex items-center text-xs font-extrabold text-brand-800 hover:text-brand-900 gap-1">
-                Đọc toàn bộ bài viết
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-              </a>
-              <span class="text-xs text-slate-400">3 phút đọc</span>
-            </div>
+            <a href="news-detail.html" class="tg-link mt-4">Đọc bài <img src="assets/images/icons/arrow-right.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[14px]"></a>
+          </article>
+
+          <!-- DANH SÁCH BÀI KHÁC -->
+          <div class="mt-14 space-y-10">
+            <article class="news-list-item" data-reveal><img class="news-thumbnail" src="assets/images/company/social.webp" alt="Hoạt động cộng đồng trong hệ thống TG APPAREL" width="144" height="140" loading="lazy">
+              <h2 class="max-w-[34ch] text-[20px] font-medium leading-[1.4] text-ink">
+                <a href="news-detail.html" class="transition-colors hover:text-accent">Công đoàn tổ chức lễ kỷ niệm 20/10 và trao thưởng nữ lao động giỏi</a>
+              </h2>
+              <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[14px] text-muted">
+                <span class="text-accent">Hoạt động nội bộ</span>
+                <span>20/10/2026</span>
+                <span aria-hidden="true">·</span>
+                <span>Công đoàn</span>
+              </div>
+              <p class="mt-2 max-w-[62ch] text-[16px] leading-[1.7] text-muted">
+                Hơn 2.000 phần quà trao tận tay nữ công nhân viên có thành tích tốt trong đợt thi đua quý 3.
+              </p>
+            </article>
+
+            <article class="news-list-item" data-reveal><img class="news-thumbnail" src="assets/images/company/workshop.webp" alt="Các công đoạn may và làm việc trong hệ thống TG APPAREL" width="144" height="140" loading="lazy">
+              <h2 class="max-w-[34ch] text-[20px] font-medium leading-[1.4] text-ink">
+                <a href="news-detail.html" class="transition-colors hover:text-accent">Phỏng vấn và kiểm tra tay nghề may: chuẩn bị những gì</a>
+              </h2>
+              <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[14px] text-muted">
+                <span class="text-accent">Cẩm nang</span>
+                <span>15/10/2026</span>
+                <span aria-hidden="true">·</span>
+                <span>HR tuyển dụng</span>
+              </div>
+              <p class="mt-2 max-w-[62ch] text-[16px] leading-[1.7] text-muted">
+                Cách may đường thẳng, may lượn sóng và những lưu ý an toàn khi vào bài kiểm tra tay nghề tại TG APPAREL.
+              </p>
+            </article>
           </div>
-        </article>
+        </div>
 
-        <!-- REGULAR POSTS GRID -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <!-- CỘT PHỤ -->
+        <aside class="space-y-6" data-reveal>
+          <form id="news-subscribe" class="rounded-card bg-surface p-6">
+            <h2 class="text-[16px] font-medium text-ink">Nhận việc làm mới mỗi tuần</h2>
+            <p class="mt-2 text-[16px] leading-[1.6] text-muted">Để lại số điện thoại hoặc email, nhân sự gửi tin tuyển mới khi có đợt mở.</p>
+            <label class="form-label mt-4" for="news-contact">Số điện thoại hoặc email</label>
+            <input type="text" id="news-contact" name="contact" required placeholder="0918 123 456" class="form-input">
+            <button type="submit" class="tg-btn tg-btn--primary mt-4 w-full">Đăng ký nhận tin</button>
+            <p class="mt-3 text-[14px] leading-[1.6] text-muted">* Biểu mẫu demo, chưa lưu vào hệ thống.</p>
+          </form>
 
-          <!-- Post 2 -->
-          <article class="bg-white rounded-3xl overflow-hidden border border-emerald-100 shadow-sm hover:shadow-md transition flex flex-col justify-between group">
-            <div>
-              <div class="h-44 overflow-hidden relative">
-                <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=600&q=80" alt="Kỷ niệm ngày phụ nữ" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                <span class="absolute top-3 left-3 bg-brand-800 text-white text-[11px] font-bold px-2 py-0.5 rounded">Nội Bộ</span>
-              </div>
-              <div class="p-5 space-y-2">
-                <div class="text-xs text-slate-400">20/10/2026 &bull; Công Đoàn TEX-GIANG</div>
-                <h3 class="font-bold text-slate-900 group-hover:text-brand-800 transition text-sm line-clamp-2">
-                  <a href="news-detail.html">Công Đoàn TEX-GIANG Tổ Chức Lễ Kỷ Niệm 20/10 & Trao Thưởng Nữ Lao Động Giỏi</a>
-                </h3>
-                <p class="text-slate-500 text-xs line-clamp-2">
-                  Hơn 2.000 phần quà ý nghĩa đã được trao tận tay các chị em nữ công nhân viên có thành tích xuất sắc trong đợt thi đua quý 3.
-                </p>
-              </div>
-            </div>
-            <div class="px-5 pb-5">
-              <a href="news-detail.html" class="text-xs font-bold text-brand-800 hover:underline">Chi tiết &rarr;</a>
-            </div>
-          </article>
+          <div class="rounded-card bg-surface p-6">
+            <h2 class="text-[16px] font-medium text-ink">Chủ đề</h2>
+            <ul class="mt-4 space-y-2.5">
+              <li><a href="jobs.html" class="text-[16px] text-muted transition-colors hover:text-accent">Vị trí đang tuyển</a></li>
+              <li><a href="why-tex-giang.html" class="text-[16px] text-muted transition-colors hover:text-accent">Chế độ phúc lợi</a></li>
+              <li><a href="apply.html" class="text-[16px] text-muted transition-colors hover:text-accent">Cách nộp hồ sơ</a></li>
+              <li><a href="contact.html" class="text-[16px] text-muted transition-colors hover:text-accent">Tuyến xe đưa rước</a></li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </section>
 
-          <!-- Post 3 -->
-          <article class="bg-white rounded-3xl overflow-hidden border border-emerald-100 shadow-sm hover:shadow-md transition flex flex-col justify-between group">
-            <div>
-              <div class="h-44 overflow-hidden relative">
-                <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=600&q=80" alt="Cẩm nang phỏng vấn" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                <span class="absolute top-3 left-3 bg-accent-500 text-white text-[11px] font-bold px-2 py-0.5 rounded">Cẩm Nang</span>
-              </div>
-              <div class="p-5 space-y-2">
-                <div class="text-xs text-slate-400">15/10/2026 &bull; HR Tuyển Dụng</div>
-                <h3 class="font-bold text-slate-900 group-hover:text-brand-800 transition text-sm line-clamp-2">
-                  <a href="news-detail.html">Kinh Nghiệm Phỏng Vấn & Kiểm Tra Tay Nghề May Chuyền Đạt Mức Lương Tối Đa</a>
-                </h3>
-                <p class="text-slate-500 text-xs line-clamp-2">
-                  Hướng dẫn chi tiết cách may đường thẳng, may lượn sóng và các lưu ý an toàn lao động khi vào bài kiểm tra tay nghề tại TG APPAREL.
-                </p>
-              </div>
-            </div>
-            <div class="px-5 pb-5">
-              <a href="news-detail.html" class="text-xs font-bold text-brand-800 hover:underline">Chi tiết &rarr;</a>
-            </div>
-          </article>
+  </main>
 
+  <footer class="bg-surface py-16 no-print lg:py-20">
+    <div class="tg-container">
+      <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr] 2xl:gap-14">
+        <div>
+          <a href="index.html" class="inline-flex items-center gap-2.5">
+            <img src="assets/images/logo-tgi.png" alt="Logo TEX-GIANG" width="30" height="30" class="h-[30px] w-auto">
+            <span class="text-[16px] font-semibold text-ink">TEX-GIANG</span>
+          </a>
+          <p class="mt-4 max-w-[320px] text-[16px] leading-[1.7] text-muted">
+            Cổng tuyển dụng chính thức của Công ty Cổ phần TEX-GIANG và TG APPAREL tại KCN Tân Hương, Đồng Tháp.
+          </p>
+          <ul class="mt-5 space-y-2.5 text-[14px] text-muted">
+            <li class="flex items-start gap-2.5"><img src="assets/images/icons/geo-alt.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon mt-0.5"> <span>Lô BII-8, Đường D3, KCN Tân Hương, Xã Tân Hương, Tỉnh Đồng Tháp</span></li>
+            <li class="flex items-center gap-2.5"><img src="assets/images/icons/telephone.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon "> <span><a href="tel:02773889999" class="text-body hover:text-accent">0277 388 9999</a> · <a href="tel:0918123456" class="text-body hover:text-accent">0918 123 456</a></span></li>
+            <li class="flex items-center gap-2.5"><img src="assets/images/icons/envelope.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon "> <a href="mailto:tuyendung@texgiang.com.vn" class="text-body hover:text-accent">tuyendung@texgiang.com.vn</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h2 class="text-[14px] font-semibold text-ink">Việc làm</h2>
+          <ul class="mt-4 space-y-2.5">
+            <li><a href="jobs.html?department=production" class="text-[16px] text-muted transition-colors hover:text-accent">Việc làm may chuyền</a></li>
+            <li><a href="jobs.html?department=qc" class="text-[16px] text-muted transition-colors hover:text-accent">Kiểm phẩm QC</a></li>
+            <li><a href="jobs.html?department=ie" class="text-[16px] text-muted transition-colors hover:text-accent">Kỹ sư IE &amp; quản lý</a></li>
+            <li><a href="jobs.html?department=maintenance" class="text-[16px] text-muted transition-colors hover:text-accent">Bảo trì &amp; cơ điện</a></li>
+            <li><a href="apply.html" class="text-[16px] text-muted transition-colors hover:text-accent">Nộp CV tự do</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h2 class="text-[14px] font-semibold text-ink">Doanh nghiệp</h2>
+          <ul class="mt-4 space-y-2.5">
+            <li><a href="about.html" class="text-[16px] text-muted transition-colors hover:text-accent">Giới thiệu TEX-GIANG</a></li>
+            <li><a href="about.html" class="text-[16px] text-muted transition-colors hover:text-accent">Thương hiệu TG APPAREL</a></li>
+            <li><a href="why-tex-giang.html" class="text-[16px] text-muted transition-colors hover:text-accent">Chính sách đãi ngộ</a></li>
+            <li><a href="news.html" class="text-[16px] text-muted transition-colors hover:text-accent">Tin tức nghề nghiệp</a></li>
+            <li><a href="contact.html" class="text-[16px] text-muted transition-colors hover:text-accent">Bản đồ &amp; xe đưa rước</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h2 class="text-[14px] font-semibold text-ink">Kết nối</h2>
+          <ul class="mt-4 space-y-2.5">
+            <li><a href="https://zalo.me" target="_blank" rel="noopener" class="text-[16px] text-muted transition-colors hover:text-accent">Chat Zalo tuyển dụng</a></li>
+            <li><button type="button" class="open-qr-modal text-[16px] text-muted transition-colors hover:text-accent">Mã QR tin tuyển dụng</button></li>
+            <li><button type="button" onclick="copyLink()" class="text-[16px] text-muted transition-colors hover:text-accent">Sao chép liên kết</button></li>
+            <li><a href="https://texgiang.com.vn" target="_blank" rel="noopener" class="text-[16px] text-muted transition-colors hover:text-accent">texgiang.com.vn</a></li>
+            <li><a href="https://tgapparel.com.vn" target="_blank" rel="noopener" class="text-[16px] text-muted transition-colors hover:text-accent">tgapparel.com.vn</a></li>
+          </ul>
         </div>
       </div>
 
-      <!-- SIDEBAR -->
-      <aside class="lg:col-span-4 space-y-6">
-        <div class="bg-white rounded-3xl border border-emerald-100 p-6 shadow-sm">
-          <h3 class="font-bold text-slate-900 text-sm mb-3">Tìm Kiếm Bài Viết</h3>
-          <div class="relative">
-            <input type="text" placeholder="Nhập từ khóa tìm kiếm..." class="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-brand-700 focus:outline-none">
-            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-            </span>
-          </div>
-        </div>
-
-        <div class="bg-gradient-to-br from-brand-950 to-brand-900 rounded-3xl p-6 text-white space-y-3">
-          <h4 class="font-bold text-sm text-amber-300">Đăng Ký Nhận Tin Việc Làm Mới</h4>
-          <p class="text-xs text-emerald-200">Nhận ngay thông báo việc làm lương cao và lịch phỏng vấn tuyển dụng hàng tuần:</p>
-          <input type="text" placeholder="Số điện thoại hoặc Email..." class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-xs text-white placeholder-slate-400 focus:outline-none">
-          <button onclick="showToast('Đăng ký nhận thông báo tuyển dụng thành công!', 'success')" class="w-full py-2.5 bg-amber-400 hover:bg-amber-300 text-brand-950 font-black text-xs rounded-xl transition">
-            Đăng Ký Ngay
-          </button>
-        </div>
-      </aside>
-
-    </div>
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="bg-brand-950 text-emerald-100 py-8 border-t border-brand-900 text-xs text-center">
-    <div class="max-w-7xl mx-auto px-4">
-      <p>&copy; 2026 CÔNG TY CỔ PHẦN TEX-GIANG & TG APPAREL. Thiết kế bởi IT-P.KT-NS.</p>
+      <p class="photo-credit">Ảnh doanh nghiệp: <a href="https://tg-apparel.vn/" target="_blank" rel="noopener">TG APPAREL</a>.</p>
+      <div class="mt-14 flex flex-col gap-2 text-[14px] text-muted sm:flex-row sm:items-center sm:justify-between">
+        <p>© 2026 Công ty Cổ phần TEX-GIANG &amp; TG APPAREL</p>
+        <p>Thiết kế &amp; vận hành: IT-P.KT-NS · <a href="admin/login.html" class="transition-colors hover:text-accent">Cổng quản trị HR</a></p>
+      </div>
     </div>
   </footer>
 
+  <div class="float-stack fixed bottom-4 right-3 z-40 flex flex-col items-center gap-2 no-print sm:bottom-6 sm:right-6 sm:gap-2.5">
+    <button id="back-to-top" type="button" aria-label="Lên đầu trang" class="float-btn opacity-0 pointer-events-none">
+      <img src="assets/images/icons/arrow-up.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon ">
+    </button>
+    <a href="https://zalo.me" target="_blank" rel="noopener" class="float-btn" aria-label="Chat Zalo tuyển dụng">Zalo</a>
+    <a href="tel:0918123456" class="float-btn float-btn--primary" aria-label="Gọi hotline 0918 123 456">
+      <img src="assets/images/icons/telephone.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[16px]">
+    </a>
+  </div>
+
+  <div id="qr-modal" class="tg-modal hidden" role="dialog" aria-modal="true" aria-labelledby="qr-title">
+    <div class="relative w-full max-w-[380px] rounded-2xl bg-white p-7 text-center">
+      <button id="close-qr-btn" type="button" aria-label="Đóng"
+              class="absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-lg text-muted transition-colors hover:bg-surface hover:text-ink">
+        <img src="assets/images/icons/x-lg.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[14px]">
+      </button>
+      <h3 id="qr-title" class="text-[18px] font-medium text-ink">Mã QR tin tuyển dụng</h3>
+      <p class="mt-1.5 text-[14px] leading-[1.6] text-muted">Quét bằng camera điện thoại hoặc Zalo để mở nhanh trên thiết bị khác.</p>
+      <div class="my-5 inline-block rounded-xl border border-line p-3">
+        <img id="qr-code-img" src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&amp;data=https%3A%2F%2Ftexgiang.com.vn"
+             alt="Mã QR tin tuyển dụng" width="180" height="180" class="h-[180px] w-[180px]">
+      </div>
+      <p id="qr-target-url" class="break-all text-[14px] text-muted"></p>
+      <button type="button" onclick="copyLink()" class="tg-btn tg-btn--primary mt-5 h-11 w-full text-[16px]">Sao chép đường dẫn</button>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
   <script src="assets/js/main.js"></script>
+  <script src="assets/js/ui.js"></script>
+  <script>
+    (function () {
+      var form = document.getElementById('news-subscribe');
+      if (!form) return;
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var input = document.getElementById('news-contact');
+        if (!input.value.trim()) {
+          showToast('Vui lòng nhập số điện thoại hoặc email.', 'error');
+          return;
+        }
+        showToast('Đã ghi nhận đăng ký (demo). Nhân sự sẽ gửi tin khi có đợt tuyển mới.', 'success');
+        form.reset();
+      });
+    })();
+  </script>
 </body>
 </html>

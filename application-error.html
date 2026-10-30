@@ -3,79 +3,59 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lỗi Gửi Hồ Sơ | TEX-GIANG</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              800: '#006837',
-              700: '#087A55',
-            },
-            navy: '#12345A'
-          }
-        }
-      }
-    }
-  </script>
-  <link rel="stylesheet" href="assets/css/custom.css">
-</head>
-<body class="bg-[#F5F7FA] text-[#1F2937] min-h-screen flex flex-col justify-between">
+  <title>Chưa gửi được hồ sơ | Tuyển dụng TEX-GIANG</title>
+  <meta name="robots" content="noindex">
 
-  <!-- Header -->
-  <header class="bg-white border-b border-emerald-100 py-4">
-    <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
-      <a href="index.html" class="flex items-center gap-3">
-        <img src="assets/images/logo-tgi.png" alt="Logo TGI" class="h-10 w-auto">
-        <span class="font-black text-sm text-[#087A55]">CÔNG TY CỔ PHẦN TEX-GIANG</span>
+  <link rel="stylesheet" href="assets/css/app.css">
+  <link rel="stylesheet" href="assets/css/utilities.css">
+  <link rel="stylesheet" href="assets/css/custom.css">
+  <link rel="stylesheet" href="assets/css/public.css">
+  <link rel="icon" href="assets/images/logo-tgi.png" type="image/png">
+</head>
+<body class="tg-public page-application-error flex min-h-screen flex-col bg-white font-sans text-body antialiased selection:bg-accent selection:text-white">
+
+  <header>
+    <div class="tg-container flex h-16 items-center justify-between gap-4">
+      <a href="index.html" class="flex items-center gap-2.5">
+        <img src="assets/images/logo-tgi.png" alt="Logo TEX-GIANG" width="32" height="32" class="h-8 w-auto object-contain">
+        <span class="text-[16px] font-semibold leading-none text-ink">TEX-GIANG</span>
       </a>
-      <a href="index.html" class="text-xs font-bold text-[#087A55] hover:underline">Về Trang Chủ &rarr;</a>
+      <a href="apply.html" class="tg-link text-[15px]">Nộp hồ sơ <img src="assets/images/icons/arrow-right.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[13px]"></a>
     </div>
   </header>
 
-  <!-- Error Card -->
-  <main class="max-w-xl mx-auto px-4 py-12">
-    <div class="bg-white rounded-3xl border border-rose-200 p-8 sm:p-10 shadow-xl text-center space-y-6">
-      <div class="w-20 h-20 rounded-full bg-rose-100 text-rose-600 mx-auto flex items-center justify-center text-4xl shadow-inner">
-        <i class="bi bi-x-octagon-fill"></i>
-      </div>
+  <a class="skip-link" href="#main-content">Đến nội dung chính</a>
+  <main id="main-content" class="notice-main">
+    <div class="tg-container">
+      <div class="mx-auto max-w-[640px]">
+        <h1 class="mt-3 text-[clamp(2.25rem,5vw,4.5rem)] font-medium leading-[1.15] tracking-[-0.02em] text-ink">
+          Hồ sơ chưa được gửi
+        </h1>
 
-      <div class="space-y-2">
-        <span class="text-xs font-extrabold text-rose-600 uppercase tracking-wider">Thông Báo Lỗi Gửi Dữ Liệu</span>
-        <h1 class="text-2xl sm:text-3xl font-black text-slate-900">Không Thể Gửi Hồ Sơ Ứng Tuyển</h1>
-        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
-          Đã xảy ra sự cố trong quá trình truyền dữ liệu hoặc tệp CV đính kèm vượt quá dung lượng cho phép.
+        <p class="mt-4 text-[18px] leading-[1.6] text-muted">
+          Có thể do mất kết nối mạng, hoặc tệp CV sai định dạng hay lớn hơn 10MB. Bạn có thể kiểm tra tệp rồi quay lại biểu mẫu để thử lại.
         </p>
-      </div>
 
-      <div class="p-4 bg-rose-50 rounded-2xl border border-rose-200 text-xs text-left space-y-2 text-slate-700">
-        <div class="font-bold text-rose-700 flex items-center gap-1.5">
-          <i class="bi bi-exclamation-triangle-fill"></i> Hướng dẫn khắc phục:
+        <div class="mt-10 rounded-card bg-surface p-6 lg:p-8">
+          <h2 class="text-[16px] font-medium text-ink">Thử theo thứ tự này</h2>
+          <ul class="mt-4 space-y-4 text-[16px] leading-[1.6] text-muted">
+            <li><span class="block font-medium text-body">Kiểm tra tệp CV</span> Chỉ nhận PDF, DOC, DOCX, JPG, PNG và tối đa 10MB.</li>
+            <li><span class="block font-medium text-body">Gửi lại</span> Bấm nút bên dưới, điền lại nhanh các trường bắt buộc.</li>
+            <li><span class="block font-medium text-body">Vẫn lỗi?</span> Gọi <a href="tel:0918123456" class="text-body underline underline-offset-2 hover:text-accent">0918 123 456</a> hoặc Zalo để nhân sự nhận hồ sơ trực tiếp.</li>
+          </ul>
         </div>
-        <ul class="space-y-1 list-disc pl-4 text-slate-600">
-          <li>Kiểm tra lại dung lượng tệp đính kèm (không vượt quá 10MB).</li>
-          <li>Đảm bảo định dạng tệp là PDF, DOCX, DOC hoặc ảnh JPG/PNG.</li>
-          <li>Kiểm tra kết nối mạng Internet và thử gửi lại biểu mẫu.</li>
-          <li>Hoặc gửi hồ sơ trực tiếp qua Zalo tuyển dụng: <strong>0918 123 456</strong>.</li>
-        </ul>
-      </div>
 
-      <div class="pt-2 flex flex-wrap justify-center gap-3">
-        <a href="apply.html" class="px-6 py-3 bg-[#087A55] hover:bg-[#006837] text-white font-bold text-xs rounded-xl shadow transition">
-          <i class="bi bi-arrow-repeat mr-1.5"></i> Thử Nộp Lại Hồ Sơ
-        </a>
-        <a href="contact.html" class="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition">
-          Liên Hệ Ban Tuyển Dụng
-        </a>
+        <div class="mt-10 flex flex-wrap gap-3">
+          <a href="apply.html" class="tg-btn tg-btn--primary">Gửi lại hồ sơ</a>
+          <a href="tel:0918123456" class="tg-btn tg-btn--ghost">Gọi 0918 123 456</a>
+        </div>
       </div>
+    <img class="notice-art" src="assets/images/application-error.svg" width="400" height="330" alt="" aria-hidden="true">
     </div>
   </main>
 
-  <footer class="bg-[#0B223D] text-emerald-200 py-6 text-xs text-center">
-    <p>&copy; 2026 CÔNG TY CỔ PHẦN TEX-GIANG & TG APPAREL.</p>
+  <footer class="bg-surface py-6">
+    <div class="tg-container text-[14px] text-muted">© 2026 Công ty Cổ phần TEX-GIANG &amp; TG APPAREL</div>
   </footer>
 
 </body>
