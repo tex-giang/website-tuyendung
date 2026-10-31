@@ -44,8 +44,10 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // 3. Banner pop-up tuyển dụng: chỉ hiện sau khi người dùng đã cuộn (không che màn đầu),
-  //    tối đa một lần mỗi phiên và có nút tắt.
+  // 3. Banner pop-up tuyển dụng: chỉ hiện khi khách có ý định rời trang (đưa chuột
+  //    lên thanh địa chỉ) hoặc ở lại lâu; không che nội dung lúc đang đọc,
+  //    tối đa một lần mỗi phiên và có nút tắt. Trên điện thoại không bật
+  //    (đã có dải thông báo ở đầu trang).
   const popupBanner = document.getElementById('recruitment-popup');
   const closePopupBtn = document.getElementById('close-popup-btn');
   const dontShowAgainBtn = document.getElementById('popup-dont-show-again');
@@ -53,23 +55,24 @@ document.addEventListener('DOMContentLoaded', function () {
   if (popupBanner) {
     const isDismissed = sessionStorage.getItem('texgiang_popup_seen');
     let popupShown = false;
+    let dwellTimer = null;
 
     const showPopup = () => {
       if (popupShown || sessionStorage.getItem('texgiang_popup_seen')) return;
       popupShown = true;
       popupBanner.classList.remove('hidden');
       popupBanner.classList.add('flex');
-      window.removeEventListener('scroll', onScroll);
+      document.removeEventListener('mouseout', onExitIntent);
+      if (dwellTimer) clearTimeout(dwellTimer);
     };
 
-    const onScroll = () => {
-      if (window.scrollY > window.innerHeight * 0.6) showPopup();
+    const onExitIntent = (event) => {
+      if (!event.relatedTarget && event.clientY <= 8) showPopup();
     };
 
-    if (!isDismissed) {
-      window.addEventListener('scroll', onScroll, { passive: true });
-      // Dự phòng cho người chỉ đọc màn đầu rồi rời tab
-      setTimeout(showPopup, 25000);
+    if (!isDismissed && window.matchMedia('(min-width: 640px)').matches) {
+      document.addEventListener('mouseout', onExitIntent);
+      dwellTimer = setTimeout(showPopup, 30000);
     }
 
     const hidePopup = () => {

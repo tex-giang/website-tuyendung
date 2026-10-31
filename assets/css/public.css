@@ -130,3 +130,19 @@ body.has-dialog { overflow: hidden; }
 }
 
 .filter-chip-remove { display: inline-grid; place-items: center; min-width: 32px; min-height: 32px; }
+
+/* Thanh tìm kiếm: nút "Tìm việc" bo tròn cùng thanh (viên thuốc).
+   Cần rule riêng vì .tg-public .tg-btn đặt border-radius 6px với độ ưu tiên
+   cao hơn utility .rounded-full nên nút bị vuông trong thanh bo tròn. */
+@media (min-width: 768px) {
+  .tg-public .search-pill .tg-btn {
+    border-radius: 9999px;
+    height: 44px;
+  }
+}
+
+@media (max-width: 767px) {
+  .tg-public .search-pill .tg-btn {
+    border-radius: 12px;
+  }
+}

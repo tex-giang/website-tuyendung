@@ -743,7 +743,7 @@
       `${c.seoTitle.length} ký tự · nên ngắn gọn và rõ vị trí tuyển dụng`;
     $("seo-description-count").textContent = `${c.seoDescription.length} ký tự`;
     $("seo-preview").innerHTML =
-      `<span>texgiang.com.vn</span><strong>${esc(c.seoTitle || "Tiêu đề trang")}</strong><p>${esc(c.seoDescription || "Mô tả website tuyển dụng")}</p>`;
+      `<span>tex-giang.com.vn</span><strong>${esc(c.seoTitle || "Tiêu đề trang")}</strong><p>${esc(c.seoDescription || "Mô tả website tuyển dụng")}</p>`;
   }
   function initBanner() {
     media = structuredClone(D.snapshot().banner);
