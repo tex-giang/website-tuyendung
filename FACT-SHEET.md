@@ -1,82 +1,69 @@
 # XÁC MINH THÔNG TIN DOANH NGHIỆP — NGUỒN & ĐỐI CHIẾU
 
-> Thực hiện: 31/10/2026. Nguồn chính thức đọc trực tiếp trong ngày:
-> - [tex-giang.com.vn](https://tex-giang.com.vn/) — TGI, trang Fact & History, Contact
-> - [tg-apparel.vn](https://tg-apparel.vn/) — TGA, Facilities, Contact
-> - Tin tuyển dụng của công ty trên TopCV (địa điểm, chế độ) và bài VCCI về việc nhận nhà máy Tân Hương 2 (8/2024)
+> Cập nhật 02/11/2026. Website chỉ giới thiệu **một pháp nhân: Công ty Cổ phần TEX-GIANG (TGI)** với **3 khu sản xuất: Tân Hương, Cái Lậy, Chợ Gạo**.
+> Nguồn chính thức đọc trực tiếp: [tex-giang.com.vn](https://tex-giang.com.vn/) (About Us → Fact & History, Contact) và tin tuyển dụng của công ty trên TopCV.
 
-## 1. Hai pháp nhân (khác nhau, dùng chung hotline)
+## 1. Pháp nhân
 
-| | TEX-GIANG (TGI) | TG APPAREL (TGA) |
-|---|---|---|
-| Pháp nhân | Công ty Cổ phần TEX-GIANG | Công ty Cổ phần May TG |
-| MST | — (không công bố trên site) | **1201671602** |
-| Thành lập | **3/2007** | pháp nhân riêng (site ghi © 2023–2026) |
-| Trụ sở | Lô BII-8, đường D3, KCN Tân Hương, xã Tân Hương, tỉnh Đồng Tháp | Ấp Bình Quới, xã Bình Phú, tỉnh Đồng Tháp (Cái Lậy) |
-| Điện thoại | **(0273) 393 7274** · Fax (0273) 393 7275 | **+84 273 393 7274** |
-| Email công bố | chung.doan@tex-giang.com.vn · trang.nguyen@tex-giang.com.vn | trang.nguyen@tg-apparel.vn |
-| Website | **tex-giang.com.vn** | **tg-apparel.vn** |
-
-## 2. Nhà máy (địa chỉ đúng)
-
-| Nhà máy | Địa chỉ |
+| Trường | Giá trị |
 |---|---|
-| Tân Hương 1 (trụ sở TGI) | Lô BII-8, đường D3, KCN Tân Hương |
-| Tân Hương 2 | Lô BI-5,6,7,8 đường D3, KCN Tân Hương — nhận thêm **8/2024**, rộng **4,8 ha** |
-| Cái Lậy | Ấp Bình Quới, xã Bình Phú, tỉnh Đồng Tháp |
-| Chợ Gạo | Ấp Hòa Lợi Tiểu, xã Bình Ninh, tỉnh Đồng Tháp |
+| Tên | Công ty Cổ phần TEX-GIANG (viết tắt TGI) |
+| Thành lập | **3/2007** |
+| Trụ sở | Lô BII-8, đường D3, KCN Tân Hương, xã Tân Hương, tỉnh Đồng Tháp |
+| Điện thoại | **(0273) 393 7274** — Fax (0273) 393 7275 |
+| Email công bố | chung.doan@tex-giang.com.vn · trang.nguyen@tex-giang.com.vn |
+| Website | **tex-giang.com.vn** |
 
-TGI hiện có 3 nhà máy (Tân Hương, Cái Lậy, Chợ Gạo); hệ thống TGA quản lý 4 nhà máy.
+## 2. Ba khu sản xuất
+
+| Khu | Địa chỉ | Ghi chú |
+|---|---|---|
+| **Tân Hương** | Lô BII-8 (Nhà máy 1) và lô BI-5,6,7,8 (Nhà máy 2), đường D3, KCN Tân Hương, xã Tân Hương | Trụ sở; Nhà máy 2 nhận thêm 8/2024, rộng 4,8 ha |
+| **Cái Lậy** | Ấp Bình Quới, xã Bình Phú | Khai trương 3/2015, cách trụ sở 40 km |
+| **Chợ Gạo** | Ấp Hòa Lợi Tiểu, xã Bình Ninh | Đưa vào vận hành 2021–2022 |
 
 ## 3. Quy mô & năng lực
 
-### Nguyên văn nguồn (đọc trực tiếp 02/11/2026)
+### Nguyên văn nguồn
 
 | Con số | Nguồn | Nguyên văn |
 |---|---|---|
-| 3 nhà máy TGI | tex-giang.com.vn → Fact & History | "At present, TGI has three factories at: Tan Huong, Cai Lay and Cho Gao." |
-| 4 nhà máy TGA | tg-apparel.vn (trang chủ) | "four modern factories" · "With more than 4,500 employees, our four factories operate with modern, green, and sustainable facilities" |
-| 4.500 lao động | tg-apparel.vn (trang chủ) | "4,500 skilled workers" · "With more than 4,500 employees…" |
-| 8 triệu sản phẩm/năm (TGI) | tex-giang.com.vn | "With current capacity to produce 8 million products each year" |
-| 10 triệu sản phẩm/năm (TGA) | tg-apparel.vn | "over 10 million garments annually" |
+| 3 khu/nhà máy | tex-giang.com.vn → Fact & History | "At present, **TGI has three factories** at: Tan Huong, Cai Lay and Cho Gao." |
+| 8 triệu sản phẩm/năm | tex-giang.com.vn | "capacity to produce **8 million products** each year" |
+| Hơn 3.500 lao động | VCCI (bài về việc nhận nhà máy Tân Hương 2, 2024) | "more than 3,500 workers" |
+| Diện tích Tân Hương 2 | VCCI (8/2024) | 4,8 ha |
 
-**Vì sao 3 và 4 không mâu thuẫn:** TGI đếm theo cơ sở (Tân Hương, Cái Lậy, Chợ Gạo = 3); TGA đếm Tân Hương 1 và Tân Hương 2 thành hai nhà máy riêng (4 tổng). Trên site ghi theo từng nguồn, không gộp thành một con số.
-
-- TGI: khoảng **8 triệu sản phẩm/năm**; hơn **3.500 lao động** (VCCI 2024).
-- TGA: khoảng **10 triệu sản phẩm/năm**; **hơn 4.500 lao động**; EU là thị trường lớn nhất, sau đó Mỹ, Úc, New Zealand.
-- Điện mặt trời lắp tại **tất cả** cơ sở (TGI công bố).
 - Khách hàng: Kathmandu, Dickies, Helly Hansen, Wurth Modyf, DHL, Wilson, Haglofs, First Tactical, Didriksons.
+- Thị trường: châu Âu, Mỹ, Úc, New Zealand.
+- Điện mặt trời lắp tại tất cả cơ sở (TGI công bố).
 
 ## 4. Chứng nhận & mốc
 
 - **2012** SA8000
 - **2014** công nghệ laser cut & lamination
 - **01/2015** ISO 9001 (SGS)
-- **03/2015** khai trương nhà máy Cái Lậy (cách trụ sở 40 km)
+- **03/2015** khai trương khu Cái Lậy (cách trụ sở 40 km)
 - **2016** OEKO-TEX STEP
-- **2021–2022** nhà máy Chợ Gạo; Higg FEM & FSLM
-- **08/2024** nhận nhà máy Tân Hương 2 (4,8 ha)
+- **2021–2022** khu Chợ Gạo; Higg FEM & FSLM
+- **08/2024** nhận Nhà máy Tân Hương 2 (4,8 ha)
 
-## 5. Đã sửa trên website
+## 5. Đã áp dụng trên website
 
-| Nội dung | Trước | Sau |
-|---|---|---|
-| Hotline / `tel:` | 0277 388 9999 · 0918 123 456 | **0273 393 7274** |
-| Email | tuyendung@texgiang.com.vn | chung.doan@tex-giang.com.vn (TGI) · trang.nguyen@tg-apparel.vn (TGA) |
-| Website đối tác | texgiang.com.vn · tgapparel.com.vn | **tex-giang.com.vn** · **tg-apparel.vn** |
-| Tên pháp nhân | "Công ty TNHH TG APPAREL" | **Công ty Cổ phần May TG (TG APPAREL, TGA)** |
-| Dải số liệu trang chủ | 3.500+ · 8–18tr · 100% · 15+ năm | 2007 · 4 nhà máy · 4.500 CBCNV · 10 triệu sản phẩm/năm |
-| About | "15 năm", 45.000 m², WRAP · ISO | H1 "từ 2007", timeline thật 2007→2024, SA8000/ISO 9001/OEKO-TEX/Higg, 4 nhà máy, 2 pháp nhân |
-| Vị trí trong tin tuyển dụng | "Xưởng 2", "VP Đại diện" | Tân Hương 1 / Tân Hương 2 / Cái Lậy / KCN Tân Hương |
-| Trang chi tiết tin | chỉ có hạn nộp | thêm **ngày đăng** (Đăng 26/10/2026 · Hạn nộp 25/11/2026) |
-| Chân trang | — | thêm dòng "Thông tin doanh nghiệp tham chiếu tex-giang.com.vn và tg-apparel.vn" |
-| Meta description | "8–18 triệu", "hơn 15 năm", "45.000 m²" | mô tả theo dữ liệu đã xác minh |
+| Hạng mục | Trạng thái |
+|---|---|
+| Hotline / fax / email / domain | theo nguồn chính thức ở mục 1 |
+| Tên pháp nhân | chỉ còn Công ty Cổ phần TEX-GIANG (TGI) — đã bỏ toàn bộ tham chiếu đơn vị thứ hai |
+| Bộ lọc & dữ liệu việc làm | 3 khu: Tân Hương / Cái Lậy / Chợ Gạo (bỏ bộ lọc "đơn vị") |
+| Dải số trang chủ & About | 2007 · 3 khu · 3.500 CBCNV · 8 triệu sản phẩm/năm |
+| Timeline About | 8 mốc, mốc cuối là 3 khu + khoảng 3.500 lao động |
+| Liên hệ | trụ sở + Nhà máy Tân Hương 2 + khu Cái Lậy + khu Chợ Gạo |
+| Quản trị | lọc theo khu sản xuất (dashboard, tin tuyển dụng, hồ sơ ứng viên) |
 
-## 6. Vẫn là dữ liệu minh hoạ (không có nguồn công khai)
+## 6. Vẫn là dữ liệu minh hoạ
 
-- Mức lương từng vị trí (8–16, 12–18, 15–22 triệu), số lượng tuyển, ngày đăng/hạn nộp.
-- Chương trình "thưởng nóng 2.000.000đ" và các con số trên dashboard quản trị (24 tin, 142 hồ sơ).
-- Danh sách tuyến xe cụ thể (công ty xác nhận có xe đưa rước, nhưng không công bố lộ trình).
+- Mức lương, số lượng tuyển, ngày đăng/hạn nộp của từng tin.
+- Chương trình "thưởng nóng 2.000.000đ" và số liệu dashboard.
+- Lộ trình tuyến xe đưa rước chi tiết (công ty chỉ công bố có xe miễn phí).
 - Hồ sơ ứng viên, bài viết tin tức mẫu.
 
-Khi có dữ liệu thật, chỉ cần sửa `assets/js/jobs-data.js`, `assets/js/admin-data.js` và mục nội dung trong `admin/content.html`.
+Muốn cập nhật dữ liệu thật: sửa `assets/js/jobs-data.js` (tin tuyển dụng), `assets/js/admin-data.js` (nội dung/cấu hình) và các trang `about.html`, `contact.html`.

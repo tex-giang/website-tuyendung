@@ -220,8 +220,9 @@ function renderJobs() {
       activeChipsContainer.classList.remove('hidden');
       activeEntries.forEach(([key, val]) => {
         let label = val;
-        if (key === 'company') label = val === 'tex-giang' ? 'Cty TEX-GIANG' : 'Cty TG APPAREL';
-        if (key === 'location') label = val === 'tan-huong' ? 'KCN Tân Hương' : 'TP.HCM';
+        if (key === 'location') {
+          label = val === 'tan-huong' ? 'Khu Tân Hương' : val === 'cai-lay' ? 'Khu Cái Lậy' : 'Khu Chợ Gạo';
+        }
         const select = document.getElementById(`filter-${key}`);
         if (select?.tagName === 'SELECT') label = select.selectedOptions[0]?.textContent || label;
 

@@ -118,20 +118,20 @@
     candidates,
     settings: {
       siteName: "Tuyển dụng TEX-GIANG",
-      legalName: "Công ty Cổ phần TEX-GIANG (TGI) & Công ty Cổ phần May TG (TG APPAREL)",
+      legalName: "Công ty Cổ phần TEX-GIANG (TGI)",
       address: "Lô BII-8, đường D3, KCN Tân Hương, xã Tân Hương, tỉnh Đồng Tháp",
-      seoTitle: "Tuyển dụng TEX-GIANG (TGI) & TG APPAREL (TGA) — KCN Tân Hương",
+      seoTitle: "Tuyển dụng TEX-GIANG (TGI) & TEX-GIANG (TGI) — KCN Tân Hương",
       seoDescription:
-        "Vị trí đang tuyển tại Công ty Cổ phần TEX-GIANG và Công ty Cổ phần May TG (TG APPAREL), KCN Tân Hương, Đồng Tháp. Xe đưa rước, cơm ca, BHXH đầy đủ.",
+        "Vị trí đang tuyển tại Công ty Cổ phần TEX-GIANG, KCN Tân Hương, Đồng Tháp. Xe đưa rước, cơm ca, BHXH đầy đủ.",
       pageSize: 6,
       applyEmail: "chung.doan@tex-giang.com.vn",
     },
     content: {
       slogan: "Một công việc ổn định. Thu nhập xứng đáng.",
       philosophy: "Vì con người — Vì chất lượng — Vì tương lai bền vững",
-      hero: "Cổng tuyển dụng Công ty Cổ phần TEX-GIANG (TGI) và Công ty Cổ phần May TG (TG APPAREL) tại KCN Tân Hương, Đồng Tháp.",
+      hero: "Cổng tuyển dụng Công ty Cổ phần TEX-GIANG (TGI) tại KCN Tân Hương, Đồng Tháp.",
       about:
-        "TEX-GIANG thành lập năm 2007, hiện có 3 nhà máy tại Tân Hương, Cái Lậy và Chợ Gạo. TG APPAREL vận hành 4 nhà máy trong cùng hệ thống với khoảng 4.500 lao động.",
+        "Công ty Cổ phần TEX-GIANG (TGI) thành lập năm 2007, vận hành 3 khu sản xuất tại Tân Hương, Cái Lậy và Chợ Gạo với khoảng 3.500 lao động.",
       benefits:
         "Môi trường làm việc đạt SA8000, ISO 9001; thưởng tháng 13 và các dịp lễ, phụ cấp nuôi con nhỏ, xe đưa rước và cơm ca.",
       hotline: "02733937274",
@@ -232,7 +232,7 @@
             !str(j.requirements) ||
             !str(j.benefits) ||
             !str(j.location, 300) ||
-            !["tex-giang", "tg-apparel"].includes(j.companyCode) ||
+            j.companyCode !== "tex-giang" ||
             !str(j.company, 140) ||
           !str(j.salary, 200) ||
           !Number.isInteger(j.quantity) || j.quantity < 1 || j.quantity > 10000 ||

@@ -35,7 +35,7 @@
       timeZone: "Asia/Ho_Chi_Minh",
     }).format(new Date(v));
   const jobLabel = (j) => j?.title || "Tin không còn trong demo",
-    company = (code) => (code === "tg-apparel" ? "TG APPAREL" : "TEX-GIANG");
+    company = () => "TEX-GIANG";
   const labels = {
     ...D.states,
     published: "Đang tuyển",
@@ -236,7 +236,7 @@
             .includes(f.keyword.toLocaleLowerCase("vi"))) &&
         (!f.status || ignoreStatus || c.status === f.status) &&
         (!f.job || c.jobId === f.job) &&
-        (!f.company || j?.companyCode === f.company)
+        (!f.company || j?.locationCode === f.company)
       );
     });
   }
@@ -249,7 +249,7 @@
             .toLocaleLowerCase("vi")
             .includes(f.keyword.toLocaleLowerCase("vi"))) &&
         (!f.status || ignoreStatus || D.jobStatus(j) === f.status) &&
-        (!f.company || j.companyCode === f.company),
+        (!f.company || j.locationCode === f.company),
     );
   }
   function tabs(id, states, rows, statusOf, selected, kind) {
@@ -390,7 +390,7 @@
   function renderDashboard() {
     const s = D.snapshot(),
       scope = val("dashboard-company"),
-      jobs = s.jobs.filter((j) => !scope || j.companyCode === scope),
+      jobs = s.jobs.filter((j) => !scope || j.locationCode === scope),
       cs = s.candidates.filter((c) => jobs.some((j) => j.id === c.jobId)),
       queue = cs
         .filter((c) => ["new", "contacted", "interview"].includes(c.status))
