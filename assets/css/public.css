@@ -185,11 +185,28 @@ body.has-dialog { overflow: hidden; }
   max-width: 880px;
 }
 .about-timeline__item {
+  position: relative;
   display: grid;
   grid-template-columns: 112px 1px minmax(0, 1fr);
   column-gap: 22px;
   align-items: start;
   padding: 15px 0;
+}
+/* Đường nối: vẽ trên chính mốc nên luôn chạy hết chiều cao, không phụ thuộc cột trục */
+.about-timeline__item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 134px; /* 112px cột năm + 22px khoảng cách = vị trí trục */
+  width: 1px;
+  background: #cfdad4;
+}
+.about-timeline__item:first-child::before {
+  top: 16px;
+}
+.about-timeline__item:last-child::before {
+  bottom: calc(100% - 16px);
 }
 .about-timeline__year {
   padding-top: 1px;
@@ -206,15 +223,6 @@ body.has-dialog { overflow: hidden; }
 .about-timeline__rail {
   position: relative;
   align-self: stretch;
-}
-.about-timeline__rail::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 1px;
-  background: #cfdad4;
 }
 .about-timeline__rail::after {
   content: "";
@@ -233,12 +241,6 @@ body.has-dialog { overflow: hidden; }
 .about-timeline__item:hover .about-timeline__rail::after {
   transform: translateX(-50%) scale(1.18);
   background: var(--tg-accent);
-}
-.about-timeline__item:first-child .about-timeline__rail::before {
-  top: 16px;
-}
-.about-timeline__item:last-child .about-timeline__rail::before {
-  bottom: calc(100% - 16px);
 }
 .about-timeline__text {
   margin: 0;
@@ -276,6 +278,15 @@ body.has-dialog { overflow: hidden; }
     column-gap: 16px;
     row-gap: 4px;
     padding: 14px 0;
+  }
+  .about-timeline__item::before {
+    left: 0;
+  }
+  .about-timeline__item:first-child::before {
+    top: 15px;
+  }
+  .about-timeline__item:last-child::before {
+    bottom: calc(100% - 15px);
   }
   .about-timeline__year {
     grid-column: 2;
