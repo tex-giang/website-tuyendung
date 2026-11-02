@@ -70,103 +70,52 @@
   <a class="skip-link" href="#main-content">Đến nội dung chính</a>
   <main id="main-content">
 
-    <section class="tg-container pt-14 lg:pt-20" data-reveal>
-      <nav aria-label="Breadcrumb" class="text-[14px] text-muted">
-        <a href="index.html" class="transition-colors hover:text-accent">Trang chủ</a>
-        <span class="mx-1.5" aria-hidden="true">/</span>
-        <span class="text-body">Tin tức</span>
+    <!-- HERO -->
+    <section class="tg-container news-hero">
+      <nav aria-label="Breadcrumb" class="news-breadcrumb">
+        <a href="index.html">Trang chủ</a><span aria-hidden="true">/</span><span>Tin tức</span>
       </nav>
 
-      <h1 class="mt-4 max-w-[820px] text-[clamp(2rem,5vw,4.5rem)] font-medium leading-[1.1] tracking-[-0.02em] text-ink" data-reveal>
-        Tin tức &amp; tuyển dụng
-      </h1>
-      <p class="mt-4 max-w-[62ch] text-[18px] leading-[1.6] text-muted" data-reveal>
-        Thông báo đợt tuyển, hoạt động nội bộ và kinh nghiệm phỏng vấn tại Nhà máy Tân Hương 2.
-      </p>
+      <div class="news-hero__head">
+        <div>
+          <h1 class="news-hero__title">Tin tức &amp; nghề nghiệp TEX-GIANG</h1>
+          <p class="news-hero__lead">Thông báo tuyển dụng, hoạt động tại ba khu sản xuất, câu chuyện người thợ và kinh nghiệm ứng tuyển.</p>
+        </div>
+        <p class="news-hero__updated">Cập nhật 30/10/2026</p>
+      </div>
     </section>
 
-    <section class="tg-container pb-20 pt-12 lg:pb-28">
-      <div class="grid items-start gap-12 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-16">
+    <!-- BÀI NỔI BẬT -->
+    <section class="tg-container pt-10 lg:pt-12" aria-label="Bài viết nổi bật">
+      <div id="news-featured" class="news-featured" data-reveal></div>
+    </section>
 
+    <!-- TẤT CẢ BÀI VIẾT -->
+    <section id="news-all" class="tg-container py-14 lg:py-20">
+      <div class="news-section-head">
+        <h2 class="news-section-title">Tất cả bài viết</h2>
+        <p id="news-count" class="news-count" role="status" aria-live="polite"></p>
+      </div>
+
+      <div id="news-chips" class="news-chips" role="group" aria-label="Lọc bài viết theo chuyên mục"></div>
+
+      <div id="news-grid" class="news-grid"></div>
+
+      <nav id="news-pager" class="news-pager" aria-label="Phân trang tin tức" hidden></nav>
+    </section>
+
+    <!-- ĐĂNG KÝ NHẬN TIN -->
+    <section class="tg-container pb-20 lg:pb-24">
+      <div class="news-subscribe">
         <div>
-          <!-- BÀI NỔI BẬT -->
-          <article class="group" data-reveal>
-            <a href="news-detail.html" class="block overflow-hidden rounded-media">
-              <img src="assets/images/banner-texgiang.webp" srcset="assets/images/banner-texgiang-800.webp 800w, assets/images/banner-texgiang.webp 2048w" sizes="(max-width: 768px) 100vw, 1200px"
-                   alt="Cổng Nhà máy Tân Hương 2 — ảnh minh hoạ bài viết"
-                   width="2048" height="768" loading="lazy"
-                   class="aspect-[4/3] w-full object-cover object-right transition-transform duration-500 group-hover:scale-[1.02]">
-            </a>
-            <h2 class="mt-6 max-w-[26ch] text-[clamp(1.5rem,2.6vw,2rem)] font-medium leading-[1.3] text-ink">
-              <a href="news-detail.html" class="transition-colors hover:text-accent">Ngày hội việc làm Châu Thành 2026</a>
-            </h2>
-            <div class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[14px] text-muted">
-              <span class="text-accent">Sự kiện việc làm</span>
-              <span>28/10/2026</span>
-              <span aria-hidden="true">·</span>
-              <span>Ban tuyển dụng</span>
-            </div>
-            <p class="mt-3 max-w-[62ch] text-[16px] leading-[1.7] text-muted">
-              Mang 500 chỉ tiêu công nhân may và QC đến ngày hội: phỏng vấn trực tiếp tại gian hàng, nhận việc ngay trong tuần, có xe đưa đón tham quan nhà máy.
-            </p>
-            <a href="news-detail.html" class="tg-link mt-4">Đọc bài <img src="assets/images/icons/arrow-right.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[14px]"></a>
-          </article>
-
-          <!-- DANH SÁCH BÀI KHÁC -->
-          <div class="mt-14 space-y-10">
-            <article class="news-list-item" data-reveal><img class="news-thumbnail" src="assets/images/company/social.webp" alt="Hoạt động cộng đồng trong hệ thống TEX-GIANG" width="144" height="140" loading="lazy">
-              <h2 class="max-w-[34ch] text-[20px] font-medium leading-[1.4] text-ink">
-                <a href="news-detail.html" class="transition-colors hover:text-accent">Công đoàn tổ chức lễ kỷ niệm 20/10 và trao thưởng nữ lao động giỏi</a>
-              </h2>
-              <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[14px] text-muted">
-                <span class="text-accent">Hoạt động nội bộ</span>
-                <span>20/10/2026</span>
-                <span aria-hidden="true">·</span>
-                <span>Công đoàn</span>
-              </div>
-              <p class="mt-2 max-w-[62ch] text-[16px] leading-[1.7] text-muted">
-                Hơn 2.000 phần quà trao tận tay nữ công nhân viên có thành tích tốt trong đợt thi đua quý 3.
-              </p>
-            </article>
-
-            <article class="news-list-item" data-reveal><img class="news-thumbnail" src="assets/images/company/workshop.webp" alt="Các công đoạn may và làm việc trong hệ thống TEX-GIANG" width="144" height="140" loading="lazy">
-              <h2 class="max-w-[34ch] text-[20px] font-medium leading-[1.4] text-ink">
-                <a href="news-detail.html" class="transition-colors hover:text-accent">Phỏng vấn và kiểm tra tay nghề may: chuẩn bị những gì</a>
-              </h2>
-              <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[14px] text-muted">
-                <span class="text-accent">Cẩm nang</span>
-                <span>15/10/2026</span>
-                <span aria-hidden="true">·</span>
-                <span>HR tuyển dụng</span>
-              </div>
-              <p class="mt-2 max-w-[62ch] text-[16px] leading-[1.7] text-muted">
-                Cách may đường thẳng, may lượn sóng và những lưu ý an toàn khi vào bài kiểm tra tay nghề tại TEX-GIANG.
-              </p>
-            </article>
-          </div>
+          <h2 class="text-[20px] font-medium text-ink">Nhận thông báo đợt tuyển mới</h2>
+          <p class="mt-2 max-w-[52ch] text-[16px] leading-[1.6] text-muted">Để lại email, mỗi tháng chúng tôi gửi một bản tin ngắn về vị trí mới và lịch phỏng vấn tại nhà máy.</p>
         </div>
-
-        <!-- CỘT PHỤ -->
-        <aside class="space-y-6" data-reveal>
-          <form id="news-subscribe" class="rounded-card bg-surface p-6">
-            <h2 class="text-[16px] font-medium text-ink">Nhận việc làm mới mỗi tuần</h2>
-            <p class="mt-2 text-[16px] leading-[1.6] text-muted">Để lại số điện thoại hoặc email, nhân sự gửi tin tuyển mới khi có đợt mở.</p>
-            <label class="form-label mt-4" for="news-contact">Số điện thoại hoặc email</label>
-            <input type="text" id="news-contact" name="contact" required placeholder="0273 393 7274" class="form-input">
-            <button type="submit" class="tg-btn tg-btn--primary mt-4 w-full">Đăng ký nhận tin</button>
-            <p class="mt-3 text-[14px] leading-[1.6] text-muted">* Biểu mẫu demo, chưa lưu vào hệ thống.</p>
-          </form>
-
-          <div class="rounded-card bg-surface p-6">
-            <h2 class="text-[16px] font-medium text-ink">Chủ đề</h2>
-            <ul class="mt-4 space-y-2.5">
-              <li><a href="jobs.html" class="text-[16px] text-muted transition-colors hover:text-accent">Vị trí đang tuyển</a></li>
-              <li><a href="why-tex-giang.html" class="text-[16px] text-muted transition-colors hover:text-accent">Chế độ phúc lợi</a></li>
-              <li><a href="apply.html" class="text-[16px] text-muted transition-colors hover:text-accent">Cách nộp hồ sơ</a></li>
-              <li><a href="contact.html" class="text-[16px] text-muted transition-colors hover:text-accent">Tuyến xe đưa rước</a></li>
-            </ul>
-          </div>
-        </aside>
+        <form id="news-subscribe" class="flex w-full flex-wrap gap-3 sm:w-auto" novalidate>
+          <label class="sr-only" for="news-email">Email nhận tin</label>
+          <input id="news-email" name="email" type="email" required placeholder="email@gmail.com" class="form-input sm:w-[260px]">
+          <button type="submit" class="tg-btn tg-btn--primary">Đăng ký</button>
+        </form>
       </div>
     </section>
 
@@ -262,6 +211,7 @@
   <div id="toast-container"></div>
 
   <script src="assets/js/main.js"></script>
+  <script src="assets/js/news.js"></script>
   <script src="assets/js/ui.js"></script>
   <script>
     (function () {
@@ -269,9 +219,9 @@
       if (!form) return;
       form.addEventListener('submit', function (e) {
         e.preventDefault();
-        var input = document.getElementById('news-contact');
-        if (!input.value.trim()) {
-          showToast('Vui lòng nhập số điện thoại hoặc email.', 'error');
+        var input = document.getElementById('news-email');
+        if (!input || !input.value.trim()) {
+          showToast('Vui lòng nhập email nhận tin.', 'error');
           return;
         }
         showToast('Đã ghi nhận đăng ký (demo). Nhân sự sẽ gửi tin khi có đợt tuyển mới.', 'success');
