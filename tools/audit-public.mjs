@@ -112,7 +112,7 @@ await check('apply CTA on job detail opens dialog with prefilled vacancy', async
   await page.waitForSelector('#apply-dialog[open]');
   assert.equal(new URL(page.url()).pathname.endsWith('/job-detail.html'), true);
   assert.equal(await page.locator('#apply-position').inputValue(),'qc');
-  assert.equal(await page.locator('#apply-company').inputValue(),'tg-apparel');
+  assert.equal(await page.locator('#apply-company').inputValue(),'tan-huong');
   // Chỉ nút × đóng được: Escape không làm đóng dialog.
   await page.keyboard.press('Escape');
   await page.waitForTimeout(150);
@@ -174,8 +174,8 @@ await check('inline required fields, invalid file, CV remove, demo submit', asyn
   await page.waitForURL('**/application-success.html');
 });
 await check('legacy search redirect preserves query',async () => {
-  await page.goto(`${base}/search-results.html?department=qc&company=tg-apparel`);
-  await page.waitForURL(url => url.pathname.endsWith('/jobs.html') && url.searchParams.get('department') === 'qc' && url.searchParams.get('company') === 'tg-apparel');
+  await page.goto(`${base}/search-results.html?department=qc&location=tan-huong`);
+  await page.waitForURL(url => url.pathname.endsWith('/jobs.html') && url.searchParams.get('department') === 'qc' && url.searchParams.get('location') === 'tan-huong');
   assert.equal(await page.locator('.job-row').count(),1);
 });
 await check('file URL and reduced motion', async () => {

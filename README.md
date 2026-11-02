@@ -1,4 +1,4 @@
-# HỆ THỐNG WEBSITE TUYỂN DỤNG CÔNG TY CỔ PHẦN TEX-GIANG & TG APPAREL
+# HỆ THỐNG WEBSITE TUYỂN DỤNG CÔNG TY CỔ PHẦN TEX-GIANG
 
 ## Admin frontend — cập nhật 30/10/2026
 

@@ -8,7 +8,7 @@ Giữ nhận diện xanh TEX-GIANG, font Be Vietnam Pro, khung 1200/1360 px và 
 
 Direction tham khảo từ design-taste-frontend: **The split stage**, seed **1207904907**, giữ palette/type của thương hiệu. Áp dụng bố cục chữ–ảnh ở phần giới thiệu; không giữ ảnh toàn chiều cao suốt trang vì yêu cầu bộ lọc ngang, job-row và form hai cột của người dùng cần diện tích thao tác. Không dùng bộ ảnh cây cối trong direction vì không đúng chủ đề.
 
-Ý tưởng: hình ảnh nhà máy Tân Hương và con người TG APPAREL trở thành phần dẫn đường để ứng viên chuyển từ tìm hiểu nơi làm việc sang chọn vị trí và nộp hồ sơ. Tương tác chính là lọc việc thật trên dữ liệu demo và chuyển đúng vị trí/công ty sang biểu mẫu.
+Ý tưởng: hình ảnh nhà máy Tân Hương và con người TEX-GIANG trở thành phần dẫn đường để ứng viên chuyển từ tìm hiểu nơi làm việc sang chọn vị trí và nộp hồ sơ. Tương tác chính là lọc việc thật trên dữ liệu demo và chuyển đúng vị trí/công ty sang biểu mẫu.
 
 ## Phát hiện và phần đã sửa
 
@@ -48,7 +48,7 @@ Giữ các ID tích hợp của `jobs.js` và `apply.js`, cùng các ID menu/QR/
 
 ## Ảnh và icon
 
-Nguồn ảnh doanh nghiệp: [TG APPAREL](https://tg-apparel.vn/), tải về local, chuyển WebP, không hotlink ảnh. File nguồn chi tiết, kích thước và dung lượng nằm tại [image-sources.json](image-sources.json).
+Nguồn ảnh doanh nghiệp: [TEX-GIANG](https://tex-giang.com.vn/), tải về local, chuyển WebP, không hotlink ảnh. File nguồn chi tiết, kích thước và dung lượng nằm tại [image-sources.json](image-sources.json).
 
 | File local | Nội dung nguồn | Vị trí sử dụng |
 |---|---|---|
@@ -58,7 +58,7 @@ Nguồn ảnh doanh nghiệp: [TG APPAREL](https://tg-apparel.vn/), tải về l
 | `company/environment.webp` | ENVIRONMENTAL | Dải ảnh index/about/phúc lợi |
 | `company/workshop.webp` | ABOUT US | Thumbnail cẩm nang và ảnh minh hoạ bài viết |
 
-Nguồn không nêu tên nhiếp ảnh gia hoặc giấy phép mở. Quyền ảnh thuộc chủ sở hữu nguồn; cần xác nhận quyền xuất bản với doanh nghiệp khi đưa bản thiết kế lên website chính thức. Ghi nguồn TG APPAREL ở footer các trang dùng ảnh và chú thích ảnh trong bài. Không dùng ảnh để làm bằng chứng cho sự kiện demo.
+Nguồn không nêu tên nhiếp ảnh gia hoặc giấy phép mở. Quyền ảnh thuộc chủ sở hữu nguồn; cần xác nhận quyền xuất bản với doanh nghiệp khi đưa bản thiết kế lên website chính thức. Ghi nguồn TEX-GIANG ở footer các trang dùng ảnh và chú thích ảnh trong bài. Không dùng ảnh để làm bằng chứng cho sự kiện demo.
 
 `banner-texgiang.png` và logo là tài sản đã có trong dự án. Giữ bản PNG gốc; các trang public dùng bản WebP. Ba minh hoạ thông báo là SVG vẽ riêng bằng code. Icon Bootstrap Icons 1.11.3: giấy phép MIT giữ tại `assets/images/icons/LICENSE.txt`.
 

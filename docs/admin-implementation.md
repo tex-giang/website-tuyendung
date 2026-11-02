@@ -101,7 +101,7 @@ Seen in one second: khung sáng, tên trang rõ, hàng chờ và các hành đ�
 
 Question: HR cần xử lý ai, tin nào tiếp theo?
 
-Identity: TEX-GIANG/TG APPAREL, hồ sơ may/QC/bảo trì, trạng thái tuyển dụng và đơn vị.
+Identity: TEX-GIANG/TEX-GIANG, hồ sơ may/QC/bảo trì, trạng thái tuyển dụng và đơn vị.
 
 Top three fixes: (1) toolbar jobs có inline grid thắng breakpoint mobile, chuyển sang class responsive; (2) disabled pagination chưa đủ tương phản, tăng độ đậm; (3) formatter HTML tạo whitespace trong error summary, làm xuất hiện dải rỗng, giữ các container lỗi trống thực sự.
 

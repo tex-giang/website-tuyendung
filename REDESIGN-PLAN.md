@@ -224,7 +224,7 @@ Còn lại đều là `few-pictures` / `no-footage` (thiếu ảnh thật) và `
 |---|---|---|---|
 | news | 6 FAIL | **1** | Bỏ 3 ảnh Unsplash; bài nổi bật dùng ảnh nhà máy (crop 4:3 `object-right` để không cắt chữ trên banner); danh mục/ngày xuống **dưới** tiêu đề (hết eyebrow); form đăng ký nhận tin có toast |
 | news-detail | 7 FAIL | **2** | H1 rút còn "Ngày hội việc làm Châu Thành 2026" + câu dẫn riêng; nút share đổi sang hàm thật (`shareZalo/shareFacebook/copyLink` — bản cũ gọi hàm không tồn tại); cột chữ 64ch |
-| search-results | — | — | **Gộp vào jobs.html**: trang redirect giữ nguyên `?keyword=&company=&location=`; đã test ra đúng `jobs.html?keyword=qc&company=tg-apparel` và bộ lọc tự áp |
+| search-results | — | — | **Gộp vào jobs.html**: trang redirect giữ nguyên `?keyword=&company=&location=`; đã test ra đúng `jobs.html?keyword=qc&location=tan-huong` và bộ lọc tự áp |
 
 Sprint 3 xong toàn bộ trang public. Còn Sprint 4 (9 trang admin + login).
 

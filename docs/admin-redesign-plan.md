@@ -48,7 +48,7 @@ Nguồn kiểm tra chính: `assets/js/admin.js` (lọc, modal, đóng/mở tin v
 | Thành phần | Quy định đề xuất |
 |---|---|
 | Sidebar | 232–240 px, logo + “Quản trị tuyển dụng”; nhóm Tuyển dụng / Nội dung / Hệ thống; đưa “Đăng tin mới” thành hành động trong trang jobs, không lặp như một mục điều hướng chính |
-| Phạm vi dữ liệu | Hiển thị “Tất cả đơn vị” / TEX-GIANG / TG APPAREL. Chỉ dựng bộ chọn nếu lọc thật các màn liên quan; không tạo switcher trang trí |
+| Phạm vi dữ liệu | Hiển thị “Tất cả đơn vị” / TEX-GIANG / TEX-GIANG. Chỉ dựng bộ chọn nếu lọc thật các màn liên quan; không tạo switcher trang trí |
 | Thanh đầu | Cao khoảng 64 px; một H1 22–24 px, mô tả 14 px khi cần, một hành động chính; thông tin người dùng và Xem website ở vị trí ổn định |
 | Canvas | Padding desktop 24–32 px, mobile 16 px; gap 20–24 px; content bên phải sidebar co được bằng `minmax(0,1fr)`/`min-width:0` |
 | Màu và mặt phẳng | Giữ xanh `#087A55`, nền trung tính hơi xanh; panel trắng, viền mảnh hoặc một bước màu nền; không gradient, ảnh nền, glass hay shadow trang trí |

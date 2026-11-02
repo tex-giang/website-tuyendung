@@ -10,9 +10,10 @@ const area = (id, label, rows = 4, extra = "") =>
 const select = (id, label, options) =>
   `<div><label class="form-label" for="${id}">${label}</label><select class="form-input" id="${id}" name="${id}">${options.map(([v, t]) => `<option value="${v}">${t}</option>`).join("")}</select><p id="${id}-error" class="field-error"></p></div>`;
 const companies = [
-  ["", "Tất cả đơn vị"],
-  ["tex-giang", "TEX-GIANG"],
-  ["tg-apparel", "TG APPAREL"],
+  ["", "Tất cả khu"],
+  ["tan-huong", "Khu Tân Hương"],
+  ["cai-lay", "Khu Cái Lậy"],
+  ["cho-gao", "Khu Chợ Gạo"],
 ];
 const statuses = [
   ["", "Tất cả trạng thái"],
@@ -32,7 +33,7 @@ const pages = {
     subtitle: "Ưu tiên công việc cần xử lý trong phiên tuyển dụng.",
     actions: `<a class="tg-btn tg-btn--primary" href="job-form.html">${icon("briefcase")}Đăng tin mới</a>`,
     body: `
-    <div id="dashboard-scope" class="admin-toolbar" style="max-width:340px;display:block">${select("dashboard-company", "Phạm vi tuyển dụng", companies)}</div>
+    <div id="dashboard-scope" class="admin-toolbar" style="max-width:340px;display:block">${select("dashboard-company", "Khu sản xuất", companies)}</div>
     <div id="dashboard-kpis" class="dashboard-kpis"></div>
     <div class="dashboard-main">
       <section class="admin-panel"><div class="admin-panel-head"><div><h2>Hồ sơ cần xử lý</h2><p id="queue-subtitle">Ưu tiên hồ sơ mới và lịch hẹn.</p></div><a class="tg-link" href="applications.html">Xem tất cả ${icon("arrow-right")}</a></div><ul class="queue-list" id="dashboard-queue"></ul></section>
@@ -46,7 +47,7 @@ const pages = {
     actions: `<button class="tg-btn tg-btn--ghost" type="button" data-export>${icon("file-earmark-text")}Xuất CSV</button>`,
     body: `
     <div class="admin-tabs" id="candidate-tabs" aria-label="Nhóm hồ sơ"></div>
-    <div class="admin-toolbar">${field("admin-candidate-search", "Tên hoặc số điện thoại", "search", 'placeholder="Tìm ứng viên…" maxlength="100"')}${select("admin-status-filter", "Trạng thái", statuses)}${select("admin-position-filter", "Vị trí", [["", "Tất cả vị trí"]])}${select("admin-company-filter", "Đơn vị", companies)}<button class="tg-btn tg-btn--ghost" type="button" data-reset-filters>Xoá lọc</button></div>
+    <div class="admin-toolbar">${field("admin-candidate-search", "Tên hoặc số điện thoại", "search", 'placeholder="Tìm ứng viên…" maxlength="100"')}${select("admin-status-filter", "Trạng thái", statuses)}${select("admin-position-filter", "Vị trí", [["", "Tất cả vị trí"]])}${select("admin-company-filter", "Khu sản xuất", companies)}<button class="tg-btn tg-btn--ghost" type="button" data-reset-filters>Xoá lọc</button></div>
     <div id="candidate-list"></div><div id="candidate-pagination" class="list-footer"></div>`,
   },
   "application-detail": {
@@ -71,7 +72,7 @@ const pages = {
         ["expired", "Hết hạn"],
         ["closed", "Đã đóng"],
       ],
-    )}${select("admin-job-company", "Đơn vị", companies)}<button class="tg-btn tg-btn--ghost" type="button" data-reset-filters>Xoá lọc</button></div>
+    )}${select("admin-job-company", "Khu sản xuất", companies)}<button class="tg-btn tg-btn--ghost" type="button" data-reset-filters>Xoá lọc</button></div>
     <div id="job-list"></div><div id="job-pagination" class="list-footer"></div>`,
   },
   "job-form": {
@@ -82,7 +83,7 @@ const pages = {
     <form id="job-editor-form" novalidate><div class="form-errors" id="job-form-errors" role="alert" tabindex="-1"></div><div class="editor-layout"><div class="form-stack">
       ${panel(
         "Thông tin vị trí",
-        `<div class="field-grid"><div class="span-all">${field("job-title", "Chức danh tuyển dụng *", "text", 'required maxlength="140"')}</div>${select("job-company", "Đơn vị tuyển dụng *", companies.slice(1))}${select(
+        `<div class="field-grid"><div class="span-all">${field("job-title", "Chức danh tuyển dụng *", "text", 'required maxlength="140"')}</div>${select("job-company", "Đơn vị tuyển dụng *", [["tex-giang", "TEX-GIANG"]])}${select(
           "job-department",
           "Khối phòng ban *",
           [
