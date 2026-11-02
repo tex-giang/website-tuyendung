@@ -16,99 +16,71 @@
   <link rel="stylesheet" href="assets/css/public.css">
   <link rel="icon" href="assets/images/logo-tgi.png" type="image/png">
   <!-- Hero đặt chữ trên ảnh: CSS riêng để không phụ thuộc bộ utility đã build -->
-  <style>
+    <style>
+    /* Hero: banner lấp đầy khung, giữ đúng tỉ lệ ảnh (không blur), nút ở góc phải dưới */
     .hero-banner {
       position: relative;
-      isolation: isolate;
       overflow: hidden;
+      /* đúng tỉ lệ ảnh 2048×768: khung cao theo chiều dọc, ảnh không bị cắt hai bên */
+      width: 100%;
+      aspect-ratio: 2048 / 768;
+      min-height: 240px;
+      max-height: 500px;
       border-radius: 20px;
       background: #06261d;
     }
-    .hero-img {
+    .hero-bg {
       position: absolute;
       inset: 0;
-      /* Lấy phần phải của banner (khu nhà xưởng) để không lộ chữ thương hiệu in sẵn */
       background-image: url("assets/images/banner-texgiang.webp");
       background-repeat: no-repeat;
-      background-size: auto 220%;
-      background-position: 100% 50%;
-      filter: blur(6px) brightness(0.52) saturate(1.1);
-    }
-    .hero-scrim {
-      position: absolute;
-      inset: 0;
-      background: rgba(6, 38, 29, 0.62);
-    }
-    .hero-body {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      min-height: 400px;
-      padding: 40px 24px 44px;
-    }
-    .hero-title {
-      margin: 0;
-      max-width: 24ch;
-      font-size: clamp(1.75rem, 4.4vw, 3rem);
-      font-weight: 500;
-      line-height: 1.15;
-      letter-spacing: -0.02em;
-      color: #fff;
-      text-wrap: balance;
-    }
-    .hero-nowrap {
-      white-space: nowrap;
-    }
-    .hero-lead {
-      margin: 18px 0 0;
-      max-width: 46ch;
-      font-size: clamp(1rem, 1.5vw, 1.125rem);
-      line-height: 1.6;
-      color: rgba(255, 255, 255, 0.88);
+      background-position: center center;
+      background-size: cover;
     }
     .hero-actions {
+      position: absolute;
+      right: 20px;
+      bottom: 20px;
+      left: 20px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 16px 28px;
-      margin-top: 28px;
+      justify-content: flex-end;
+      gap: 10px;
     }
-    .hero-btn {
-      height: 48px;
-      padding-inline: 24px;
+    .hero-actions .tg-btn {
+      height: 44px;
+      padding-inline: 20px;
     }
-    .hero-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 16px;
-      font-weight: 500;
+    .hero-btn-secondary {
+      background: #0b3b2e;
       color: #fff;
-      text-decoration: none;
+      border-color: transparent;
     }
-    .hero-link:hover {
-      text-decoration: underline;
-      text-underline-offset: 4px;
-    }
-    .hero-note {
-      margin: 26px 0 0;
-      font-size: 14px;
-      line-height: 1.5;
-      color: rgba(255, 255, 255, 0.72);
-    }
-    .hero-note strong {
-      font-weight: 500;
+    .hero-btn-secondary:hover {
+      background: #0a3328;
       color: #fff;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+      border: 0;
     }
     @media (min-width: 640px) {
-      .hero-body { min-height: 460px; padding: 52px 40px; }
+      .hero-actions { right: 28px; bottom: 28px; left: auto; }
     }
     @media (min-width: 1024px) {
-      .hero-body { min-height: 500px; padding: 60px 56px; }
+      .hero-actions { right: 36px; bottom: 32px; }
     }
-    @media (prefers-reduced-motion: reduce) {
-      .hero-btn, .hero-link { transition: none; }
+    @media (max-width: 639px) {
+      .hero-actions { flex-direction: column; align-items: flex-end; }
+      .hero-bg { background-position: 92% center; }
     }
   </style>
 </head>
@@ -173,35 +145,18 @@
   <a class="skip-link" href="#main-content">Đến nội dung chính</a>
   <main id="main-content">
 
-    <!-- HERO: nội dung đặt trực tiếp trên ảnh banner -->
+        <!-- HERO: giữ nguyên ảnh banner (không blur), nút ở góc phải dưới -->
     <section class="pt-5 lg:pt-7">
       <div class="tg-container">
         <div class="hero-banner">
-          <div class="hero-img" role="img"
+          <div class="hero-bg" role="img"
                aria-label="Cổng Nhà máy Tân Hương 2 — Công ty Cổ phần TEX-GIANG, KCN Tân Hương, Đồng Tháp"></div>
 
-          <div class="hero-scrim" aria-hidden="true"></div>
+          <h1 class="sr-only">Tuyển dụng TEX-GIANG 2026</h1>
 
-          <div class="hero-body">
-            <h1 class="hero-title">
-              Tuyển dụng <span class="hero-nowrap">TEX-GIANG</span> 2026
-            </h1>
-
-            <p class="hero-lead">
-              Cổng tuyển dụng chính thức của TEX-GIANG và TG APPAREL — may mặc xuất khẩu tại Nhà máy Tân Hương 2, Đồng Tháp.
-            </p>
-
-            <div class="hero-actions">
-              <a href="jobs.html" class="tg-btn tg-btn--white hero-btn">Xem vị trí đang tuyển</a>
-              <a href="apply.html" class="hero-link">
-                Nộp hồ sơ trong 2 phút
-                <img src="assets/images/icons/arrow-right.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon" style="filter: brightness(0) invert(1)">
-              </a>
-            </div>
-
-            <p class="hero-note">
-              Đang tuyển <strong>7 vị trí</strong> · Cập nhật 30/10/2026
-            </p>
+          <div class="hero-actions">
+            <a href="jobs.html" class="tg-btn tg-btn--white">Xem vị trí đang tuyển</a>
+            <a href="apply.html" class="tg-btn hero-btn-secondary">Nộp hồ sơ trong 2 phút</a>
           </div>
         </div>
       </div>
