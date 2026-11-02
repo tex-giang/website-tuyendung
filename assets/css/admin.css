@@ -1228,4 +1228,13 @@ body.admin-app {
 @media (max-width: 700px) {
   .admin-app .tg-btn, .admin-app .form-input { min-height: 44px; }
   .admin-app .admin-icon-btn { min-width: 44px; min-height: 44px; }
+
+  /* link nhỏ ở topbar / chân sidebar: đủ vùng chạm */
+  .admin-app .admin-topbar a,
+  .admin-app .admin-topbar button,
+  .admin-app .admin-sidebar-foot a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+  }
 }

@@ -547,3 +547,47 @@ body.has-dialog { overflow: hidden; }
   .apply-dialog[open],
   .apply-dialog[open]::backdrop { animation: none; }
 }
+
+/* ---------- Vùng chạm trên điện thoại ---------- */
+.tg-public a.tg-link {
+  min-height: 36px;
+}
+
+@media (max-width: 639px) {
+  .share-row {
+    gap: 8px;
+  }
+  .share-row .tg-link {
+    min-height: 42px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: var(--tg-surface, #f3f6f4);
+  }
+  .tg-public footer ul a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 38px;
+  }
+}
+
+/* Link phụ trong thẻ việc làm / breadcrumb: đủ vùng chạm trên mobile */
+@media (max-width: 639px) {
+  .job-row a[href^="job-detail"],
+  .job-row__side a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+  }
+  .tg-public nav[aria-label="Breadcrumb"] a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+  }
+}
+
+/* Ô đồng ý điều khoản: đủ lớn để chạm trên mobile */
+.tg-public #apply-terms {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+}
