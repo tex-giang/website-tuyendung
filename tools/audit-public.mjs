@@ -71,7 +71,8 @@ await check('department query, live filter, empty state, reset sort', async () =
   await page.waitForFunction(() => !document.getElementById('jobs-empty-state').classList.contains('hidden'));
   await page.locator('#filter-sort').selectOption('urgent');
   await page.getByRole('button',{name:'Xoá hết',exact:true}).click();
-  assert.equal(await page.locator('.job-row').count(),8);
+  // 8 tin nhưng phân trang 6 tin/trang (xem PAGE_SIZE trong jobs.js)
+  assert.equal(await page.locator('.job-row').count(),6);
   assert.equal(await page.locator('#filter-sort').inputValue(),'newest');
 });
 await check('filter user text is inert', async () => {
@@ -103,18 +104,58 @@ await check('QR modal focus and Escape', async () => {
   assert.equal(await page.locator('#qr-modal').isVisible(),false);
   assert.equal(await button.evaluate(el => el === document.activeElement),true);
 });
-await check('selected vacancy and company reach application', async () => {
+await check('apply CTA on job detail opens dialog with prefilled vacancy', async () => {
   await page.goto(`${base}/job-detail.html?id=TG-02`);
   await page.waitForFunction(() => document.querySelector('h1').textContent.includes('QC'));
-  assert.equal(await page.locator('main nav[aria-label="Breadcrumb"] > span:last-child').innerText(), 'Giám sát kiểm phẩm QC');
   const apply = page.locator('main aside a[href^="apply.html"]').first();
   await apply.click();
-  await page.waitForLoadState('networkidle');
+  await page.waitForSelector('#apply-dialog[open]');
+  assert.equal(new URL(page.url()).pathname.endsWith('/job-detail.html'), true);
   assert.equal(await page.locator('#apply-position').inputValue(),'qc');
   assert.equal(await page.locator('#apply-company').inputValue(),'tg-apparel');
+  // Chỉ nút × đóng được: Escape không làm đóng dialog.
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(150);
+  assert.equal(await page.locator('#apply-dialog').evaluate(el => el.open), true);
+  await page.locator('.apply-dialog__close').click();
+  await page.waitForFunction(() => !document.getElementById('apply-dialog').open);
+  assert.equal(await apply.evaluate(el => el === document.activeElement), true);
+});
+await check('apply dialog from index: validation, demo success, no navigation', async () => {
+  await page.goto(`${base}/index.html`);
+  await page.locator('a[href^="apply.html?job="]').first().click();
+  await page.waitForSelector('#apply-dialog[open]');
+  assert.equal(new URL(page.url()).pathname.endsWith('/index.html'), true);
+  assert.notEqual(await page.locator('#apply-position').inputValue(), '');
+
+  // Chỉ nút × đóng được: Escape và bấm nền ngoài đều không đóng.
+  await page.keyboard.press('Escape');
+  await page.mouse.click(6, 6);
+  await page.waitForTimeout(150);
+  assert.equal(await page.locator('#apply-dialog').evaluate(el => el.open), true);
+
+  await page.locator('.apply-dialog__submit').click();
+  assert.equal(await page.locator('#apply-fullname').getAttribute('aria-invalid'),'true');
+  assert.equal(await page.locator('#apply-address').getAttribute('aria-invalid'),'true');
+
+  await page.locator('#apply-fullname').fill('Nguyễn Thị An');
+  await page.locator('#apply-phone').fill('0918123456');
+  await page.locator('#apply-position').selectOption('cn-may');
+  await page.locator('#apply-address').fill('Tân Hương');
+  await page.locator('#apply-terms').check();
+  await page.locator('.apply-dialog__submit').click();
+  await page.waitForSelector('.apply-success', { state: 'visible' });
+  assert.equal(new URL(page.url()).pathname.endsWith('/index.html'), true);
+
+  await page.locator('.apply-success [data-tg-apply-restart]').click();
+  assert.equal(await page.locator('#apply-fullname').inputValue(), '');
+  assert.equal(await page.locator('#apply-dialog').isVisible(), true);
+  await page.locator('.apply-dialog__close').click();
+  await page.waitForFunction(() => !document.getElementById('apply-dialog').open);
 });
 await check('inline required fields, invalid file, CV remove, demo submit', async () => {
   await page.goto(`${base}/apply.html`);
+  await page.waitForSelector('#online-apply-form');
   await page.locator('button[type="submit"]').click();
   assert.equal(await page.locator('#apply-fullname').getAttribute('aria-invalid'),'true');
   assert.equal(await page.locator('#apply-address').getAttribute('aria-invalid'),'true');
@@ -142,6 +183,17 @@ await check('file URL and reduced motion', async () => {
   await page.goto(new URL('file:///' + root.replaceAll('\\','/') + '/index.html').href);
   assert.equal(await page.locator('h1').isVisible(),true);
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),true);
+  // Dialog ứng tuyển phải chạy được khi mở site trực tiếp bằng file://
+  await page.locator('a[href^="apply.html"]').first().click();
+  await page.waitForSelector('#apply-dialog[open]');
+  assert.equal(await page.locator('#apply-dialog').isVisible(),true);
+  // Chỉ nút × đóng được.
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(150);
+  assert.equal(await page.locator('#apply-dialog').evaluate(el => el.open), true);
+  await page.locator('.apply-dialog__close').click();
+  await page.waitForFunction(() => !document.getElementById('apply-dialog').open);
+  await page.emulateMedia({reducedMotion:'no-preference'});
 });
 await writeFile(path.join(output,'report.json'),JSON.stringify({results,checks,failures},null,2));
 await browser.close();

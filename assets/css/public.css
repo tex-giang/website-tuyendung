@@ -177,6 +177,19 @@ body.has-dialog { overflow: hidden; }
   .site-logo { height: 52px; }
 }
 
+/* Ảnh minh hoạ trong bài viết: phủ hết chiều ngang container nhưng giữ chiều cao
+   hợp lý (ảnh gốc vuông 450×450 sẽ quá cao nếu kéo full width). */
+.news-inline-photo {
+  width: 100%;
+  aspect-ratio: 8 / 3;
+  object-fit: cover;
+  object-position: center;
+  border-radius: var(--tg-radius-media);
+}
+@media (max-width: 639px) {
+  .news-inline-photo { aspect-ratio: 16 / 9; }
+}
+
 /* ---------- Mốc phát triển: timeline dọc ---------- */
 .about-timeline {
   margin: 28px 0 0;
@@ -304,4 +317,233 @@ body.has-dialog { overflow: hidden; }
     grid-row: 2;
     font-size: 15px;
   }
+}
+
+/* =====================================================================
+   DIALOG ỨNG TUYỂN — modal kiểu Bootstrap, tự dựng, không thư viện
+   Dùng <dialog> gốc nên có sẵn: top layer, focus trap, Escape, ::backdrop.
+   Mở từ mọi link apply.html trên trang public (assets/js/apply-dialog.js).
+   ===================================================================== */
+.apply-dialog {
+  width: min(900px, calc(100vw - 32px));
+  max-width: 900px;
+  max-height: min(92vh, 980px);
+  margin: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: #fff;
+  color: var(--tg-body);
+  box-shadow: 0 24px 64px rgba(10, 28, 22, .28);
+  overflow: hidden;
+}
+.apply-dialog::backdrop {
+  background: rgba(10, 28, 22, .55);
+}
+.apply-dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+.apply-dialog__content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 0;
+  max-height: inherit;
+}
+.apply-dialog__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 22px 26px 18px;
+  border-bottom: 1px solid var(--tg-line);
+  background: #fff;
+}
+.apply-dialog__heading { min-width: 0; }
+.apply-dialog__eyebrow {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--tg-accent);
+}
+.apply-dialog__title {
+  margin: 6px 0 0;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -.01em;
+  color: var(--tg-ink);
+  text-wrap: balance;
+}
+.apply-dialog__subtitle {
+  margin: 8px 0 0;
+  max-width: 62ch;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--tg-muted);
+}
+.apply-dialog__close {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid var(--tg-line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--tg-muted);
+  cursor: pointer;
+  transition: border-color var(--tg-t), color var(--tg-t);
+}
+.apply-dialog__close:hover { border-color: var(--tg-accent); color: var(--tg-accent); }
+.apply-dialog__close:focus-visible {
+  outline: 3px solid rgba(8, 122, 85, .35);
+  outline-offset: 2px;
+  border-color: var(--tg-accent);
+  color: var(--tg-accent);
+}
+.apply-dialog__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: 22px 26px 10px;
+  background: #fff;
+}
+/* Trong dialog form chạy một cột; các field bên trong vẫn chia 2 cột như cũ. */
+.apply-dialog__body #online-apply-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+.apply-dialog__body #online-apply-form > fieldset:nth-of-type(2) { grid-row: auto; }
+.apply-dialog__body #online-apply-form > div:last-child { grid-column: 1 / -1; }
+.apply-dialog__body #apply-error-summary { grid-column: 1 / -1; }
+.apply-dialog__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  padding: 14px 26px calc(15px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--tg-line);
+  background: #f7faf8;
+}
+.apply-dialog__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+}
+.apply-dialog__submit { min-height: 44px; }
+.apply-dialog.is-success .apply-dialog__submit { display: none; }
+
+/* Trạng thái gửi thành công (giữ người dùng trong dialog) */
+.apply-success {
+  padding: 26px 4px 18px;
+  text-align: center;
+}
+.apply-success__icon {
+  display: inline-grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--tg-accent-soft);
+}
+.apply-success__icon img { width: 34px; height: 34px; }
+.apply-success__title {
+  margin: 18px 0 0;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--tg-ink);
+}
+.apply-success__text {
+  margin: 12px auto 0;
+  max-width: 56ch;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--tg-muted);
+}
+.apply-success__detail {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 18px;
+  margin: 16px auto 0;
+  padding: 12px 18px;
+  border-radius: 8px;
+  background: var(--tg-accent-soft);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--tg-body);
+}
+.apply-success__detail span { display: inline-flex; gap: 6px; }
+.apply-success__hint {
+  margin: 14px auto 0;
+  max-width: 52ch;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--tg-muted);
+}
+.apply-success__hint strong {
+  display: inline-grid;
+  place-items: center;
+  min-width: 22px;
+  height: 22px;
+  margin-inline: 2px;
+  border: 1px solid #cfdad4;
+  border-radius: 6px;
+  background: #fff;
+  font-weight: 600;
+  line-height: 1;
+}
+.apply-success__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+/* Chuyển động ngắn; tắt khi người dùng giảm chuyển động */
+@keyframes apply-dialog-in {
+  from { opacity: 0; transform: translateY(10px) scale(.985); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes apply-backdrop-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.apply-dialog[open] { animation: apply-dialog-in .2s cubic-bezier(.2, .6, .2, 1); }
+.apply-dialog[open]::backdrop { animation: apply-backdrop-in .2s ease-out; }
+
+@media (max-width: 640px) {
+  .apply-dialog {
+    width: 100vw;
+    max-width: none;
+    height: 100dvh;
+    max-height: 100dvh;
+    margin: 0;
+    border-radius: 0;
+  }
+  .apply-dialog__header { padding: 16px 18px 14px; gap: 12px; }
+  .apply-dialog__title { font-size: 20px; }
+  .apply-dialog__subtitle { font-size: 15px; }
+  .apply-dialog__body { padding: 18px 18px 8px; }
+  .apply-dialog__footer { padding: 12px 18px calc(13px + env(safe-area-inset-bottom)); }
+  .apply-dialog__actions { width: 100%; }
+  .apply-dialog__actions .tg-btn { flex: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .apply-dialog[open],
+  .apply-dialog[open]::backdrop { animation: none; }
 }

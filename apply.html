@@ -14,6 +14,22 @@
 </head>
 <body class="tg-public page-apply bg-white font-sans text-body antialiased selection:bg-accent selection:text-white">
 
+  <!-- THÔNG BÁO (thay pop-up tự bật) -->
+  <div id="announce-strip" class="bg-accent-soft no-print">
+    <div class="tg-container flex min-h-[44px] items-center justify-between gap-4 py-2.5">
+      <p class="text-[14px] leading-snug text-body">
+        <strong class="font-semibold text-accent">Thưởng nóng 2.000.000đ</strong> cho công nhân may mới — đào tạo miễn phí, có lương ngay tháng đầu.
+      </p>
+      <div class="flex shrink-0 items-center gap-3">
+        <a href="apply.html" class="tg-link hidden text-[14px] sm:inline-flex">Xem điều kiện <img src="assets/images/icons/arrow-right.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[13px]"></a>
+        <button id="announce-close" type="button" aria-label="Đóng thông báo"
+                class="grid h-7 w-7 place-items-center rounded-md text-muted transition-colors hover:bg-black/5 hover:text-ink">
+          <img src="assets/images/icons/x-lg.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[13px]">
+        </button>
+      </div>
+    </div>
+  </div>
+
   <header id="site-nav" class="sticky top-0 z-40 border-b border-transparent bg-white transition-colors no-print">
     <div class="tg-container flex h-16 items-center justify-between gap-6 lg:h-[72px]">
       <a href="index.html" class="flex shrink-0 items-center gap-2.5" aria-label="TEX-GIANG — trang chủ">
@@ -67,142 +83,10 @@
     <section class="tg-container pb-20 pt-10 lg:pb-28">
       <div class="grid items-start gap-12 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-16">
 
-        <form id="online-apply-form" class="space-y-10" novalidate>
 
-          <div id="apply-error-summary" class="form-summary" role="alert" tabindex="-1" style="grid-column:1/-1"></div>
-          <!-- 1. VỊ TRÍ -->
-          <fieldset data-reveal>
-            <legend class="form-group-title"><img class="tg-icon" src="assets/images/icons/briefcase.svg" width="20" height="20" alt="" aria-hidden="true"> Vị trí ứng tuyển</legend>
-            <div class="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label class="form-label" for="apply-company">Khu sản xuất <span class="req">*</span></label>
-                <select id="apply-company" name="company" class="form-input" required>
-                  <option value="tan-huong">Khu Tân Hương</option>
-                  <option value="cai-lay">Khu Cái Lậy</option>
-                  <option value="cho-gao">Khu Chợ Gạo</option>
-                  <option value="any">Theo sắp xếp phù hợp</option>
-                </select>
-              </div>
-              <div>
-                <label class="form-label" for="apply-position">Vị trí mong muốn <span class="req">*</span></label>
-                <select id="apply-position" name="position" class="form-input" required>
-                  <option value="">— Chọn vị trí —</option>
-                  <option value="cn-may">Công nhân may chuyền (8 – 16 triệu)</option>
-                  <option value="qc">Giám sát QC — kiểm phẩm (12 – 18 triệu)</option>
-                  <option value="ie">Kỹ sư IE — công nghiệp &amp; định mức (15 – 22 triệu)</option>
-                  <option value="merchandiser">Merchandiser — quản lý đơn hàng (13 – 20 triệu)</option>
-                  <option value="bao-tri">Bảo trì máy may &amp; điện xưởng (9,5 – 14,5 triệu)</option>
-                  <option value="ke-toan">Kế toán chi phí &amp; giá thành (11 – 16 triệu)</option>
-                  <option value="hoc-nghe">Học nghề may miễn phí, có lương</option>
-                  <option value="other">Vị trí khác — ghi rõ ở phần giới thiệu</option>
-                </select>
-              </div>
-            </div>
-          </fieldset>
+        <!-- Form được dựng từ assets/js/apply-form.js để dùng chung với dialog ứng tuyển -->
+        <div id="apply-inline-mount" data-tg-apply-inline></div>
 
-          <!-- 2. THÔNG TIN CÁ NHÂN -->
-          <fieldset data-reveal>
-            <legend class="form-group-title"><img class="tg-icon" src="assets/images/icons/file-earmark-text.svg" width="20" height="20" alt="" aria-hidden="true"> Thông tin cá nhân</legend>
-            <div class="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label class="form-label" for="apply-fullname">Họ và tên <span class="req">*</span></label>
-                <input type="text" id="apply-fullname" name="fullname" required autocomplete="name" placeholder="Ví dụ: Lê Thị Mai" class="form-input">
-              </div>
-              <div>
-                <label class="form-label" for="apply-phone">Số điện thoại <span class="req">*</span></label>
-                <input type="tel" id="apply-phone" name="phone" required autocomplete="tel" inputmode="tel" placeholder="0273 393 7274" class="form-input">
-              </div>
-              <div>
-                <label class="form-label" for="apply-email">Email (nếu có)</label>
-                <input type="email" id="apply-email" name="email" autocomplete="email" placeholder="email@gmail.com" class="form-input">
-              </div>
-              <div class="grid grid-cols-2 gap-3">
-                <div>
-                  <label class="form-label" for="apply-birth">Năm sinh</label>
-                  <input type="number" id="apply-birth" name="birth_year" min="1950" max="2010" placeholder="1996" class="form-input">
-                </div>
-                <div>
-                  <label class="form-label" for="apply-gender">Giới tính</label>
-                  <select id="apply-gender" name="gender" class="form-input">
-                    <option value="nu">Nữ</option>
-                    <option value="nam">Nam</option>
-                    <option value="khac">Khác</option>
-                  </select>
-                </div>
-              </div>
-              <div class="sm:col-span-2">
-                <label class="form-label" for="apply-address">Địa chỉ hiện tại <span class="req">*</span></label>
-                <input type="text" id="apply-address" name="address" required autocomplete="address-line1"
-                       placeholder="Ấp/Xã, Huyện Châu Thành, Tỉnh Đồng Tháp" class="form-input">
-                <p class="form-hint">Giúp ban tuyển dụng xếp bạn vào tuyến xe đưa rước gần nhất.</p>
-              </div>
-            </div>
-          </fieldset>
-
-          <!-- 3. CV -->
-          <fieldset data-reveal>
-            <legend class="form-group-title"><img class="tg-icon" src="assets/images/icons/file-earmark-text.svg" width="20" height="20" alt="" aria-hidden="true"> CV hoặc hình hồ sơ</legend>
-
-            <div id="cv-drop-zone" class="dropzone">
-              <input type="file" id="cv-file-input" aria-describedby="cv-hint cv-error" name="cv" class="hidden" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
-              <label for="cv-file-input" class="block cursor-pointer">
-                <img src="assets/images/icons/cloud-arrow-up.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[28px] text-accent">
-                <span class="mt-2 block text-[16px] font-medium text-ink">Kéo thả tệp vào đây, hoặc chọn từ máy</span>
-                <span id="cv-hint" class="mt-1 block text-[16px] text-muted">PDF, DOC, DOCX, JPG, PNG · tối đa 10MB</span>
-              </label>
-            </div>
-
-            <p id="cv-error" class="field-error" role="alert"></p>
-            <button type="button" id="skip-cv" class="hidden tg-link mt-2">Bỏ tệp này, tiếp tục không có CV</button>
-            <div id="upload-progress-container" class="mt-4 hidden">
-              <div class="flex items-center justify-between text-[14px] text-muted">
-                <span>Đang tải tệp…</span>
-                <span id="upload-percentage">Vui lòng chờ</span>
-              </div>
-              <div class="progress-track mt-2">
-                <div id="upload-progress-bar" class="progress-bar" style="width: 0%"></div>
-              </div>
-            </div>
-
-            <div id="file-preview-card" class="mt-4 hidden items-center justify-between gap-4 rounded-card bg-surface p-4">
-              <div class="flex min-w-0 items-center gap-3">
-                <img src="assets/images/icons/file-earmark-check.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[22px] text-accent">
-                <div class="min-w-0">
-                  <strong id="file-name-display" class="block truncate text-[16px] font-medium text-ink">HoSo_UngVien.pdf</strong>
-                  <span id="file-size-display" class="text-[14px] text-muted">1.2 MB</span>
-                </div>
-              </div>
-              <button type="button" id="remove-file-btn" class="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-muted transition-colors hover:bg-white hover:text-ink" aria-label="Gỡ tệp">
-                <img src="assets/images/icons/trash.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon ">
-              </button>
-            </div>
-          </fieldset>
-
-          <!-- 4. GIỚI THIỆU -->
-          <fieldset data-reveal>
-            <legend class="form-group-title">Kinh nghiệm &amp; nguyện vọng</legend>
-            <label class="form-label" for="apply-note">Giới thiệu ngắn (không bắt buộc)</label>
-            <textarea id="apply-note" name="note" rows="4" class="form-input"
-                      placeholder="Kinh nghiệm may, vị trí từng làm, mong muốn thu nhập hoặc tuyến xe đưa đón…"></textarea>
-          </fieldset>
-
-          <!-- CAM KẾT -->
-          <div class="space-y-5">
-            <label class="flex cursor-pointer items-start gap-3 rounded-card bg-surface p-4 text-[14px] leading-[1.6] text-muted">
-              <input type="checkbox" id="apply-terms" name="terms" required
-                     class="mt-0.5 h-4 w-4 shrink-0 rounded border-line text-accent focus:ring-accent">
-              <span>Tôi xác nhận thông tin trên là đúng và đồng ý để ban tuyển dụng TEX-GIANG liên hệ qua điện thoại hoặc Zalo.</span>
-            </label>
-
-            <button type="submit" class="tg-btn tg-btn--primary w-full">
-              <img src="assets/images/icons/send.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[16px]"> Gửi hồ sơ ứng tuyển
-            </button>
-
-            <p class="text-center text-[16px] leading-[1.6] text-muted">
-              * Biểu mẫu demo: dữ liệu chưa lưu vào cơ sở dữ liệu, chỉ mô phỏng luồng gửi hồ sơ.
-            </p>
-          </div>
-        </form>
 
         <!-- CỘT PHỤ -->
         <aside class="space-y-6 lg:sticky lg:top-24">
@@ -244,7 +128,8 @@
   <div id="toast-container"></div>
 
   <script src="assets/js/main.js"></script>
-  <script src="assets/js/apply.js"></script>
+  <script src="assets/js/apply-form.js"></script>
+  <script src="assets/js/apply-dialog.js"></script>
   <script src="assets/js/ui.js"></script>
   </body>
 </html>

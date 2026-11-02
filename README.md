@@ -80,11 +80,15 @@ E:\websitetuyendung\
 │
 ├── assets/
 │   ├── css/
-│   │   └── custom.css           # CSS tùy biến: Hiệu ứng pulse sóng âm, thanh cuộn hiện đại, glassmorphism
+│   │   └── custom.css           # CSS tùy biến: hiệu ứng pulse sóng âm, thanh cuộn hiện đại, glassmorphism
 │   ├── js/
-│   │   ├── main.js              # Xử lý mobile menu, toast notification, pop-up banner, mã QR, share API
-│   │   ├── jobs.js              # Dữ liệu mẫu việc làm, tìm kiếm, lọc đa tiêu chí, xóa chip lọc, sắp xếp
-│   │   ├── apply.js             # Form validation, kéo thả tệp CV, kiểm tra dung lượng/định dạng, giả lập upload
+│   │   ├── main.js              # Menu mobile, toast, pop-up banner, QR, share API
+│   │   ├── jobs-data.js         # 8 tin tuyển dụng mẫu dùng chung
+│   │   ├── jobs.js              # Tìm kiếm, lọc đa tiêu chí, phân trang, empty state
+│   │   ├── job-detail.js        # Nạp đúng tin theo ?id=, prefill vị trí sang form ứng tuyển
+│   │   ├── apply-form.js        # Markup + validation form ứng tuyển dùng chung (một nguồn)
+│   │   ├── apply-dialog.js      # Mở form ứng tuyển trong <dialog> kiểu Bootstrap từ mọi trang
+│   │   ├── ui.js                # Thanh thông báo, nav, hiệu ứng hiện dần
 │   │   └── admin.js             # Drawer sidebar mobile, tìm kiếm bảng, modal cập nhật trạng thái, xuất Excel
 │   └── images/
 │       ├── banner-texgiang.png  # Ảnh banner chính thức Nhà máy Tân Hương 2
@@ -100,10 +104,13 @@ E:\websitetuyendung\
    - Trang chủ ứng viên: `index.html`
    - Tìm việc làm: `jobs.html`
    - Đăng nhập quản trị HR: `admin/login.html` &rarr; Nhấn "Đăng Nhập Hệ Thống" để vào `admin/dashboard.html`.
+   - Nộp hồ sơ: bấm **Ứng tuyển** ở bất kỳ trang nào để mở dialog ứng tuyển ngay tại chỗ, không rời trang. Mở trực tiếp `apply.html` vẫn có form dạng trang đầy đủ (dùng khi cần link trực tiếp hoặc trình duyệt không hỗ trợ `<dialog>`).
 3. **Mở qua máy chủ cục bộ (khuyến nghị cho trải nghiệm mượt nhất):**
    - Với VS Code: Cài extension *Live Server*, nhấn chuột phải chọn *Open with Live Server*.
    - Với Python: Chạy lệnh `python -m http.server 8080` trong thư mục `E:\websitetuyendung`.
    - Với Node.js: Chạy lệnh `npx serve .`
+
+> Dialog ứng tuyển tự dựng bằng `<dialog>` + CSS/JS (không dùng thư viện ngoài), chạy được cả `file://`. Chi tiết: [docs/apply-dialog-2026-11-02.md](docs/apply-dialog-2026-11-02.md).
 
 ---
 
