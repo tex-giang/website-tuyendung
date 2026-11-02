@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng ký ứng tuyển | Tuyển dụng TEX-GIANG</title>
+  <meta name="description" content="Đăng ký ứng tuyển trực tuyến tại TEX-GIANG: 3 bước, không cần tài khoản, phản hồi trong 24 giờ làm việc. Chọn khu Tân Hương, Cái Lậy hoặc Chợ Gạo.">
+
+  <link rel="stylesheet" href="assets/css/app.css">
+  <link rel="stylesheet" href="assets/css/utilities.css">
+  <link rel="stylesheet" href="assets/css/custom.css">
+  <link rel="stylesheet" href="assets/css/public.css">
+  <link rel="icon" href="assets/images/logo-tgi.png" type="image/png">
+</head>
+<body class="tg-public page-apply bg-white font-sans text-body antialiased selection:bg-accent selection:text-white">
+
+  <!-- THÔNG BÁO (thay pop-up tự bật) -->
+  <div id="announce-strip" class="bg-accent-soft no-print">
+    <div class="tg-container flex min-h-[44px] items-center justify-between gap-4 py-2.5">
+      <p class="text-[14px] leading-snug text-body">
+        <strong class="font-semibold text-accent">Thưởng nóng 2.000.000đ</strong> cho công nhân may mới — đào tạo miễn phí, có lương ngay tháng đầu.
+      </p>
+      <div class="flex shrink-0 items-center gap-3">
+        <a href="apply.html" class="tg-link hidden text-[14px] sm:inline-flex">Xem điều kiện <img src="assets/images/icons/arrow-right.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[13px]"></a>
+        <button id="announce-close" type="button" aria-label="Đóng thông báo"
+                class="grid h-9 w-9 place-items-center rounded-md text-muted transition-colors hover:bg-black/5 hover:text-ink">
+          <img src="assets/images/icons/x-lg.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[13px]">
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <header id="site-nav" class="sticky top-0 z-40 border-b border-transparent bg-white transition-colors no-print">
+    <div class="tg-container flex h-16 items-center justify-between gap-6 lg:h-[72px]">
+      <a href="index.html" class="flex shrink-0 items-center gap-2.5" aria-label="TEX-GIANG — trang chủ">
+        <img src="assets/images/logo-tgi-mark.webp" alt="TEX-GIANG (TGI)" width="80" height="52" class="site-logo">
+        
+      </a>
+
+      <nav class="hidden items-center gap-7 lg:flex xl:gap-8" aria-label="Điều hướng chính">
+        <a href="index.html" class="nav-link">Trang chủ</a>
+        <a href="jobs.html" class="nav-link">Việc làm</a>
+        <a href="about.html" class="nav-link">Về chúng tôi</a>
+        <a href="why-tex-giang.html" class="nav-link">Phúc lợi</a>
+        <a href="news.html" class="nav-link">Tin tức</a>
+        <a href="contact.html" class="nav-link">Liên hệ</a>
+      </nav>
+
+      <div class="flex items-center gap-3.5">
+        <a href="tel:02733937274" class="hidden text-[14px] text-muted xl:inline-flex">Hotline <strong class="ml-1 font-medium text-body">0273 393 7274</strong></a>
+        <a href="ung-tuyen.html" class="tg-btn tg-btn--primary h-10 px-4 text-[16px]">Ứng tuyển</a>
+        <button id="mobile-menu-btn" type="button" aria-label="Mở menu" aria-expanded="false" aria-controls="mobile-menu"
+                class="grid h-10 w-10 place-items-center rounded-lg border border-line text-body transition-colors hover:border-accent hover:text-accent lg:hidden">
+          <img src="assets/images/icons/list.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[20px]">
+        </button>
+      </div>
+    </div>
+
+    <div id="mobile-menu" class="nav-mobile hidden border-t border-line bg-white px-6 pb-6 pt-2">
+      <a href="index.html" class="block border-b border-line py-3 text-[16px] text-body">Trang chủ</a>
+      <a href="jobs.html" class="block border-b border-line py-3 text-[16px] text-body">Việc làm</a>
+      <a href="about.html" class="block border-b border-line py-3 text-[16px] text-body">Về chúng tôi</a>
+      <a href="why-tex-giang.html" class="block border-b border-line py-3 text-[16px] text-body">Phúc lợi</a>
+      <a href="news.html" class="block border-b border-line py-3 text-[16px] text-body">Tin tức</a>
+      <a href="contact.html" class="block border-b border-line py-3 text-[16px] text-body">Liên hệ</a>
+      <a href="admin/login.html" class="block border-b border-line py-3 text-[16px] text-body">Cổng quản trị HR</a>
+      <a href="apply.html" class="tg-btn tg-btn--primary mt-4 w-full" aria-current="page">Ứng tuyển ngay</a>
+    </div>
+  </header>
+
+  <a class="skip-link" href="#main-content">Đến nội dung chính</a>
+  <main id="main-content">
+
+    <!-- HERO -->
+    <section class="tg-container apx-hero" data-reveal>
+      <nav aria-label="Breadcrumb" class="apx-crumbs">
+        <a href="index.html">Trang chủ</a><span aria-hidden="true">/</span><span>Đăng ký ứng tuyển</span>
+      </nav>
+
+      <div class="apx-hero__grid">
+        <div>
+          <h1 class="apx-hero__title">Đăng ký ứng tuyển TEX-GIANG</h1>
+          <p class="apx-hero__lead">
+            Điền 3 bước ngắn — không cần tạo tài khoản. Bộ phận tuyển dụng gọi lại trong 24 giờ làm việc để xác nhận thông tin và hẹn lịch.
+          </p>
+
+          <ul class="apx-trust">
+            <li><img src="assets/images/icons/check2.svg" alt="" aria-hidden="true" width="16" height="16"> Phản hồi trong 24 giờ</li>
+            <li><img src="assets/images/icons/check2.svg" alt="" aria-hidden="true" width="16" height="16"> Tân Hương · Cái Lậy · Chợ Gạo</li>
+            <li><img src="assets/images/icons/check2.svg" alt="" aria-hidden="true" width="16" height="16"> Tự lưu nháp trên máy</li>
+          </ul>
+        </div>
+        <img class="apx-hero__photo" src="assets/images/banner-texgiang.webp" alt="Toàn cảnh nhà máy TEX-GIANG tại KCN Tân Hương" width="2048" height="768" fetchpriority="high">
+        <div class="apx-gallery" data-reveal>
+          <img src="assets/images/news/cover-1.webp" alt="Cổng khu Tân Hương" width="380" height="238" loading="lazy">
+          <img src="assets/images/news/cover-5.webp" alt="Hoạt động cộng đồng tại nhà máy" width="380" height="238" loading="lazy">
+          <img src="assets/images/company/environment.webp" alt="Hệ thống điện mặt trời trên mái xưởng" width="380" height="238" loading="lazy">
+        </div>
+      </div>
+    </section>
+
+    <!-- FORM -->
+    <section class="tg-container">
+      <div class="apx-surface">
+      <div class="apx-layout">
+
+        <div>
+          <div class="apx-draft" id="apx-draft" role="status">
+            <span>Bạn có bản nháp chưa gửi từ lần trước.</span>
+            <span class="flex gap-2">
+              <button type="button" class="tg-link" id="apx-draft-restore">Khôi phục</button>
+              <button type="button" class="tg-link" id="apx-draft-discard">Bỏ</button>
+            </span>
+          </div>
+
+          <div class="apx-card" data-reveal>
+            <div class="apx-steps" aria-hidden="true">
+              <div class="apx-step-ind is-active" data-ind="1">
+                <span class="apx-step-ind__dot">1</span>
+                <span class="apx-step-ind__label">Thông tin cá nhân</span>
+              </div>
+              <div class="apx-step-ind" data-ind="2">
+                <span class="apx-step-ind__dot">2</span>
+                <span class="apx-step-ind__label">Vị trí &amp; kinh nghiệm</span>
+              </div>
+              <div class="apx-step-ind" data-ind="3">
+                <span class="apx-step-ind__dot">3</span>
+                <span class="apx-step-ind__label">Xác nhận &amp; gửi</span>
+              </div>
+            </div>
+
+            <div class="apx-progress"><div class="apx-progress__bar" id="apx-progress"></div></div>
+
+            <form id="apx-form" novalidate>
+              <div class="apx-body">
+                <div id="apx-alert" class="apx-error" role="alert"></div>
+
+                <!-- BƯỚC 1 -->
+                <section class="apx-step is-active" data-step="1" aria-labelledby="apx-title-1">
+                  <h2 id="apx-title-1" class="apx-group__title">Thông tin cá nhân</h2>
+
+                  <div class="apx-group">
+                    <div class="apx-grid apx-grid--2">
+                      <div class="apx-field" data-field="name">
+                        <label class="apx-label" for="apx-name">Họ và tên <span class="req">*</span></label>
+                        <input id="apx-name" name="name" type="text" class="form-input" autocomplete="name" placeholder="Ví dụ: Nguyễn Thị Mai" required>
+                        <p class="apx-error" data-error-for="name">Vui lòng nhập họ tên đầy đủ.</p>
+                      </div>
+
+                      <div class="apx-field" data-field="phone">
+                        <label class="apx-label" for="apx-phone">Số điện thoại <span class="req">*</span></label>
+                        <input id="apx-phone" name="phone" type="tel" inputmode="tel" class="form-input" autocomplete="tel" placeholder="0912 345 678" required>
+                        <p class="apx-error" data-error-for="phone">Số di động Việt Nam chưa đúng, ví dụ 0912 345 678.</p>
+                      </div>
+
+                      <div class="apx-field" data-field="birth">
+                        <label class="apx-label" for="apx-birth">Năm sinh</label>
+                        <input id="apx-birth" name="birth" type="number" inputmode="numeric" class="form-input" min="1950" max="2010" placeholder="1998">
+                        <p class="apx-error" data-error-for="birth">Năm sinh trong khoảng 1950 – 2010.</p>
+                      </div>
+
+                      <div class="apx-field" data-field="gender">
+                        <label class="apx-label" for="apx-gender">Giới tính</label>
+                        <select id="apx-gender" name="gender" class="form-input">
+                          <option value="">— Chọn —</option>
+                          <option value="nữ">Nữ</option>
+                          <option value="nam">Nam</option>
+                          <option value="khác">Khác</option>
+                        </select>
+                      </div>
+
+                      <div class="apx-field" data-field="email">
+                        <label class="apx-label" for="apx-email">Email</label>
+                        <input id="apx-email" name="email" type="email" class="form-input" autocomplete="email" placeholder="email@gmail.com">
+                        <p class="apx-error" data-error-for="email">Email chưa đúng định dạng.</p>
+                      </div>
+
+                      <div class="apx-field" data-field="cccd">
+                        <label class="apx-label" for="apx-cccd">Số CCCD</label>
+                        <input id="apx-cccd" name="cccd" type="text" inputmode="numeric" class="form-input" placeholder="12 chữ số" maxlength="12">
+                        <p class="apx-hint">Bắt buộc khi nhận việc, có thể bổ sung sau.</p>
+                        <p class="apx-error" data-error-for="cccd">Số CCCD gồm 12 chữ số.</p>
+                      </div>
+                    </div>
+
+                    <div class="apx-grid" style="margin-top:16px">
+                      <div class="apx-field" data-field="address">
+                        <label class="apx-label" for="apx-address">Địa chỉ hiện tại</label>
+                        <input id="apx-address" name="address" type="text" class="form-input" autocomplete="street-address" placeholder="Ấp/xã, huyện, tỉnh — để xếp tuyến xe đưa rước">
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <!-- BƯỚC 2 -->
+                <section class="apx-step" data-step="2" aria-labelledby="apx-title-2">
+                  <h2 id="apx-title-2" class="apx-group__title">Vị trí &amp; kinh nghiệm</h2>
+
+                  <div class="apx-group">
+                    <span class="apx-label" id="apx-location-label">Nơi muốn làm việc <span class="req">*</span></span>
+                    <div class="apx-choices" role="radiogroup" aria-labelledby="apx-location-label">
+                      <label class="apx-choice">
+                        <input type="radio" name="location" value="tan-huong" required>
+                        <span class="apx-choice__box">
+                          <span class="apx-choice__name">Tân Hương</span>
+                          <span class="apx-choice__desc">KCN Tân Hương — trụ sở và 2 nhà máy</span>
+                        </span>
+                      </label>
+                      <label class="apx-choice">
+                        <input type="radio" name="location" value="cai-lay">
+                        <span class="apx-choice__box">
+                          <span class="apx-choice__name">Cái Lậy</span>
+                          <span class="apx-choice__desc">Ấp Bình Quới, xã Bình Phú</span>
+                        </span>
+                      </label>
+                      <label class="apx-choice">
+                        <input type="radio" name="location" value="cho-gao">
+                        <span class="apx-choice__box">
+                          <span class="apx-choice__name">Chợ Gạo</span>
+                          <span class="apx-choice__desc">Ấp Hòa Lợi Tiểu, xã Bình Ninh</span>
+                        </span>
+                      </label>
+                    </div>
+                    <p class="apx-error" data-error-for="location">Chọn một khu bạn muốn làm việc.</p>
+                    <label class="apx-choice" style="margin-top:10px">
+                      <input type="radio" name="location" value="any">
+                      <span class="apx-choice__box" style="min-height:auto;flex-direction:row;align-items:center;gap:10px">
+                        <span class="apx-choice__name">Theo sắp xếp phù hợp</span>
+                        <span class="apx-choice__desc">Nhân sự tư vấn khu còn chỉ tiêu</span>
+                      </span>
+                    </label>
+                  </div>
+
+                  <div class="apx-group">
+                    <div class="apx-grid apx-grid--2">
+                      <div class="apx-field" data-field="position">
+                        <label class="apx-label" for="apx-position">Vị trí muốn ứng tuyển <span class="req">*</span></label>
+                        <select id="apx-position" name="position" class="form-input" required>
+                          <option value="">— Chọn vị trí —</option>
+                          <option value="cn-may">Công nhân may chuyền</option>
+                          <option value="hoc-nghe">Học nghề may có lương</option>
+                          <option value="qc">Giám sát QC — kiểm phẩm</option>
+                          <option value="ie">Kỹ sư IE — định mức</option>
+                          <option value="merchandiser">Merchandiser — quản lý đơn hàng</option>
+                          <option value="bao-tri">Bảo trì máy may &amp; điện xưởng</option>
+                          <option value="ke-toan">Kế toán chi phí &amp; giá thành</option>
+                          <option value="lai-xe">Lái xe đưa rước</option>
+                          <option value="khac">Vị trí khác</option>
+                        </select>
+                        <p class="apx-error" data-error-for="position">Chọn vị trí bạn muốn ứng tuyển.</p>
+                      </div>
+
+                      <div class="apx-field" data-field="exp">
+                        <label class="apx-label" for="apx-exp">Kinh nghiệm may</label>
+                        <select id="apx-exp" name="exp" class="form-input">
+                          <option value="">— Chọn —</option>
+                          <option value="chua-co">Chưa có kinh nghiệm</option>
+                          <option value="duoi-1">Dưới 1 năm</option>
+                          <option value="1-3">1 – 3 năm</option>
+                          <option value="3-5">3 – 5 năm</option>
+                          <option value="tren-5">Trên 5 năm</option>
+                        </select>
+                      </div>
+
+                      <div class="apx-field" data-field="skill">
+                        <label class="apx-label" for="apx-skill">Tay nghề chính</label>
+                        <select id="apx-skill" name="skill" class="form-input">
+                          <option value="">— Chọn —</option>
+                          <option value="1-kim">May 1 kim</option>
+                          <option value="2-kim">May 2 kim</option>
+                          <option value="vat-so">Vắt sổ</option>
+                          <option value="ui">Ủi — ép keo</option>
+                          <option value="cat">Cắt — giác sơ đồ</option>
+                          <option value="kiem-pham">Kiểm phẩm</option>
+                          <option value="khac">Khác</option>
+                        </select>
+                      </div>
+
+                      <div class="apx-field" data-field="shift">
+                        <label class="apx-label" for="apx-shift">Ca làm mong muốn</label>
+                        <select id="apx-shift" name="shift" class="form-input">
+                          <option value="">— Chọn —</option>
+                          <option value="hanh-chinh">Hành chính (7:30 – 16:30)</option>
+                          <option value="tang-ca">Có thể tăng ca</option>
+                          <option value="linh-hoat">Linh hoạt theo chuyền</option>
+                        </select>
+                      </div>
+
+                      <div class="apx-field" data-field="salary">
+                        <label class="apx-label" for="apx-salary">Thu nhập mong muốn</label>
+                        <div class="apx-input-wrap">
+                          <input id="apx-salary" name="salary" type="number" inputmode="numeric" class="form-input" min="0" max="60" step="0.5" placeholder="12">
+                          <span class="apx-suffix">triệu/tháng</span>
+                        </div>
+                        <p class="apx-hint">Để trống nếu muốn trao đổi khi phỏng vấn.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="apx-group">
+                    <span class="apx-label">Hồ sơ đính kèm</span>
+                    <div class="apx-upload">
+                      <div>
+                        <p class="apx-upload__text">Tải CV hoặc ảnh CCCD (không bắt buộc)</p>
+                        <p class="apx-upload__hint">PDF, DOC, DOCX, JPG, PNG · tối đa 10 MB</p>
+                      </div>
+                      <label class="tg-btn tg-btn--ghost" for="apx-cv" tabindex="0">Chọn tệp</label>
+                      <input id="apx-cv" name="cv" type="file" class="sr-only" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+                    </div>
+                    <div class="apx-file" id="apx-file" hidden>
+                      <span class="apx-file__name" id="apx-file-name"></span>
+                      <button type="button" class="tg-link" id="apx-file-remove">Gỡ tệp</button>
+                    </div>
+                    <p class="apx-error" data-error-for="cv">Tệp vượt quá 10 MB hoặc sai định dạng.</p>
+                  </div>
+
+                  <div class="apx-group">
+                    <label class="apx-label" for="apx-note">Giới thiệu ngắn</label>
+                    <textarea id="apx-note" name="note" rows="4" maxlength="600" class="form-input" placeholder="Kinh nghiệm từng làm, chuyền đã làm, nguyện vọng hoặc câu hỏi về tuyến xe…"></textarea>
+                    <span class="apx-counter" id="apx-note-counter">0/600</span>
+                  </div>
+                </section>
+
+                <!-- BƯỚC 3 -->
+                <section class="apx-step" data-step="3" aria-labelledby="apx-title-3">
+                  <h2 id="apx-title-3" class="apx-group__title">Xác nhận &amp; gửi</h2>
+                  <p class="apx-hint" style="margin-top:0;margin-bottom:16px">Kiểm tra lại thông tin. Bấm “Quay lại” nếu cần sửa.</p>
+
+                  <dl class="apx-review" id="apx-review"></dl>
+
+                  <label class="apx-consent">
+                    <input type="checkbox" id="apx-consent" required>
+                    <span>Tôi xác nhận thông tin trên là đúng và đồng ý để bộ phận tuyển dụng TEX-GIANG liên hệ qua điện thoại hoặc Zalo.</span>
+                  </label>
+                  <p class="apx-error" data-error-for="consent">Bạn cần đồng ý để gửi hồ sơ.</p>
+                </section>
+              </div>
+
+              <div class="apx-nav">
+                <span class="apx-nav__meta" id="apx-nav-meta">Bước 1/3</span>
+                <div class="apx-nav__actions">
+                  <button type="button" class="tg-btn tg-btn--ghost" id="apx-back" hidden>Quay lại</button>
+                  <button type="button" class="tg-btn tg-btn--primary" id="apx-next">Tiếp tục</button>
+                  <button type="submit" class="tg-btn tg-btn--primary" id="apx-submit" hidden>Gửi hồ sơ</button>
+                </div>
+              </div>
+            </form>
+
+            <div class="apx-success" id="apx-success" role="status" tabindex="-1">
+              <div class="apx-success__icon">
+                <img src="assets/images/icons/check2.svg" alt="" aria-hidden="true" width="30" height="30">
+              </div>
+              <h2 class="apx-success__title">Đã nhận hồ sơ của bạn</h2>
+              <p class="apx-hint" style="margin-top:8px">Mã hồ sơ — dùng khi gọi hotline để tra cứu:</p>
+              <span class="apx-success__code" id="apx-code">TG-2026-0000</span>
+
+              <ol class="apx-success__steps">
+                <li><strong>1.</strong> Trong 24 giờ làm việc, nhân sự gọi xác nhận thông tin.</li>
+                <li><strong>2.</strong> Bạn nhận lịch phỏng vấn tại khu đã chọn, mang CCCD.</li>
+                <li><strong>3.</strong> Có kết quả trong 3 ngày làm việc sau phỏng vấn.</li>
+              </ol>
+
+              <div class="apx-success__actions">
+                <a href="jobs.html" class="tg-btn tg-btn--ghost">Xem vị trí khác</a>
+                <button type="button" class="tg-btn tg-btn--primary" id="apx-again">Nộp hồ sơ khác</button>
+              </div>
+              <p class="apx-hint" style="margin-top:18px">* Biểu mẫu demo: dữ liệu không gửi lên máy chủ, chỉ mô phỏng luồng đăng ký.</p>
+            </div>
+          </div>
+        </div>
+
+        <aside class="apx-aside" data-reveal>
+          <div class="apx-panel">
+            <h2 class="apx-panel__title">Cần hỗ trợ?</h2>
+            <p>Gọi trực tiếp nếu bạn không tiện điền form, hoặc cần hỏi tuyến xe.</p>
+            <ul class="apx-contact-list">
+              <li><a href="tel:02733937274">0273 393 7274</a> — giờ hành chính</li>
+              <li><a href="https://zalo.me/02733937274" target="_blank" rel="noopener">Zalo tuyển dụng</a></li>
+              <li><a href="mailto:chung.doan@tex-giang.com.vn">chung.doan@tex-giang.com.vn</a></li>
+            </ul>
+          </div>
+
+          <div class="apx-panel">
+            <h2 class="apx-panel__title">Ba khu sản xuất</h2>
+            <p><strong>Tân Hương</strong> — Lô BII-8 &amp; BI-5,6,7,8, KCN Tân Hương</p>
+            <p><strong>Cái Lậy</strong> — Ấp Bình Quới, xã Bình Phú</p>
+            <p><strong>Chợ Gạo</strong> — Ấp Hòa Lợi Tiểu, xã Bình Ninh</p>
+          </div>
+
+          <div class="apx-panel">
+            <h2 class="apx-panel__title">Chuẩn bị gì?</h2>
+            <ul class="apx-checklist">
+              <li><img src="assets/images/icons/check2.svg" alt="" aria-hidden="true" width="17" height="17"> CCCD còn hiệu lực (mang khi phỏng vấn)</li>
+              <li><img src="assets/images/icons/check2.svg" alt="" aria-hidden="true" width="17" height="17"> Số điện thoại đang dùng để liên hệ</li>
+              <li><img src="assets/images/icons/check2.svg" alt="" aria-hidden="true" width="17" height="17"> CV nếu đã từng làm ngành may</li>
+              <li><img src="assets/images/icons/check2.svg" alt="" aria-hidden="true" width="17" height="17"> Địa chỉ để xếp tuyến xe đưa rước</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="bg-surface py-10 no-print">
+    <div class="tg-container flex flex-col gap-3 text-[14px] text-muted sm:flex-row sm:items-center sm:justify-between">
+      <p>© 2026 Công ty Cổ phần TEX-GIANG</p>
+      <p><a href="index.html" class="transition-colors hover:text-accent">Trang chủ</a> · <a href="jobs.html" class="transition-colors hover:text-accent">Việc làm</a> · <a href="admin/login.html" class="transition-colors hover:text-accent">Cổng quản trị HR</a></p>
+    </div>
+  </footer>
+
+  <div id="toast-container"></div>
+
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/ung-tuyen.js"></script>
+  <script src="assets/js/ui.js"></script>
+  </body>
+</html>
