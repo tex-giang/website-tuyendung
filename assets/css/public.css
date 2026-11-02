@@ -75,7 +75,7 @@
 .tg-public .tg-modal { z-index: 80; }
 body.has-dialog { overflow: hidden; }
 @media (max-width:767px) {
-  .tg-public header > .tg-container > a:first-child > img { width:60px; height:60px; object-fit:contain; }
+  .tg-public header > .tg-container > a:first-child > img { object-fit: contain; }
   .tg-public header > .tg-container > a:first-child > span { display:none; }
 }
 @media (min-width:1024px) and (max-width:1279px) {
@@ -145,4 +145,34 @@ body.has-dialog { overflow: hidden; }
   .tg-public .search-pill .tg-btn {
     border-radius: 12px;
   }
+}
+
+/* Logo dấu TGI: giữ đúng tỉ lệ, đủ lớn để nhận diện */
+.site-logo {
+  display: block;
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
+.footer-logo {
+  display: block;
+  height: 34px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Header cao hơn để chứa logo lớn */
+#site-nav > .tg-container {
+  height: 72px;
+}
+
+@media (min-width: 640px) {
+  .site-logo { height: 46px; }
+  .footer-logo { height: 38px; }
+}
+
+@media (min-width: 1024px) {
+  #site-nav > .tg-container { height: 84px; }
+  .site-logo { height: 52px; }
 }

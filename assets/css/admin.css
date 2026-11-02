@@ -41,12 +41,16 @@ body.admin-app {
   gap: 12px;
 }
 .admin-app .admin-brand img {
-  width: 34px;
-  height: 34px;
+  width: auto;
+  height: 38px;
   object-fit: contain;
 }
 .admin-app .admin-brand strong {
-  font-size: 15px;
+  font-size: 16px;
+}
+.admin-app .admin-brand span {
+  font-size: 11px;
+  line-height: 1.35;
 }
 .admin-app .admin-section-label {
   text-transform: none;
@@ -102,7 +106,9 @@ body.admin-app {
   .topbar-context > span { display: none; }
   .topbar-right > .admin-badge { display: none; }
   .admin-app .admin-brand > div, .admin-app .login-brand > div { display: none; }
-  .admin-app .admin-brand img, .admin-app .login-brand img { width: 60px; height: 60px; object-fit: contain; }
+  .admin-app .admin-brand img { width: auto; height: 40px; object-fit: contain; }
+.admin-app .login-brand img { width: 60px; height: 60px; object-fit: contain; }
+.admin-mobile-logo img { width: auto; height: 30px; object-fit: contain; }
 }
 .topbar-right {
   display: flex;

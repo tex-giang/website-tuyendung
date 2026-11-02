@@ -30,8 +30,20 @@ TGI hiện có 3 nhà máy (Tân Hương, Cái Lậy, Chợ Gạo); hệ thống
 
 ## 3. Quy mô & năng lực
 
+### Nguyên văn nguồn (đọc trực tiếp 02/11/2026)
+
+| Con số | Nguồn | Nguyên văn |
+|---|---|---|
+| 3 nhà máy TGI | tex-giang.com.vn → Fact & History | "At present, TGI has three factories at: Tan Huong, Cai Lay and Cho Gao." |
+| 4 nhà máy TGA | tg-apparel.vn (trang chủ) | "four modern factories" · "With more than 4,500 employees, our four factories operate with modern, green, and sustainable facilities" |
+| 4.500 lao động | tg-apparel.vn (trang chủ) | "4,500 skilled workers" · "With more than 4,500 employees…" |
+| 8 triệu sản phẩm/năm (TGI) | tex-giang.com.vn | "With current capacity to produce 8 million products each year" |
+| 10 triệu sản phẩm/năm (TGA) | tg-apparel.vn | "over 10 million garments annually" |
+
+**Vì sao 3 và 4 không mâu thuẫn:** TGI đếm theo cơ sở (Tân Hương, Cái Lậy, Chợ Gạo = 3); TGA đếm Tân Hương 1 và Tân Hương 2 thành hai nhà máy riêng (4 tổng). Trên site ghi theo từng nguồn, không gộp thành một con số.
+
 - TGI: khoảng **8 triệu sản phẩm/năm**; hơn **3.500 lao động** (VCCI 2024).
-- TGA: khoảng **10 triệu sản phẩm/năm**; **4.500 lao động**; EU là thị trường lớn nhất, sau đó Mỹ, Úc, New Zealand.
+- TGA: khoảng **10 triệu sản phẩm/năm**; **hơn 4.500 lao động**; EU là thị trường lớn nhất, sau đó Mỹ, Úc, New Zealand.
 - Điện mặt trời lắp tại **tất cả** cơ sở (TGI công bố).
 - Khách hàng: Kathmandu, Dickies, Helly Hansen, Wurth Modyf, DHL, Wilson, Haglofs, First Tactical, Didriksons.
 
