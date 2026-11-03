@@ -959,3 +959,18 @@ body.has-dialog { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .gf-radio__box { transition: none; }
 }
+
+.apply-dialog__page-link {
+  font-size: 14px;
+  color: var(--tg-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.apply-dialog__page-link:hover { color: var(--tg-accent); }
+
+.gf-applying {
+  margin: 10px 0 0;
+  font-size: 14px;
+  color: var(--tg-body);
+}
+.gf-applying strong { color: var(--tg-ink); }

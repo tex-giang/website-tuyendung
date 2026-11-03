@@ -336,9 +336,29 @@
       }
       form.setAttribute('aria-busy', 'true');
 
-      // Demo only: không gửi request, không lưu dữ liệu cá nhân.
+      // Demo: không gửi request lên máy chủ, chỉ ghi vào kho tạm của trình duyệt.
       window.setTimeout(function () {
         form.removeAttribute('aria-busy');
+
+        // Bản demo: ghi hồ sơ vào hàng chờ để trang quản trị đọc lại.
+        if (window.TGPendingApplications) {
+          var positionSelect = q('#apply-position');
+          var messageField = q('#apply-message');
+          var fileInput = q('#cv-file-input');
+          window.TGPendingApplications.add({
+            name: value('apply-fullname'),
+            phone: phone,
+            email: value('apply-email'),
+            birth: value('apply-birth'),
+            address: value('apply-address'),
+            jobTitle: positionSelect && positionSelect.selectedIndex > 0 ? positionSelect.options[positionSelect.selectedIndex].text : '',
+            message: messageField ? messageField.value.trim() : '',
+            note: '',
+            source: 'Website — form ứng tuyển',
+            attachment: fileInput && fileInput.files && fileInput.files[0] ? fileInput.files[0].name : ''
+          });
+        }
+
         if (typeof options.onSuccess === 'function') {
           options.onSuccess(form);
         } else {

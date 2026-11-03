@@ -54,6 +54,7 @@
       '  </header>',
       '  <div class="apply-dialog__body" data-tg-apply-mount></div>',
       '  <footer class="apply-dialog__footer">',
+      '    <a class="apply-dialog__page-link" data-tg-apply-page-link href="ung-tuyen.html">Cần bản đầy đủ? Mở trang ứng tuyển</a>',
       '    <div class="apply-dialog__actions">',
       '      <button type="submit" class="tg-btn tg-btn--primary apply-dialog__submit" form="online-apply-form">',
       '        <img src="assets/images/icons/send.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon">Gửi hồ sơ',
@@ -74,7 +75,7 @@
       '    <img src="assets/images/icons/check-circle-fill.svg" alt="" aria-hidden="true" width="40" height="40">',
       '  </span>',
       '  <h3 class="apply-success__title">Đã gửi hồ sơ (bản demo)</h3>',
-      '  <p class="apply-success__text">Cảm ơn bạn. Trong bản demo, hồ sơ <strong>chưa được lưu</strong> vào cơ sở dữ liệu; nhân sự TEX-GIANG sẽ gọi lại trong 24 giờ làm việc khi hệ thống thật được kết nối.</p>',
+      '  <p class="apply-success__text">Cảm ơn bạn. Hồ sơ đã được ghi vào <strong>hệ thống quản trị (bản demo)</strong> và sẽ hiện trong mục Hồ sơ ứng viên; nhân sự TEX-GIANG gọi lại trong 24 giờ làm việc khi hệ thống thật được kết nối.</p>',
       detail.length ? '  <p class="apply-success__detail">' + detail.join('') + '</p>' : '',
       '  <p class="apply-success__hint">Bấm nút <strong>×</strong> ở góc trên để đóng cửa sổ này.</p>',
       '  <div class="apply-success__actions">',
@@ -163,6 +164,16 @@
     var dialog = ensureDialog();
     if (dialog.classList.contains('is-success')) resetDialog();
     else if (state.form && !window.TGApplyForm.isDirty(state.form)) window.TGApplyForm.prefill(state.form, data || {});
+
+    var pageLink = state.dialog.querySelector('[data-tg-apply-page-link]');
+    if (pageLink) {
+      var params = new URLSearchParams();
+      if (data && data.job) params.set('job', data.job);
+      if (data && data.position) params.set('vai-tri', data.position);
+      if (data && data.location) params.set('khu', data.location);
+      var query = params.toString();
+      pageLink.href = 'ung-tuyen.html' + (query ? '?' + query : '');
+    }
 
     state.opener = trigger || document.activeElement;
     document.body.classList.add('has-dialog');

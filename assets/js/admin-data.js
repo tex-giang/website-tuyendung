@@ -186,7 +186,7 @@
         !Array.isArray(parsed.jobs) ||
         parsed.jobs.length > 200 ||
         !Array.isArray(parsed.candidates) ||
-        parsed.candidates.length !== 4 ||
+        parsed.candidates.length < 4 ||
         !parsed.settings ||
         !parsed.content ||
         !parsed.banner ||
@@ -200,7 +200,7 @@
       if (
         parsed.candidates.some(
           (c) =>
-            !allowedIds.has(c.id) ||
+            (!allowedIds.has(c.id) && !/^p[a-z0-9]+$/.test(c.id)) ||
             !states[c.status] ||
             !str(c.note, 2000) ||
             !str(c.name, 140) ||
@@ -293,6 +293,52 @@
     state = next;
     window.dispatchEvent(new Event("admin-data-change"));
   };
+  // Hồ sơ nộp từ website (demo) được đưa từ hàng chờ vào danh sách quản trị.
+  (function mergePendingApplications() {
+    let pending = [];
+    try {
+      pending = JSON.parse(sessionStorage.getItem("texgiang_pending_applications") || "[]");
+    } catch (_) {
+      pending = [];
+    }
+    if (!Array.isArray(pending) || !pending.length) return;
+
+    const existing = new Set(state.candidates.map((c) => c.id));
+    const incoming = pending
+      .filter((p) => p && p.id && !existing.has(p.id))
+      .map((p) => {
+        const matchedJob =
+          state.jobs.find((j) => p.jobTitle && j.title === p.jobTitle) ||
+          state.jobs.find((j) => p.jobId && j.id === p.jobId);
+        return {
+          id: p.id,
+          name: p.name || "Chưa điền tên",
+          phone: String(p.phone || "").replace(/\D/g, "").slice(0, 10) || "0000000000",
+          email: p.email || "",
+          birth: Number.isInteger(p.birth) ? p.birth : 2000,
+          address: p.address || "",
+          jobId: matchedJob ? matchedJob.id : state.jobs[0].id,
+          status: "new",
+          note: p.note ? "Khu mong muốn: " + p.note : "",
+          submitted: p.submitted || new Date().toISOString(),
+          source: p.source || "Website",
+          message: p.message || "",
+          attachment: p.attachment || "",
+          history: Array.isArray(p.history) && p.history.length
+            ? p.history
+            : [{ at: new Date().toISOString(), status: "new", note: "Hồ sơ gửi từ form ứng tuyển trên website." }],
+        };
+      });
+
+    if (!incoming.length) return;
+
+    state = { ...state, candidates: [...incoming, ...state.candidates] };
+    try {
+      sessionStorage.setItem(KEY, JSON.stringify(state));
+      sessionStorage.removeItem("texgiang_pending_applications");
+    } catch (_) {}
+  })();
+
   window.AdminData = {
     states,
     date,

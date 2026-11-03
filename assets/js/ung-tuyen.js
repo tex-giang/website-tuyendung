@@ -68,6 +68,36 @@
     return !firstInvalid;
   }
 
+  // điền sẵn từ tham số URL: ?vai-tri=qc&khu=cai-lay&job=...
+  (function applyQueryPrefill() {
+    const params = new URLSearchParams(location.search);
+    const job = params.get('job');
+    const position = params.get('vai-tri');
+    const khuCode = params.get('khu');
+
+    if (position) {
+      const match = [...fields.position.options].find((opt) => opt.value === position || opt.textContent.trim() === position);
+      if (match) fields.position.value = match.value;
+    }
+
+    if (khuCode) {
+      const radio = q(`input[name="location"][value="${khuCode}"]`);
+      if (radio) radio.checked = true;
+    }
+
+    if (job) {
+      const note = document.querySelector('.gf-desc');
+      if (note && !note.dataset.jobApplied) {
+        note.dataset.jobApplied = '1';
+        note.insertAdjacentHTML('afterend', `<p class="gf-applying">Bạn đang ứng tuyển: <strong>${job.replace(/[<>&]/g, '')}</strong></p>`);
+      }
+      if (!position && !fields.position.value) {
+        const guess = [...fields.position.options].find((opt) => opt.textContent.trim().toLowerCase() === job.trim().toLowerCase());
+        if (guess) fields.position.value = guess.value;
+      }
+    }
+  })();
+
   // đếm ký tự
   fields.note.addEventListener('input', () => {
     counter.textContent = `${fields.note.value.length}/600`;
@@ -88,7 +118,26 @@
     event.preventDefault();
     if (!validate()) return;
 
-    codeEl.textContent = `TG-2026-${String(Math.floor(1000 + Math.random() * 9000))}`;
+    const code = `TG-2026-${String(Math.floor(1000 + Math.random() * 9000))}`;
+    codeEl.textContent = code;
+
+    if (window.TGPendingApplications) {
+      const positionSelect = fields.position;
+      const loc = q('input[name="location"]:checked');
+      const locLabels = { 'tan-huong': 'Khu Tân Hương', 'cai-lay': 'Khu Cái Lậy', 'cho-gao': 'Khu Chợ Gạo', any: 'Theo sắp xếp' };
+      window.TGPendingApplications.add({
+        name: fields.name.value,
+        phone: fields.phone.value,
+        email: fields.email.value,
+        birth: fields.birth.value,
+        address: fields.address.value,
+        jobTitle: positionSelect && positionSelect.selectedIndex > 0 ? positionSelect.options[positionSelect.selectedIndex].text : '',
+        note: loc ? locLabels[loc.value] || '' : '',
+        message: fields.note.value,
+        source: 'Website — trang ứng tuyển',
+        attachment: fields.cv.files && fields.cv.files[0] ? fields.cv.files[0].name : ''
+      });
+    }
 
     form.hidden = true;
     if (head) head.hidden = true;
