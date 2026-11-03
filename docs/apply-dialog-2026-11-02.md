@@ -4,19 +4,19 @@ Chuyển luồng nộp hồ sơ từ "mở trang `apply.html`" sang **dialog m�
 
 ## Hành vi
 
-- Bấm bất kỳ link **Ứng tuyển / Nộp hồ sơ** nào (header, thẻ việc làm, CTA, footer, trang thông báo) → mở `<dialog>` ngay trên trang hiện tại, **không điều hướng**, không mất vị trí đọc.
-- Dialog tự điền sẵn công ty + vị trí khi link có `?job=` / `?company=`: `job='Công Nhân May'` khớp mềm tên vị trí, `company='tex-giang'` chọn đúng đơn vị.
+- Bấm bất kỳ link **Ứng tuyển / Nộp hồ sơ** nào (header, thẻ việc làm, CTA, footer, trang thông báo) → mở `<dialog>` ngay trên trang hiện tại, **không điều hướng**, không mất vị trí đọc. Trang ứng tuyển đầy đủ là `apply.html`; link **"Cần bản đầy đủ? Mở trang ứng tuyển"** bên trong dialog điều hướng thật tới `apply.html` (kèm tham số đang chọn).
+- Dialog tự điền sẵn khu sản xuất + vị trí khi link có tham số: `?job=` khớp mềm tiêu đề tin, `?vai-tri=` chọn đúng mã vị trí, `?khu=`/`?company=` chọn đúng khu.
 - Submit hợp lệ → hiện trạng thái **“Đã gửi hồ sơ (bản demo)”** ngay trong dialog; có nút **Nộp hồ sơ khác** (làm mới form, giữ dialog mở).
 - **Chỉ nút × ở góc trên bên phải mới đóng được dialog.** Phím Escape và bấm nền ngoài không đóng; khi cố đóng bằng hai cách đó, focus được đưa về nút × để gợi ý. Footer không còn nút “Đóng”.
 - Đóng giữa chừng rồi mở lại: dữ liệu đang nhập được giữ; nếu chưa nhập gì thì lần mở sau vẫn prefill theo link mới.
-- Trên trang `apply.html`, link ứng tuyển chỉ **cuộn tới form** thay vì mở dialog (tránh trùng ID).
-- Nếu trình duyệt không hỗ trợ `<dialog>` hoặc JS lỗi, link gốc vẫn điều hướng tới `apply.html` như cũ.
+- Trên trang `apply.html`, link ứng tuyển **cũng mở dialog**: dialog dùng chính form đang có trên trang (chuyển form vào dialog khi mở, trả về chỗ cũ khi đóng) nên không trùng ID và giữ nguyên dữ liệu đang nhập; gửi thành công vẫn chuyển tới `application-success.html` như luồng trang độc lập.
+- Nếu trình duyệt không hỗ trợ `<dialog>` hoặc JS lỗi, link gốc vẫn điều hướng tới trang tương ứng như cũ.
 
 ## Kiến trúc
 
 | File | Vai trò |
 |---|---|
-| `assets/js/apply-form.js` | Một nguồn markup form + validation + drag-drop CV + prefill. `TGIpplyForm.mount(root, options)` dùng cho cả trang lẫn dialog. |
+| `assets/js/apply-form.js` | Một nguồn markup form + validation + drag-drop CV + prefill. `TGApplyForm.mount(root, options)` dùng cho cả trang lẫn dialog. |
 | `assets/js/apply-dialog.js` | Tạo `<dialog>` kiểu Bootstrap (header/body/footer, backdrop), chặn click link `apply.html` bằng event delegation nên bắt cả link do `jobs.js`/`job-detail.js` render sau. |
 | `assets/css/public.css` | Khối `/* DIALOG ỨNG TUYỂN */`: layout dialog, form 1 cột trong dialog, footer sticky, trạng thái thành công, mobile toàn màn hình, tắt animation khi `prefers-reduced-motion`. |
 | `apply.html` | Giữ header/footer/giới thiệu; form mount qua `<div id="apply-inline-mount" data-tg-apply-inline>`. Trang này cần JS để dựng form (giống dialog), nhưng vẫn là đích dự phòng khi trình duyệt không hỗ trợ `<dialog>` hoặc cần link trực tiếp. |

@@ -443,6 +443,11 @@ body.has-dialog { overflow: hidden; }
 }
 .apply-dialog__submit { min-height: 44px; }
 .apply-dialog.is-success .apply-dialog__submit { display: none; }
+/* apply.html: dialog dùng chính form trên trang nên form đã có nút gửi riêng;
+   link "mở trang đầy đủ" cũng không cần vì đang ở chính trang đó. */
+.apply-dialog.is-inline .apply-dialog__submit,
+.apply-dialog.is-inline .apply-dialog__actions,
+.apply-dialog.is-inline .apply-dialog__page-link { display: none; }
 
 /* Trạng thái gửi thành công (giữ người dùng trong dialog) */
 .apply-success {
@@ -837,6 +842,16 @@ body.has-dialog { overflow: hidden; }
   background: #fff;
 }
 @media (min-width: 640px) { .gf-card { padding: 32px 32px 28px; border-radius: 14px; } }
+
+/* Banner đầu form ứng tuyển độc lập */
+.gf-banner {
+  margin: 0 0 22px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #eaf6f0;
+}
+.gf-banner img { display: block; width: 100%; height: auto; }
+@media (max-width: 639px) { .gf-banner { margin-bottom: 18px; } }
 
 .gf-title {
   margin: 0;

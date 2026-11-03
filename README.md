@@ -51,6 +51,7 @@ E:\websitetuyendung\
 ├── jobs.html                    # [Trang 2] Danh sách việc làm: Bộ lọc đa chiều, filter chips, phân trang
 ├── job-detail.html              # [Trang 3] Chi tiết công việc: JD, quyền lợi, chia sẻ FB/Zalo, QR, form nộp nhanh
 ├── apply.html                   # [Trang 4] Ứng tuyển trực tuyến: Không cần tài khoản, kéo thả CV, validation
+├── ung-tuyen.html               # [Trang riêng] Form nộp hồ sơ độc lập: banner + 4 ô (họ tên, SĐT, vị trí, nơi làm việc)
 ├── about.html                   # [Trang 5] Về chúng tôi: Giới thiệu TEX-GIANG, sứ mệnh, giá trị cốt lõi, WRAP/ISO
 ├── why-tex-giang.html           # [Trang 8] Tại sao chọn chúng tôi: 4 trụ cột phúc lợi, so sánh đãi ngộ, testimonials
 ├── news.html                    # [Trang 6] Tin tức nghề nghiệp: Bài viết nổi bật, ngày hội việc làm, hoạt động công đoàn
@@ -105,6 +106,7 @@ E:\websitetuyendung\
    - Tìm việc làm: `jobs.html`
    - Đăng nhập quản trị HR: `admin/login.html` &rarr; Nhấn "Đăng Nhập Hệ Thống" để vào `admin/dashboard.html`.
    - Nộp hồ sơ: bấm **Ứng tuyển** ở bất kỳ trang nào để mở dialog ứng tuyển ngay tại chỗ, không rời trang. Mở trực tiếp `apply.html` vẫn có form dạng trang đầy đủ (dùng khi cần link trực tiếp hoặc trình duyệt không hỗ trợ `<dialog>`).
+   - Form ứng tuyển độc lập: `ung-tuyen.html` — trang riêng có banner, chỉ 4 ô (họ tên, số điện thoại, vị trí tuyển dụng, nơi muốn làm việc), không đi qua dialog; hồ sơ gửi vào hàng chờ demo và hiện trong admin.
 3. **Mở qua máy chủ cục bộ (khuyến nghị cho trải nghiệm mượt nhất):**
    - Với VS Code: Cài extension *Live Server*, nhấn chuột phải chọn *Open with Live Server*.
    - Với Python: Chạy lệnh `python -m http.server 8080` trong thư mục `E:\websitetuyendung`.

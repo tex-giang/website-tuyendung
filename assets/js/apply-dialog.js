@@ -1,10 +1,14 @@
 /**
  * TEX-GIANG RECRUITMENT — DIALOG ỨNG TUYỂN DÙNG CHUNG
  *
- * Mọi link `apply.html` trên trang public được chặn để mở biểu mẫu trong
- * <dialog> kiểu Bootstrap (tự dựng CSS/JS, không thư viện, chạy được file://).
- * Link gốc vẫn giữ trong HTML nên khi trình duyệt không hỗ trợ <dialog>
- * hoặc JS lỗi, người dùng vẫn mở được trang apply.html như trước.
+ * Mọi link ứng tuyển trên trang public (`apply.html`) đều được chặn để mở
+ * biểu mẫu trong <dialog> kiểu Bootstrap (tự dựng CSS/JS, không thư viện,
+ * chạy được file://). Link gốc vẫn giữ trong HTML nên khi trình duyệt không
+ * hỗ trợ <dialog> hoặc JS lỗi, người dùng vẫn mở được trang như trước.
+ *
+ * Riêng link "Cần bản đầy đủ? Mở trang ứng tuyển" trong dialog được bỏ qua
+ * để vẫn điều hướng tới trang ứng tuyển đầy đủ `apply.html`.
+ * `ung-tuyen.html` là form độc lập, không đi qua dialog.
  *
  * Trên apply.html, biểu mẫu đã có sẵn trên trang nên link ứng tuyển chỉ cuộn
  * tới form thay vì mở dialog (tránh trùng ID).
@@ -18,7 +22,9 @@
     footerSubmit: null,
     form: null,
     opener: null,
-    inline: false
+    inline: false,
+    inlineMount: null,
+    inlineForm: null
   };
 
   function supportsDialog() {
@@ -28,6 +34,22 @@
 
   function isApplyUrl(url) {
     return /(^|\/)apply\.html$/.test(url.pathname);
+  }
+
+  /**
+   * Đọc dữ liệu điền sẵn từ link ứng tuyển.
+   * - `job`  : tiêu đề tin (khớp mềm sang ô vị trí)
+   * - `vai-tri` / `position`: mã vị trí chính xác
+   * - `khu`  / `company`    : mã khu sản xuất
+   */
+  function applyDataFromUrl(url) {
+    var params = url.searchParams;
+    return {
+      job: params.get('job'),
+      company: params.get('company') || params.get('khu'),
+      position: params.get('vai-tri') || params.get('position'),
+      location: params.get('khu')
+    };
   }
 
   function parseUrl(href) {
@@ -54,7 +76,7 @@
       '  </header>',
       '  <div class="apply-dialog__body" data-tg-apply-mount></div>',
       '  <footer class="apply-dialog__footer">',
-      '    <a class="apply-dialog__page-link" data-tg-apply-page-link href="ung-tuyen.html">Cần bản đầy đủ? Mở trang ứng tuyển</a>',
+      '    <a class="apply-dialog__page-link" data-tg-apply-page-link href="apply.html">Cần bản đầy đủ? Mở trang ứng tuyển</a>',
       '    <div class="apply-dialog__actions">',
       '      <button type="submit" class="tg-btn tg-btn--primary apply-dialog__submit" form="online-apply-form">',
       '        <img src="assets/images/icons/send.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon">Gửi hồ sơ',
@@ -120,11 +142,16 @@
 
     dialog.addEventListener('close', function () {
       document.body.classList.remove('has-dialog');
+      // Trang apply.html dùng dialog với chính form trên trang: trả form về chỗ cũ.
+      if (state.inline && state.inlineForm && state.inlineForm.parentElement === state.mountEl) {
+        state.inlineMount.appendChild(state.inlineForm);
+        state.form = state.inlineForm;
+      }
       if (state.opener && document.contains(state.opener)) state.opener.focus();
       state.opener = null;
     });
 
-    mountForm();
+    if (!state.inline) mountForm();
     return dialog;
   }
 
@@ -157,6 +184,17 @@
     if (primary) primary.focus();
   }
 
+  function updatePageLink(data) {
+    var pageLink = state.dialog && state.dialog.querySelector('[data-tg-apply-page-link]');
+    if (!pageLink) return;
+    var params = new URLSearchParams();
+    if (data && data.job) params.set('job', data.job);
+    if (data && data.position) params.set('vai-tri', data.position);
+    if (data && data.location) params.set('khu', data.location);
+    var query = params.toString();
+    pageLink.href = 'apply.html' + (query ? '?' + query : '');
+  }
+
   function open(data, trigger) {
     if (!supportsDialog()) return;
     if (!window.TGApplyForm) return;
@@ -165,16 +203,37 @@
     if (dialog.classList.contains('is-success')) resetDialog();
     else if (state.form && !window.TGApplyForm.isDirty(state.form)) window.TGApplyForm.prefill(state.form, data || {});
 
-    var pageLink = state.dialog.querySelector('[data-tg-apply-page-link]');
-    if (pageLink) {
-      var params = new URLSearchParams();
-      if (data && data.job) params.set('job', data.job);
-      if (data && data.position) params.set('vai-tri', data.position);
-      if (data && data.location) params.set('khu', data.location);
-      var query = params.toString();
-      pageLink.href = 'ung-tuyen.html' + (query ? '?' + query : '');
+    updatePageLink(data);
+    state.opener = trigger || document.activeElement;
+    document.body.classList.add('has-dialog');
+    if (!dialog.open) dialog.showModal();
+    focusCloseButton();
+  }
+
+  /**
+   * Trang apply.html: mở dialog nhưng dùng chính form đang có trên trang
+   * (chuyển vào dialog khi mở, trả về chỗ cũ khi đóng) để không trùng ID.
+   */
+  function openInline(data, trigger) {
+    if (!supportsDialog() || !window.TGApplyForm) return;
+
+    var dialog = ensureDialog();
+    if (state.inlineForm && state.inlineForm.parentElement !== state.mountEl) {
+      state.mountEl.appendChild(state.inlineForm);
+      state.form = state.inlineForm;
+      dialog.classList.add('is-inline');
+      // Form trên trang có thể đang chờ hiệu ứng hiện dần: bỏ qua để không bị mờ trong dialog.
+      var reveal = state.inlineForm.querySelectorAll('[data-reveal]');
+      for (var i = 0; i < reveal.length; i++) {
+        reveal[i].style.opacity = '1';
+        reveal[i].style.transform = 'none';
+      }
+    }
+    if (state.form && !window.TGApplyForm.isDirty(state.form)) {
+      window.TGApplyForm.prefill(state.form, data || {});
     }
 
+    updatePageLink(data);
     state.opener = trigger || document.activeElement;
     document.body.classList.add('has-dialog');
     if (!dialog.open) dialog.showModal();
@@ -186,24 +245,12 @@
     if (state.dialog && state.dialog.open) state.dialog.close();
   }
 
-  function focusInlineForm() {
-    var form = document.getElementById('online-apply-form');
-    if (!form) return;
-    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    form.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
-    var first = document.getElementById('apply-fullname');
-    if (first) {
-      window.setTimeout(function () { first.focus({ preventScroll: true }); }, reduced ? 0 : 320);
-    }
-  }
-
   function decorateLinks() {
     var links = document.querySelectorAll('a[href]');
     for (var i = 0; i < links.length; i++) {
       var link = links[i];
-      var href = link.getAttribute('href');
-      if (!href || href.indexOf('apply.html') === -1) continue;
-      var url = parseUrl(href);
+      if (link.hasAttribute('data-tg-apply-page-link')) continue;
+      var url = parseUrl(link.getAttribute('href'));
       if (!url || !isApplyUrl(url)) continue;
       link.setAttribute('aria-haspopup', 'dialog');
     }
@@ -214,29 +261,31 @@
     if (!event.target.closest) return;
     var link = event.target.closest('a[href]');
     if (!link || (link.target && link.target !== '_self') || link.hasAttribute('download')) return;
-    var href = link.getAttribute('href');
-    if (!href) return;
-    var url = parseUrl(href);
+    // Link "Mở trang ứng tuyển" trong dialog phải điều hướng bình thường.
+    if (link.hasAttribute('data-tg-apply-page-link')) return;
+    var url = parseUrl(link.getAttribute('href'));
     if (!url || !isApplyUrl(url)) return;
     if (!supportsDialog() || !window.TGApplyForm) return;
 
     event.preventDefault();
 
     if (state.inline) {
-      focusInlineForm();
+      openInline(applyDataFromUrl(url), link);
       return;
     }
-    open({ job: url.searchParams.get('job'), company: url.searchParams.get('company') }, link);
+    open(applyDataFromUrl(url), link);
   }
 
   function init() {
     var inlineMount = document.querySelector('[data-tg-apply-inline]');
     if (inlineMount && window.TGApplyForm) {
       state.inline = true;
+      state.inlineMount = inlineMount;
       window.TGApplyForm.mount(inlineMount);
-    } else {
-      decorateLinks();
+      state.inlineForm = inlineMount.querySelector('#online-apply-form');
+      state.form = state.inlineForm;
     }
+    decorateLinks();
     // Ủy quyền sự kiện: bắt cả link do jobs.js/job-detail.js render sau đó.
     document.addEventListener('click', onClick);
   }
@@ -244,5 +293,5 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 
-  window.TGApplyDialog = { open: open, close: close };
+  window.TGApplyDialog = { open: open, openInline: openInline, close: close };
 })();

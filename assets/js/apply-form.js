@@ -169,7 +169,7 @@
     var params = readPageParams();
 
     var company = form.querySelector('#apply-company');
-    var companyValue = data.company || params.get('company');
+    var companyValue = data.company || data.location || params.get('company') || params.get('khu');
     if (company && companyValue && Array.prototype.some.call(company.options, function (option) {
       return option.value === companyValue;
     })) {
@@ -177,8 +177,20 @@
     }
 
     var jobSelect = form.querySelector('#apply-position');
+    if (!jobSelect) return;
+
+    // Ưu tiên mã vị trí truyền thẳng (?vai-tri= hoặc data.position),
+    // sau đó mới khớp mềm theo tiêu đề tin (?job=).
+    var positionValue = data.position || params.get('vai-tri');
+    if (positionValue && Array.prototype.some.call(jobSelect.options, function (option) {
+      return option.value === positionValue;
+    })) {
+      jobSelect.value = positionValue;
+      return;
+    }
+
     var jobTitle = data.job || params.get('job');
-    if (!jobTitle || !jobSelect) return;
+    if (!jobTitle) return;
 
     var target = normalize(jobTitle);
     var targetWords = target.split(' ').filter(function (word) { return word.length > 2; });

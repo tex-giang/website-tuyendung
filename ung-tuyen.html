@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Đăng ký tuyển dụng | TEX-GIANG</title>
-  <meta name="description" content="Form đăng ký tuyển dụng của Công ty Cổ phần TEX-GIANG. Điền thông tin để bộ phận nhân sự liên hệ trong 24 giờ làm việc.">
+  <title>Nộp hồ sơ ứng tuyển | TEX-GIANG</title>
+  <meta name="description" content="Nộp hồ sơ ứng tuyển TEX-GIANG trong 1 phút: họ tên, số điện thoại, vị trí và nơi muốn làm việc. Nhân sự gọi lại trong 24 giờ làm việc.">
+  <meta name="robots" content="noindex">
 
   <link rel="stylesheet" href="assets/css/app.css">
   <link rel="stylesheet" href="assets/css/utilities.css">
@@ -21,9 +22,17 @@
     </a>
 
     <div class="gf-card">
+      <figure class="gf-banner">
+        <img src="assets/images/banner-texgiang.webp"
+             srcset="assets/images/banner-texgiang-800.webp 800w, assets/images/banner-texgiang.webp 2048w"
+             sizes="(max-width: 760px) 100vw, 720px"
+             alt="Nhà máy Tân Hương 2 — Công ty Cổ phần TEX-GIANG"
+             width="2048" height="768" fetchpriority="high">
+      </figure>
+
       <header class="gf-head">
-        <h1 class="gf-title">Đăng ký tuyển dụng</h1>
-        <p class="gf-desc">Vui lòng điền thông tin ứng tuyển. Bộ phận nhân sự TEX-GIANG sẽ gọi lại trong 24 giờ làm việc để xác nhận và hẹn lịch.</p>
+        <h1 class="gf-title">Nộp hồ sơ ứng tuyển</h1>
+        <p class="gf-desc">Điền 4 thông tin dưới đây. Bộ phận nhân sự TEX-GIANG sẽ gọi lại trong 24 giờ làm việc để xác nhận và hẹn lịch.</p>
         <p class="gf-required">* Bắt buộc</p>
       </header>
 
@@ -39,6 +48,22 @@
           <label class="gf-label" for="gf-phone">Số điện thoại <span class="req">*</span></label>
           <input class="form-input" id="gf-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="0912 345 678" required>
           <p class="gf-error" data-error-for="phone">Số di động Việt Nam chưa đúng, ví dụ 0912 345 678.</p>
+        </div>
+
+        <div class="gf-field" data-field="position">
+          <label class="gf-label" for="gf-position">Vị trí tuyển dụng <span class="req">*</span></label>
+          <select class="form-input" id="gf-position" name="position" required>
+            <option value="">— Chọn vị trí —</option>
+            <option value="cn-may" data-job-id="TG-01">Công nhân may chuyền</option>
+            <option value="qc" data-job-id="TG-02">Giám sát kiểm phẩm QC</option>
+            <option value="ie" data-job-id="TG-03">Kỹ sư công nghiệp &amp; định mức (IE)</option>
+            <option value="merchandiser" data-job-id="TG-04">Chuyên viên quản lý đơn hàng (Merchandiser)</option>
+            <option value="bao-tri" data-job-id="TG-05">Nhân viên bảo trì máy may &amp; điện xưởng</option>
+            <option value="ke-toan" data-job-id="TG-06">Kế toán chi phí &amp; giá thành</option>
+            <option value="hoc-nghe" data-job-id="TG-07">Học nghề may miễn phí (có trợ cấp)</option>
+            <option value="khac" data-job-id="">Vị trí khác</option>
+          </select>
+          <p class="gf-error" data-error-for="position">Chọn vị trí bạn muốn ứng tuyển.</p>
         </div>
 
         <fieldset class="gf-field" data-field="location">
@@ -64,74 +89,10 @@
           <p class="gf-error" data-error-for="location">Chọn một nơi bạn muốn làm việc.</p>
         </fieldset>
 
-        <div class="gf-field" data-field="position">
-          <label class="gf-label" for="gf-position">Vị trí tuyển dụng <span class="req">*</span></label>
-          <select class="form-input" id="gf-position" name="position" required>
-            <option value="">— Chọn vị trí —</option>
-            <option value="cn-may">Công nhân may chuyền</option>
-            <option value="hoc-nghe">Học nghề may có lương</option>
-            <option value="qc">Giám sát QC — kiểm phẩm</option>
-            <option value="ie">Kỹ sư IE — định mức</option>
-            <option value="merchandiser">Merchandiser — quản lý đơn hàng</option>
-            <option value="bao-tri">Bảo trì máy may &amp; điện xưởng</option>
-            <option value="ke-toan">Kế toán chi phí &amp; giá thành</option>
-            <option value="lai-xe">Lái xe đưa rước</option>
-            <option value="khac">Vị trí khác</option>
-          </select>
-          <p class="gf-error" data-error-for="position">Chọn vị trí bạn muốn ứng tuyển.</p>
-        </div>
-
-        <div class="gf-row">
-          <div class="gf-field" data-field="birth">
-            <label class="gf-label" for="gf-birth">Năm sinh</label>
-            <input class="form-input" id="gf-birth" name="birth" type="number" inputmode="numeric" min="1950" max="2010" placeholder="1998">
-            <p class="gf-error" data-error-for="birth">Năm sinh trong khoảng 1950 – 2010.</p>
-          </div>
-
-          <div class="gf-field" data-field="gender">
-            <label class="gf-label" for="gf-gender">Giới tính</label>
-            <select class="form-input" id="gf-gender" name="gender">
-              <option value="">— Chọn —</option>
-              <option value="nữ">Nữ</option>
-              <option value="nam">Nam</option>
-              <option value="khác">Khác</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="gf-field" data-field="email">
-          <label class="gf-label" for="gf-email">Email</label>
-          <input class="form-input" id="gf-email" name="email" type="email" autocomplete="email" placeholder="email@gmail.com">
-          <p class="gf-error" data-error-for="email">Email chưa đúng định dạng.</p>
-        </div>
-
-        <div class="gf-field" data-field="address">
-          <label class="gf-label" for="gf-address">Địa chỉ hiện tại</label>
-          <input class="form-input" id="gf-address" name="address" type="text" autocomplete="street-address" placeholder="Ấp/xã, huyện, tỉnh — để xếp tuyến xe đưa rước">
-        </div>
-
-        <div class="gf-field" data-field="cccd">
-          <label class="gf-label" for="gf-cccd">Số CCCD</label>
-          <input class="form-input" id="gf-cccd" name="cccd" type="text" inputmode="numeric" maxlength="12" placeholder="12 chữ số">
-          <p class="gf-hint">Có thể bổ sung khi nhận việc.</p>
-          <p class="gf-error" data-error-for="cccd">Số CCCD gồm 12 chữ số.</p>
-        </div>
-
-        <div class="gf-field" data-field="cv">
-          <label class="gf-label" for="gf-cv">Tải CV hoặc ảnh CCCD</label>
-          <input class="form-input gf-file-input" id="gf-cv" name="cv" type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
-          <p class="gf-hint" id="gf-file-hint">PDF, DOC, DOCX, JPG, PNG · tối đa 10 MB</p>
-          <p class="gf-error" data-error-for="cv">Tệp vượt quá 10 MB hoặc sai định dạng.</p>
-        </div>
-
-        <div class="gf-field" data-field="note">
-          <label class="gf-label" for="gf-note">Giới thiệu ngắn</label>
-          <textarea class="form-input" id="gf-note" name="note" rows="4" maxlength="600" placeholder="Kinh nghiệm từng làm, chuyền đã làm, nguyện vọng hoặc câu hỏi về tuyến xe…"></textarea>
-          <span class="gf-counter" id="gf-note-counter">0/600</span>
-        </div>
-
         <div class="gf-submit">
-          <button type="submit" class="tg-btn tg-btn--primary">Gửi</button>
+          <button type="submit" class="tg-btn tg-btn--primary">
+            <img src="assets/images/icons/send.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[16px]"> Gửi hồ sơ
+          </button>
           <p class="gf-demo">* Biểu mẫu demo: dữ liệu không gửi lên máy chủ, chỉ mô phỏng luồng đăng ký.</p>
         </div>
       </form>
@@ -143,7 +104,7 @@
         <h2 class="gf-success__title">Đã nhận hồ sơ của bạn</h2>
         <p class="gf-desc">Mã hồ sơ: <strong id="gf-code">TG-2026-0000</strong>. Nhân sự sẽ gọi lại trong 24 giờ làm việc.</p>
         <div class="gf-success__actions">
-          <button type="button" class="tg-btn tg-btn--ghost" id="gf-again">Gửi phản hồi khác</button>
+          <button type="button" class="tg-btn tg-btn--ghost" id="gf-again">Gửi hồ sơ khác</button>
         </div>
       </div>
     </div>
@@ -158,7 +119,6 @@
   </main>
 
   <script src="assets/js/demo-store.js"></script>
-
   <script src="assets/js/ung-tuyen.js"></script>
 </body>
 </html>
