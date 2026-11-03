@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Báo cáo kết quả thiết kế website tuyển dụng — TEX-GIANG</title>
+<style>
+  :root {
+    --ink: #10201a;
+    --body: #33463d;
+    --muted: #6b7f75;
+    --line: #dfe7e2;
+    --accent: #087a55;
+    --soft: #f2f7f4;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  body {
+    margin: 0;
+    background: #eef1ef;
+    color: var(--ink);
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    font-size: 11pt;
+    line-height: 1.6;
+  }
+
+  .sheet {
+    width: 210mm;
+    margin: 0 auto;
+    background: #fff;
+    padding: 16mm 14mm 18mm;
+  }
+
+  /* ---------------- bìa ---------------- */
+  .cover {
+    min-height: 255mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    page-break-after: always;
+  }
+  .cover__top { display: flex; align-items: center; gap: 14px; }
+  .cover__logo { height: 46px; width: auto; }
+  .cover__company { font-size: 10.5pt; color: var(--muted); line-height: 1.45; }
+  .cover__company strong { display: block; color: var(--ink); font-size: 12pt; font-weight: 600; }
+
+  .cover__body { padding: 16mm 0 0; }
+  .cover__kicker {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: var(--soft);
+    color: var(--accent);
+    font-size: 9.5pt;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .cover h1 {
+    margin: 16px 0 0;
+    font-size: 27pt;
+    line-height: 1.16;
+    letter-spacing: -0.015em;
+    font-weight: 700;
+  }
+  .cover__lead { margin: 14px 0 0; font-size: 12pt; color: var(--body); max-width: 150mm; }
+
+  .cover__stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 16mm 0 0;
+  }
+  .stat {
+    padding: 12px 14px;
+    border-radius: 8px;
+    background: var(--soft);
+  }
+  .stat b { display: block; font-size: 19pt; line-height: 1.1; color: var(--accent); }
+  .stat span { font-size: 9.5pt; color: var(--body); }
+
+  .cover__meta {
+    margin-top: 18mm;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 18px;
+    font-size: 10.5pt;
+    color: var(--body);
+  }
+  .cover__meta b { color: var(--ink); }
+
+  /* ---------------- nội dung ---------------- */
+  h2.sec {
+    margin: 0 0 4px;
+    font-size: 17pt;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    page-break-after: avoid;
+  }
+  .sec-no {
+    display: inline-block;
+    min-width: 34px;
+    padding: 1px 8px;
+    margin-right: 10px;
+    border-radius: 6px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 12pt;
+    text-align: center;
+  }
+  .sec-lead { margin: 6px 0 0; color: var(--muted); font-size: 10.5pt; }
+
+  .block { page-break-before: always; }
+  .block:first-of-type { page-break-before: auto; }
+
+  h3 {
+    margin: 18px 0 6px;
+    font-size: 11.5pt;
+    letter-spacing: 0.01em;
+    color: var(--ink);
+  }
+
+  .req {
+    margin: 10px 0 0;
+    padding: 12px 16px;
+    border-left: 3px solid var(--accent);
+    background: var(--soft);
+    border-radius: 0 8px 8px 0;
+    font-size: 10.5pt;
+    color: var(--body);
+  }
+  .req p { margin: 0; }
+  .req p + p { margin-top: 5px; }
+
+  ul.check { margin: 10px 0 0; padding: 0; list-style: none; }
+  ul.check li {
+    position: relative;
+    padding-left: 22px;
+    margin: 6px 0;
+    font-size: 10.5pt;
+    color: var(--body);
+  }
+  ul.check li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  ul.check li b { color: var(--ink); font-weight: 600; }
+
+  figure { margin: 12px 0 0; page-break-inside: avoid; }
+  figure img {
+    display: block;
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+  }
+  figcaption {
+    margin-top: 5px;
+    font-size: 9pt;
+    color: var(--muted);
+  }
+
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .pair figure { margin-top: 0; }
+
+  .mobile-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+
+  /* ảnh chụp khổ điện thoại: thu nhỏ để không chiếm cả trang */
+  figure.shot--phone img { max-width: 46%; margin-inline: auto; }
+  @media print { figure.shot--phone img { max-width: 44%; } }
+
+  /* ảnh chụp một thẻ hẹp (cột phụ): thu nhỏ, canh giữa */
+  figure.shot--card img { max-width: 40%; margin-inline: auto; }
+  @media print { figure.shot--card img { max-width: 38%; } }
+  .mobile-row img { width: 100%; border: 1px solid var(--line); border-radius: 6px; }
+
+  table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 10pt; }
+  th, td { padding: 7px 10px; text-align: left; vertical-align: top; }
+  thead th { background: var(--soft); color: var(--ink); font-weight: 600; font-size: 9.5pt; }
+  tbody tr + tr td { border-top: 1px solid var(--line); }
+  td.ok { color: var(--accent); font-weight: 600; white-space: nowrap; }
+  td.part { color: #a15c00; font-weight: 600; white-space: nowrap; }
+
+  .note {
+    margin-top: 14px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: #fff8ea;
+    font-size: 10pt;
+    color: #5b4300;
+  }
+  .note b { color: #3d2e00; }
+
+  .toc { margin-top: 12px; }
+  .toc td:first-child { width: 34px; color: var(--accent); font-weight: 600; }
+  .toc td:nth-child(2) { width: 42%; }
+
+  .footnote { margin-top: 16px; font-size: 9pt; color: var(--muted); }
+
+  @page { size: A4; margin: 14mm 12mm 16mm; }
+
+  @media print {
+    body { background: #fff; font-size: 10.5pt; }
+    .sheet { width: auto; padding: 0; margin: 0; }
+    .cover { min-height: 250mm; }
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <!-- ============ BÌA ============ -->
+  <section class="cover">
+    <div class="cover__top">
+      <img class="cover__logo" src="../assets/images/logo-tgi.png" alt="TEX-GIANG">
+      <div class="cover__company">
+        <strong>CÔNG TY CỔ PHẦN TEX-GIANG</strong>
+        Lô BII-8, Đường D3, KCN Tân Hương, xã Châu Thành, tỉnh Đồng Tháp
+      </div>
+    </div>
+
+    <div class="cover__body">
+      <span class="cover__kicker">Báo cáo tiến độ · 03/11/2026</span>
+      <h1>Kết quả thiết kế website tuyển dụng <span style="white-space:nowrap">TEX-GIANG</span></h1>
+      <p class="cover__lead">
+        Báo cáo đối chiếu 10 chức năng theo tài liệu “Nội dung thiết kế website tuyển dụng” với sản phẩm đã dựng:
+        ảnh chụp từng trang, mức độ đáp ứng từng yêu cầu và các phần còn phụ thuộc máy chủ khi đưa lên Internet.
+      </p>
+
+      <div class="cover__stats">
+        <div class="stat"><b>10/10</b><span>chức năng theo PDF đã có bản chạy được</span></div>
+        <div class="stat"><b>13</b><span>trang giao diện public</span></div>
+        <div class="stat"><b>10</b><span>trang quản trị</span></div>
+      </div>
+
+      <div class="cover__meta">
+        <div><b>Người thực hiện:</b> Bộ phận IT — P.KT-NS</div>
+        <div><b>Ngày báo cáo:</b> 03/11/2026</div>
+        <div><b>Phạm vi:</b> Giao diện + luồng nghiệp vụ (bản demo)</div>
+        <div><b>Thiết bị kiểm tra:</b> 1440px, 768px, 390px</div>
+      </div>
+    </div>
+
+    <p class="footnote">
+      Ảnh chụp trong báo cáo được tạo trực tiếp từ website đang dựng bằng trình duyệt Chrome (chế độ không giao diện),
+      độ phân giải 1440×1000 và 390×844.
+    </p>
+  </section>
+
+  <!-- ============ MỤC LỤC ============ -->
+  <section class="block">
+    <h2 class="sec"><span class="sec-no">Ⅰ</span>Tổng quan và mục lục</h2>
+    <p class="sec-lead">Đối chiếu tài liệu yêu cầu (10 chức năng) với sản phẩm đã dựng.</p>
+
+    <table class="toc">
+      <thead>
+        <tr><th>#</th><th>Chức năng theo PDF</th><th>Trang thực tế</th><th>Trạng thái</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>Trang chủ</td><td>index.html</td><td class="ok">Đạt</td></tr>
+        <tr><td>2</td><td>Chức năng tiện ích (hotline, banner, Zalo, liên kết, chia sẻ)</td><td>Toàn site + job-detail</td><td class="ok">Đạt</td></tr>
+        <tr><td>3</td><td>Danh sách việc làm</td><td>jobs.html</td><td class="ok">Đạt</td></tr>
+        <tr><td>4</td><td>Ứng tuyển trực tuyến</td><td>ung-tuyen.html + dialog</td><td class="ok">Đạt</td></tr>
+        <tr><td>5</td><td>Chi tiết công việc</td><td>job-detail.html</td><td class="ok">Đạt</td></tr>
+        <tr><td>6</td><td>Về chúng tôi</td><td>about.html</td><td class="ok">Đạt</td></tr>
+        <tr><td>7</td><td>Tin tức nghề nghiệp</td><td>news.html, news-detail.html</td><td class="ok">Đạt</td></tr>
+        <tr><td>8</td><td>Tại sao chọn chúng tôi</td><td>why-tex-giang.html</td><td class="ok">Đạt</td></tr>
+        <tr><td>9</td><td>Trang liên hệ</td><td>contact.html</td><td class="ok">Đạt</td></tr>
+        <tr><td>10</td><td>Trang quản trị</td><td>admin/*.html (10 trang)</td><td class="part">Đạt (demo)</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Nguyên tắc đọc báo cáo</h3>
+    <ul class="check">
+      <li><b>Đạt:</b> chức năng đã dựng và bấm được trên trình duyệt.</li>
+      <li><b>Đạt (demo):</b> giao diện và luồng đúng, dữ liệu lưu tạm trong trình duyệt — chưa nối cơ sở dữ liệu thật.</li>
+      <li>Mỗi mục gồm: yêu cầu trích từ PDF (khung xanh), ảnh chụp trang, và checklist đối chiếu.</li>
+    </ul>
+
+    <div class="note">
+      <b>Lưu ý phạm vi:</b> website hiện là bản tĩnh (HTML/CSS/JavaScript). Việc đăng nhập, lưu hồ sơ, tải CV lên máy chủ
+      và gửi email cần máy chủ + cơ sở dữ liệu; báo cáo ghi rõ ở phần “Ghi chú triển khai” (mục Ⅺ).
+    </div>
+  </section>
+
+  <!-- ============ 1. TRANG CHỦ ============ -->
+  <section class="block">
+    <h2 class="sec"><span class="sec-no">1</span>Trang chủ</h2>
+    <p class="sec-lead">Trang đầu tiên ứng viên nhìn thấy — thể hiện thương hiệu tuyển dụng và dẫn vào các nhóm việc làm.</p>
+
+    <div class="req">
+      <p>“Thiết kế giao diện trang chủ hiện đại, chuyên nghiệp, thể hiện bản sắc thương hiệu tuyển dụng và văn hóa doanh nghiệp.”</p>
+    </div>
+
+    <ul class="check">
+      <li><b>Banner tuyển dụng nổi bật</b> + thông điệp thu hút nhân tài — ảnh nhà máy, tiêu đề lớn, 2 nút hành động.</li>
+      <li><b>Công cụ tìm kiếm nhanh</b> theo từ khoá và địa điểm (3 khu: Tân Hương · Cái Lậy · Chợ Gạo).</li>
+      <li><b>Danh sách vị trí nổi bật</b> và việc làm mới nhất, kèm thu nhập và hạn nộp.</li>
+      <li><b>Khu giới thiệu doanh nghiệp</b>: quy mô, môi trường làm việc, phúc lợi, cơ hội phát triển.</li>
+      <li><b>Tối ưu hiển thị</b> trên máy tính, máy tính bảng và điện thoại (kiểm tra 1440 / 768 / 390 px).</li>
+    </ul>
+
+    <figure>
+      <img src="images/01-trang-chu.png" alt="Trang chủ website tuyển dụng TEX-GIANG">
+      <figcaption>Trang chủ — dải thông báo, thanh điều hướng, banner nhà máy và công cụ tìm việc.</figcaption>
+    </figure>
+
+    <figure class="shot--phone">
+      <img src="images/01b-trang-chu-mobile.png" alt="Trang chủ trên điện thoại">
+      <figcaption>Cùng trang chủ trên khổ 390 px: bố cục một cột, nút ứng tuyển luôn hiện ở thanh đầu trang.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ 2. TIỆN ÍCH ============ -->
+  <section class="block">
+    <h2 class="sec"><span class="sec-no">2</span>Chức năng tiện ích</h2>
+    <p class="sec-lead">Các kênh liên hệ và chia sẻ giúp tăng khả năng tiếp cận ứng viên.</p>
+
+    <div class="req">
+      <p>“Hotline, email và nút liên hệ nhanh. Banner chính, banner pop-up và banner truyền thông tuyển dụng. Liên kết Zalo hoặc kênh hỗ trợ trực tuyến. Chia sẻ tin tuyển dụng qua Facebook, Zalo và các kênh hỗ trợ. Tạo mã QR dẫn đến tin tuyển dụng hoặc trang việc làm.”</p>
+    </div>
+
+    <ul class="check">
+      <li><b>Hotline - Email</b> hiển thị ở thanh đầu trang, chân trang và trong form ứng tuyển.</li>
+      <li><b>Banner chính</b> ở trang chủ; <b>banner thông báo</b> dạng dải trên đầu mọi trang, có nút đóng.</li>
+      <li><b>Zalo</b>: nút nổi góc phải dưới (chat) + link Zalo trong form và trang liên hệ.</li>
+      <li><b>Liên kết website</b>: trỏ về tex-giang.com.vn (đã bỏ đơn vị thứ hai theo yêu cầu ngày 02/11).</li>
+      <li><b>Chia sẻ &amp; mã QR</b>: Facebook, Zalo, sao chép liên kết, in tin và mã QR ngay trên trang chi tiết.</li>
+    </ul>
+
+    <figure class="shot--card">
+      <img src="images/04b-chia-se-va-qr.png" alt="Khu vực chia sẻ và mã QR trên trang chi tiết">
+      <figcaption>Khu chia sẻ trên trang chi tiết: mã QR, Facebook, Zalo, sao chép liên kết, in tin.</figcaption>
+    </figure>
+
+    <div class="note">
+      <b>Ghi chú:</b> banner pop-up tự bật đã được thay bằng dải thông báo đầu trang — giữ đủ nội dung truyền thông
+      nhưng không che nội dung khi ứng viên đọc trên điện thoại.
+    </div>
+  </section>
+
+  <!-- ============ 3. DANH SÁCH VIỆC LÀM ============ -->
+  <section class="block">
+    <h2 class="sec"><span class="sec-no">3</span>Danh sách việc làm</h2>
+    <p class="sec-lead">Trang tổng hợp vị trí đang tuyển, tìm và lọc nhanh theo nhu cầu.</p>
+
+    <div class="req">
+      <p>“Tìm kiếm theo tên công việc hoặc từ khoá. Bộ lọc theo công ty, địa điểm. Hiển thị chức danh, đơn vị tuyển dụng, địa điểm, mức lương và hạn nộp hồ sơ. Phân trang và sắp xếp theo thời gian đăng hoặc mức độ ưu tiên. Phân biệt trạng thái đang tuyển, hết hạn hoặc đã đóng. Liên kết trực tiếp đến trang chi tiết và ứng tuyển.”</p>
+    </div>
+
+    <ul class="check">
+      <li><b>Tìm kiếm</b> theo tên việc làm / từ khoá, giữ từ khoá khi chuyển trang.</li>
+      <li><b>Bộ lọc</b> theo khu sản xuất (Tân Hương, Cái Lậy, Chợ Gạo) và theo khối phòng ban.</li>
+      <li><b>Hiển thị</b> chức danh, địa điểm, thu nhập, hạn nộp trên từng dòng việc làm.</li>
+      <li><b>Phân trang</b> 6 tin/trang; sắp xếp theo ngày đăng và độ ưu tiên.</li>
+      <li><b>Trạng thái</b>: đang tuyển / sắp hết hạn / đã đóng được gắn nhãn riêng.</li>
+      <li><b>Liên kết</b> tới trang chi tiết và nút ứng tuyển ngay trên danh sách.</li>
+    </ul>
+
+    <figure>
+      <img src="images/02-danh-sach-viec-lam.png" alt="Trang danh sách việc làm">
+      <figcaption>Danh sách việc làm kèm thanh tìm kiếm, bộ lọc khu sản xuất và phân trang.</figcaption>
+    </figure>
+
+    <figure class="shot--phone">
+      <img src="images/02b-danh-sach-mobile.png" alt="Danh sách việc làm trên điện thoại">
+      <figcaption>Khổ 390 px: bộ lọc thu gọn, mỗi tin là một thẻ dễ chạm.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ 4. ỨNG TUYỂN ============ -->
+  <section class="block">
+    <h2 class="sec"><span class="sec-no">4</span>Ứng tuyển trực tuyến</h2>
+    <p class="sec-lead">Nộp hồ sơ nhanh, không cần tạo tài khoản; hồ sơ chảy về trang quản trị.</p>
+
+    <div class="req">
+      <p>“Form thông tin cá nhân: họ tên, điện thoại, email. Lựa chọn vị trí ứng tuyển và nhập nội dung giới thiệu bản thân. Đính kèm CV theo định dạng được hệ thống hỗ trợ. Kiểm tra dữ liệu đầu vào và thông báo kết quả gửi hồ sơ. Lưu hồ sơ tập trung trong hệ thống quản trị.”</p>
+    </div>
+
+    <ul class="check">
+      <li><b>Form thông tin</b>: họ tên, điện thoại, email, năm sinh, giới tính, địa chỉ, số CCCD.</li>
+      <li><b>Chọn vị trí</b> theo danh mục 9 vị trí + <b>nơi muốn làm việc</b> (3 khu hoặc theo sắp xếp).</li>
+      <li><b>Đính kèm CV</b>: PDF, DOC, DOCX, JPG, PNG — tối đa 10 MB, có kiểm tra định dạng và dung lượng.</li>
+      <li><b>Kiểm tra dữ liệu</b> ngay tại ô sai và <b>thông báo kết quả</b> kèm mã hồ sơ sau khi gửi.</li>
+      <li><b>Lưu hồ sơ</b>: hồ sơ xuất hiện trong mục “Hồ sơ ứng viên” của trang quản trị (đã kiểm chứng).</li>
+    </ul>
+
+    <figure>
+      <img src="images/05-trang-ung-tuyen.png" alt="Trang đăng ký ứng tuyển">
+      <figcaption>Trang đăng ký ứng tuyển độc lập (không header/footer) — dùng khi chia sẻ link trực tiếp.</figcaption>
+    </figure>
+
+    <figure>
+      <img src="images/04-dialog-ung-tuyen.png" alt="Hộp thoại ứng tuyển mở từ trang chi tiết">
+      <figcaption>Hộp thoại ứng tuyển mở ngay trên trang chi tiết công việc — không rời trang đang đọc.</figcaption>
+    </figure>
+
+    <div class="pair">
+      <figure class="shot--phone">
+        <img src="images/05b-trang-ung-tuyen-mobile.png" alt="Trang ứng tuyển trên điện thoại">
+        <figcaption>Form trên điện thoại (390 px).</figcaption>
+      </figure>
+      <figure>
+        <img src="images/13-quan-tri-ho-so.png" alt="Danh sách hồ sơ trong trang quản trị">
+        <figcaption>Hồ sơ vừa nộp hiện ở đầu danh sách quản trị.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ 5. CHI TIẾT CÔNG VIỆC ============ -->
+  <section class="block">
+    <h2 class="sec"><span class="sec-no">5</span>Chi tiết công việc</h2>
+    <p class="sec-lead">Trang cung cấp đủ dữ liệu để ứng viên quyết định trước khi nộp.</p>
+
+    <div class="req">
+      <p>“Mô tả công việc, nhiệm vụ và trách nhiệm. Yêu cầu về trình độ, kinh nghiệm và kỹ năng. Mức lương, chế độ phúc lợi, thời gian và địa điểm làm việc. Số lượng tuyển dụng, ngày đăng và hạn nộp hồ sơ. Nút ứng tuyển nổi bật và thông tin liên hệ tuyển dụng. Chia sẻ tin qua Facebook, Zalo và sao chép liên kết.”</p>
+    </div>
+
+    <ul class="check">
+      <li><b>Mô tả công việc</b> chia theo nhiệm vụ, trách nhiệm rõ ràng.</li>
+      <li><b>Yêu cầu</b> trình độ, kinh nghiệm, kỹ năng; ghi rõ phần “được đào tạo”.</li>
+      <li><b>Thu nhập, phúc lợi, thời gian và địa điểm</b> làm việc thành khối riêng.</li>
+      <li><b>Số lượng, ngày đăng, hạn nộp</b> hiển thị cạnh nút ứng tuyển.</li>
+      <li><b>Nút ứng tuyển nổi bật</b> (thanh dính đáy trên điện thoại) + khối liên hệ tuyển dụng.</li>
+      <li><b>Chia sẻ</b> Facebook, Zalo, sao chép liên kết, mã QR và in tin.</li>
+    </ul>
+
+    <figure>
+      <img src="images/03-chi-tiet-cong-viec.png" alt="Trang chi tiết công việc">
+      <figcaption>Chi tiết công việc: mô tả, yêu cầu, thu nhập, hạn nộp và nút ứng tuyển.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ 6. VỀ CHÚNG TÔI ============ -->
+  <section class="block">
+    <h2 class="sec"><span class="sec-no">6</span>Về chúng tôi</h2>
+    <p class="sec-lead">Trang giới thiệu thương hiệu tuyển dụng và môi trường làm việc.</p>
+
+    <div class="req">
+      <p>“Giới thiệu tổng quan về doanh nghiệp và lĩnh vực hoạt động. Tầm nhìn, sứ mệnh, giá trị cốt lõi và định hướng phát triển. Hình ảnh nhà máy, văn phòng, đội ngũ nhân sự và môi trường làm việc.”</p>
+    </div>
+
+    <ul class="check">
+      <li><b>Tổng quan doanh nghiệp</b>: thành lập 2007, 3 khu sản xuất, 3.500 lao động, 8 triệu sản phẩm/năm.</li>
+      <li><b>Tầm nhìn — sứ mệnh — giá trị cốt lõi</b> trình bày thành khối riêng, dễ đọc.</li>
+      <li><b>Mốc phát triển</b> dạng timeline dọc từ 2007 tới nay.</li>
+      <li><b>Hình ảnh</b> nhà máy, xưởng may, hoạt động cộng đồng; chứng nhận SA8000, ISO 9001, OEKO-TEX, Higg.</li>
+    </ul>
+
+    <figure>
+      <img src="images/06-ve-chung-toi.png" alt="Trang giới thiệu về TEX-GIANG">
+      <figcaption>Trang “Về chúng tôi” kèm số liệu quy mô và timeline phát triển.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ 7. TIN TỨC ============ -->
+  <section class="block">
+    <h2 class="sec"><span class="sec-no">7</span>Tin tức nghề nghiệp</h2>
+    <p class="sec-lead">Hoạt động nội bộ, thông báo tuyển dụng, chia sẻ nghề nghiệp và sự kiện.</p>
+
+    <div class="req">
+      <p>“Hoạt động nội bộ, thông báo tuyển dụng, chia sẻ nghề nghiệp và sự kiện tuyển dụng. Admin quản trị được nội dung thêm, xóa, sửa tùy ý.”</p>
+    </div>
+
+    <ul class="check">
+      <li><b>Trang danh sách tin</b>: 1 bài nổi bật + lưới bài viết, lọc theo 8 chuyên mục, phân trang thật.</li>
+      <li><b>Trang chi tiết tin</b>: nội dung bài, ảnh minh hoạ, khối chia sẻ.</li>
+      <li><b>Quản trị nội dung</b>: thêm, sửa, xoá bài trong trang quản trị (mục 10).</li>
+      <li><b>Dữ liệu</b>: 15 bài minh hoạ đang hiển thị trên website.</li>
+    </ul>
+
+    <figure>
+      <img src="images/08-tin-tuc.png" alt="Trang tin tức nghề nghiệp">
+      <figcaption>Trang tin tức: bài nổi bật, 8 chuyên mục lọc, lưới 3 cột và phân trang.</figcaption>
+    </figure>
+
+    <figure class="shot--phone">
+      <img src="images/08b-tin-tuc-mobile.png" alt="Trang tin tức trên điện thoại">
+      <figcaption>Khổ 390 px: một cột, chuyên mục cuộn ngang.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ 8. TẠI SAO CHỌN ============ -->
+  <section class="block">
+    <h2 class="sec"><span class="sec-no">8</span>Tại sao chọn chúng tôi</h2>
+    <p class="sec-lead">Khu vực truyền tải giá trị khác biệt để tăng niềm tin.</p>
+
+    <div class="req">
+      <p>“Khu vực truyền tải những giá trị khác biệt của doanh nghiệp, giúp nâng cao niềm tin và thu hút ứng viên tiềm năng. Có thể trình bày 3–4 tiêu chí nổi bật như: Môi trường làm việc chuyên nghiệp, an toàn; Chính sách phúc lợi và chế độ đãi ngộ.”</p>
+    </div>
+
+    <ul class="check">
+      <li>Trình bày <b>4 nhóm tiêu chí</b>: thu nhập &amp; thưởng, môi trường làm việc, đào tạo &amp; thăng tiến, phúc lợi &amp; đời sống.</li>
+      <li>Mỗi tiêu chí có <b>số liệu hoặc dẫn chứng</b> thay vì khẩu hiệu chung.</li>
+      <li>Có <b>khối CTA</b> dẫn sang danh sách việc làm và form ứng tuyển.</li>
+    </ul>
+
+    <figure>
+      <img src="images/07-tai-sao-chon.png" alt="Trang tại sao chọn TEX-GIANG">
+      <figcaption>Trang “Tại sao chọn TEX-GIANG”: 4 nhóm tiêu chí kèm số liệu và chứng nhận.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ 9. LIÊN HỆ ============ -->
+  <section class="block">
+    <h2 class="sec"><span class="sec-no">9</span>Trang liên hệ</h2>
+    <p class="sec-lead">Thông tin bộ phận tuyển dụng và bản đồ đường đi.</p>
+
+    <div class="req">
+      <p>“Có đầy đủ thông tin bộ phận tuyển dụng, bảng đồ Maps…”</p>
+    </div>
+
+    <ul class="check">
+      <li><b>Thông tin tuyển dụng</b>: hotline (0273) 393 7274, email chung.doan@tex-giang.com.vn, giờ làm việc.</li>
+      <li><b>Địa chỉ 3 khu</b>: Tân Hương, Cái Lậy, Chợ Gạo kèm chỉ đường.</li>
+      <li><b>Bản đồ Maps</b> nhúng trực tiếp, bấm để mở Google Maps.</li>
+      <li><b>Kênh nhanh</b>: gọi điện, Zalo, gửi email, và link sang form ứng tuyển.</li>
+    </ul>
+
+    <div class="pair">
+      <figure>
+        <img src="images/09-lien-he.png" alt="Trang liên hệ">
+        <figcaption>Trang liên hệ: thông tin bộ phận tuyển dụng.</figcaption>
+      </figure>
+      <figure>
+        <img src="images/09b-lien-he-ban-do.png" alt="Bản đồ trên trang liên hệ">
+        <figcaption>Khối bản đồ Google Maps nhúng trong trang.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ 10. QUẢN TRỊ ============ -->
+  <section class="block">
+    <h2 class="sec"><span class="sec-no">10</span>Trang quản trị</h2>
+    <p class="sec-lead">Bộ phận nhân sự tự vận hành website, không cần sửa mã nguồn.</p>
+
+    <div class="req">
+      <p>“Quản lý tin tuyển dụng: tạo, sửa, sao chép, ẩn, đóng tin; thiết lập hạn nộp và trạng thái tuyển dụng. Quản lý hồ sơ ứng viên: xem thông tin, tải CV, tìm kiếm, lọc theo vị trí, ghi chú nội bộ và cập nhật trạng thái xử lý. Thống kê tuyển dụng: tổng số tin, số tin đang tuyển, số hồ sơ nhận được và thống kê cơ bản theo vị trí hoặc nguồn ứng viên khi có dữ liệu. Quản lý nội dung: cập nhật trang chủ, giới thiệu, tin tức, banner, thông tin liên hệ và các chuyên mục website. Quản trị hệ thống: đăng nhập, lưu dữ liệu.”</p>
+    </div>
+
+    <ul class="check">
+      <li><b>Đăng nhập</b> riêng cho quản trị, tách khỏi giao diện ứng viên.</li>
+      <li><b>Bảng điều khiển</b>: số tin đang tuyển, hồ sơ chờ xử lý, hồ sơ theo vị trí/khu, việc cần làm.</li>
+      <li><b>Quản lý tin</b>: tạo, sửa, sao chép, ẩn, đóng; đặt hạn nộp và trạng thái.</li>
+      <li><b>Quản lý hồ sơ</b>: xem chi tiết, tìm kiếm, lọc theo vị trí/khu/trạng thái, ghi chú nội bộ, cập nhật trạng thái, tải CV.</li>
+      <li><b>Quản lý nội dung</b>: trang chủ, giới thiệu, tin tức, banner, liên hệ, chuyên mục.</li>
+      <li><b>Cài đặt hệ thống</b>: thông tin công ty, hotline, email, phân trang, sao lưu dữ liệu demo.</li>
+    </ul>
+
+    <div class="pair">
+      <figure>
+        <img src="images/10-quan-tri-dang-nhap.png" alt="Trang đăng nhập quản trị">
+        <figcaption>Đăng nhập quản trị.</figcaption>
+      </figure>
+      <figure>
+        <img src="images/11-quan-tri-dashboard.png" alt="Bảng điều khiển quản trị">
+        <figcaption>Bảng điều khiển tuyển dụng.</figcaption>
+      </figure>
+    </div>
+
+    <div class="pair">
+      <figure>
+        <img src="images/12-quan-tri-tin-tuyen-dung.png" alt="Quản lý tin tuyển dụng">
+        <figcaption>Danh sách tin tuyển dụng kèm trạng thái.</figcaption>
+      </figure>
+      <figure>
+        <img src="images/12b-quan-tri-tao-tin.png" alt="Form tạo tin tuyển dụng">
+        <figcaption>Form tạo/sửa tin tuyển dụng.</figcaption>
+      </figure>
+    </div>
+
+    <div class="pair">
+      <figure>
+        <img src="images/13-quan-tri-ho-so.png" alt="Danh sách hồ sơ ứng viên">
+        <figcaption>Danh sách hồ sơ ứng viên, lọc theo trạng thái.</figcaption>
+      </figure>
+      <figure>
+        <img src="images/13b-quan-tri-chi-tiet-ho-so.png" alt="Chi tiết hồ sơ ứng viên">
+        <figcaption>Chi tiết hồ sơ: thông tin, ghi chú nội bộ, đổi trạng thái.</figcaption>
+      </figure>
+    </div>
+
+    <div class="pair">
+      <figure>
+        <img src="images/14-quan-tri-noi-dung.png" alt="Quản lý nội dung website">
+        <figcaption>Quản lý nội dung website.</figcaption>
+      </figure>
+      <figure>
+        <img src="images/15-quan-tri-cai-dat.png" alt="Cài đặt hệ thống">
+        <figcaption>Cài đặt hệ thống và dữ liệu demo.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ 11. GHI CHÚ ============ -->
+  <section class="block">
+    <h2 class="sec"><span class="sec-no">Ⅺ</span>Ghi chú triển khai</h2>
+    <p class="sec-lead">Phần đã hoàn thành và phần cần máy chủ khi đưa lên Internet.</p>
+
+    <h3>Đã hoàn thành (chạy được ngay trên trình duyệt)</h3>
+    <ul class="check">
+      <li>Toàn bộ giao diện 13 trang public + 10 trang quản trị, thống nhất một bộ nhận diện.</li>
+      <li>Tìm kiếm, lọc, phân trang, trạng thái tin, hộp thoại ứng tuyển, chia sẻ &amp; mã QR.</li>
+      <li>Form ứng tuyển có kiểm tra dữ liệu, đính kèm CV, thông báo mã hồ sơ.</li>
+      <li>Quản trị đọc được hồ sơ mới nộp và hiển thị trong danh sách ứng viên.</li>
+      <li>Kiểm tra hiển thị 1440 / 768 / 390 px: không có trang nào bị tràn ngang.</li>
+    </ul>
+
+    <h3>Cần bổ sung khi chạy thật (cần máy chủ)</h3>
+    <table>
+      <thead>
+        <tr><th>Hạng mục</th><th>Hiện tại (demo)</th><th>Khi đưa lên Internet</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Lưu hồ sơ, tin tuyển dụng, bài viết</td>
+          <td>Lưu tạm trong trình duyệt</td>
+          <td>Cơ sở dữ liệu (MySQL/SQL Server) + API</td>
+        </tr>
+        <tr>
+          <td>Đăng nhập quản trị</td>
+          <td>Màn hình đăng nhập demo</td>
+          <td>Tài khoản thật, phân quyền, đổi mật khẩu</td>
+        </tr>
+        <tr>
+          <td>Tải CV</td>
+          <td>Chọn tệp và kiểm tra tại trình duyệt</td>
+          <td>Lưu tệp trên máy chủ, chống mã độc, giới hạn dung lượng</td>
+        </tr>
+        <tr>
+          <td>Thông báo cho ứng viên và nhân sự</td>
+          <td>Thông báo trên màn hình</td>
+          <td>Email/Zalo OA tự động khi có hồ sơ mới</td>
+        </tr>
+        <tr>
+          <td>Tên miền và hosting</td>
+          <td>Chạy nội bộ</td>
+          <td>Trỏ tên miền, HTTPS, sao lưu định kỳ</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note">
+      <b>Đề xuất bước tiếp theo:</b> chốt nội dung ảnh và bài viết thật (thay ảnh minh hoạ hiện tại), sau đó nối phần
+      lưu hồ sơ + đăng nhập vào máy chủ. Thời gian dự kiến cho phần máy chủ: 5–7 ngày làm việc.
+    </div>
+
+    <p class="footnote">
+      Báo cáo lập ngày 03/11/2026. Ảnh chụp lấy trực tiếp từ bản dựng tại thời điểm lập báo cáo;
+      nếu giao diện thay đổi sau ngày này, ảnh cần chụp lại.
+    </p>
+  </section>
+
+</div>
+</body>
+</html>
