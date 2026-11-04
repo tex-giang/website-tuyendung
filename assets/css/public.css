@@ -1145,3 +1145,53 @@ body.has-dialog { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .urgent-dialog[open] { animation: none; }
 }
+
+/* =====================================================================
+   MENU MOBILE — nổi dưới header, trượt từ trên xuống, không đẩy nội dung
+   ===================================================================== */
+@media (max-width: 1023px) {
+  #mobile-menu.nav-mobile {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    max-height: 78dvh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: #fff;
+    border-top: 1px solid var(--tg-line);
+    box-shadow: 0 26px 40px -24px rgba(6, 38, 29, .5);
+    transform: translateY(-10px);
+    opacity: 0;
+    visibility: hidden;
+    transition: transform .28s cubic-bezier(.22, .61, .36, 1), opacity .2s ease, visibility 0s linear .28s;
+  }
+  #mobile-menu.nav-mobile.is-open {
+    transform: none;
+    opacity: 1;
+    visibility: visible;
+    transition: transform .28s cubic-bezier(.22, .61, .36, 1), opacity .2s ease;
+  }
+  #mobile-menu.nav-mobile.hidden { display: none; }
+}
+
+@media (max-width: 1023px) and (prefers-reduced-motion: reduce) {
+  #mobile-menu.nav-mobile,
+  #mobile-menu.nav-mobile.is-open { transition: none; }
+}
+
+/* ---------- Bản đồ nhúng trong thẻ khu vực liên hệ ---------- */
+.map-frame {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--tg-line);
+  border-radius: 10px;
+  background: #eef3f0;
+}
+.map-frame iframe {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border: 0;
+}

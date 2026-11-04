@@ -6,23 +6,48 @@
 const TG_ASSET_BASE = new URL('../images/', document.currentScript.src).href;
 
 document.addEventListener('DOMContentLoaded', function () {
-  // 1. Mobile Navigation Toggle
+  // 1. Mobile Navigation Toggle — menu nổi dưới header, trượt từ trên xuống,
+  //    không đẩy nội dung phía dưới.
+  const MENU_MS = 280;
   const mobileMenuBtn = document.getElementById('mobile-menu-btn');
   const mobileMenu = document.getElementById('mobile-menu');
+  let menuCloseTimer = null;
+
+  const isMenuOpen = () => !!mobileMenu && mobileMenu.classList.contains('is-open');
+
+  const setMenuAria = open => {
+    if (!mobileMenuBtn) return;
+    mobileMenuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    mobileMenuBtn.setAttribute('aria-label', open ? 'Đóng menu' : 'Mở menu');
+  };
+
+  const closeMenu = (restoreFocus = true) => {
+    if (!mobileMenu || mobileMenu.classList.contains('hidden')) return;
+    mobileMenu.classList.remove('is-open');
+    setMenuAria(false);
+    if (menuCloseTimer) clearTimeout(menuCloseTimer);
+    menuCloseTimer = setTimeout(() => {
+      if (!mobileMenu.classList.contains('is-open')) mobileMenu.classList.add('hidden');
+      menuCloseTimer = null;
+    }, MENU_MS);
+    if (restoreFocus && mobileMenuBtn) mobileMenuBtn.focus();
+  };
+
   if (mobileMenuBtn && mobileMenu) {
     mobileMenuBtn.addEventListener('click', function () {
-      mobileMenu.classList.toggle('hidden');
-      const isExpanded = !mobileMenu.classList.contains('hidden');
-      mobileMenuBtn.setAttribute('aria-expanded', isExpanded);
-      mobileMenuBtn.setAttribute('aria-label', isExpanded ? 'Đóng menu' : 'Mở menu');
+      if (isMenuOpen()) { closeMenu(); return; }
+      if (menuCloseTimer) { clearTimeout(menuCloseTimer); menuCloseTimer = null; }
+      mobileMenu.classList.remove('hidden');
+      void mobileMenu.offsetWidth; // ép reflow để transition chạy từ trạng thái đóng
+      mobileMenu.classList.add('is-open');
+      setMenuAria(true);
     });
   }
+
   document.addEventListener('keydown', event => {
-    if (event.key === 'Escape' && mobileMenu && !mobileMenu.classList.contains('hidden')) {
-      mobileMenu.classList.add('hidden');
-      mobileMenuBtn?.setAttribute('aria-expanded', 'false');
-      mobileMenuBtn?.setAttribute('aria-label', 'Mở menu');
-      mobileMenuBtn?.focus();
+    if (event.key === 'Escape' && isMenuOpen()) {
+      event.preventDefault();
+      closeMenu(true);
     }
   });
 
