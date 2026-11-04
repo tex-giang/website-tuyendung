@@ -76,32 +76,86 @@
   <a class="skip-link" href="#main-content">Đến nội dung chính</a>
   <main id="main-content">
 
-    <!-- HERO -->
-    <section class="pt-24 lg:pt-28 2xl:pt-32">
-      <div class="tg-container flex flex-col items-center text-center">
-        <h1 class="max-w-[1000px] text-[clamp(2rem,5.5vw,5rem)] font-medium leading-[1.08] tracking-[-0.025em] text-ink">
-          Một công việc ổn định.<br><span class="text-accent">Thu nhập xứng đáng.</span>
-        </h1>
+    <!-- HERO: slider ảnh ngay dưới header, chữ và CTA bên dưới -->
+    <section>
+      <div class="tg-container">
 
-        <p class="mt-6 max-w-[660px] text-[18px] leading-[1.6] text-muted">
-          Cổng tuyển dụng chính thức của TEX-GIANG — may mặc xuất khẩu tại 3 khu sản xuất Tân Hương, Cái Lậy, Chợ Gạo (Đồng Tháp).
-        </p>
+        <!-- SLIDER: tự chuyển 5s, có nút trước/sau và chấm chọn ảnh -->
+        <div class="hero-slider" data-hero-slider aria-roledescription="carousel" aria-label="Hình ảnh nhà máy và môi trường làm việc TEX-GIANG">
+          <div class="hero-slider__viewport">
+            <div class="hero-slider__track" data-slider-track>
+              <div class="hero-slider__slide" data-slide>
+                <img class="hero-slider__img hero-slider__img--banner"
+                     src="assets/images/banner-texgiang.webp"
+                     srcset="assets/images/banner-texgiang-800.webp 800w, assets/images/banner-texgiang.webp 2048w"
+                     sizes="(max-width: 768px) 100vw, 1200px"
+                     alt="Cổng Nhà máy Tân Hương 2 — Công ty Cổ phần TEX-GIANG, KCN Tân Hương, Đồng Tháp"
+                     width="2048" height="768" fetchpriority="high">
+              </div>
 
-        <div class="mt-10 flex flex-wrap items-center justify-center gap-x-7 gap-y-3">
-          <a href="jobs.html" class="tg-btn tg-btn--primary">Xem vị trí đang tuyển</a>
-          <a href="apply.html" class="tg-link">Nộp hồ sơ trong 2 phút <img src="assets/images/icons/arrow-right.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[14px]"></a>
+              <div class="hero-slider__slide" data-slide>
+                <img class="hero-slider__img" src="assets/images/company/cai-lay.webp"
+                     alt="Chi nhánh TEX-GIANG tại Cái Lậy, tỉnh Đồng Tháp"
+                     width="1600" height="1200" loading="lazy">
+                <span class="hero-slider__shade" aria-hidden="true"></span>
+                <div class="hero-slider__caption">
+                  <p class="hero-slider__eyebrow">Chi nhánh Cái Lậy</p>
+                  <p class="hero-slider__title">Một trong ba khu sản xuất của TEX-GIANG tại Đồng Tháp</p>
+                </div>
+              </div>
+
+              <div class="hero-slider__slide" data-slide>
+                <img class="hero-slider__img" src="assets/images/company/training.webp"
+                     alt="Đào tạo nghề may cho người lao động mới tại TEX-GIANG"
+                     width="1280" height="960" loading="lazy">
+                <span class="hero-slider__shade" aria-hidden="true"></span>
+                <div class="hero-slider__caption">
+                  <p class="hero-slider__eyebrow">Đào tạo nghề</p>
+                  <p class="hero-slider__title">Học nghề may miễn phí, có trợ cấp lương học việc</p>
+                </div>
+              </div>
+
+              <div class="hero-slider__slide" data-slide>
+                <img class="hero-slider__img" src="assets/images/company/team-event.webp"
+                     alt="Hoạt động gắn kết cán bộ công nhân viên TEX-GIANG"
+                     width="960" height="637" loading="lazy">
+                <span class="hero-slider__shade" aria-hidden="true"></span>
+                <div class="hero-slider__caption">
+                  <p class="hero-slider__eyebrow">Con người</p>
+                  <p class="hero-slider__title">Môi trường làm việc gắn kết, ổn định lâu dài</p>
+                </div>
+              </div>
+            </div>
+
+            <button type="button" class="hero-slider__btn hero-slider__btn--prev" data-slider-prev aria-label="Ảnh trước">
+              <img src="assets/images/icons/arrow-right.svg" alt="" aria-hidden="true" width="20" height="20">
+            </button>
+            <button type="button" class="hero-slider__btn hero-slider__btn--next" data-slider-next aria-label="Ảnh tiếp theo">
+              <img src="assets/images/icons/arrow-right.svg" alt="" aria-hidden="true" width="20" height="20">
+            </button>
+            <div class="hero-slider__dots" data-slider-dots role="group" aria-label="Chọn ảnh"></div>
+          </div>
+          <p class="sr-only" data-slider-live aria-live="polite"></p>
         </div>
 
-        <figure class="mt-20 w-full lg:mt-24">
-          <img src="assets/images/banner-texgiang.webp" srcset="assets/images/banner-texgiang-800.webp 800w, assets/images/banner-texgiang.webp 2048w" sizes="(max-width: 768px) 100vw, 1200px"
-               alt="Cổng Nhà máy Tân Hương 2 — Công ty Cổ phần TEX-GIANG, KCN Tân Hương, Đồng Tháp"
-               width="2048" height="768" fetchpriority="high"
-               class="w-full rounded-media">
-        </figure>
+        <div class="mt-10 flex flex-col items-center text-center lg:mt-14">
+          <h1 class="max-w-[1000px] text-[clamp(2rem,5.5vw,5rem)] font-medium leading-[1.08] tracking-[-0.025em] text-ink">
+            Một công việc ổn định.<br><span class="text-accent">Thu nhập xứng đáng.</span>
+          </h1>
 
-        <p class="mt-5 text-[14px] text-muted">
-          Đang tuyển <strong class="font-medium text-body">7 vị trí</strong><span class="max-md:hidden"> · Cập nhật 30/10/2026</span>
-        </p>
+          <p class="mt-6 max-w-[660px] text-[18px] leading-[1.6] text-muted">
+            Cổng tuyển dụng chính thức của TEX-GIANG — may mặc xuất khẩu tại 3 khu sản xuất Tân Hương, Cái Lậy, Chợ Gạo (Đồng Tháp).
+          </p>
+
+          <div class="mt-10 flex flex-wrap items-center justify-center gap-x-7 gap-y-3">
+            <a href="jobs.html" class="tg-btn tg-btn--primary">Xem vị trí đang tuyển</a>
+            <a href="apply.html" class="tg-link">Nộp hồ sơ trong 2 phút <img src="assets/images/icons/arrow-right.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[14px]"></a>
+          </div>
+
+          <p class="mt-5 text-[14px] text-muted">
+            Đang tuyển <strong class="font-medium text-body">7 vị trí</strong><span class="max-md:hidden"> · Cập nhật 30/10/2026</span>
+          </p>
+        </div>
       </div>
     </section>
 
@@ -397,5 +451,8 @@
   <script src="assets/js/demo-store.js"></script>
   <script src="assets/js/apply-form.js"></script>
   <script src="assets/js/apply-dialog.js"></script>
+  <script src="assets/js/jobs-data.js"></script>
+  <script src="assets/js/home-slider.js"></script>
+  <script src="assets/js/home-urgent-dialog.js"></script>
 </body>
 </html>

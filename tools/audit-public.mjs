@@ -15,11 +15,20 @@ const context = await browser.newContext();
 const page = await context.newPage();
 let runtime = [];
 page.on('pageerror', error => runtime.push(error.message));
+// Dialog "tuyển gấp" tự mở ở trang chủ: đóng trước khi đo/kiểm tra để không che trang.
+async function dismissUrgentDialog() {
+  try {
+    await page.waitForSelector('#urgent-dialog[open]', { timeout: 2500 });
+    await page.locator('#urgent-dialog [data-urgent-close]').first().click();
+    await page.waitForFunction(() => !document.getElementById('urgent-dialog') || !document.getElementById('urgent-dialog').open);
+  } catch (_) {}
+}
 for (const name of pages) {
   for (const width of widths) {
     runtime = [];
     await page.setViewportSize({ width, height: width < 600 ? 844 : 1000 });
     await page.goto(`${base}/${name}.html`, { waitUntil: 'networkidle' });
+    if (name === 'index') await dismissUrgentDialog();
     await page.evaluate(() => document.fonts.ready);
     await page.evaluate(async () => {
       document.querySelectorAll('img[loading="lazy"]').forEach(img => { img.loading = 'eager'; });
@@ -38,6 +47,7 @@ for (const name of pages) {
         missingImages: [...document.images].filter(img => img.id !== 'qr-code-img' && (!img.complete || !img.naturalWidth)).map(img => img.getAttribute('src')),
         duplicateIds: [...document.querySelectorAll('[id]')].map(el => el.id).filter((id,i,all) => all.indexOf(id) !== i),
         clipped: [...document.querySelectorAll('main h1,main h2,main p,main label,main .tg-btn')].filter(el => {
+          if (el.closest('[data-hero-slider]')) return false; // slide ngoài khung của carousel là chủ ý
           const r = el.getBoundingClientRect(); return r.width && (r.left < -1 || r.right > innerWidth + 1);
         }).map(el => el.textContent.trim().slice(0,60))
       };
@@ -123,6 +133,7 @@ await check('apply CTA on job detail opens dialog with prefilled vacancy', async
 });
 await check('apply dialog from index: validation, demo success, no navigation', async () => {
   await page.goto(`${base}/index.html`);
+  await dismissUrgentDialog();
   await page.locator('a[href^="apply.html?job="]').first().click();
   await page.waitForSelector('#apply-dialog[open]');
   assert.equal(new URL(page.url()).pathname.endsWith('/index.html'), true);
@@ -153,6 +164,43 @@ await check('apply dialog from index: validation, demo success, no navigation', 
   await page.locator('.apply-dialog__close').click();
   await page.waitForFunction(() => !document.getElementById('apply-dialog').open);
 });
+await check('homepage urgent dialog lists flagged jobs and hands off to apply dialog', async () => {
+  await page.setViewportSize({width:1440,height:1000});
+  await page.goto(`${base}/index.html`);
+  await page.waitForSelector('#urgent-dialog[open]', { timeout: 4000 });
+  assert.equal(await page.locator('#urgent-dialog article').count(), 3);
+  assert.match(await page.locator('#urgent-dialog article').first().innerText(), /Tuyển gấp/);
+  await page.locator('#urgent-dialog [data-urgent-apply]').first().click();
+  await page.waitForSelector('#apply-dialog[open]', { timeout: 4000 });
+  assert.equal(await page.locator('#urgent-dialog').evaluate(el => el.open), false);
+  assert.notEqual(await page.locator('#apply-position').inputValue(), '');
+  await page.locator('.apply-dialog__close').click();
+  await page.waitForFunction(() => !document.getElementById('apply-dialog').open);
+});
+await check('home slider: dots, next/prev and 5s autoplay', async () => {
+  await page.setViewportSize({width:1440,height:1000});
+  await page.goto(`${base}/index.html`);
+  await dismissUrgentDialog();
+  await page.waitForSelector('[data-hero-slider] .hero-slider__dot');
+  assert.equal(await page.locator('[data-hero-slider] .hero-slider__dot').count(), 4);
+  const trackX = () => page.locator('[data-slider-track]').evaluate(el => {
+    const match = /translateX\((-?[\d.]+)%\)/.exec(el.style.transform);
+    return match ? Number(match[1]) : 0;
+  });
+  assert.equal(await trackX(), 0);
+  await page.locator('[data-slider-next]').click();
+  await page.waitForTimeout(800);
+  assert.equal(await trackX(), -100);
+  await page.locator('[data-slider-prev]').click();
+  await page.waitForTimeout(800);
+  assert.equal(await trackX(), 0);
+  assert.equal(await page.locator('[data-hero-slider] .hero-slider__dot[aria-current="true"]').count(), 1);
+  // Tự chuyển sau ~5s khi không rê chuột vào slider.
+  await page.evaluate(() => document.activeElement && document.activeElement.blur());
+  await page.mouse.move(8, 960);
+  await page.waitForTimeout(5400);
+  assert.equal(await trackX(), -100);
+});
 await check('inline required fields, invalid file, CV remove, demo submit', async () => {
   await page.goto(`${base}/apply.html`);
   await page.waitForSelector('#online-apply-form');
@@ -181,6 +229,7 @@ await check('legacy search redirect preserves query',async () => {
 await check('file URL and reduced motion', async () => {
   await page.emulateMedia({reducedMotion:'reduce'});
   await page.goto(new URL('file:///' + root.replaceAll('\\','/') + '/index.html').href);
+  await dismissUrgentDialog();
   assert.equal(await page.locator('h1').isVisible(),true);
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),true);
   // Dialog ứng tuyển phải chạy được khi mở site trực tiếp bằng file://
