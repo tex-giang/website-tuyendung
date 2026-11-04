@@ -52,6 +52,21 @@
     ].join('\n');
   }
 
+  var STORAGE_KEY = 'texgiang_urgent_hide_date';
+
+  function todayKey() {
+    var now = new Date();
+    return now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+  }
+
+  function hiddenToday() {
+    try { return window.localStorage.getItem(STORAGE_KEY) === todayKey(); } catch (_) { return false; }
+  }
+
+  function hideForToday() {
+    try { window.localStorage.setItem(STORAGE_KEY, todayKey()); } catch (_) {}
+  }
+
   var dialogMarkup = [
     '<div class="flex max-h-[min(88vh,780px)] w-full flex-col overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-black/5">',
     '  <header class="relative shrink-0 overflow-hidden bg-gradient-to-br from-[#087A55] via-[#08674A] to-[#0B223D] px-5 py-5 text-white sm:px-7 sm:py-6">',
@@ -70,9 +85,15 @@
     '    </div>',
     '  </header>',
     '  <div class="flex-1 space-y-3 overflow-y-auto px-4 py-4 sm:px-6">' + jobs.map(rowMarkup).join('') + '</div>',
-    '  <footer class="flex shrink-0 items-center justify-between gap-3 border-t border-line bg-surface/70 px-4 py-3 sm:px-6">',
+    '  <footer class="flex shrink-0 flex-wrap items-center justify-between gap-3 border-t border-line bg-surface/70 px-4 py-3 sm:px-6">',
     '    <a href="jobs.html" class="text-[15px] font-medium text-body transition-colors hover:text-accent">Xem tất cả vị trí →</a>',
-    '    <button type="button" class="tg-btn tg-btn--ghost h-10 px-4 text-[15px]" data-urgent-close>Để sau</button>',
+    '    <div class="flex flex-wrap items-center gap-3">',
+    '      <label class="flex cursor-pointer items-center gap-2 text-[13px] text-muted">',
+    '        <input type="checkbox" data-urgent-dont-show class="h-4 w-4 rounded border-line text-accent focus:ring-accent">',
+    '        <span>Không hiển thị lại hôm nay</span>',
+    '      </label>',
+    '      <button type="button" class="tg-btn tg-btn--ghost h-10 px-4 text-[15px]" data-urgent-later>Để sau</button>',
+    '    </div>',
     '  </footer>',
     '</div>'
   ].join('\n');
@@ -98,6 +119,13 @@
   }
 
   dialog.addEventListener('click', function (event) {
+    // "Để sau": chỉ lưu ẩn trong hôm nay nếu người dùng đã tick ô "Không hiển thị lại".
+    if (event.target.closest('[data-urgent-later]')) {
+      var dontShow = dialog.querySelector('[data-urgent-dont-show]');
+      if (dontShow && dontShow.checked) hideForToday();
+      close();
+      return;
+    }
     if (event.target.closest('[data-urgent-close]')) { close(); return; }
     var applyButton = event.target.closest('[data-urgent-apply]');
     if (applyButton) {
@@ -120,7 +148,9 @@
   });
 
   // Tự mở khi vào trang chủ (đợi giao diện ổn định một nhịp).
-  window.setTimeout(open, 700);
+  // Đã tick "Không hiển thị lại" và bấm "Để sau" trong hôm nay thì bỏ qua;
+  // sang ngày khác tự hiện lại.
+  if (!hiddenToday()) window.setTimeout(open, 700);
 
   window.TGUrgentDialog = { open: open, close: close };
 })();

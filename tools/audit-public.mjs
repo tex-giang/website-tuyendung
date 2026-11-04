@@ -47,7 +47,7 @@ for (const name of pages) {
         missingImages: [...document.images].filter(img => img.id !== 'qr-code-img' && (!img.complete || !img.naturalWidth)).map(img => img.getAttribute('src')),
         duplicateIds: [...document.querySelectorAll('[id]')].map(el => el.id).filter((id,i,all) => all.indexOf(id) !== i),
         clipped: [...document.querySelectorAll('main h1,main h2,main p,main label,main .tg-btn')].filter(el => {
-          if (el.closest('[data-hero-slider]')) return false; // slide ngoài khung của carousel là chủ ý
+          if (el.closest('[data-hero-slider]') || el.closest('[data-job-slider]')) return false; // slide ngoài khung của carousel là chủ ý
           const r = el.getBoundingClientRect(); return r.width && (r.left < -1 || r.right > innerWidth + 1);
         }).map(el => el.textContent.trim().slice(0,60))
       };
@@ -177,6 +177,27 @@ await check('homepage urgent dialog lists flagged jobs and hands off to apply di
   await page.locator('.apply-dialog__close').click();
   await page.waitForFunction(() => !document.getElementById('apply-dialog').open);
 });
+await check('urgent dialog hide-today checkbox saves for today only', async () => {
+  await page.setViewportSize({width:1440,height:1000});
+  await page.goto(`${base}/index.html`);
+  await page.evaluate(() => { try { localStorage.removeItem('texgiang_urgent_hide_date'); } catch (_) {} });
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForSelector('#urgent-dialog[open]', { timeout: 4000 });
+  await page.locator('#urgent-dialog [data-urgent-dont-show]').check();
+  await page.locator('#urgent-dialog [data-urgent-later]').click();
+  await page.waitForFunction(() => !document.getElementById('urgent-dialog').open);
+  assert.ok(await page.evaluate(() => localStorage.getItem('texgiang_urgent_hide_date')));
+  // Cùng ngày: vào lại trang chủ không tự mở.
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForTimeout(1400);
+  assert.equal(await page.locator('#urgent-dialog[open]').count(), 0);
+  // Giả lập sang ngày khác: dialog hiện lại.
+  await page.evaluate(() => localStorage.setItem('texgiang_urgent_hide_date', '2000-01-01'));
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForSelector('#urgent-dialog[open]', { timeout: 4000 });
+  await dismissUrgentDialog();
+  await page.evaluate(() => { try { localStorage.removeItem('texgiang_urgent_hide_date'); } catch (_) {} });
+});
 await check('home slider: dots, next/prev and 5s autoplay', async () => {
   await page.setViewportSize({width:1440,height:1000});
   await page.goto(`${base}/index.html`);
@@ -200,6 +221,42 @@ await check('home slider: dots, next/prev and 5s autoplay', async () => {
   await page.mouse.move(8, 960);
   await page.waitForTimeout(5400);
   assert.equal(await trackX(), -100);
+});
+await check('home job slider: pages of 3, dots and next/prev', async () => {
+  await page.setViewportSize({width:1440,height:1000});
+  await page.goto(`${base}/index.html`);
+  await dismissUrgentDialog();
+  await page.waitForSelector('[data-job-slider] .job-slider__track');
+  // 7 vị trí, 3 thẻ/trang => 3 trang.
+  assert.equal(await page.locator('[data-job-slider] .job-slider__dot').count(), 3);
+  assert.equal(await page.locator('[data-job-slider] .job-slider__page').count(), 3);
+  assert.equal(await page.locator('[data-job-slider] .job-slider__page').first().locator('.job-card').count(), 3);
+  const jobX = () => page.locator('[data-job-track]').evaluate(el => {
+    const match = /translateX\((-?[\d.]+)%\)/.exec(el.style.transform);
+    return match ? Number(match[1]) : 0;
+  });
+  assert.equal(await jobX(), 0);
+  assert.equal(await page.locator('[data-job-prev]').isDisabled(), true);
+  await page.locator('[data-job-next]').click();
+  await page.waitForTimeout(650);
+  assert.equal(await jobX(), -100);
+  await page.locator('[data-job-dot]').nth(2).click();
+  await page.waitForTimeout(650);
+  assert.equal(await jobX(), -200);
+  assert.equal(await page.locator('[data-job-next]').isDisabled(), true);
+  await page.locator('[data-job-prev]').click();
+  await page.waitForTimeout(650);
+  assert.equal(await jobX(), -100);
+  // Kéo chuột trên desktop cũng chuyển trang.
+  await page.evaluate(() => document.querySelector('[data-job-slider]').scrollIntoView({ block: 'center' }));
+  await page.waitForTimeout(250);
+  const sliderBox = await page.locator('.job-slider__viewport').boundingBox();
+  await page.mouse.move(sliderBox.x + sliderBox.width * 0.8, sliderBox.y + sliderBox.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(sliderBox.x + sliderBox.width * 0.2, sliderBox.y + sliderBox.height / 2, { steps: 10 });
+  await page.mouse.up();
+  await page.waitForTimeout(650);
+  assert.equal(await jobX(), -200);
 });
 await check('inline required fields, invalid file, CV remove, demo submit', async () => {
   await page.goto(`${base}/apply.html`);

@@ -107,7 +107,8 @@ E:\websitetuyendung\
    - Đăng nhập quản trị HR: `admin/login.html` &rarr; Nhấn "Đăng Nhập Hệ Thống" để vào `admin/dashboard.html`.
    - Nộp hồ sơ: bấm **Ứng tuyển** ở bất kỳ trang nào để mở dialog ứng tuyển ngay tại chỗ, không rời trang. Mở trực tiếp `apply.html` vẫn có form dạng trang đầy đủ (dùng khi cần link trực tiếp hoặc trình duyệt không hỗ trợ `<dialog>`).
    - Form ứng tuyển độc lập: `ung-tuyen.html` — trang riêng có banner, chỉ 4 ô (họ tên, số điện thoại, vị trí tuyển dụng, nơi muốn làm việc), không đi qua dialog; hồ sơ gửi vào hàng chờ demo và hiện trong admin.
-   - Trang chủ: slider ảnh tự chuyển mỗi 5 giây (nút trước/sau, chấm chọn, vuốt trên mobile) và dialog **Tuyển gấp** tự mở khi vào trang, liệt kê vị trí theo status `urgent` / `hot` / `expiring`; bấm "Ứng tuyển ngay" mở dialog ứng tuyển đã điền sẵn vị trí.
+   - Trang chủ: slider ảnh tự chuyển mỗi 5 giây (nút trước/sau, chấm chọn, vuốt trên mobile) và dialog **Tuyển gấp** tự mở khi vào trang, liệt kê vị trí theo status `urgent` / `hot` / `expiring`; bấm "Ứng tuyển ngay" mở dialog ứng tuyển đã điền sẵn vị trí. Dialog có ô **Không hiển thị lại hôm nay** — tick rồi bấm "Để sau" thì hết ngày mới hiện lại (lưu theo ngày trong localStorage).
+ - Mục **Vị trí đang tuyển** ở trang chủ là slider dạng product lấy dữ liệu từ `assets/js/jobs-data.js` (bỏ tin đã đóng): desktop 3 thẻ/trang, tablet 2, mobile 1; có nút trước/sau, chấm trang, kéo chuột trên desktop và vuốt trên mobile.
 3. **Mở qua máy chủ cục bộ (khuyến nghị cho trải nghiệm mượt nhất):**
    - Với VS Code: Cài extension *Live Server*, nhấn chuột phải chọn *Open with Live Server*.
    - Với Python: Chạy lệnh `python -m http.server 8080` trong thư mục `E:\websitetuyendung`.

@@ -1,0 +1,16 @@
+﻿import { chromium } from "playwright";
+const browser = await chromium.launch({ executablePath: "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe", headless: true });
+const page = await (await browser.newContext({ viewport: { width: 1440, height: 1000 } })).newPage();
+const errors = []; page.on("pageerror", e => errors.push(e.message));
+await page.goto("http://127.0.0.1:4173/index.html", { waitUntil: "networkidle" });
+await page.waitForSelector("#urgent-dialog[open]", { timeout: 4000 }).then(() => page.locator("#urgent-dialog [data-urgent-close]").first().click()).catch(() => {});
+await page.waitForTimeout(300);
+const links = await page.locator('a[href^="apply.html?job="]').count();
+console.log("apply?job links:", links);
+const link = page.locator('a[href^="apply.html?job="]').first();
+console.log("href:", await link.getAttribute("href"), "visible:", await link.isVisible());
+await link.click();
+await page.waitForTimeout(800);
+console.log("apply dialog open:", await page.locator("#apply-dialog").evaluate(el => el ? el.open : "missing").catch(e => "ERR"));
+console.log("errors:", errors.length ? errors : "none");
+await browser.close();

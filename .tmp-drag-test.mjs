@@ -1,0 +1,32 @@
+﻿import { chromium } from "playwright";
+const browser = await chromium.launch({ executablePath: "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe", headless: true });
+const page = await (await browser.newContext({ viewport: { width: 1440, height: 1000 } })).newPage();
+const errors = []; page.on("pageerror", e => errors.push(e.message));
+await page.goto("http://127.0.0.1:4173/index.html", { waitUntil: "networkidle" });
+await page.waitForSelector("#urgent-dialog[open]", { timeout: 4000 }).then(() => page.locator("#urgent-dialog [data-urgent-close]").first().click()).catch(() => {});
+await page.waitForTimeout(300);
+const trackX = () => page.locator("[data-job-track]").evaluate(el => { const m = /translateX\((-?[\d.]+)%\)/.exec(el.style.transform); return m ? Number(m[1]) : 0; });
+const box = await page.locator(".job-slider__viewport").boundingBox();
+console.log("start x:", await trackX(), "url:", page.url());
+await page.mouse.move(box.x + box.width * 0.8, box.y + box.height / 2);
+await page.mouse.down();
+await page.mouse.move(box.x + box.width * 0.2, box.y + box.height / 2, { steps: 12 });
+await page.mouse.up();
+await page.waitForTimeout(750);
+console.log("after drag left x:", await trackX(), "url:", page.url());
+// drag right back
+await page.mouse.move(box.x + box.width * 0.2, box.y + box.height / 2);
+await page.mouse.down();
+await page.mouse.move(box.x + box.width * 0.8, box.y + box.height / 2, { steps: 12 });
+await page.mouse.up();
+await page.waitForTimeout(750);
+console.log("after drag right x:", await trackX(), "url:", page.url());
+// small drag should NOT change page and should still allow click
+await page.mouse.move(box.x + box.width * 0.5, box.y + box.height / 2);
+await page.mouse.down();
+await page.mouse.move(box.x + box.width * 0.5 - 10, box.y + box.height / 2, { steps: 3 });
+await page.mouse.up();
+await page.waitForTimeout(400);
+console.log("after small drag x:", await trackX(), "url:", page.url());
+console.log("errors:", errors.length ? errors : "none");
+await browser.close();

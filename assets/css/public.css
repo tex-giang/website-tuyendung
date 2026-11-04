@@ -1195,3 +1195,65 @@ body.has-dialog { overflow: hidden; }
   aspect-ratio: 4 / 3;
   border: 0;
 }
+
+/* =====================================================================
+   SLIDER "VỊ TRÍ ĐANG TUYỂN" — dạng product carousel
+   ===================================================================== */
+.job-slider__viewport { overflow: hidden; touch-action: pan-y; }
+.job-slider__track {
+  display: flex;
+  transition: transform .5s cubic-bezier(.22, .61, .36, 1);
+  will-change: transform;
+  user-select: none;
+}
+.job-slider__page {
+  flex: 0 0 100%;
+  display: grid;
+  grid-template-columns: repeat(var(--per-view, 3), minmax(0, 1fr));
+  gap: 24px;
+  align-items: stretch;
+}
+.job-slider__nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 28px;
+}
+.job-slider__btn {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid var(--tg-line);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--tg-body);
+  cursor: pointer;
+  transition: border-color .18s ease, color .18s ease, opacity .18s ease;
+}
+.job-slider__btn:hover:not(:disabled) { border-color: var(--tg-accent); color: var(--tg-accent); }
+.job-slider__btn:focus-visible { outline: 3px solid rgba(8, 122, 85, .35); outline-offset: 2px; }
+.job-slider__btn:disabled { opacity: .35; cursor: default; }
+.job-slider__btn--prev img { transform: rotate(180deg); }
+.job-slider__dots { display: flex; align-items: center; gap: 8px; }
+.job-slider__dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: #cfdad4;
+  cursor: pointer;
+  transition: width .25s ease, background .25s ease;
+}
+.job-slider__dot[aria-current="true"] { width: 22px; background: var(--tg-accent); }
+.job-slider__dot:focus-visible { outline: 2px solid var(--tg-accent); outline-offset: 3px; }
+@media (max-width: 639px) {
+  .job-slider__page { gap: 16px; }
+  .job-slider__nav { margin-top: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .job-slider__track { transition: none; }
+}
