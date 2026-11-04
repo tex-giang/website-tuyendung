@@ -627,7 +627,7 @@ select.form-input {
   border-bottom: 1px solid var(--tg-line);
 }
 
-.admin-brand img {
+.admin-brand > img {
   height: 30px;
   width: auto;
 }

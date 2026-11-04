@@ -869,38 +869,100 @@
         "Dữ liệu phiên cũ không hợp lệ. Đang hiển thị dữ liệu demo ban đầu.";
     }
     const side = $("admin-sidebar"),
-      toggle = $("toggle-sidebar-btn");
+      toggle = $("toggle-sidebar-btn"),
+      overlay = $("sidebar-overlay"),
+      closeBtn = $("close-sidebar-btn");
+    const SIDEBAR_KEY = "texgiang_admin_sidebar_collapsed";
+    const DESKTOP = () => innerWidth >= 1024;
     let prior;
+
+    const isDrawerOpen = () => !!side?.classList.contains("is-open");
+    const isCollapsed = () => document.body.classList.contains("sidebar-collapsed");
+
+    const setToggle = (expanded) => {
+      if (!toggle) return;
+      toggle.setAttribute("aria-expanded", String(expanded));
+      toggle.setAttribute(
+        "aria-label",
+        expanded ? (DESKTOP() ? "Thu gọn menu" : "Đóng menu") : "Mở menu",
+      );
+    };
+
     const syncSide = () => {
-      if (side) {
-        const hidden = innerWidth < 1024 && !side.classList.contains("is-open");
-        side.inert = hidden;
-        side.setAttribute("aria-hidden", String(hidden));
+      if (!side) return;
+      // Desktop: ẩn khi đã thu gọn. Mobile: ẩn khi drawer chưa mở.
+      const hidden = DESKTOP() ? isCollapsed() : !isDrawerOpen();
+      side.inert = hidden;
+      side.setAttribute("aria-hidden", String(hidden));
+    };
+
+    const readCollapsedPref = () => {
+      try {
+        return sessionStorage.getItem(SIDEBAR_KEY) === "1";
+      } catch (_) {
+        return false;
       }
     };
+    const saveCollapsedPref = (value) => {
+      try {
+        sessionStorage.setItem(SIDEBAR_KEY, value ? "1" : "0");
+      } catch (_) {}
+    };
+
+    const applyCollapsed = (value) => {
+      document.body.classList.toggle("sidebar-collapsed", value);
+      saveCollapsedPref(value);
+      setToggle(!value);
+      syncSide();
+    };
+
     const closeSide = () => {
       side?.classList.remove("is-open");
-      if ($("sidebar-overlay")) $("sidebar-overlay").hidden = true;
-      toggle?.setAttribute("aria-expanded", "false");
+      if (overlay) overlay.hidden = true;
       document.body.style.overflow = "";
+      setToggle(DESKTOP() ? !isCollapsed() : false);
       syncSide();
       prior?.focus();
     };
+
+    // Khởi tạo theo màn hình hiện tại (desktop nhớ trạng thái thu gọn trong phiên).
+    if (DESKTOP()) {
+      document.body.classList.toggle("sidebar-collapsed", readCollapsedPref());
+      setToggle(!isCollapsed());
+    } else {
+      document.body.classList.remove("sidebar-collapsed");
+      setToggle(false);
+    }
     syncSide();
+
     toggle?.addEventListener("click", () => {
+      if (DESKTOP()) {
+        applyCollapsed(!isCollapsed());
+        return;
+      }
+      // Mobile: mở drawer.
       prior = document.activeElement;
       side.classList.add("is-open");
       syncSide();
-      $("sidebar-overlay").hidden = false;
-      toggle.setAttribute("aria-expanded", "true");
+      if (overlay) overlay.hidden = false;
+      setToggle(true);
       document.body.style.overflow = "hidden";
-      $("close-sidebar-btn").focus();
+      closeBtn?.focus();
     });
-    $("close-sidebar-btn")?.addEventListener("click", closeSide);
-    $("sidebar-overlay")?.addEventListener("click", closeSide);
+    closeBtn?.addEventListener("click", closeSide);
+    overlay?.addEventListener("click", closeSide);
     window.addEventListener("resize", () => {
-      if (innerWidth >= 1024 && side?.classList.contains("is-open"))
-        closeSide();
+      if (DESKTOP()) {
+        // Rời mobile: đóng drawer, khôi phục trạng thái thu gọn đã lưu.
+        side?.classList.remove("is-open");
+        if (overlay) overlay.hidden = true;
+        document.body.style.overflow = "";
+        document.body.classList.toggle("sidebar-collapsed", readCollapsedPref());
+        setToggle(!isCollapsed());
+      } else {
+        document.body.classList.remove("sidebar-collapsed");
+        setToggle(isDrawerOpen());
+      }
       syncSide();
     });
     document.addEventListener("keydown", (e) => {

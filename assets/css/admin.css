@@ -40,9 +40,9 @@ body.admin-app {
   border: 0;
   gap: 12px;
 }
-.admin-app .admin-brand img {
+.admin-app .admin-brand > img {
   width: auto;
-  height: 38px;
+  height: 30px;
   object-fit: contain;
 }
 .admin-app .admin-brand strong {
@@ -100,15 +100,15 @@ body.admin-app {
 }
 .admin-mobile-logo { display: none; }
 @media (max-width: 767px) {
-  .admin-mobile-logo { display: flex; flex: none; width: 60px; height: 60px; }
-  .admin-mobile-logo img { width: 60px; height: 60px; object-fit: contain; }
-  .admin-app .admin-topbar { height: 80px; padding-block: 10px; }
+  .admin-mobile-logo { display: flex; flex: none; width: 44px; height: 44px; }
+  .admin-mobile-logo img { width: 44px; height: 44px; object-fit: contain; }
+  .admin-app .admin-topbar { height: 68px; padding-block: 10px; }
   .topbar-context > span { display: none; }
   .topbar-right > .admin-badge { display: none; }
   .admin-app .admin-brand > div, .admin-app .login-brand > div { display: none; }
-  .admin-app .admin-brand img { width: auto; height: 40px; object-fit: contain; }
-.admin-app .login-brand img { width: 60px; height: 60px; object-fit: contain; }
-.admin-mobile-logo img { width: auto; height: 30px; object-fit: contain; }
+  .admin-app .admin-brand > img { width: auto; height: 28px; object-fit: contain; }
+.admin-app .login-brand img { width: 44px; height: 44px; object-fit: contain; }
+.admin-mobile-logo img { width: auto; height: 26px; object-fit: contain; }
 }
 .topbar-right {
   display: flex;
@@ -229,6 +229,7 @@ body.admin-app {
 }
 .admin-app .admin-icon-btn {
   display: inline-grid;
+  place-items: center;
   width: 36px;
   height: 36px;
   background: white;
@@ -1005,10 +1006,16 @@ body.admin-app {
   .admin-workspace {
     padding: 0 8px 8px;
   }
+  /* Drawer mobile: nền trắng, bo góc phải, đổ bóng, chừa safe-area. */
   .admin-app .admin-sidebar {
-    transform: translateX(-100%);
-    width: 260px;
-    transition: transform 0.2s;
+    transform: translateX(-102%);
+    width: min(86vw, 320px);
+    background: #fff;
+    padding: 16px 12px calc(16px + env(safe-area-inset-bottom));
+    border-right: 1px solid #e2eae5;
+    border-radius: 0 20px 20px 0;
+    box-shadow: 24px 0 60px -30px rgba(18, 53, 35, 0.45);
+    transition: transform 0.28s cubic-bezier(0.22, 0.61, 0.36, 1);
   }
   .admin-app .admin-sidebar.is-open {
     transform: none;
@@ -1018,7 +1025,98 @@ body.admin-app {
     position: fixed;
     inset: 0;
     z-index: 60;
-    background: #12352366;
+    background: rgba(18, 53, 35, 0.45);
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+    animation: adminOverlayIn 0.2s ease-out;
+  }
+  @keyframes adminOverlayIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .admin-app .admin-brand {
+    align-items: center;
+    gap: 10px;
+    padding: 4px 6px 12px;
+    border-bottom: 1px solid #e8efe9;
+  }
+  .admin-app .admin-brand > img {
+    height: 20px;
+  }
+  /* Drawer mobile hiện lại tên thương hiệu để logo không đứng lẻ một mình. */
+  .admin-app .admin-sidebar .admin-brand > div {
+    display: block;
+  }
+  .admin-app .admin-sidebar .admin-brand strong {
+    font-size: 14px;
+    line-height: 1.2;
+  }
+  .admin-app .admin-sidebar .admin-brand span {
+    font-size: 11px;
+    line-height: 1.35;
+  }
+  .admin-app .admin-brand .admin-icon-btn {
+    margin-left: auto;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: #f2f7f3;
+  }
+  .admin-app .admin-brand .admin-icon-btn img {
+    width: 18px;
+    height: 18px;
+  }
+  .admin-app .admin-nav-link {
+    min-height: 48px;
+    padding: 11px 12px;
+    gap: 12px;
+    font-size: 15px;
+    border-radius: 10px;
+  }
+  .admin-app .admin-nav-link .admin-icon {
+    width: 20px;
+    height: 20px;
+  }
+  .admin-app .admin-nav-link.is-active {
+    background: #e2ede6;
+  }
+  .admin-app .admin-section-label {
+    padding: 18px 12px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #6b7d72;
+  }
+  .admin-app .admin-sidebar-foot {
+    gap: 2px;
+    padding: 12px 4px 4px;
+    border-top: 1px solid #e8efe9;
+    font-size: 14px;
+  }
+  .admin-app .admin-sidebar-foot a,
+  .admin-app .admin-sidebar-foot button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 42px;
+    padding: 9px 10px;
+    border: 0;
+    border-radius: 8px;
+    background: none;
+    color: #42564b;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .admin-app .admin-sidebar-foot a:hover,
+  .admin-app .admin-sidebar-foot button:hover {
+    background: #f1f6f2;
+    color: var(--admin-ink);
+  }
+  .admin-app .admin-sidebar-foot [data-reset-demo] {
+    color: #9a3b32;
   }
   .admin-app .admin-topbar {
     padding: 12px 20px;
@@ -1042,9 +1140,19 @@ body.admin-app {
   }
 }
 @media (min-width: 1024px) {
-  #toggle-sidebar-btn,
+  /* Appbar desktop có nút thu gọn/mở sidebar; nút đóng chỉ dùng cho drawer mobile. */
   #close-sidebar-btn {
     display: none;
+  }
+  .admin-app .admin-sidebar,
+  .admin-workspace {
+    transition: transform 0.22s ease, padding-left 0.22s ease;
+  }
+  .admin-app.sidebar-collapsed .admin-sidebar {
+    transform: translateX(-100%);
+  }
+  .admin-app.sidebar-collapsed .admin-workspace {
+    padding-left: 8px;
   }
 }
 @media (max-width: 700px) {
@@ -1227,11 +1335,11 @@ body.admin-app {
 
 @media (max-width: 700px) {
   .admin-app .tg-btn, .admin-app .form-input { min-height: 44px; }
-  .admin-app .admin-icon-btn { min-width: 44px; min-height: 44px; }
+  .admin-app .admin-icon-btn { width: 44px; height: 44px; place-items: center; }
 
   /* link nhỏ ở topbar / chân sidebar: đủ vùng chạm */
   .admin-app .admin-topbar a,
-  .admin-app .admin-topbar button,
+  .admin-app .admin-topbar button:not(.admin-icon-btn),
   .admin-app .admin-sidebar-foot a {
     display: inline-flex;
     align-items: center;
