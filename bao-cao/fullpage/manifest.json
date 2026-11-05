@@ -1,0 +1,114 @@
+[
+  {
+    "name": "01-trang-chu",
+    "path": "/",
+    "width": 1440,
+    "height": 4138,
+    "title": "Tuyển dụng TEX-GIANG — Tân Hương, Cái Lậy, Chợ Gạo",
+    "kb": 1323
+  },
+  {
+    "name": "02-danh-sach-viec-lam",
+    "path": "/jobs.html",
+    "width": 1440,
+    "height": 2929,
+    "title": "Việc làm đang tuyển | Tuyển dụng TEX-GIANG",
+    "kb": 586
+  },
+  {
+    "name": "03-chi-tiet-cong-viec",
+    "path": "/job-detail.html?id=TG-02",
+    "width": 1440,
+    "height": 1963,
+    "title": "Giám sát kiểm phẩm QC | Tuyển dụng TEX-GIANG",
+    "kb": 221
+  },
+  {
+    "name": "04-nop-ho-so",
+    "path": "/apply.html",
+    "width": 1440,
+    "height": 1995,
+    "title": "Nộp hồ sơ ứng tuyển | Tuyển dụng TEX-GIANG",
+    "kb": 453
+  },
+  {
+    "name": "05-trang-ung-tuyen-rieng",
+    "path": "/ung-tuyen.html",
+    "width": 1440,
+    "height": 1122,
+    "title": "Nộp hồ sơ ứng tuyển | TEX-GIANG",
+    "kb": 312
+  },
+  {
+    "name": "06-ve-chung-toi",
+    "path": "/about.html",
+    "width": 1440,
+    "height": 4540,
+    "title": "Về TEX-GIANG | Tuyển dụng TEX-GIANG",
+    "kb": 1384
+  },
+  {
+    "name": "07-tai-sao-chon",
+    "path": "/why-tex-giang.html",
+    "width": 1440,
+    "height": 3213,
+    "title": "Phúc lợi & vì sao chọn TEX-GIANG | Tuyển dụng TEX-GIANG",
+    "kb": 533
+  },
+  {
+    "name": "08-tin-tuc",
+    "path": "/news.html",
+    "width": 1440,
+    "height": 3156,
+    "title": "Tin tức & tuyển dụng | Tuyển dụng TEX-GIANG",
+    "kb": 1339
+  },
+  {
+    "name": "09-chi-tiet-tin",
+    "path": "/news-detail.html?id=tuyen-300-cong-nhan",
+    "width": 1440,
+    "height": 3036,
+    "title": "Ngày hội việc làm Châu Thành 2026 | Tuyển dụng TEX-GIANG",
+    "kb": 1393
+  },
+  {
+    "name": "10-lien-he",
+    "path": "/contact.html",
+    "width": 1440,
+    "height": 2654,
+    "title": "Liên hệ tuyển dụng | Tuyển dụng TEX-GIANG",
+    "kb": 454
+  },
+  {
+    "name": "11-quan-tri-dang-nhap",
+    "path": "/admin/login.html",
+    "width": 1440,
+    "height": 1000,
+    "title": "Đăng nhập quản trị | TEX-GIANG HR",
+    "kb": 46
+  },
+  {
+    "name": "12-quan-tri-dashboard",
+    "path": "/admin/dashboard.html",
+    "width": 1440,
+    "height": 1355,
+    "title": "Bảng điều khiển | TEX-GIANG HR",
+    "kb": 114
+  },
+  {
+    "name": "13-quan-tri-tin-tuyen-dung",
+    "path": "/admin/jobs.html",
+    "width": 1440,
+    "height": 1014,
+    "title": "Tin tuyển dụng | TEX-GIANG HR",
+    "kb": 97
+  },
+  {
+    "name": "14-quan-tri-ho-so",
+    "path": "/admin/applications.html",
+    "width": 1440,
+    "height": 1000,
+    "title": "Hồ sơ ứng viên | TEX-GIANG HR",
+    "kb": 108
+  }
+]
