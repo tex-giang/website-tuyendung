@@ -1,0 +1,221 @@
+<?php
+/** Form thêm/sửa tin tuyển dụng. $job = null khi tạo mới. */
+$isEdit = $job !== null;
+$action = $isEdit ? url('admin/jobs/' . $job['id'] . '/edit') : url('admin/jobs/create');
+$val = static fn(string $key, string $default = ''): string => (string) ($values[$key] ?? $default);
+// datetime-local cần định dạng Y-m-d\TH:i
+$postedAt = $val('posted_at');
+if ($postedAt !== '' && !str_contains($postedAt, 'T')) {
+    $postedAt = date('Y-m-d\TH:i', strtotime($postedAt));
+}
+$deadline = $val('deadline');
+if ($deadline !== '' && str_contains($deadline, ' ')) {
+    $deadline = substr($deadline, 0, 10);
+}
+?>
+<div class="admin-page-head">
+  <div>
+    <p class="admin-breadcrumb"><a href="<?= url('admin/jobs') ?>">Tin tuyển dụng</a> / <?= $isEdit ? 'Sửa tin' : 'Thêm tin' ?></p>
+    <h1 class="admin-h1"><?= $isEdit ? 'Sửa tin tuyển dụng' : 'Thêm tin tuyển dụng' ?></h1>
+    <?php if ($isEdit): ?>
+    <p class="admin-sub">Mã tin <strong><?= e($job['code'] ?: '—') ?></strong> · slug <code><?= e($job['slug']) ?></code>
+      · <?= (int) $job['views'] ?> lượt xem</p>
+    <?php endif; ?>
+  </div>
+  <div class="admin-head-actions">
+    <?php if ($isEdit): ?>
+    <a href="<?= url('jobs/' . $job['slug']) ?>" target="_blank" rel="noopener" class="btn btn-outline">Xem trên website ↗</a>
+    <?php endif; ?>
+    <a href="<?= url('admin/jobs') ?>" class="btn btn-ghost">← Danh sách</a>
+  </div>
+</div>
+
+<?php if ($errors !== []): ?>
+<div class="admin-alert admin-alert--error" role="alert">Có <?= count($errors) ?> trường cần kiểm tra lại. Chi tiết hiển thị dưới từng ô.</div>
+<?php endif; ?>
+
+<form method="POST" action="<?= $action ?>" class="admin-form" data-ajax="job">
+  <?= csrf_field() ?>
+
+  <section class="admin-card">
+    <h2 class="admin-h2">Thông tin chính</h2>
+    <div class="field-grid">
+      <label class="field field--span2">
+        <span class="field__label">Tiêu đề tin <em>*</em></span>
+        <input class="field__input<?= isset($errors['title']) ? ' is-invalid' : '' ?>" type="text" name="title"
+               value="<?= e($val('title')) ?>" maxlength="220" required>
+        <?php if (isset($errors['title'])): ?><span class="field__error"><?= e($errors['title']) ?></span><?php endif; ?>
+      </label>
+
+      <label class="field">
+        <span class="field__label">Mã tin <small>(duy nhất, tuỳ chọn)</small></span>
+        <input class="field__input<?= isset($errors['code']) ? ' is-invalid' : '' ?>" type="text" name="code"
+               value="<?= e($val('code')) ?>" maxlength="20" placeholder="TG-01">
+        <?php if (isset($errors['code'])): ?><span class="field__error"><?= e($errors['code']) ?></span><?php endif; ?>
+      </label>
+
+      <label class="field">
+        <span class="field__label">Đường dẫn (slug) <small>để trống sẽ tự sinh</small></span>
+        <input class="field__input<?= isset($errors['slug']) ? ' is-invalid' : '' ?>" type="text" name="slug"
+               value="<?= e($val('slug')) ?>" maxlength="220" placeholder="cong-nhan-may">
+        <?php if (isset($errors['slug'])): ?><span class="field__error"><?= e($errors['slug']) ?></span><?php endif; ?>
+      </label>
+
+      <label class="field">
+        <span class="field__label">Khu sản xuất <em>*</em></span>
+        <select class="field__input<?= isset($errors['branch_id']) ? ' is-invalid' : '' ?>" name="branch_id" required>
+          <option value="">— Chọn khu —</option>
+          <?php foreach ($branches as $branch): ?>
+          <option value="<?= (int) $branch['id'] ?>"<?= (string) $val('branch_id') === (string) $branch['id'] ? ' selected' : '' ?>><?= e($branch['name']) ?></option>
+          <?php endforeach; ?>
+        </select>
+        <?php if (isset($errors['branch_id'])): ?><span class="field__error"><?= e($errors['branch_id']) ?></span><?php endif; ?>
+      </label>
+
+      <label class="field">
+        <span class="field__label">Khối phòng ban</span>
+        <select class="field__input" name="category_id">
+          <option value="">— Không chọn —</option>
+          <?php foreach ($categories as $category): ?>
+          <option value="<?= (int) $category['id'] ?>"<?= (string) $val('category_id') === (string) $category['id'] ? ' selected' : '' ?>><?= e($category['name']) ?></option>
+          <?php endforeach; ?>
+        </select>
+      </label>
+
+      <label class="field">
+        <span class="field__label">Số lượng tuyển <em>*</em></span>
+        <input class="field__input<?= isset($errors['quantity']) ? ' is-invalid' : '' ?>" type="number" name="quantity"
+               min="1" max="10000" value="<?= e($val('quantity', '1')) ?>" required>
+        <?php if (isset($errors['quantity'])): ?><span class="field__error"><?= e($errors['quantity']) ?></span><?php endif; ?>
+      </label>
+
+      <label class="field field--span2">
+        <span class="field__label">Địa điểm làm việc</span>
+        <input class="field__input" type="text" name="location" value="<?= e($val('location')) ?>" maxlength="255"
+               placeholder="Khu Tân Hương — Nhà máy 2">
+      </label>
+    </div>
+  </section>
+
+  <section class="admin-card">
+    <h2 class="admin-h2">Thu nhập & điều kiện</h2>
+    <div class="field-grid">
+      <label class="field">
+        <span class="field__label">Mức lương hiển thị</span>
+        <input class="field__input" type="text" name="salary_text" value="<?= e($val('salary_text')) ?>" maxlength="150"
+               placeholder="8.000.000 - 16.000.000 VNĐ">
+      </label>
+      <label class="field">
+        <span class="field__label">Khoảng lương (dùng cho bộ lọc)</span>
+        <select class="field__input<?= isset($errors['salary_range']) ? ' is-invalid' : '' ?>" name="salary_range">
+          <?php foreach ($salaryRanges as $key => $label): ?>
+          <option value="<?= e($key) ?>"<?= (string) $val('salary_range') === (string) $key ? ' selected' : '' ?>><?= e($label) ?></option>
+          <?php endforeach; ?>
+        </select>
+        <?php if (isset($errors['salary_range'])): ?><span class="field__error"><?= e($errors['salary_range']) ?></span><?php endif; ?>
+      </label>
+      <label class="field">
+        <span class="field__label">Lương tối thiểu (VNĐ)</span>
+        <input class="field__input<?= isset($errors['salary_min']) ? ' is-invalid' : '' ?>" type="number" name="salary_min"
+               min="0" step="100000" value="<?= e($val('salary_min')) ?>" placeholder="8000000">
+        <?php if (isset($errors['salary_min'])): ?><span class="field__error"><?= e($errors['salary_min']) ?></span><?php endif; ?>
+      </label>
+      <label class="field">
+        <span class="field__label">Lương tối đa (VNĐ)</span>
+        <input class="field__input<?= isset($errors['salary_max']) ? ' is-invalid' : '' ?>" type="number" name="salary_max"
+               min="0" step="100000" value="<?= e($val('salary_max')) ?>" placeholder="16000000">
+        <?php if (isset($errors['salary_max'])): ?><span class="field__error"><?= e($errors['salary_max']) ?></span><?php endif; ?>
+      </label>
+      <label class="field">
+        <span class="field__label">Kinh nghiệm</span>
+        <input class="field__input" type="text" name="experience" value="<?= e($val('experience')) ?>" maxlength="150"
+               placeholder="Không yêu cầu, có đào tạo">
+      </label>
+      <label class="field">
+        <span class="field__label">Hình thức làm việc</span>
+        <input class="field__input" type="text" name="employment_type" value="<?= e($val('employment_type')) ?>" maxlength="100"
+               placeholder="Toàn thời gian, chính thức">
+      </label>
+    </div>
+  </section>
+
+  <section class="admin-card">
+    <h2 class="admin-h2">Nội dung tin</h2>
+    <p class="admin-hint">Mỗi dòng là một gạch đầu dòng. Riêng <strong>Quyền lợi</strong> dùng dạng
+      <code>Tiêu đề | Mô tả</code> để hiển thị thành thẻ.</p>
+    <div class="field-grid">
+      <label class="field field--span2">
+        <span class="field__label">Mô tả công việc <em>*</em></span>
+        <textarea class="field__input<?= isset($errors['description']) ? ' is-invalid' : '' ?>" name="description" rows="6" required><?= e($val('description')) ?></textarea>
+        <?php if (isset($errors['description'])): ?><span class="field__error"><?= e($errors['description']) ?></span><?php endif; ?>
+      </label>
+      <label class="field field--span2">
+        <span class="field__label">Yêu cầu ứng viên</span>
+        <textarea class="field__input" name="requirements" rows="4"><?= e($val('requirements')) ?></textarea>
+      </label>
+      <label class="field field--span2">
+        <span class="field__label">Quyền lợi <small>(Tiêu đề | Mô tả)</small></span>
+        <textarea class="field__input" name="benefits" rows="5"><?= e($val('benefits')) ?></textarea>
+      </label>
+    </div>
+  </section>
+
+  <section class="admin-card">
+    <h2 class="admin-h2">Xuất bản & SEO</h2>
+    <div class="field-grid">
+      <label class="field">
+        <span class="field__label">Trạng thái <em>*</em></span>
+        <select class="field__input" name="status">
+          <?php foreach ($statuses as $key => $label): ?>
+          <option value="<?= e($key) ?>"<?= $val('status') === $key ? ' selected' : '' ?>><?= e($label) ?></option>
+          <?php endforeach; ?>
+        </select>
+      </label>
+      <label class="field">
+        <span class="field__label">Ngày đăng</span>
+        <input class="field__input<?= isset($errors['posted_at']) ? ' is-invalid' : '' ?>" type="datetime-local" name="posted_at"
+               value="<?= e($postedAt) ?>">
+        <?php if (isset($errors['posted_at'])): ?><span class="field__error"><?= e($errors['posted_at']) ?></span><?php endif; ?>
+      </label>
+      <label class="field">
+        <span class="field__label">Hạn nộp hồ sơ</span>
+        <input class="field__input<?= isset($errors['deadline']) ? ' is-invalid' : '' ?>" type="date" name="deadline"
+               value="<?= e($deadline) ?>">
+        <?php if (isset($errors['deadline'])): ?><span class="field__error"><?= e($errors['deadline']) ?></span><?php endif; ?>
+      </label>
+      <label class="field field--checkbox">
+        <input type="checkbox" name="is_urgent" value="1"<?= (int) $val('is_urgent', '0') === 1 ? ' checked' : '' ?>>
+        <span>Đánh dấu <strong>tuyển gấp</strong> (ưu tiên hiển thị)</span>
+      </label>
+      <label class="field">
+        <span class="field__label">Thứ tự ưu tiên</span>
+        <input class="field__input" type="number" name="sort_order" value="<?= e($val('sort_order', '0')) ?>">
+      </label>
+      <label class="field">
+        <span class="field__label">Meta title <small>để trống dùng tiêu đề tin</small></span>
+        <input class="field__input" type="text" name="meta_title" value="<?= e($val('meta_title')) ?>" maxlength="220">
+      </label>
+      <label class="field field--span2">
+        <span class="field__label">Meta description</span>
+        <textarea class="field__input" name="meta_description" rows="2" maxlength="320"><?= e($val('meta_description')) ?></textarea>
+      </label>
+    </div>
+  </section>
+
+  <div class="admin-form__actions">
+    <button type="submit" class="btn btn-primary"><?= $isEdit ? 'Lưu thay đổi' : 'Tạo tin tuyển dụng' ?></button>
+    <a href="<?= url('admin/jobs') ?>" class="btn btn-ghost">Huỷ</a>
+  </div>
+</form>
+
+<?php if ($isEdit): ?>
+<div class="admin-form__delete">
+  <form method="POST" action="<?= url('admin/jobs/' . $job['id'] . '/duplicate') ?>" data-ajax>
+    <?= csrf_field() ?><button type="submit" class="btn btn-outline">Nhân bản tin này</button>
+  </form>
+  <form method="POST" action="<?= url('admin/jobs/' . $job['id'] . '/delete') ?>" data-ajax
+        data-confirm="Xoá tin &quot;<?= e($val('title')) ?>&quot;? Thao tác không thể hoàn tác.">
+    <?= csrf_field() ?><button type="submit" class="btn btn-danger">Xoá tin</button>
+  </form>
+</div>
+<?php endif; ?>

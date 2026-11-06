@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nộp hồ sơ ứng tuyển | TEX-GIANG</title>
+  <meta name="description" content="Nộp hồ sơ ứng tuyển TEX-GIANG trong 1 phút: họ tên, số điện thoại, vị trí và nơi muốn làm việc. Nhân sự gọi lại trong 24 giờ làm việc.">
+  <meta name="robots" content="noindex">
+
+  <link rel="stylesheet" href="assets/css/app.css">
+  <link rel="stylesheet" href="assets/css/utilities.css">
+  <link rel="stylesheet" href="assets/css/custom.css">
+  <link rel="stylesheet" href="assets/css/public.css">
+  <link rel="icon" href="assets/images/logo-tgi.png" type="image/png">
+</head>
+<body class="tg-public gf-page">
+
+  <main id="main-content" class="gf-wrap">
+
+    <a class="gf-brand" href="index.html" aria-label="TEX-GIANG — về trang tuyển dụng">
+      <img src="assets/images/logo-tgi-mark.webp" alt="TEX-GIANG" width="80" height="34">
+    </a>
+
+    <div class="gf-card">
+      <figure class="gf-banner">
+        <img src="assets/images/banner-texgiang.webp"
+             srcset="assets/images/banner-texgiang-800.webp 800w, assets/images/banner-texgiang.webp 2048w"
+             sizes="(max-width: 760px) 100vw, 720px"
+             alt="Nhà máy Tân Hương 2 — Công ty Cổ phần TEX-GIANG"
+             width="2048" height="768" fetchpriority="high">
+      </figure>
+
+      <header class="gf-head">
+        <h1 class="gf-title">Nộp hồ sơ ứng tuyển</h1>
+        <p class="gf-desc">Điền 4 thông tin dưới đây. Bộ phận nhân sự TEX-GIANG sẽ gọi lại trong 24 giờ làm việc để xác nhận và hẹn lịch.</p>
+        <p class="gf-required">* Bắt buộc</p>
+      </header>
+
+      <form id="gf-form" class="gf-form" novalidate>
+
+        <div class="gf-field" data-field="name">
+          <label class="gf-label" for="gf-name">Họ và tên <span class="req">*</span></label>
+          <input class="form-input" id="gf-name" name="name" type="text" autocomplete="name" placeholder="Ví dụ: Nguyễn Thị Mai" required>
+          <p class="gf-error" data-error-for="name">Vui lòng nhập họ tên đầy đủ.</p>
+        </div>
+
+        <div class="gf-field" data-field="phone">
+          <label class="gf-label" for="gf-phone">Số điện thoại <span class="req">*</span></label>
+          <input class="form-input" id="gf-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="0912 345 678" required>
+          <p class="gf-error" data-error-for="phone">Số di động Việt Nam chưa đúng, ví dụ 0912 345 678.</p>
+        </div>
+
+        <div class="gf-field" data-field="position">
+          <label class="gf-label" for="gf-position">Vị trí tuyển dụng <span class="req">*</span></label>
+          <select class="form-input" id="gf-position" name="position" required>
+            <option value="">— Chọn vị trí —</option>
+            <option value="cn-may" data-job-id="TG-01">Công nhân may chuyền</option>
+            <option value="qc" data-job-id="TG-02">Giám sát kiểm phẩm QC</option>
+            <option value="ie" data-job-id="TG-03">Kỹ sư công nghiệp &amp; định mức (IE)</option>
+            <option value="merchandiser" data-job-id="TG-04">Chuyên viên quản lý đơn hàng (Merchandiser)</option>
+            <option value="bao-tri" data-job-id="TG-05">Nhân viên bảo trì máy may &amp; điện xưởng</option>
+            <option value="ke-toan" data-job-id="TG-06">Kế toán chi phí &amp; giá thành</option>
+            <option value="hoc-nghe" data-job-id="TG-07">Học nghề may miễn phí (có trợ cấp)</option>
+            <option value="khac" data-job-id="">Vị trí khác</option>
+          </select>
+          <p class="gf-error" data-error-for="position">Chọn vị trí bạn muốn ứng tuyển.</p>
+        </div>
+
+        <fieldset class="gf-field" data-field="location">
+          <legend class="gf-label">Nơi muốn làm việc <span class="req">*</span></legend>
+          <div class="gf-radios">
+            <label class="gf-radio">
+              <input type="radio" name="location" value="tan-huong" required>
+              <span class="gf-radio__box">Tân Hương</span>
+            </label>
+            <label class="gf-radio">
+              <input type="radio" name="location" value="cai-lay">
+              <span class="gf-radio__box">Cái Lậy</span>
+            </label>
+            <label class="gf-radio">
+              <input type="radio" name="location" value="cho-gao">
+              <span class="gf-radio__box">Chợ Gạo</span>
+            </label>
+            <label class="gf-radio">
+              <input type="radio" name="location" value="any">
+              <span class="gf-radio__box">Theo sắp xếp</span>
+            </label>
+          </div>
+          <p class="gf-error" data-error-for="location">Chọn một nơi bạn muốn làm việc.</p>
+        </fieldset>
+
+        <div class="gf-submit">
+          <button type="submit" class="tg-btn tg-btn--primary">
+            <img src="assets/images/icons/send.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[16px]"> Gửi hồ sơ
+          </button>
+          <p class="gf-demo">* Biểu mẫu demo: dữ liệu không gửi lên máy chủ, chỉ mô phỏng luồng đăng ký.</p>
+        </div>
+      </form>
+
+      <div class="gf-success" id="gf-success" role="status" tabindex="-1" hidden>
+        <span class="gf-success__icon" aria-hidden="true">
+          <img src="assets/images/icons/check2.svg" alt="" width="28" height="28">
+        </span>
+        <h2 class="gf-success__title">Đã nhận hồ sơ của bạn</h2>
+        <p class="gf-desc">Mã hồ sơ: <strong id="gf-code">TG-2026-0000</strong>. Nhân sự sẽ gọi lại trong 24 giờ làm việc.</p>
+        <div class="gf-success__actions">
+          <button type="button" class="tg-btn tg-btn--ghost" id="gf-again">Gửi hồ sơ khác</button>
+        </div>
+      </div>
+    </div>
+
+    <p class="gf-foot">
+      Cần hỗ trợ? Gọi <a href="tel:02733937274">0273 393 7274</a> (giờ hành chính) hoặc
+      <a href="https://zalo.me/02733937274" target="_blank" rel="noopener">chat Zalo</a>.
+      <span class="gf-foot__sep" aria-hidden="true">·</span>
+      <a href="index.html">Về trang tuyển dụng</a>
+    </p>
+
+  </main>
+
+  <script src="assets/js/demo-store.js"></script>
+  <script src="assets/js/ung-tuyen.js"></script>
+</body>
+</html>

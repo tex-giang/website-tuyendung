@@ -1,0 +1,95 @@
+<?php
+declare(strict_types=1);
+
+namespace App\Core;
+
+/**
+ * Base controller: render view trong layout, JSON, redirect.
+ * View nhận $content để layout chèn nội dung; dữ liệu trang nằm trong $page.
+ */
+abstract class Controller
+{
+    protected function view(string $view, array $data = [], string $layout = 'layouts/public'): void
+    {
+        $data['page'] = array_merge([
+            'title'       => settings('seo_title', settings('site_name', 'Tuyển dụng TEX-GIANG')),
+            'description' => settings('seo_description', ''),
+            'body_class'  => 'tg-public',
+            'nav'         => '',
+            'canonical'   => null,
+            'og_image'    => null,
+        ], $data['page'] ?? []);
+
+        extract($data, EXTR_SKIP);
+
+        $viewFile = BASE_PATH . '/app/Views/' . $view . '.php';
+        if (!is_file($viewFile)) {
+            throw new \RuntimeException('Không tìm thấy view: ' . $view);
+        }
+
+        ob_start();
+        require $viewFile;
+        $content = (string) ob_get_clean();
+
+        $layoutFile = BASE_PATH . '/app/Views/' . $layout . '.php';
+        if (!is_file($layoutFile)) {
+            throw new \RuntimeException('Không tìm thấy layout: ' . $layout);
+        }
+        require $layoutFile;
+    }
+
+    /** Render nội dung không qua layout (dùng cho lỗi, tiện ích). */
+    protected function viewRaw(string $view, array $data = []): void
+    {
+        extract($data, EXTR_SKIP);
+        require BASE_PATH . '/app/Views/' . $view . '.php';
+    }
+
+    protected function json(array $data, int $status = 200): never
+    {
+        Response::json($data, $status);
+    }
+
+    protected function redirect(string $to): never
+    {
+        Response::redirect($to);
+    }
+
+    /** Request đến từ fetch/AJAX hay không (dùng để trả JSON thay vì redirect). */
+    protected function isAjaxRequest(): bool
+    {
+        if (strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'xmlhttprequest') {
+            return true;
+        }
+        return str_contains(strtolower($_SERVER['HTTP_ACCEPT'] ?? ''), 'application/json');
+    }
+
+    /**
+     * Kết quả thao tác: AJAX trả JSON {ok, message, errors, redirect};
+     * không phải AJAX thì controller tự flash + redirect như cũ.
+     */
+    protected function jsonResult(bool $ok, string $message, ?string $redirect = null, array $errors = []): never
+    {
+        $this->json([
+            'ok'       => $ok,
+            'message'  => $message,
+            'errors'   => $errors,
+            'redirect' => $redirect,
+        ], $ok ? 200 : 422);
+    }
+
+    protected function back(): never
+    {
+        Response::back();
+    }
+
+    protected function notFound(string $message = 'Không tìm thấy trang.'): never
+    {
+        http_response_code(404);
+        $this->view('public/404', [
+            'message' => $message,
+            'page'    => ['title' => 'Không tìm thấy trang | ' . settings('site_name'), 'nav' => ''],
+        ]);
+        exit;
+    }
+}

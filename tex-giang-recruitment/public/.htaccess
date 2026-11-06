@@ -1,0 +1,30 @@
+# ============================================================================
+# Apache / cPanel — DocumentRoot trỏ vào thư mục public/.
+# File này chặn truy cập trực tiếp vào mã nguồn, chỉ phục vụ public/.
+# ============================================================================
+Options -Indexes
+DirectoryIndex index.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # Nếu deploy trong thư mục con, đổi RewriteBase cho khớp (ví dụ /tuyendung/)
+    # RewriteBase /
+
+    # Chặn file ẩn (.env, .git, ...)
+    RewriteRule (^|/)\. - [F,L]
+
+    # Chuyển mọi request không phải file/thư mục thật về index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php [QSA,L]
+</IfModule>
+
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    Header set X-Frame-Options "SAMEORIGIN"
+</IfModule>
+
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>

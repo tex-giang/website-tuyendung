@@ -1,0 +1,6 @@
+/* Input build Tailwind cho website TEX-GIANG (PHP).
+   Build: npm run build:css → public/assets/css/utilities.css
+   Không sửa trực tiếp public/assets/css/utilities.css. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

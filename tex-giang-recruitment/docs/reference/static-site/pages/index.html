@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tuyển dụng TEX-GIANG — Tân Hương, Cái Lậy, Chợ Gạo</title>
+  <meta name="description" content="Cổng tuyển dụng của Công ty Cổ phần TEX-GIANG (TGI) tại KCN Tân Hương, Đồng Tháp. Xe đưa rước, cơm ca, thưởng tháng 13, BHXH đầy đủ.">
+  <meta property="og:title" content="Tuyển dụng TEX-GIANG — Nhà máy Tân Hương 2, Đồng Tháp">
+  <meta property="og:description" content="Một công việc ổn định, thu nhập xứng đáng. Xem 7 vị trí đang tuyển tại TEX-GIANG.">
+  <meta property="og:type" content="website">
+
+  <link rel="stylesheet" href="assets/css/app.css">
+  <link rel="stylesheet" href="assets/css/utilities.css">
+  <link rel="stylesheet" href="assets/css/custom.css">
+  <link rel="stylesheet" href="assets/css/public.css">
+  <link rel="icon" href="assets/images/logo-tgi.png" type="image/png">
+</head>
+<body class="tg-public page-index bg-white font-sans text-body antialiased selection:bg-accent selection:text-white">
+
+  <!-- THÔNG BÁO (thay pop-up tự bật) -->
+  <div id="announce-strip" class="bg-accent-soft no-print">
+    <div class="tg-container flex min-h-[44px] items-center justify-between gap-4 py-2.5">
+      <p class="text-[14px] leading-snug text-body">
+        <strong class="font-semibold text-accent">Thưởng nóng 2.000.000đ</strong> cho công nhân may mới — đào tạo miễn phí, có lương ngay tháng đầu.
+      </p>
+      <div class="flex shrink-0 items-center gap-3">
+        <a href="apply.html" class="tg-link hidden text-[14px] sm:inline-flex">Xem điều kiện <img src="assets/images/icons/arrow-right.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[13px]"></a>
+        <button id="announce-close" type="button" aria-label="Đóng thông báo"
+                class="grid h-9 w-9 place-items-center rounded-md text-muted transition-colors hover:bg-black/5 hover:text-ink">
+          <img src="assets/images/icons/x-lg.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[13px]">
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <header id="site-nav" class="sticky top-0 z-40 border-b border-transparent bg-white transition-colors no-print">
+    <div class="tg-container flex h-16 items-center justify-between gap-6 lg:h-[72px]">
+      <a href="index.html" class="flex shrink-0 items-center gap-2.5" aria-label="TEX-GIANG — trang chủ">
+        <img src="assets/images/logo-tgi-mark.webp" alt="TEX-GIANG (TGI)" width="80" height="52" class="site-logo">
+        
+      </a>
+
+      <nav class="hidden items-center gap-7 lg:flex xl:gap-8" aria-label="Điều hướng chính">
+        <a href="index.html" class="nav-link is-active" aria-current="page">Trang chủ</a>
+        <a href="jobs.html" class="nav-link">Việc làm</a>
+        <a href="about.html" class="nav-link">Về chúng tôi</a>
+        <a href="why-tex-giang.html" class="nav-link">Phúc lợi</a>
+        <a href="news.html" class="nav-link">Tin tức</a>
+        <a href="contact.html" class="nav-link">Liên hệ</a>
+      </nav>
+
+      <div class="flex items-center gap-3.5">
+        <a href="tel:02733937274" class="hidden text-[14px] text-muted xl:inline-flex">Hotline <strong class="ml-1 font-medium text-body">0273 393 7274</strong></a>
+        <a href="apply.html" class="tg-btn tg-btn--primary h-10 px-4 text-[16px]">Ứng tuyển</a>
+        <button id="mobile-menu-btn" type="button" aria-label="Mở menu" aria-expanded="false" aria-controls="mobile-menu"
+                class="grid h-10 w-10 place-items-center rounded-lg border border-line text-body transition-colors hover:border-accent hover:text-accent lg:hidden">
+          <img src="assets/images/icons/list.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[20px]">
+        </button>
+      </div>
+    </div>
+
+    <div id="mobile-menu" class="nav-mobile hidden border-t border-line bg-white px-6 pb-6 pt-2">
+      <a href="index.html" class="block border-b border-line py-3 text-[16px] font-medium text-accent">Trang chủ</a>
+      <a href="jobs.html" class="block border-b border-line py-3 text-[16px] text-body">Việc làm</a>
+      <a href="about.html" class="block border-b border-line py-3 text-[16px] text-body">Về chúng tôi</a>
+      <a href="why-tex-giang.html" class="block border-b border-line py-3 text-[16px] text-body">Phúc lợi</a>
+      <a href="news.html" class="block border-b border-line py-3 text-[16px] text-body">Tin tức</a>
+      <a href="contact.html" class="block border-b border-line py-3 text-[16px] text-body">Liên hệ</a>
+      <a href="admin/login.html" class="block border-b border-line py-3 text-[16px] text-body">Cổng quản trị HR</a>
+      <a href="tel:02733937274" class="block py-3 text-[16px] text-body">Hotline 0273 393 7274</a>
+    </div>
+  </header>
+
+  <a class="skip-link" href="#main-content">Đến nội dung chính</a>
+  <main id="main-content">
+
+    <!-- HERO: slider ảnh ngay dưới header, chữ và CTA bên dưới -->
+    <section>
+      <div class="tg-container">
+
+        <!-- SLIDER: tự chuyển 5s, có nút trước/sau và chấm chọn ảnh -->
+        <div class="hero-slider" data-hero-slider aria-roledescription="carousel" aria-label="Hình ảnh nhà máy và môi trường làm việc TEX-GIANG">
+          <div class="hero-slider__viewport">
+            <div class="hero-slider__track" data-slider-track>
+              <div class="hero-slider__slide" data-slide>
+                <img class="hero-slider__img hero-slider__img--banner"
+                     src="assets/images/banner-texgiang.webp"
+                     srcset="assets/images/banner-texgiang-800.webp 800w, assets/images/banner-texgiang.webp 2048w"
+                     sizes="(max-width: 768px) 100vw, 1200px"
+                     alt="Cổng Nhà máy Tân Hương 2 — Công ty Cổ phần TEX-GIANG, KCN Tân Hương, Đồng Tháp"
+                     width="2048" height="768" fetchpriority="high">
+              </div>
+
+              <div class="hero-slider__slide" data-slide>
+                <img class="hero-slider__img" src="assets/images/company/cai-lay.webp"
+                     alt="Chi nhánh TEX-GIANG tại Cái Lậy, tỉnh Đồng Tháp"
+                     width="1600" height="1200" loading="lazy">
+                <span class="hero-slider__shade" aria-hidden="true"></span>
+                <div class="hero-slider__caption">
+                  <p class="hero-slider__eyebrow">Chi nhánh Cái Lậy</p>
+                  <p class="hero-slider__title">Một trong ba khu sản xuất của TEX-GIANG tại Đồng Tháp</p>
+                </div>
+              </div>
+
+              <div class="hero-slider__slide" data-slide>
+                <img class="hero-slider__img" src="assets/images/company/training.webp"
+                     alt="Đào tạo nghề may cho người lao động mới tại TEX-GIANG"
+                     width="1280" height="960" loading="lazy">
+                <span class="hero-slider__shade" aria-hidden="true"></span>
+                <div class="hero-slider__caption">
+                  <p class="hero-slider__eyebrow">Đào tạo nghề</p>
+                  <p class="hero-slider__title">Học nghề may miễn phí, có trợ cấp lương học việc</p>
+                </div>
+              </div>
+
+              <div class="hero-slider__slide" data-slide>
+                <img class="hero-slider__img" src="assets/images/company/team-event.webp"
+                     alt="Hoạt động gắn kết cán bộ công nhân viên TEX-GIANG"
+                     width="960" height="637" loading="lazy">
+                <span class="hero-slider__shade" aria-hidden="true"></span>
+                <div class="hero-slider__caption">
+                  <p class="hero-slider__eyebrow">Con người</p>
+                  <p class="hero-slider__title">Môi trường làm việc gắn kết, ổn định lâu dài</p>
+                </div>
+              </div>
+            </div>
+
+            <button type="button" class="hero-slider__btn hero-slider__btn--prev" data-slider-prev aria-label="Ảnh trước">
+              <img src="assets/images/icons/arrow-right.svg" alt="" aria-hidden="true" width="20" height="20">
+            </button>
+            <button type="button" class="hero-slider__btn hero-slider__btn--next" data-slider-next aria-label="Ảnh tiếp theo">
+              <img src="assets/images/icons/arrow-right.svg" alt="" aria-hidden="true" width="20" height="20">
+            </button>
+            <div class="hero-slider__dots" data-slider-dots role="group" aria-label="Chọn ảnh"></div>
+          </div>
+          <p class="sr-only" data-slider-live aria-live="polite"></p>
+        </div>
+
+        <div class="mt-10 flex flex-col items-center text-center lg:mt-14">
+          <h1 class="max-w-[1000px] text-[clamp(2rem,5.5vw,5rem)] font-medium leading-[1.08] tracking-[-0.025em] text-ink">
+            Một công việc ổn định.<br><span class="text-accent">Thu nhập xứng đáng.</span>
+          </h1>
+
+          <p class="mt-6 max-w-[660px] text-[18px] leading-[1.6] text-muted">
+            Cổng tuyển dụng chính thức của TEX-GIANG — may mặc xuất khẩu tại 3 khu sản xuất Tân Hương, Cái Lậy, Chợ Gạo (Đồng Tháp).
+          </p>
+
+          <div class="mt-10 flex flex-wrap items-center justify-center gap-x-7 gap-y-3">
+            <a href="jobs.html" class="tg-btn tg-btn--primary">Xem vị trí đang tuyển</a>
+            <a href="apply.html" class="tg-link">Nộp hồ sơ trong 2 phút <img src="assets/images/icons/arrow-right.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[14px]"></a>
+          </div>
+
+          <p class="mt-5 text-[14px] text-muted">
+            Đang tuyển <strong class="font-medium text-body"><span data-open-job-count>7</span> vị trí</strong><span class="max-md:hidden"> · Cập nhật 30/10/2026</span>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÌM KIẾM -->
+    <section class="pt-16 lg:pt-20">
+      <div class="tg-container">
+        <form action="jobs.html" method="GET" role="search"
+              class="search-pill mx-auto flex max-w-[1000px] flex-col gap-2 2xl:max-w-[1080px] md:flex-row md:items-center md:gap-0
+                     md:rounded-full md:border md:border-line md:bg-white md:p-1.5 md:transition-colors md:focus-within:border-accent">
+          <label class="field max-md:rounded-xl max-md:bg-surface">
+            <img src="assets/images/icons/search.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon ">
+            <input type="text" name="keyword" placeholder="Vị trí, từ khoá — ví dụ: công nhân may, QC, IE" aria-label="Từ khoá tìm kiếm">
+          </label>
+          <label class="field max-md:rounded-xl max-md:bg-surface">
+            <img src="assets/images/icons/geo-alt.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon ">
+            <select name="location" aria-label="Địa điểm làm việc">
+              <option value="">Tất cả địa điểm</option>
+              <option value="tan-huong">Khu Tân Hương</option>
+              <option value="cai-lay">Khu Cái Lậy</option>
+              <option value="cho-gao">Khu Chợ Gạo</option>
+            </select>
+          </label>
+          <button type="submit" class="tg-btn tg-btn--primary h-11 rounded-full px-7">Tìm việc</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- SỐ LIỆU -->
+    <section class="mt-16 bg-surface py-16 lg:mt-20 lg:py-20">
+      <div class="tg-container grid grid-cols-2 gap-x-5 gap-y-7 md:gap-x-8 lg:grid-cols-4">
+        <div class="stat" data-reveal>
+          <span class="block text-[clamp(1.75rem,3vw,3rem)] font-medium leading-none tracking-[-0.02em] text-accent">2007</span>
+          <span class="mt-2 block text-[14px] leading-snug text-muted">Thành lập tại KCN Tân Hương</span>
+        </div>
+        <div class="stat" data-reveal>
+          <span class="block text-[clamp(1.75rem,3vw,3rem)] font-medium leading-none tracking-[-0.02em] text-accent">3</span>
+          <span class="mt-2 block text-[14px] leading-snug text-muted">Khu sản xuất tại Đồng Tháp</span>
+        </div>
+        <div class="stat" data-reveal>
+          <span class="block text-[clamp(1.75rem,3vw,3rem)] font-medium leading-none tracking-[-0.02em] text-accent">3.500</span>
+          <span class="mt-2 block text-[14px] leading-snug text-muted">Cán bộ công nhân viên</span>
+        </div>
+        <div class="stat" data-reveal>
+          <span class="block text-[clamp(1.75rem,3vw,3rem)] font-medium leading-none tracking-[-0.02em] text-accent">8 triệu</span>
+          <span class="mt-2 block text-[14px] leading-snug text-muted">Sản phẩm xuất khẩu mỗi năm</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIỆC LÀM -->
+    <section class="py-20 lg:py-32">
+      <div class="tg-container">
+        <div class="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between" data-reveal>
+          <div>
+            <h2 class="text-[clamp(1.75rem,3.4vw,2.75rem)] font-medium leading-[1.2] tracking-[-0.015em] text-ink">Vị trí đang tuyển</h2>
+            <p class="mt-2.5 text-[16px] text-muted">Bổ sung nhân sự cho khu Tân Hương.</p>
+          </div>
+          <a href="jobs.html" class="tg-link">Xem tất cả <span data-open-job-count>7</span> vị trí <img src="assets/images/icons/arrow-right.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[14px]"></a>
+        </div>
+
+        <div class="mt-10" data-job-slider></div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="tg-container pb-20 lg:pb-32">
+      <div class="flex flex-col items-start justify-between gap-10 rounded-media bg-accent p-8 lg:flex-row lg:items-center lg:p-14 2xl:p-16" data-reveal>
+        <div class="max-w-[560px] xl:max-w-[620px]">
+          <h2 class="text-[clamp(1.75rem,3.4vw,2.75rem)] font-medium leading-[1.2] text-white">Thưởng nóng cho công nhân may mới</h2>
+          <p class="mt-4 max-w-[52ch] text-[16px] leading-[1.7] text-white/85">2.000.000đ khi làm đủ 2 tháng, kèm xe đưa rước tận nhà, ăn ca miễn phí và đào tạo nghề có lương.</p>
+        </div>
+        <div class="flex w-full flex-col items-start gap-5 sm:flex-row sm:items-center lg:w-auto">
+          <a href="apply.html" class="tg-btn tg-btn--white w-full sm:w-auto">Đăng ký nhận thưởng</a>
+          <a href="https://zalo.me" target="_blank" rel="noopener" class="inline-flex items-center gap-2 whitespace-nowrap text-[16px] font-medium text-white/90 transition-colors hover:text-white">
+            Chat Zalo tuyển dụng <img src="assets/images/icons/arrow-right.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[14px]">
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- VỀ TEX-GIANG -->
+    <section class="tg-container grid items-center gap-10 pb-20 lg:grid-cols-2 lg:gap-16 lg:pb-32">
+      <figure data-reveal>
+        <img src="assets/images/banner-texgiang.webp" srcset="assets/images/banner-texgiang-800.webp 800w, assets/images/banner-texgiang.webp 2048w" sizes="(max-width: 768px) 100vw, 1200px"
+             alt="Khu nhà xưởng và cổng Nhà máy Tân Hương 2"
+             width="2048" height="768" loading="lazy"
+             class="aspect-[4/3] w-full rounded-media object-cover object-right">
+      </figure>
+
+      <div data-reveal>
+        <h2 class="text-[clamp(1.75rem,3.4vw,2.75rem)] font-medium leading-[1.2] tracking-[-0.015em] text-ink">Về TEX-GIANG</h2>
+        <p class="mt-4 max-w-[62ch] text-[16px] leading-[1.7] text-muted">
+          Công ty Cổ phần TEX-GIANG (TGI) thành lập tháng 3/2007, vận hành 3 khu sản xuất tại Tân Hương, Cái Lậy, Chợ Gạo; xuất khẩu sang châu Âu, Mỹ, Úc và New Zealand.
+        </p>
+        <p class="mt-4 max-w-[62ch] text-[16px] leading-[1.7] text-muted">
+          Triết lý “Vì con người — Vì chất lượng — Vì tương lai bền vững”: môi trường làm việc an toàn, nhà xưởng thoáng mát, thu nhập xứng đáng với người lao động.
+        </p>
+
+        <div class="mt-8 flex flex-wrap gap-10">
+          <div>
+            <span class="block text-[24px] font-medium leading-tight text-ink">2007</span>
+            <span class="mt-1 block text-[14px] text-muted">Thành lập, may xuất khẩu Âu – Mỹ</span>
+          </div>
+          <div>
+            <span class="block text-[24px] font-medium leading-tight text-ink">SA8000 · ISO 9001</span>
+            <span class="mt-1 block text-[14px] text-muted">Chứng nhận đang áp dụng</span>
+          </div>
+        </div>
+
+        <div class="mt-8 flex flex-wrap gap-7">
+          <a href="about.html" class="tg-link">Về chúng tôi <img src="assets/images/icons/arrow-right.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[14px]"></a>
+          <a href="why-tex-giang.html" class="tg-link">Chế độ phúc lợi <img src="assets/images/icons/arrow-right.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[14px]"></a>
+        </div>
+      </div>
+    </section>
+
+<section class="tg-container pb-20 lg:pb-28" aria-labelledby="company-scenes">
+  <div class="image-story">
+    <div><h2 id="company-scenes">Con người và nơi làm việc</h2><p>Khám phá không gian nhà máy, hoạt động cộng đồng và định hướng phát triển bền vững trong hệ thống TEX-GIANG.</p><a href="about.html" class="tg-link mt-5">Tìm hiểu doanh nghiệp <img class="tg-icon" src="assets/images/icons/arrow-right.svg" alt="" width="20" height="20"></a></div>
+    <figure><img src="assets/images/company/social.webp" width="600" height="450" loading="lazy" alt="Đại diện doanh nghiệp trao quà trong hoạt động cộng đồng"><figcaption>Gắn kết cùng cộng đồng</figcaption></figure>
+    <figure><img src="assets/images/company/environment.webp" width="600" height="450" loading="lazy" alt="Hệ thống điện mặt trời trên mái nhà xưởng TEX-GIANG"><figcaption>Hướng tới sản xuất bền vững</figcaption></figure>
+  </div>
+</section>
+  </main>
+
+  <!-- FOOTER -->
+    <footer class="no-print border-t border-line bg-surface">
+    <div class="tg-container py-12 lg:py-16">
+      <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1.3fr_1fr] lg:gap-12">
+
+        <!-- Cột 1: thương hiệu -->
+        <div>
+          <a href="index.html" class="inline-flex items-center gap-2.5" aria-label="TEX-GIANG — trang chủ">
+            <img src="assets/images/logo-tgi-mark.webp" alt="TEX-GIANG (TGI)" width="62" height="40" class="footer-logo">
+          </a>
+          <p class="mt-4 max-w-[300px] text-[15px] leading-[1.7] text-muted">
+            Cổng tuyển dụng chính thức của Công ty Cổ phần TEX-GIANG tại KCN Tân Hương, Đồng Tháp.
+          </p>
+          <ul class="mt-4 space-y-2 text-[15px] text-muted">
+            <li class="flex items-center gap-2.5">
+              <img src="assets/images/icons/telephone.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon">
+              <a href="tel:02733937274" class="transition-colors hover:text-accent">0273 393 7274</a>
+            </li>
+            <li class="flex items-center gap-2.5">
+              <img src="assets/images/icons/envelope.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon">
+              <a href="mailto:nhansu@tex-giang.com.vn" class="transition-colors hover:text-accent">nhansu@tex-giang.com.vn</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Cột 2: menu -->
+        <nav aria-label="Menu chân trang">
+          <h2 class="text-[13px] font-semibold uppercase tracking-[0.12em] text-ink">Menu</h2>
+          <ul class="mt-4 space-y-2.5 text-[15px]">
+            <li><a href="index.html" class="text-muted transition-colors hover:text-accent">Trang chủ</a></li>
+            <li><a href="jobs.html" class="text-muted transition-colors hover:text-accent">Việc làm</a></li>
+            <li><a href="about.html" class="text-muted transition-colors hover:text-accent">Về chúng tôi</a></li>
+            <li><a href="why-tex-giang.html" class="text-muted transition-colors hover:text-accent">Phúc lợi</a></li>
+            <li><a href="news.html" class="text-muted transition-colors hover:text-accent">Tin tức</a></li>
+            <li><a href="contact.html" class="text-muted transition-colors hover:text-accent">Liên hệ</a></li>
+          </ul>
+        </nav>
+
+        <!-- Cột 3: liên hệ chi nhánh -->
+        <div>
+          <h2 class="text-[13px] font-semibold uppercase tracking-[0.12em] text-ink">Liên hệ chi nhánh</h2>
+          <ul class="mt-4 space-y-3 text-[15px] leading-[1.6] text-muted">
+            <li><span class="block font-medium text-body">Tân Hương</span>KCN Tân Hương, Xã Tân Hương, Đồng Tháp</li>
+            <li><span class="block font-medium text-body">Chợ Gạo</span>Ấp Hòa Lợi Tiểu, Xã Bình Ninh, Đồng Tháp</li>
+            <li><span class="block font-medium text-body">Cai Lậy</span>Ấp Bình Quới, Xã Bình Phú, Đồng Tháp</li>
+          </ul>
+        </div>
+
+        <!-- Cột 4: mạng xã hội -->
+        <div>
+          <h2 class="text-[13px] font-semibold uppercase tracking-[0.12em] text-ink">Kết nối</h2>
+          <ul class="mt-4 space-y-2.5 text-[15px]">
+            <li><a href="https://zalo.me/02733937274" target="_blank" rel="noopener" class="text-muted transition-colors hover:text-accent">Zalo tuyển dụng</a></li>
+            <li><a href="https://www.facebook.com/" target="_blank" rel="noopener" class="text-muted transition-colors hover:text-accent">Facebook</a></li>
+            <li><a href="https://www.youtube.com/" target="_blank" rel="noopener" class="text-muted transition-colors hover:text-accent">YouTube</a></li>
+            <li><a href="https://tex-giang.com.vn" target="_blank" rel="noopener" class="text-muted transition-colors hover:text-accent">Website công ty</a></li>
+            <li><button type="button" class="open-qr-modal text-muted transition-colors hover:text-accent">Mã QR tuyển dụng</button></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mt-10 flex flex-col gap-3 border-t border-line pt-6 text-[13px] text-muted sm:flex-row sm:items-center sm:justify-between">
+        <p>© 2026 Công ty Cổ phần TEX-GIANG</p>
+        <p class="flex flex-wrap items-center gap-x-3 gap-y-1">
+          <span>Ảnh: TEX-GIANG</span>
+          <a href="admin/login.html" class="transition-colors hover:text-accent">Cổng quản trị HR</a>
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- NÚT NỔI -->
+  <div class="float-stack fixed bottom-4 right-3 z-40 flex flex-col items-center gap-2 no-print sm:bottom-6 sm:right-6 sm:gap-2.5">
+    <button id="back-to-top" type="button" aria-label="Lên đầu trang"
+            class="float-btn opacity-0 pointer-events-none">
+      <img src="assets/images/icons/arrow-up.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon ">
+    </button>
+    <a href="https://zalo.me" target="_blank" rel="noopener" class="float-btn" aria-label="Chat Zalo tuyển dụng">Zalo</a>
+    <a href="tel:02733937274" class="float-btn float-btn--primary" aria-label="Gọi hotline 0273 393 7274">
+      <img src="assets/images/icons/telephone.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[16px]">
+    </a>
+  </div>
+
+  <!-- BANNER POP-UP: thẻ nổi góc trái, hiện sau khi cuộn, 1 lần mỗi phiên -->
+  <div id="recruitment-popup" class="hidden fixed bottom-20 left-4 right-4 z-40 w-auto max-w-[360px] flex-col rounded-media bg-white p-5 shadow-float sm:right-auto sm:w-[360px] no-print"
+       role="dialog" aria-modal="false" aria-labelledby="popup-title">
+    <div class="flex items-start justify-between gap-4">
+      <p class="text-[14px] font-medium text-accent">Đợt tuyển cuối năm 2026</p>
+      <button id="close-popup-btn" type="button" aria-label="Đóng thông báo"
+              class="grid h-7 w-7 shrink-0 place-items-center rounded-md text-muted transition-colors hover:bg-surface hover:text-ink">
+        <img src="assets/images/icons/x-lg.svg" alt="" aria-hidden="true" width="18" height="18">
+      </button>
+    </div>
+
+    <h2 id="popup-title" class="mt-2 text-[18px] font-medium leading-[1.35] text-ink">Thưởng nóng 2.000.000đ cho công nhân may mới</h2>
+
+    <p class="mt-2 text-[14px] leading-[1.6] text-muted">Học nghề miễn phí có lương · xe đưa rước · ăn ca miễn phí.</p>
+
+    <a href="apply.html" class="tg-btn tg-btn--primary mt-4 h-10 w-full text-[15px]">Nộp hồ sơ ngay</a>
+    <button id="popup-dont-show-again" type="button" class="mt-2 text-[14px] text-muted underline underline-offset-2 transition-colors hover:text-ink">
+      Không hiện lại trong phiên này
+    </button>
+  </div>
+
+  <!-- MODAL QR -->
+  <div id="qr-modal" class="tg-modal hidden" role="dialog" aria-modal="true" aria-labelledby="qr-title">
+    <div class="relative w-full max-w-[380px] rounded-2xl bg-white p-7 text-center">
+      <button id="close-qr-btn" type="button" aria-label="Đóng"
+              class="absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-lg text-muted transition-colors hover:bg-surface hover:text-ink">
+        <img src="assets/images/icons/x-lg.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[14px]">
+      </button>
+      <h3 id="qr-title" class="text-[18px] font-medium text-ink">Mã QR tin tuyển dụng</h3>
+      <p class="mt-1.5 text-[14px] leading-[1.6] text-muted">Quét bằng camera điện thoại hoặc Zalo để mở nhanh trên thiết bị khác.</p>
+      <div class="my-5 inline-block rounded-xl border border-line p-3">
+        <img id="qr-code-img"
+             src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&amp;data=https%3A%2F%2Ftex-giang.com.vn"
+             alt="Mã QR tuyển dụng" width="180" height="180" class="h-[180px] w-[180px]">
+      </div>
+      <p id="qr-target-url" class="break-all text-[14px] text-muted"></p>
+              <button type="button" onclick="copyLink()" class="tg-btn tg-btn--primary mt-5 h-11 w-full text-[16px]">Sao chép đường dẫn</button>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/ui.js"></script>
+  <script src="assets/js/demo-store.js"></script>
+  <script src="assets/js/apply-form.js"></script>
+  <script src="assets/js/apply-dialog.js"></script>
+  <script src="assets/js/jobs-data.js"></script>
+  <script src="assets/js/home-slider.js"></script>
+  <script src="assets/js/home-jobs-slider.js"></script>
+  <script src="assets/js/home-urgent-dialog.js"></script>
+</body>
+</html>
