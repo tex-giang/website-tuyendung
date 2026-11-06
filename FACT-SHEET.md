@@ -58,6 +58,7 @@
 | Timeline About | 8 mốc, mốc cuối là 3 khu + khoảng 3.500 lao động |
 | Liên hệ | trụ sở + Nhà máy Tân Hương 2 + khu Cái Lậy + khu Chợ Gạo |
 | Quản trị | lọc theo khu sản xuất (dashboard, tin tuyển dụng, hồ sơ ứng viên) |
+| Email liên hệ trên site | `chung.doan@tex-giang.com.vn` → **`nhansu@tex-giang.com.vn`** (06/11/2026); email công bố ở mục 1 giữ nguyên để đối chiếu nguồn |
 
 ## 6. Vẫn là dữ liệu minh hoạ
 

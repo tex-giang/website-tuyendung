@@ -124,7 +124,7 @@
       seoDescription:
         "Vị trí đang tuyển tại Công ty Cổ phần TEX-GIANG, KCN Tân Hương, Đồng Tháp. Xe đưa rước, cơm ca, BHXH đầy đủ.",
       pageSize: 6,
-      applyEmail: "chung.doan@tex-giang.com.vn",
+      applyEmail: "nhansu@tex-giang.com.vn",
     },
     content: {
       slogan: "Một công việc ổn định. Thu nhập xứng đáng.",
@@ -136,7 +136,7 @@
         "Môi trường làm việc đạt SA8000, ISO 9001; thưởng tháng 13 và các dịp lễ, phụ cấp nuôi con nhỏ, xe đưa rước và cơm ca.",
       hotline: "02733937274",
       zalo: "02733937274",
-      email: "chung.doan@tex-giang.com.vn",
+      email: "nhansu@tex-giang.com.vn",
       fanpage: "",
     },
     posts: [
