@@ -39,7 +39,7 @@ tex-giang-recruitment/
 ├── storage/                   logs/ · uploads/cv (ngoài public)
 ├── tools/serve.ps1            server dev Windows
 ├── package.json · tailwind.config.cjs   build CSS (Node, chỉ dùng khi phát triển giao diện)
-├── docs/                      01-ui-inventory · 02-database · 03-admin-guide · 04-fe-admin-field-map
+├── docs/                      01-ui-inventory · 02-database · 03-admin-guide · 04-fe-admin-field-map · 05-cai-dat-may-khac
 │   └── reference/static-site/ bản gốc site tĩnh (HTML/CSS/JS demo, docs, tools) để đối chiếu
 └── .env.example
 ```
@@ -205,4 +205,4 @@ Chi tiết cách suy ra trường từ FE + thiết kế Admin + ma trận quy�
 > Lưu ý upload ảnh/CV: trên hosting cần đặt `upload_max_filesize` và `post_max_size` ≥ `12M`
 > (form giới hạn CV 10MB, ảnh 5MB) — kiểm tra trong cPanel → Select PHP Version → Options hoặc `.user.ini`.
 
-Xem chi tiết tiến độ: [docs/01-ui-inventory.md](docs/01-ui-inventory.md) · thiết kế DB: [docs/02-database.md](docs/02-database.md) · hướng dẫn quản trị: [docs/03-admin-guide.md](docs/03-admin-guide.md) · bản đồ trường FE→Admin + phân quyền: [docs/04-fe-admin-field-map.md](docs/04-fe-admin-field-map.md).
+Xem chi tiết tiến độ: [docs/01-ui-inventory.md](docs/01-ui-inventory.md) · thiết kế DB: [docs/02-database.md](docs/02-database.md) · hướng dẫn quản trị: [docs/03-admin-guide.md](docs/03-admin-guide.md) · bản đồ trường FE→Admin + phân quyền: [docs/04-fe-admin-field-map.md](docs/04-fe-admin-field-map.md) · cài đặt máy khác: [docs/05-cai-dat-may-khac.md](docs/05-cai-dat-may-khac.md).
