@@ -9,7 +9,7 @@ $statusLabels = [
   <div>
     <h1 class="admin-h1">Bảng điều khiển</h1>
   </div>
-  <a href="<?= url('admin/jobs/create') ?>" class="btn btn-primary">+ Thêm tin tuyển dụng</a>
+  <a href="<?= url('admin/jobs/create') ?>" class="btn btn-primary"><i class="bi bi-plus-lg me-1" aria-hidden="true"></i> Thêm tin tuyển dụng</a>
 </div>
 
 <div class="admin-kpis">
@@ -87,6 +87,6 @@ $statusLabels = [
       </li>
       <?php endforeach; ?>
     </ul>
-    <a href="<?= url('admin/jobs') ?>" class="btn btn-outline btn-block mt-4">Quản lý tin tuyển dụng</a>
+    <a href="<?= url('admin/jobs') ?>" class="btn btn-outline btn-block mt-4"><i class="bi bi-briefcase me-1" aria-hidden="true"></i> Quản lý tin tuyển dụng</a>
   </section>
 </div>

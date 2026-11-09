@@ -9,7 +9,7 @@
   <div>
     <h1 class="admin-h1">Menu website</h1>
   </div>
-  <a href="<?= url('admin/menus/create') ?>" class="btn btn-primary">+ Thêm menu</a>
+  <a href="<?= url('admin/menus/create') ?>" class="btn btn-primary"><i class="bi bi-plus-lg me-1" aria-hidden="true"></i> Thêm menu</a>
 </div>
 
 <?php if ($menus === []): ?>

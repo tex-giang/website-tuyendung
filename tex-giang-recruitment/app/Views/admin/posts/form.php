@@ -14,9 +14,9 @@ $currentImage = $val('image_path');
   </div>
   <div class="admin-head-actions">
     <?php if ($isEdit && $post['status'] === 'published'): ?>
-    <a href="<?= url('news/' . $post['slug']) ?>" target="_blank" rel="noopener" class="btn btn-outline">Xem trên website ↗</a>
+    <a href="<?= url('news/' . $post['slug']) ?>" target="_blank" rel="noopener" class="btn btn-outline"><i class="bi bi-box-arrow-up-right me-1" aria-hidden="true"></i> Xem trên website</a>
     <?php endif; ?>
-    <a href="<?= url('admin/posts') ?>" class="btn btn-ghost">← Danh sách</a>
+    <a href="<?= url('admin/posts') ?>" class="btn btn-ghost"><i class="bi bi-arrow-left me-1" aria-hidden="true"></i> Danh sách</a>
   </div>
 </div>
 
@@ -125,7 +125,7 @@ $currentImage = $val('image_path');
   </section>
 
   <div class="admin-form__actions">
-    <button type="submit" class="btn btn-primary"><?= $isEdit ? 'Lưu thay đổi' : 'Tạo bài viết' ?></button>
+    <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1" aria-hidden="true"></i> <?= $isEdit ? 'Lưu thay đổi' : 'Tạo bài viết' ?></button>
     <a href="<?= url('admin/posts') ?>" class="btn btn-ghost">Huỷ</a>
   </div>
 </form>
@@ -135,7 +135,7 @@ $currentImage = $val('image_path');
       class="admin-form__delete" data-ajax
       data-confirm="Xoá bài &quot;<?= e($val('title')) ?>&quot;? Bài sẽ gỡ khỏi website.">
   <?= csrf_field() ?>
-  <button type="submit" class="btn btn-danger">Xoá bài viết</button>
+  <button type="submit" class="btn btn-danger"><i class="bi bi-trash me-1" aria-hidden="true"></i> Xoá bài viết</button>
 </form>
 <?php endif; ?>
 

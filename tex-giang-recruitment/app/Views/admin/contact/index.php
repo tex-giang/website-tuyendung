@@ -26,8 +26,8 @@ $end = min($result['page'] * $result['per_page'], $result['total']);
     <option value="<?= e($key) ?>"<?= $filters['status'] === $key ? ' selected' : '' ?>><?= e($label) ?> (<?= (int) ($counts[$key] ?? 0) ?>)</option>
     <?php endforeach; ?>
   </select>
-  <button type="submit" class="btn btn-outline">Lọc</button>
-  <a href="<?= url('admin/contact') ?>" class="btn btn-ghost">Xoá lọc</a>
+  <button type="submit" class="btn btn-outline"><i class="bi bi-funnel me-1" aria-hidden="true"></i> Lọc</button>
+  <a href="<?= url('admin/contact') ?>" class="btn btn-ghost"><i class="bi bi-x-circle me-1" aria-hidden="true"></i> Xoá lọc</a>
 </form>
 
 <div class="admin-card">
@@ -52,7 +52,7 @@ $end = min($result['page'] * $result['per_page'], $result['total']);
           <td class="admin-muted"><?= e(vn_date($item['created_at'], 'd/m/Y H:i')) ?></td>
           <td class="is-actions">
             <div class="admin-actions">
-              <a href="<?= url('admin/contact/' . $item['id']) ?>" class="btn btn-outline btn-sm">Xem</a>
+              <a href="<?= url('admin/contact/' . $item['id']) ?>" class="btn btn-outline btn-sm"><i class="bi bi-eye me-1" aria-hidden="true"></i> Xem</a>
               <form method="POST" action="<?= url('admin/contact/' . $item['id'] . '/delete') ?>"
                     data-confirm="Xoá tin nhắn của &quot;<?= e($item['full_name']) ?>&quot;?">
                 <?= csrf_field() ?><button class="btn btn-danger btn-icon" type="submit" title="Xoá" aria-label="Xoá"><?= admin_icon_svg('trash') ?></button>

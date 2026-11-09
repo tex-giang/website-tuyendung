@@ -91,6 +91,6 @@ $e = static fn(string $key): string => (string) ($errors[$key] ?? '');
   </section>
 
   <div class="admin-form__actions">
-    <button type="submit" class="btn btn-primary">Lưu nội dung</button>
+    <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1" aria-hidden="true"></i> Lưu nội dung</button>
   </div>
 </form>

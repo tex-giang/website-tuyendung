@@ -6,25 +6,25 @@ $can = static fn(string $module): bool => \App\Core\Permissions::currentCan($mod
 
 $groups = [
     'Tuyển dụng' => [
-        ['dashboard', 'Bảng điều khiển', url('admin/dashboard'), 0],
-        ['jobs', 'Tin tuyển dụng', url('admin/jobs'), 0],
-        ['applications', 'Hồ sơ ứng tuyển', url('admin/applications'), \App\Models\Application::newCount()],
-        ['visits', 'Thống kê truy cập', url('admin/visits'), 0, 'dashboard'],
+        ['dashboard', 'Bảng điều khiển', url('admin/dashboard'), 0, 'dashboard', 'bi-speedometer2'],
+        ['jobs', 'Tin tuyển dụng', url('admin/jobs'), 0, 'jobs', 'bi-briefcase'],
+        ['applications', 'Hồ sơ ứng tuyển', url('admin/applications'), \App\Models\Application::newCount(), 'applications', 'bi-file-earmark-person'],
+        ['visits', 'Thống kê truy cập', url('admin/visits'), 0, 'dashboard', 'bi-bar-chart-line'],
     ],
     'Nội dung' => [
-        ['posts', 'Tin tức & bài viết', url('admin/posts'), 0],
-        ['banners', 'Banner & thông báo', url('admin/banners'), 0],
-        ['content', 'Nội dung website', url('admin/content'), 0],
-        ['pages-about', 'Về chúng tôi', url('admin/pages/about'), 0, 'content'],
-        ['pages-benefits', 'Phúc lợi', url('admin/pages/benefits'), 0, 'content'],
-        ['menus', 'Menu website', url('admin/menus'), 0, 'content'],
-        ['categories', 'Danh mục dùng chung', url('admin/categories'), 0],
-        ['contact', 'Hộp thư liên hệ', url('admin/contact'), \App\Models\ContactMessage::newCount()],
+        ['posts', 'Tin tức & bài viết', url('admin/posts'), 0, 'posts', 'bi-newspaper'],
+        ['banners', 'Banner & thông báo', url('admin/banners'), 0, 'banners', 'bi-images'],
+        ['content', 'Nội dung website', url('admin/content'), 0, 'content', 'bi-file-earmark-text'],
+        ['pages-about', 'Về chúng tôi', url('admin/pages/about'), 0, 'content', 'bi-info-circle'],
+        ['pages-benefits', 'Phúc lợi', url('admin/pages/benefits'), 0, 'content', 'bi-gift'],
+        ['menus', 'Menu website', url('admin/menus'), 0, 'content', 'bi-menu-button-wide'],
+        ['categories', 'Danh mục dùng chung', url('admin/categories'), 0, 'categories', 'bi-tags'],
+        ['contact', 'Hộp thư liên hệ', url('admin/contact'), \App\Models\ContactMessage::newCount(), 'contact', 'bi-envelope'],
     ],
     'Hệ thống' => [
-        ['settings', 'Cài đặt hệ thống', url('admin/settings'), 0],
-        ['users', 'Người dùng quản trị', url('admin/users'), 0],
-        ['audit', 'Nhật ký thao tác', url('admin/audit'), 0],
+        ['settings', 'Cài đặt hệ thống', url('admin/settings'), 0, 'settings', 'bi-gear'],
+        ['users', 'Người dùng quản trị', url('admin/users'), 0, 'users', 'bi-people'],
+        ['audit', 'Nhật ký thao tác', url('admin/audit'), 0, 'audit', 'bi-clock-history'],
     ],
 ];
 $roleLabel = \App\Core\Permissions::roleLabels()[$user['role'] ?? ''] ?? ($user['role'] ?? '');
@@ -50,8 +50,9 @@ $initials = mb_strtoupper($initials !== '' ? $initials : 'TG', 'UTF-8');
       }
       ?>
       <p class="admin-nav__group"><?= e($groupLabel) ?></p>
-      <?php foreach ($visible as [$key, $label, $href, $badge]): ?>
+      <?php foreach ($visible as [$key, $label, $href, $badge, $perm, $icon]): ?>
       <a href="<?= $href ?>" class="admin-nav__item <?= $nav === $key ? 'is-active' : '' ?>" title="<?= e($label) ?>">
+        <i class="bi <?= e($icon) ?> admin-nav__icon" aria-hidden="true"></i>
         <span class="admin-nav__label"><?= e($label) ?></span>
         <?php if ((int) $badge > 0): ?><span class="admin-nav__count"><?= (int) $badge ?></span><?php endif; ?>
       </a>
@@ -67,6 +68,6 @@ $initials = mb_strtoupper($initials !== '' ? $initials : 'TG', 'UTF-8');
         <em><?= e($roleLabel) ?></em>
       </span>
     </a>
-    <a href="<?= url('') ?>" target="_blank" rel="noopener" class="admin-sidebar__link">↗ Website công khai</a>
+    <a href="<?= url('') ?>" target="_blank" rel="noopener" class="admin-sidebar__link"><i class="bi bi-box-arrow-up-right me-1" aria-hidden="true"></i> Website công khai</a>
   </div>
 </aside>

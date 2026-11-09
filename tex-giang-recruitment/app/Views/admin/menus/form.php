@@ -17,7 +17,7 @@ $err = static fn(string $key): string => (string) ($errors[$key] ?? '');
     <p class="admin-breadcrumb"><a href="<?= url('admin/menus') ?>">Menu website</a> / <?= $isEdit ? 'Sửa menu' : 'Thêm menu' ?></p>
     <h1 class="admin-h1"><?= $isEdit ? 'Sửa menu' : 'Thêm menu' ?></h1>
   </div>
-  <a href="<?= url('admin/menus') ?>" class="btn btn-ghost">← Danh sách</a>
+  <a href="<?= url('admin/menus') ?>" class="btn btn-ghost"><i class="bi bi-arrow-left me-1" aria-hidden="true"></i> Danh sách</a>
 </div>
 
 <?php if ($errors !== []): ?>
@@ -53,7 +53,7 @@ $err = static fn(string $key): string => (string) ($errors[$key] ?? '');
   </section>
 
   <div class="admin-form__actions">
-    <button type="submit" class="btn btn-primary"><?= $isEdit ? 'Lưu thay đổi' : 'Thêm menu' ?></button>
+    <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1" aria-hidden="true"></i> <?= $isEdit ? 'Lưu thay đổi' : 'Thêm menu' ?></button>
     <a href="<?= url('admin/menus') ?>" class="btn btn-ghost">Huỷ</a>
   </div>
 </form>

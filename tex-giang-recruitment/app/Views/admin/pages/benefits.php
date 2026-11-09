@@ -84,7 +84,7 @@ $val = static function (array $row, string $key, string $default = ''): string {
             </div>
             <?php endforeach; ?>
           </div>
-          <button type="button" class="btn btn-outline btn-sm" data-item-add>+ Thêm dòng</button>
+          <button type="button" class="btn btn-outline btn-sm" data-item-add><i class="bi bi-plus-lg me-1" aria-hidden="true"></i> Thêm dòng</button>
         </div>
       </div>
       <?php endforeach; ?>
@@ -125,7 +125,7 @@ $val = static function (array $row, string $key, string $default = ''): string {
         <div class="admin-repeater admin-repeater--items" data-items>
           <p class="admin-repeater__caption">Các dòng phúc lợi</p>
           <div class="admin-repeater__rows" data-item-rows></div>
-          <button type="button" class="btn btn-outline btn-sm" data-item-add>+ Thêm dòng</button>
+          <button type="button" class="btn btn-outline btn-sm" data-item-add><i class="bi bi-plus-lg me-1" aria-hidden="true"></i> Thêm dòng</button>
         </div>
       </div>
     </template>
@@ -141,7 +141,7 @@ $val = static function (array $row, string $key, string $default = ''): string {
       </div>
     </template>
 
-    <button type="button" class="btn btn-outline btn-sm" data-group-add>+ Thêm nhóm phúc lợi</button>
+    <button type="button" class="btn btn-outline btn-sm" data-group-add><i class="bi bi-plus-lg me-1" aria-hidden="true"></i> Thêm nhóm phúc lợi</button>
   </section>
 
   <section class="admin-card">
@@ -182,12 +182,12 @@ $val = static function (array $row, string $key, string $default = ''): string {
         </div>
         </div>
       </template>
-      <button type="button" class="btn btn-outline btn-sm" data-add>+ Thêm dòng so sánh</button>
+      <button type="button" class="btn btn-outline btn-sm" data-add><i class="bi bi-plus-lg me-1" aria-hidden="true"></i> Thêm dòng so sánh</button>
     </div>
   </section>
 
   <div class="admin-form__actions">
-    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+    <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1" aria-hidden="true"></i> Lưu thay đổi</button>
   </div>
 </form>
 

@@ -31,8 +31,8 @@ $actionLabels = [
     <option value="<?= (int) $user['id'] ?>"<?= (string) $filters['user_id'] === (string) $user['id'] ? ' selected' : '' ?>><?= e($user['full_name']) ?></option>
     <?php endforeach; ?>
   </select>
-  <button type="submit" class="btn btn-outline">Lọc</button>
-  <a href="<?= url('admin/audit') ?>" class="btn btn-ghost">Xoá lọc</a>
+  <button type="submit" class="btn btn-outline"><i class="bi bi-funnel me-1" aria-hidden="true"></i> Lọc</button>
+  <a href="<?= url('admin/audit') ?>" class="btn btn-ghost"><i class="bi bi-x-circle me-1" aria-hidden="true"></i> Xoá lọc</a>
 </form>
 
 <div class="admin-card">

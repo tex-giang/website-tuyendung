@@ -31,7 +31,7 @@ $sections = [
 <section class="admin-card">
   <div class="admin-card__head">
     <h2 class="admin-h2"><?= e($section['title']) ?> <span class="admin-badge admin-badge--soft"><?= count($section['items']) ?></span></h2>
-    <a href="<?= url('admin/categories/' . $type . '/create') ?>" class="btn btn-primary btn-sm">+ Thêm</a>
+    <a href="<?= url('admin/categories/' . $type . '/create') ?>" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg me-1" aria-hidden="true"></i> Thêm</a>
   </div>
 
   <?php if ($section['items'] === []): ?>

@@ -11,7 +11,7 @@ $typeHints = [
   <div>
     <h1 class="admin-h1">Banner &amp; thông báo</h1>
   </div>
-  <a href="<?= url('admin/banners/create') ?>" class="btn btn-primary">+ Thêm banner</a>
+  <a href="<?= url('admin/banners/create') ?>" class="btn btn-primary"><i class="bi bi-plus-lg me-1" aria-hidden="true"></i> Thêm banner</a>
 </div>
 
 <?php foreach ($types as $type => $typeLabel): ?>
@@ -45,12 +45,12 @@ $typeHints = [
           </td>
           <td>
             <?php if (!empty($banner['title'])): ?><span class="admin-muted"><?= e(excerpt((string) $banner['title'], 90)) ?></span><?php endif; ?>
-            <?php if (!empty($banner['link_url'])): ?><span class="admin-muted admin-mono">→ <?= e((string) $banner['link_url']) ?></span><?php endif; ?>
+            <?php if (!empty($banner['link_url'])): ?><span class="admin-muted admin-mono"><i class="bi bi-arrow-right me-1" aria-hidden="true"></i><?= e((string) $banner['link_url']) ?></span><?php endif; ?>
             <?php if (!empty($banner['description'])): ?><span class="admin-muted"><?= e(excerpt((string) $banner['description'], 90)) ?></span><?php endif; ?>
           </td>
           <td class="admin-muted">
             <?php if (!empty($banner['starts_at']) || !empty($banner['ends_at'])): ?>
-              <?= e(vn_date($banner['starts_at'], 'd/m/Y H:i') ?: '…') ?> → <?= e(vn_date($banner['ends_at'], 'd/m/Y H:i') ?: '…') ?>
+              <?= e(vn_date($banner['starts_at'], 'd/m/Y H:i') ?: '…') ?> <i class="bi bi-arrow-right mx-1" aria-hidden="true"></i> <?= e(vn_date($banner['ends_at'], 'd/m/Y H:i') ?: '…') ?>
             <?php else: ?>
               Không giới hạn
             <?php endif; ?>

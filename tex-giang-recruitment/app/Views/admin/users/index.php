@@ -6,7 +6,7 @@ $me = \App\Core\Session::get('auth_id');
   <div>
     <h1 class="admin-h1">Người dùng quản trị</h1>
   </div>
-  <a href="<?= url('admin/users/create') ?>" class="btn btn-primary">+ Thêm tài khoản</a>
+  <a href="<?= url('admin/users/create') ?>" class="btn btn-primary"><i class="bi bi-plus-lg me-1" aria-hidden="true"></i> Thêm tài khoản</a>
 </div>
 
 <div class="admin-card">
@@ -43,5 +43,5 @@ $me = \App\Core\Session::get('auth_id');
 <div class="admin-card">
   <h2 class="admin-h2">Hồ sơ của bạn</h2>
   <p class="admin-muted">Đổi mật khẩu và xem thông tin tài khoản đang đăng nhập.</p>
-  <a href="<?= url('admin/profile') ?>" class="btn btn-outline mt-4">Mở hồ sơ cá nhân</a>
+  <a href="<?= url('admin/profile') ?>" class="btn btn-outline mt-4"><i class="bi bi-person me-1" aria-hidden="true"></i> Mở hồ sơ cá nhân</a>
 </div>

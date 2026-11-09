@@ -14,7 +14,7 @@ $backUrl = url('admin/categories');
     <h1 class="admin-h1"><?= $isEdit ? 'Sửa ' : 'Thêm ' ?><?= e($config['singular']) ?></h1>
     <?php if ($isEdit): ?><?php endif; ?>
   </div>
-  <a href="<?= $backUrl ?>" class="btn btn-ghost">← Danh sách</a>
+  <a href="<?= $backUrl ?>" class="btn btn-ghost"><i class="bi bi-arrow-left me-1" aria-hidden="true"></i> Danh sách</a>
 </div>
 
 <?php if ($errors !== []): ?>
@@ -121,13 +121,13 @@ $backUrl = url('admin/categories');
         </div>
       </template>
 
-      <button type="button" class="btn btn-outline btn-sm" data-contact-add>+ Thêm người liên hệ</button>
+      <button type="button" class="btn btn-outline btn-sm" data-contact-add><i class="bi bi-plus-lg me-1" aria-hidden="true"></i> Thêm người liên hệ</button>
     </div>
   </section>
   <?php endif; ?>
 
   <div class="admin-form__actions">
-    <button type="submit" class="btn btn-primary"><?= $isEdit ? 'Lưu thay đổi' : 'Thêm ' . e($config['singular']) ?></button>
+    <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1" aria-hidden="true"></i> <?= $isEdit ? 'Lưu thay đổi' : 'Thêm ' . e($config['singular']) ?></button>
     <a href="<?= $backUrl ?>" class="btn btn-ghost">Huỷ</a>
   </div>
 </form>

@@ -17,7 +17,7 @@ $typeHint = [
     <p class="admin-breadcrumb"><a href="<?= url('admin/banners') ?>">Banner</a> / <?= $isEdit ? 'Sửa' : 'Thêm' ?></p>
     <h1 class="admin-h1"><?= $isEdit ? 'Sửa banner' : 'Thêm banner' ?></h1>
   </div>
-  <a href="<?= url('admin/banners') ?>" class="btn btn-ghost">← Danh sách</a>
+  <a href="<?= url('admin/banners') ?>" class="btn btn-ghost"><i class="bi bi-arrow-left me-1" aria-hidden="true"></i> Danh sách</a>
 </div>
 
 <?php if ($errors !== []): ?>
@@ -135,7 +135,7 @@ $typeHint = [
   </section>
 
   <div class="admin-form__actions">
-    <button type="submit" class="btn btn-primary"><?= $isEdit ? 'Lưu thay đổi' : 'Tạo banner' ?></button>
+    <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1" aria-hidden="true"></i> <?= $isEdit ? 'Lưu thay đổi' : 'Tạo banner' ?></button>
     <a href="<?= url('admin/banners') ?>" class="btn btn-ghost">Huỷ</a>
   </div>
 </form>

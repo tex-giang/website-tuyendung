@@ -55,7 +55,7 @@ $flashError = \App\Core\Session::pull('_error');
           <?php if ($err('password_confirm')): ?><span class="field__error"><?= e($err('password_confirm')) ?></span><?php endif; ?>
         </label>
       </div>
-      <button type="submit" class="btn btn-primary mt-4">Đổi mật khẩu</button>
+      <button type="submit" class="btn btn-primary mt-4"><i class="bi bi-key me-1" aria-hidden="true"></i> Đổi mật khẩu</button>
     </form>
   </section>
 </div>

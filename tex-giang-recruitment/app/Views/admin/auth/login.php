@@ -28,5 +28,5 @@ $passwordError = errors('password');
     <?php if ($passwordError): ?><span class="field__error"><?= e($passwordError) ?></span><?php endif; ?>
   </label>
 
-  <button type="submit" class="btn btn-primary btn-block">Đăng nhập</button>
+  <button type="submit" class="btn btn-primary btn-block"><i class="bi bi-box-arrow-in-right me-1" aria-hidden="true"></i> Đăng nhập</button>
 </form>

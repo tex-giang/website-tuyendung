@@ -37,8 +37,8 @@ $end = min($result['page'] * $result['per_page'], $result['total']);
     <option value="<?= (int) $jobId ?>"<?= (string) $filters['job_id'] === (string) $jobId ? ' selected' : '' ?>><?= e($jobTitle) ?></option>
     <?php endforeach; ?>
   </select>
-  <button type="submit" class="btn btn-outline">Lọc</button>
-  <a href="<?= url('admin/applications') ?>" class="btn btn-ghost">Xoá lọc</a>
+  <button type="submit" class="btn btn-outline"><i class="bi bi-funnel me-1" aria-hidden="true"></i> Lọc</button>
+  <a href="<?= url('admin/applications') ?>" class="btn btn-ghost"><i class="bi bi-x-circle me-1" aria-hidden="true"></i> Xoá lọc</a>
 </form>
 
 <div class="admin-card">
@@ -67,9 +67,9 @@ $end = min($result['page'] * $result['per_page'], $result['total']);
           <td class="admin-muted"><?= e(vn_date($app['created_at'], 'd/m/Y H:i')) ?></td>
           <td class="is-actions">
             <div class="admin-actions">
-              <a href="<?= url('admin/applications/' . $app['id']) ?>" class="btn btn-outline btn-sm">Xem hồ sơ</a>
+              <a href="<?= url('admin/applications/' . $app['id']) ?>" class="btn btn-outline btn-sm"><i class="bi bi-eye me-1" aria-hidden="true"></i> Xem hồ sơ</a>
               <?php if (!empty($app['cv_stored_name'])): ?>
-              <a href="<?= url('admin/applications/' . $app['id'] . '/cv') ?>" class="btn btn-ghost btn-sm">Tải CV</a>
+              <a href="<?= url('admin/applications/' . $app['id'] . '/cv') ?>" class="btn btn-ghost btn-sm"><i class="bi bi-download me-1" aria-hidden="true"></i> Tải CV</a>
               <?php endif; ?>
             </div>
           </td>

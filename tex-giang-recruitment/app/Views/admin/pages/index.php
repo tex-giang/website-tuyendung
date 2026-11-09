@@ -25,7 +25,7 @@ foreach ($groupNames as $group) {
     <p class="admin-breadcrumb">Nội dung website / <?= e($groupConfig['label']) ?></p>
     <h1 class="admin-h1"><?= e($config['label']) ?></h1>
   </div>
-  <a href="<?= url('admin/pages/' . $type . '/create') ?>" class="btn btn-primary">+ Thêm <?= e($config['singular']) ?></a>
+  <a href="<?= url('admin/pages/' . $type . '/create') ?>" class="btn btn-primary"><i class="bi bi-plus-lg me-1" aria-hidden="true"></i> Thêm <?= e($config['singular']) ?></a>
 </div>
 
 
@@ -61,7 +61,7 @@ foreach ($groupNames as $group) {
         <?php endif; ?>
       <?php endforeach; ?>
       <div class="field admin-quickadd__actions">
-        <button type="submit" class="btn btn-primary">+ Thêm nhanh</button>
+        <button type="submit" class="btn btn-primary"><i class="bi bi-plus-lg me-1" aria-hidden="true"></i> Thêm nhanh</button>
       </div>
     </div>
   </form>

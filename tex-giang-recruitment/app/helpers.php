@@ -441,21 +441,31 @@ function menu_link_visible(string $url): bool
     return $map[$key] === 1;
 }
 
-/** Icon inline (SVG) cho nút thao tác admin — nhận màu theo currentColor. */
-function admin_icon_svg(string $name, int $size = 18): string
+/** Icon Bootstrap cho admin — nhận màu theo currentColor. */
+function admin_icon_svg(string $name, int $size = 16): string
 {
-    $paths = [
-        'plus'      => '<path d="M8 3.5v9M3.5 8h9"/>',
-        'pencil'    => '<path d="M11.5 2.2l2.3 2.3L5.3 13H3v-2.3z"/><path d="M9.6 4.1l2.3 2.3"/>',
-        'trash'     => '<path d="M2.8 4.5h10.4"/><path d="M5.5 4.5V3h5v1.5"/><path d="M4.2 4.5l.7 8.2h6.2l.7-8.2"/><path d="M6.6 7v3.8M9.4 7v3.8"/>',
-        'eye'       => '<path d="M1.5 8s2.4-4.2 6.5-4.2S14.5 8 14.5 8 12.1 12.2 8 12.2 1.5 8 1.5 8z"/><circle cx="8" cy="8" r="1.9"/>',
-        'eye-off'   => '<path d="M2 2l12 12"/><path d="M6.2 4.1A6.7 6.7 0 0 1 8 3.8c4.1 0 6.5 4.2 6.5 4.2a11 11 0 0 1-2.2 2.7"/><path d="M4 5.1C2.5 6.3 1.5 8 1.5 8S3.9 12.2 8 12.2c1 0 2-.3 2.8-.7"/><path d="M6.9 6.8a1.9 1.9 0 0 0 2.5 2.6"/>',
-        'copy'      => '<rect x="5.5" y="5.5" width="7.5" height="8.5" rx="1.3"/><path d="M3 10.5V3.8A1.3 1.3 0 0 1 4.3 2.5H10"/>',
-        'arrow-up'  => '<path d="M8 13V3.5"/><path d="M4.5 7L8 3.5 11.5 7"/>',
-        'arrow-down'=> '<path d="M8 3v9.5"/><path d="M4.5 9l3.5 3.5L11.5 9"/>',
-        'check'     => '<path d="M13 4.5L6.5 11 3 7.5"/>',
-        'x'         => '<path d="M4 4l8 8M12 4l-8 8"/>',
+    $map = [
+        'plus'       => 'bi-plus-lg',
+        'pencil'     => 'bi-pencil',
+        'trash'      => 'bi-trash',
+        'eye'        => 'bi-eye',
+        'eye-off'    => 'bi-eye-slash',
+        'copy'       => 'bi-copy',
+        'arrow-up'   => 'bi-arrow-up',
+        'arrow-down' => 'bi-arrow-down',
+        'arrow-left' => 'bi-arrow-left',
+        'arrow-right'=> 'bi-arrow-right',
+        'check'      => 'bi-check-lg',
+        'x'          => 'bi-x-lg',
     ];
-    $path = $paths[$name] ?? $paths['check'];
-    return '<svg xmlns="http://www.w3.org/2000/svg" width="' . $size . '" height="' . $size . '" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' . $path . '</svg>';
+    $icon = $map[$name] ?? ('bi-' . ltrim($name, 'bi-'));
+    return '<i class="bi ' . e($icon) . '" style="font-size:' . (int) $size . 'px;line-height:1;" aria-hidden="true"></i>';
+}
+
+/** Render thẻ icon Bootstrap nhanh: bi('plus-lg', 'me-1') */
+function bi(string $name, string $extraClass = ''): string
+{
+    $icon = str_starts_with($name, 'bi-') ? $name : ('bi-' . $name);
+    $cls = 'bi ' . $icon . ($extraClass !== '' ? ' ' . $extraClass : '');
+    return '<i class="' . e($cls) . '" aria-hidden="true"></i>';
 }

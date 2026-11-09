@@ -22,9 +22,9 @@ if ($deadline !== '' && str_contains($deadline, ' ')) {
   </div>
   <div class="admin-head-actions">
     <?php if ($isEdit): ?>
-    <a href="<?= url('jobs/' . $job['slug']) ?>" target="_blank" rel="noopener" class="btn btn-outline">Xem trên website ↗</a>
+    <a href="<?= url('jobs/' . $job['slug']) ?>" target="_blank" rel="noopener" class="btn btn-outline"><i class="bi bi-box-arrow-up-right me-1" aria-hidden="true"></i> Xem trên website</a>
     <?php endif; ?>
-    <a href="<?= url('admin/jobs') ?>" class="btn btn-ghost">← Danh sách</a>
+    <a href="<?= url('admin/jobs') ?>" class="btn btn-ghost"><i class="bi bi-arrow-left me-1" aria-hidden="true"></i> Danh sách</a>
   </div>
 </div>
 
@@ -199,7 +199,7 @@ if ($deadline !== '' && str_contains($deadline, ' ')) {
   </section>
 
   <div class="admin-form__actions">
-    <button type="submit" class="btn btn-primary"><?= $isEdit ? 'Lưu thay đổi' : 'Tạo tin tuyển dụng' ?></button>
+    <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1" aria-hidden="true"></i> <?= $isEdit ? 'Lưu thay đổi' : 'Tạo tin tuyển dụng' ?></button>
     <a href="<?= url('admin/jobs') ?>" class="btn btn-ghost">Huỷ</a>
   </div>
 </form>
@@ -207,11 +207,11 @@ if ($deadline !== '' && str_contains($deadline, ' ')) {
 <?php if ($isEdit): ?>
 <div class="admin-form__delete">
   <form method="POST" action="<?= url('admin/jobs/' . $job['id'] . '/duplicate') ?>" data-ajax>
-    <?= csrf_field() ?><button type="submit" class="btn btn-outline">Nhân bản tin này</button>
+    <?= csrf_field() ?><button type="submit" class="btn btn-outline"><i class="bi bi-copy me-1" aria-hidden="true"></i> Nhân bản tin này</button>
   </form>
   <form method="POST" action="<?= url('admin/jobs/' . $job['id'] . '/delete') ?>" data-ajax
         data-confirm="Xoá tin &quot;<?= e($val('title')) ?>&quot;? Thao tác không thể hoàn tác.">
-    <?= csrf_field() ?><button type="submit" class="btn btn-danger">Xoá tin</button>
+    <?= csrf_field() ?><button type="submit" class="btn btn-danger"><i class="bi bi-trash me-1" aria-hidden="true"></i> Xoá tin</button>
   </form>
 </div>
 <?php endif; ?>

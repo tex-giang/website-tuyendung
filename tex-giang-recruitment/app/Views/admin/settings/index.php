@@ -41,7 +41,7 @@ $e = static fn(string $key): string => (string) ($errors[$key] ?? '');
   <?php endforeach; ?>
 
   <div class="admin-form__actions">
-    <button type="submit" class="btn btn-primary">Lưu cài đặt</button>
+    <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1" aria-hidden="true"></i> Lưu cài đặt</button>
     <a href="<?= url('admin/dashboard') ?>" class="btn btn-ghost">Huỷ</a>
   </div>
 </form>

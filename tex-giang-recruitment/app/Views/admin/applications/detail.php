@@ -15,10 +15,10 @@ $appointmentValue = $app['appointment_at'] ? date('Y-m-d\TH:i', strtotime((strin
   </div>
   <div class="admin-head-actions">
     <?php if (!empty($app['cv_stored_name'])): ?>
-    <a href="<?= url('admin/applications/' . $app['id'] . '/cv') ?>" class="btn btn-primary">Tải CV (<?= e((string) ($app['cv_original_name'] ?: 'tệp đính kèm')) ?>)</a>
+    <a href="<?= url('admin/applications/' . $app['id'] . '/cv') ?>" class="btn btn-primary"><i class="bi bi-download me-1" aria-hidden="true"></i> Tải CV (<?= e((string) ($app['cv_original_name'] ?: 'tệp đính kèm')) ?>)</a>
     <?php endif; ?>
-    <a href="tel:<?= e($app['phone']) ?>" class="btn btn-outline">Gọi <?= e($app['phone']) ?></a>
-    <a href="<?= url('admin/applications') ?>" class="btn btn-ghost">← Danh sách</a>
+    <a href="tel:<?= e($app['phone']) ?>" class="btn btn-outline"><i class="bi bi-telephone me-1" aria-hidden="true"></i> Gọi <?= e($app['phone']) ?></a>
+    <a href="<?= url('admin/applications') ?>" class="btn btn-ghost"><i class="bi bi-arrow-left me-1" aria-hidden="true"></i> Danh sách</a>
   </div>
 </div>
 
@@ -37,7 +37,7 @@ $appointmentValue = $app['appointment_at'] ? date('Y-m-d\TH:i', strtotime((strin
           <tr><th>Vị trí ứng tuyển</th><td>
             <?= e($app['job_title'] ?? 'CV tự do — chưa chọn vị trí') ?>
             <?php if (!empty($app['job_slug'])): ?>
-            · <a href="<?= url('jobs/' . $app['job_slug']) ?>" target="_blank" rel="noopener">xem tin ↗</a>
+            · <a href="<?= url('jobs/' . $app['job_slug']) ?>" target="_blank" rel="noopener">xem tin <i class="bi bi-box-arrow-up-right ms-1" aria-hidden="true"></i></a>
             <?php endif; ?>
           </td></tr>
           <tr><th>CV</th><td>
@@ -80,7 +80,7 @@ $appointmentValue = $app['appointment_at'] ? date('Y-m-d\TH:i', strtotime((strin
                       placeholder="Ví dụ: Đã gọi xác nhận, hẹn phỏng vấn 14:00 ngày 12/11."><?= e($app['admin_note'] ?? '') ?></textarea>
           </label>
         </div>
-        <button type="submit" class="btn btn-primary mt-4">Lưu cập nhật</button>
+        <button type="submit" class="btn btn-primary mt-4"><i class="bi bi-check-lg me-1" aria-hidden="true"></i> Lưu cập nhật</button>
       </form>
     </section>
   </div>

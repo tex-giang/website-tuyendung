@@ -24,7 +24,7 @@ $backUrl = url('admin/pages/' . $type);
     <p class="admin-breadcrumb"><a href="<?= $backUrl ?>"><?= e($config['label']) ?></a> / <?= e($groupConfig['label']) ?></p>
     <h1 class="admin-h1"><?= $isEdit ? 'Sửa ' : 'Thêm ' ?><?= e($config['singular']) ?></h1>
   </div>
-  <a href="<?= $backUrl ?>" class="btn btn-ghost">← Danh sách</a>
+  <a href="<?= $backUrl ?>" class="btn btn-ghost"><i class="bi bi-arrow-left me-1" aria-hidden="true"></i> Danh sách</a>
 </div>
 
 <?php if ($errors !== []): ?>
@@ -105,13 +105,13 @@ $backUrl = url('admin/pages/' . $type);
           <button type="button" class="btn btn-ghost btn-icon" data-item-remove title="Xoá" aria-label="Xoá"><?= admin_icon_svg('trash') ?></button>
         </div>
       </template>
-      <button type="button" class="btn btn-outline btn-sm" data-item-add>+ Thêm dòng</button>
+      <button type="button" class="btn btn-outline btn-sm" data-item-add><i class="bi bi-plus-lg me-1" aria-hidden="true"></i> Thêm dòng</button>
     </div>
   </section>
   <?php endif; ?>
 
   <div class="admin-form__actions">
-    <button type="submit" class="btn btn-primary"><?= $isEdit ? 'Lưu thay đổi' : 'Thêm ' . e($config['singular']) ?></button>
+    <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1" aria-hidden="true"></i> <?= $isEdit ? 'Lưu thay đổi' : 'Thêm ' . e($config['singular']) ?></button>
     <a href="<?= $backUrl ?>" class="btn btn-ghost">Huỷ</a>
   </div>
 </form>

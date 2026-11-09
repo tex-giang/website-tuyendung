@@ -8,7 +8,7 @@ $end = min($result['page'] * $result['per_page'], $result['total']);
   <div>
     <h1 class="admin-h1">Tin tức &amp; bài viết</h1>
   </div>
-  <a href="<?= url('admin/posts/create') ?>" class="btn btn-primary">+ Thêm bài viết</a>
+  <a href="<?= url('admin/posts/create') ?>" class="btn btn-primary"><i class="bi bi-plus-lg me-1" aria-hidden="true"></i> Thêm bài viết</a>
 </div>
 
 <form class="admin-filters" method="GET" action="<?= url('admin/posts') ?>">
@@ -25,8 +25,8 @@ $end = min($result['page'] * $result['per_page'], $result['total']);
     <option value="<?= (int) $category['id'] ?>"<?= (string) $filters['category_id'] === (string) $category['id'] ? ' selected' : '' ?>><?= e($category['name']) ?></option>
     <?php endforeach; ?>
   </select>
-  <button type="submit" class="btn btn-outline">Lọc</button>
-  <a href="<?= url('admin/posts') ?>" class="btn btn-ghost">Xoá lọc</a>
+  <button type="submit" class="btn btn-outline"><i class="bi bi-funnel me-1" aria-hidden="true"></i> Lọc</button>
+  <a href="<?= url('admin/posts') ?>" class="btn btn-ghost"><i class="bi bi-x-circle me-1" aria-hidden="true"></i> Xoá lọc</a>
 </form>
 
 <div class="admin-card">
@@ -72,7 +72,7 @@ $end = min($result['page'] * $result['per_page'], $result['total']);
           <td class="is-actions">
             <div class="admin-actions">
               <?php if ($item['status'] === 'published'): ?>
-              <a href="<?= url('news/' . $item['slug']) ?>" target="_blank" rel="noopener" class="btn btn-icon" title="Xem trên website">↗</a>
+              <a href="<?= url('news/' . $item['slug']) ?>" target="_blank" rel="noopener" class="btn btn-icon" title="Xem trên website" aria-label="Xem trên website"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i></a>
               <?php endif; ?>
               <a href="<?= url('admin/posts/' . $item['id'] . '/edit') ?>" class="btn btn-outline btn-icon" title="Sửa" aria-label="Sửa"><?= admin_icon_svg('pencil') ?></a>
               <form method="POST" action="<?= url('admin/posts/' . $item['id'] . '/delete') ?>"

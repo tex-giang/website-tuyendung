@@ -9,11 +9,11 @@ $statusBadge = ['new' => 'admin-badge--new', 'read' => 'admin-badge--draft', 're
     <h1 class="admin-h1"><?= e($msg['full_name']) ?></h1>
   </div>
   <div class="admin-head-actions">
-    <a href="tel:<?= e($msg['phone']) ?>" class="btn btn-outline">Gọi <?= e($msg['phone']) ?></a>
+    <a href="tel:<?= e($msg['phone']) ?>" class="btn btn-outline"><i class="bi bi-telephone me-1" aria-hidden="true"></i> Gọi <?= e($msg['phone']) ?></a>
     <?php if (!empty($msg['email'])): ?>
-    <a href="mailto:<?= e($msg['email']) ?>?subject=<?= rawurlencode('Phản hồi TEX-GIANG: ' . ($msg['subject'] ?? 'Câu hỏi tuyển dụng')) ?>" class="btn btn-outline">Trả lời email</a>
+    <a href="mailto:<?= e($msg['email']) ?>?subject=<?= rawurlencode('Phản hồi TEX-GIANG: ' . ($msg['subject'] ?? 'Câu hỏi tuyển dụng')) ?>" class="btn btn-outline"><i class="bi bi-envelope me-1" aria-hidden="true"></i> Trả lời email</a>
     <?php endif; ?>
-    <a href="<?= url('admin/contact') ?>" class="btn btn-ghost">← Danh sách</a>
+    <a href="<?= url('admin/contact') ?>" class="btn btn-ghost"><i class="bi bi-arrow-left me-1" aria-hidden="true"></i> Danh sách</a>
   </div>
 </div>
 
@@ -50,14 +50,14 @@ $statusBadge = ['new' => 'admin-badge--new', 'read' => 'admin-badge--draft', 're
         </label>
       </div>
       <div class="admin-form__actions mt-4">
-        <button type="submit" class="btn btn-primary">Lưu trạng thái</button>
+        <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1" aria-hidden="true"></i> Lưu trạng thái</button>
       </div>
     </form>
 
     <form method="POST" action="<?= url('admin/contact/' . $msg['id'] . '/delete') ?>" class="mt-4"
           data-confirm="Xoá tin nhắn của &quot;<?= e($msg['full_name']) ?>&quot;?">
       <?= csrf_field() ?>
-      <button type="submit" class="btn btn-danger">Xoá tin nhắn</button>
+      <button type="submit" class="btn btn-danger"><i class="bi bi-trash me-1" aria-hidden="true"></i> Xoá tin nhắn</button>
     </form>
   </section>
 </div>

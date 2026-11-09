@@ -23,6 +23,7 @@ $initials = mb_strtoupper($initials !== '' ? $initials : 'TG', 'UTF-8');
   <title><?= e($page['title'] ?? 'Quản trị | TEX-GIANG') ?></title>
   <link rel="stylesheet" href="<?= asset('css/utilities.css') ?>">
   <link rel="stylesheet" href="<?= asset('vendor/bootstrap/bootstrap.min.css') ?>">
+  <link rel="stylesheet" href="<?= asset('vendor/bootstrap-icons/bootstrap-icons.min.css') ?>">
   <link rel="stylesheet" href="<?= asset('vendor/datatables/dataTables.bootstrap5.min.css') ?>">
   <link rel="stylesheet" href="<?= asset('vendor/sweetalert2/sweetalert2.min.css') ?>">
   <link rel="stylesheet" href="<?= asset('css/admin-app.css') ?>">
@@ -60,21 +61,21 @@ $initials = mb_strtoupper($initials !== '' ? $initials : 'TG', 'UTF-8');
                 aria-haspopup="menu" aria-expanded="false" aria-controls="admin-avatar-menu">
           <span class="admin-avatar" aria-hidden="true"><?= e($initials) ?></span>
           <span class="admin-avatar__name"><?= e($user['full_name']) ?></span>
-          <span class="admin-avatar__chevron" aria-hidden="true">▾</span>
+          <i class="bi bi-chevron-down admin-avatar__chevron" aria-hidden="true"></i>
         </button>
 
         <div class="admin-avatar-menu" id="admin-avatar-menu" role="menu" aria-labelledby="admin-avatar-btn">
           <a role="menuitem" href="<?= url('admin/profile') ?>" class="admin-avatar-menu__item">
-            <span class="admin-avatar-menu__icon" aria-hidden="true">👤</span> Hồ sơ cá nhân
+            <i class="bi bi-person admin-avatar-menu__icon" aria-hidden="true"></i> Hồ sơ cá nhân
           </a>
           <a role="menuitem" href="<?= url('admin/profile') ?>#doi-mat-khau" class="admin-avatar-menu__item">
-            <span class="admin-avatar-menu__icon" aria-hidden="true">🔑</span> Đổi mật khẩu
+            <i class="bi bi-key admin-avatar-menu__icon" aria-hidden="true"></i> Đổi mật khẩu
           </a>
           <div class="admin-avatar-menu__divider" role="separator"></div>
           <form method="POST" action="<?= url('admin/logout') ?>">
             <?= csrf_field() ?>
             <button type="submit" role="menuitem" class="admin-avatar-menu__item is-danger">
-              <span class="admin-avatar-menu__icon" aria-hidden="true">⏻</span> Đăng xuất
+              <i class="bi bi-power admin-avatar-menu__icon" aria-hidden="true"></i> Đăng xuất
             </button>
           </form>
         </div>
@@ -93,7 +94,7 @@ $initials = mb_strtoupper($initials !== '' ? $initials : 'TG', 'UTF-8');
     <?= $content ?>
   </div>
 
-  <footer class="admin-footer">TEX-GIANG Recruitment · PHP <?= e(PHP_VERSION) ?> · <a href="<?= url('') ?>">về website</a></footer>
+  <footer class="admin-footer">TEX-GIANG Recruitment · PHP <?= e(PHP_VERSION) ?> · <a href="<?= url('') ?>"><i class="bi bi-arrow-left-short" aria-hidden="true"></i> về website</a></footer>
 </div>
 
 <script src="<?= asset('vendor/jquery/jquery.min.js') ?>"></script>

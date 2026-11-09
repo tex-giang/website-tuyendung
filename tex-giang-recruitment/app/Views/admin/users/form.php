@@ -10,7 +10,7 @@ $err = static fn(string $key): string => (string) ($errors[$key] ?? '');
     <p class="admin-breadcrumb"><a href="<?= url('admin/users') ?>">Người dùng</a> / <?= $isEdit ? 'Sửa' : 'Thêm' ?></p>
     <h1 class="admin-h1"><?= $isEdit ? 'Sửa tài khoản' : 'Thêm tài khoản' ?></h1>
   </div>
-  <a href="<?= url('admin/users') ?>" class="btn btn-ghost">← Danh sách</a>
+  <a href="<?= url('admin/users') ?>" class="btn btn-ghost"><i class="bi bi-arrow-left me-1" aria-hidden="true"></i> Danh sách</a>
 </div>
 
 <?php if ($errors !== []): ?>
@@ -75,7 +75,7 @@ $err = static fn(string $key): string => (string) ($errors[$key] ?? '');
   </section>
 
   <div class="admin-form__actions">
-    <button type="submit" class="btn btn-primary"><?= $isEdit ? 'Lưu thay đổi' : 'Tạo tài khoản' ?></button>
+    <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1" aria-hidden="true"></i> <?= $isEdit ? 'Lưu thay đổi' : 'Tạo tài khoản' ?></button>
     <a href="<?= url('admin/users') ?>" class="btn btn-ghost">Huỷ</a>
   </div>
 </form>
@@ -95,7 +95,7 @@ $err = static fn(string $key): string => (string) ($errors[$key] ?? '');
         <input class="field__input" type="password" name="password_confirm" required autocomplete="new-password">
       </label>
     </div>
-    <button type="submit" class="btn btn-outline mt-4">Đặt lại mật khẩu</button>
+    <button type="submit" class="btn btn-outline mt-4"><i class="bi bi-arrow-clockwise me-1" aria-hidden="true"></i> Đặt lại mật khẩu</button>
   </section>
 </form>
 <?php endif; ?>

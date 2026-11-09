@@ -11,7 +11,7 @@ $end = min($result['page'] * $result['per_page'], $result['total']);
   <div>
     <h1 class="admin-h1">Tin tuyển dụng</h1>
   </div>
-  <a href="<?= url('admin/jobs/create') ?>" class="btn btn-primary">+ Thêm tin</a>
+  <a href="<?= url('admin/jobs/create') ?>" class="btn btn-primary"><i class="bi bi-plus-lg me-1" aria-hidden="true"></i> Thêm tin</a>
 </div>
 
 <form class="admin-filters" method="GET" action="<?= url('admin/jobs') ?>">
@@ -22,8 +22,8 @@ $end = min($result['page'] * $result['per_page'], $result['total']);
     <option value="<?= e($key) ?>"<?= $filters['status'] === $key ? ' selected' : '' ?>><?= e($label) ?> (<?= (int) $counts[$key] ?>)</option>
     <?php endforeach; ?>
   </select>
-  <button type="submit" class="btn btn-outline">Lọc</button>
-  <a href="<?= url('admin/jobs') ?>" class="btn btn-ghost">Xoá lọc</a>
+  <button type="submit" class="btn btn-outline"><i class="bi bi-funnel me-1" aria-hidden="true"></i> Lọc</button>
+  <a href="<?= url('admin/jobs') ?>" class="btn btn-ghost"><i class="bi bi-x-circle me-1" aria-hidden="true"></i> Xoá lọc</a>
 </form>
 
 <div class="admin-card">
@@ -63,7 +63,7 @@ $end = min($result['page'] * $result['per_page'], $result['total']);
           <td class="admin-muted"><?= e(vn_date($job['updated_at'], 'd/m/Y H:i')) ?></td>
           <td class="is-actions">
             <div class="admin-actions">
-              <a href="<?= url('jobs/' . $job['slug']) ?>" target="_blank" rel="noopener" class="btn btn-icon" title="Xem trên website">↗</a>
+              <a href="<?= url('jobs/' . $job['slug']) ?>" target="_blank" rel="noopener" class="btn btn-icon" title="Xem trên website" aria-label="Xem trên website"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i></a>
               <a href="<?= url('admin/jobs/' . $job['id'] . '/edit') ?>" class="btn btn-outline btn-icon" title="Sửa" aria-label="Sửa"><?= admin_icon_svg('pencil') ?></a>
               <form method="POST" action="<?= url('admin/jobs/' . $job['id'] . '/duplicate') ?>" data-ajax>
                 <?= csrf_field() ?><button class="btn btn-outline btn-icon" type="submit" title="Nhân bản" aria-label="Nhân bản"><?= admin_icon_svg('copy') ?></button>

@@ -312,7 +312,20 @@ code { background: #eef3f0; padding: 1px 6px; border-radius: 5px; font-size: 13p
   padding: 7px 10px; font-size: 13px; border-radius: 7px;
   white-space: nowrap; overflow: hidden; min-width: 0;
 }
-.admin-nav__label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.admin-nav__icon {
+  font-size: 14px;
+  line-height: 1;
+  width: 16px;
+  text-align: center;
+  flex: none;
+  opacity: .75;
+}
+.admin-nav__item:hover .admin-nav__icon,
+.admin-nav__item.is-active .admin-nav__icon {
+  opacity: 1;
+  color: #fff;
+}
+.admin-nav__label { min-width: 0; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .admin-nav__count { flex: none; font-size: 10.5px; min-width: 18px; padding: 1px 5px; }
 
 .admin-sidebar__foot {
@@ -575,6 +588,7 @@ code { background: #eef3f0; padding: 1px 6px; border-radius: 5px; font-size: 13p
   border-radius: 9px;
 }
 .btn-icon svg { width: 17px; height: 17px; }
+.btn-icon i, .btn-icon .bi { font-size: 15px; line-height: 1; display: inline-flex; }
 .btn-icon.btn-danger { color: #b3261e; border-color: #f0c8c4; background: #fff; }
 .btn-icon.btn-danger:hover { background: #fdf3f2; }
 .admin-actions { gap: 6px; align-items: center; }

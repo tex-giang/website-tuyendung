@@ -11,6 +11,7 @@ $error = \App\Core\Session::pull('_error');
   <meta name="robots" content="noindex, nofollow">
   <title><?= e($page['title'] ?? 'Đăng nhập quản trị') ?></title>
   <link rel="stylesheet" href="<?= asset('css/utilities.css') ?>">
+  <link rel="stylesheet" href="<?= asset('vendor/bootstrap-icons/bootstrap-icons.min.css') ?>">
   <link rel="stylesheet" href="<?= asset('css/admin-app.css') ?>">
   <link rel="icon" href="<?= asset('images/logo-tgi.png') ?>" type="image/png">
 </head>

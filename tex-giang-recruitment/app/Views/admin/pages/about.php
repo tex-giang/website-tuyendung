@@ -67,7 +67,7 @@ $val = static function (array $row, string $key, string $default = ''): string {
           </div>
         </div>
       </template>
-      <button type="button" class="btn btn-outline btn-sm" data-add>+ Thêm mốc</button>
+      <button type="button" class="btn btn-outline btn-sm" data-add><i class="bi bi-plus-lg me-1" aria-hidden="true"></i> Thêm mốc</button>
     </div>
   </section>
 
@@ -106,7 +106,7 @@ $val = static function (array $row, string $key, string $default = ''): string {
           </div>
         </div>
       </template>
-      <button type="button" class="btn btn-outline btn-sm" data-add>+ Thêm dòng</button>
+      <button type="button" class="btn btn-outline btn-sm" data-add><i class="bi bi-plus-lg me-1" aria-hidden="true"></i> Thêm dòng</button>
     </div>
   </section>
 
@@ -142,12 +142,12 @@ $val = static function (array $row, string $key, string $default = ''): string {
           </div>
         </div>
       </template>
-      <button type="button" class="btn btn-outline btn-sm" data-add>+ Thêm chứng nhận</button>
+      <button type="button" class="btn btn-outline btn-sm" data-add><i class="bi bi-plus-lg me-1" aria-hidden="true"></i> Thêm chứng nhận</button>
     </div>
   </section>
 
   <div class="admin-form__actions">
-    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+    <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1" aria-hidden="true"></i> Lưu thay đổi</button>
   </div>
 </form>
 
