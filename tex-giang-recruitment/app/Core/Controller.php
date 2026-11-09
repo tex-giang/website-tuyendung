@@ -58,24 +58,45 @@ abstract class Controller
     /** Request đến từ fetch/AJAX hay không (dùng để trả JSON thay vì redirect). */
     protected function isAjaxRequest(): bool
     {
-        if (strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'xmlhttprequest') {
-            return true;
-        }
-        return str_contains(strtolower($_SERVER['HTTP_ACCEPT'] ?? ''), 'application/json');
+        return Response::isAjaxRequest();
     }
 
     /**
      * Kết quả thao tác: AJAX trả JSON {ok, message, errors, redirect};
      * không phải AJAX thì controller tự flash + redirect như cũ.
      */
-    protected function jsonResult(bool $ok, string $message, ?string $redirect = null, array $errors = []): never
+    protected function jsonResult(bool $ok, string $message, ?string $redirect = null, array $errors = [], ?int $status = null): never
     {
         $this->json([
             'ok'       => $ok,
             'message'  => $message,
             'errors'   => $errors,
             'redirect' => $redirect,
-        ], $ok ? 200 : 422);
+        ], $status ?? ($ok ? 200 : 422));
+    }
+
+    protected function formSuccess(string $message, string $redirect): never
+    {
+        if ($this->isAjaxRequest()) {
+            $this->jsonResult(true, $message, $redirect);
+        }
+        Session::flash('_success', $message);
+        $this->redirect($redirect);
+    }
+
+    protected function formError(string $message, string $redirect, array $errors = [], ?array $old = null, int $status = 422): never
+    {
+        if ($this->isAjaxRequest()) {
+            $this->jsonResult(false, $message, null, $errors, $status);
+        }
+        if ($old !== null) {
+            Session::flash('_old', $old);
+        }
+        if ($errors !== []) {
+            Session::flash('_errors', $errors);
+        }
+        Session::flash('_error', $message);
+        $this->redirect($redirect);
     }
 
     protected function back(): never

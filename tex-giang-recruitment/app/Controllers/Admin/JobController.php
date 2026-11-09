@@ -39,7 +39,7 @@ final class JobController extends Controller
             $filters['status'] = '';
         }
 
-        $result = Job::adminPaginate($filters, max(1, (int) ($_GET['page'] ?? 1)), 500);
+        $result = Job::adminPaginate($filters, max(1, (int) ($_GET['page'] ?? 1)));
 
         $this->view('admin/jobs/index', [
             'result'   => $result,

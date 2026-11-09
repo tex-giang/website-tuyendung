@@ -1339,3 +1339,49 @@ body.has-dialog { overflow: hidden; }
   line-height: 1.55;
 }
 .apply-dialog__alert[hidden] { display: none; }
+
+
+/* Trang chi tiết tin tức: nhịp đọc + typography nội dung từ CKEditor */
+.tg-public .news-reading { max-width: 860px; padding-top: 36px; }
+.tg-public .news-reading h1 { margin: 16px 0 0; font-size: clamp(1.6rem, 3vw, 2.1rem); line-height: 1.28; color: var(--tg-ink, #161616); letter-spacing: -0.01em; }
+.news-reading-meta { margin-top: 10px; font-size: 14px; color: var(--tg-muted, #4F4F4F); }
+.news-reading-lead { margin-top: 16px; font-size: 18px; line-height: 1.65; color: var(--tg-body, #2B2B2B); }
+.news-reading > figure { margin: 26px 0 0; }
+.news-reading > figure > img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 8px; }
+.news-reading > figure > figcaption { margin-top: 10px; font-size: 14px; line-height: 1.6; color: var(--tg-muted, #4F4F4F); }
+.news-reading-body { margin-top: 26px; font-size: 17px; line-height: 1.78; color: var(--tg-body, #2B2B2B); }
+.news-reading-body > * + * { margin-top: 16px; }
+.news-reading-body h2 { margin-top: 34px; font-size: clamp(1.25rem, 2vw, 1.5rem); line-height: 1.32; color: var(--tg-ink, #161616); }
+.news-reading-body h3 { margin-top: 26px; font-size: 1.12rem; line-height: 1.36; color: var(--tg-ink, #161616); }
+.news-reading-body h4 { margin-top: 22px; font-size: 1rem; font-weight: 600; color: var(--tg-ink, #161616); }
+.news-reading-body ul, .news-reading-body ol { padding-left: 22px; }
+.news-reading-body ul { list-style: disc; }
+.news-reading-body ol { list-style: decimal; }
+.news-reading-body li + li { margin-top: 8px; }
+.news-reading-body a { color: var(--tg-accent, #087A55); text-decoration: underline; text-underline-offset: 3px; }
+.news-reading-body a:hover { color: var(--tg-accent-strong, #06603F); }
+.news-reading-body img { max-width: 100%; height: auto; border-radius: 8px; }
+.news-reading-body figure { margin: 22px 0 0; }
+.news-reading-body figure > img { width: 100%; }
+.news-reading-body figcaption { margin-top: 8px; font-size: 14px; line-height: 1.6; color: var(--tg-muted, #4F4F4F); }
+.news-reading-body blockquote { margin: 22px 0 0; padding: 14px 18px; border-left: 3px solid var(--tg-accent, #087A55); background: var(--tg-accent-soft, #F1F7F4); border-radius: 0 8px 8px 0; }
+.news-reading-body table { width: 100%; border-collapse: collapse; font-size: 15px; }
+.news-reading-body th, .news-reading-body td { padding: 10px 12px; border: 1px solid var(--tg-line, #E8E8E8); text-align: left; vertical-align: top; }
+.news-reading-body th { background: var(--tg-surface, #F6F7F9); font-weight: 600; }
+.news-reading-body hr { border: 0; border-top: 1px solid var(--tg-line, #E8E8E8); margin: 26px 0; }
+.news-reading-body pre { overflow-x: auto; padding: 14px 16px; border-radius: 8px; background: var(--tg-surface, #F6F7F9); font-size: 14px; }
+.article-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--tg-line, #E8E8E8); }
+.share-row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 16px; padding-bottom: 8px; }
+.tg-public .news-related { max-width: 860px; margin-top: 44px; padding-top: 26px; border-top: 1px solid var(--tg-line, #E8E8E8); padding-bottom: 64px; }
+.tg-public .news-related > h2 { font-size: 20px; line-height: 1.3; color: var(--tg-ink, #161616); }
+.tg-public .news-related > ul { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin-top: 18px; }
+.tg-public .news-related a { display: block; height: 100%; padding: 16px 18px; border: 1px solid var(--tg-line, #E8E8E8); border-radius: 10px; transition: border-color 0.15s ease, transform 0.15s ease; }
+.tg-public .news-related a:hover { border-color: var(--tg-accent, #087A55); transform: translateY(-1px); }
+.tg-public .news-related span { display: block; font-size: 13px; color: var(--tg-accent, #087A55); }
+.tg-public .news-related strong { display: block; margin-top: 6px; font-size: 15px; line-height: 1.5; color: var(--tg-ink, #161616); }
+@media (max-width: 639px) {
+  .news-reading-body { font-size: 16px; line-height: 1.72; }
+  .share-row { gap: 8px; }
+  .article-actions .tg-btn { flex: 1 1 100%; justify-content: center; }
+  .tg-public .news-related > ul { grid-template-columns: 1fr; }
+}

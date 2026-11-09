@@ -1,29 +1,36 @@
 <?php
+$page['ajax_fragment'] = true;
 /** Danh sách tin tuyển dụng (admin). */
 $statusBadge = [
     'published' => 'admin-badge--published', 'draft' => 'admin-badge--draft',
     'paused' => 'admin-badge--paused', 'closed' => 'admin-badge--closed', 'expired' => 'admin-badge--expired',
 ];
-$start = $result['total'] === 0 ? 0 : (($result['page'] - 1) * $result['per_page']) + 1;
-$end = min($result['page'] * $result['per_page'], $result['total']);
 ?>
 <div class="admin-page-head">
   <div>
-    <h1 class="admin-h1">Tin tuyển dụng</h1>
+    <h1 class="admin-h1" id="admin-list-title">Tin tuyển dụng</h1>
   </div>
   <a href="<?= url('admin/jobs/create') ?>" class="btn btn-primary"><i class="bi bi-plus-lg me-1" aria-hidden="true"></i> Thêm tin</a>
 </div>
 
-<form class="admin-filters" method="GET" action="<?= url('admin/jobs') ?>">
-  <input type="search" name="q" value="<?= e($filters['q']) ?>" class="field__input" placeholder="Tìm theo tiêu đề hoặc mã tin…">
-  <select name="status" class="field__input" data-submit-onchange>
-    <option value="">Tất cả trạng thái</option>
-    <?php foreach ($statuses as $key => $label): ?>
-    <option value="<?= e($key) ?>"<?= $filters['status'] === $key ? ' selected' : '' ?>><?= e($label) ?> (<?= (int) $counts[$key] ?>)</option>
-    <?php endforeach; ?>
-  </select>
-  <button type="submit" class="btn btn-outline"><i class="bi bi-funnel me-1" aria-hidden="true"></i> Lọc</button>
-  <a href="<?= url('admin/jobs') ?>" class="btn btn-ghost"><i class="bi bi-x-circle me-1" aria-hidden="true"></i> Xoá lọc</a>
+<form class="admin-filters" method="GET" role="search" aria-label="Bộ lọc danh sách" action="<?= url('admin/jobs') ?>">
+  <label class="field">
+    <span class="field__label">Từ khóa</span>
+    <input type="search" name="q" value="<?= e($filters['q']) ?>" class="field__input" placeholder="Tìm theo tiêu đề hoặc mã tin…">
+  </label>
+  <label class="field">
+    <span class="field__label">Trạng thái</span>
+    <select name="status" class="field__input">
+      <option value="">Tất cả trạng thái</option>
+      <?php foreach ($statuses as $key => $label): ?>
+      <option value="<?= e($key) ?>"<?= $filters['status'] === $key ? ' selected' : '' ?>><?= e($label) ?> (<?= (int) $counts[$key] ?>)</option>
+      <?php endforeach; ?>
+    </select>
+  </label>
+  <div class="admin-filter-actions">
+    <button type="submit" class="btn btn-outline"><i class="bi bi-funnel me-1" aria-hidden="true"></i> Áp dụng</button>
+    <a href="<?= url('admin/jobs') ?>" class="btn btn-ghost"><i class="bi bi-x-circle me-1" aria-hidden="true"></i> Xoá lọc</a>
+  </div>
 </form>
 
 <div class="admin-card">
@@ -31,7 +38,7 @@ $end = min($result['page'] * $result['per_page'], $result['total']);
   <p class="admin-empty">Chưa có tin tuyển dụng nào khớp bộ lọc. <a href="<?= url('admin/jobs/create') ?>">Tạo tin đầu tiên</a>.</p>
   <?php else: ?>
   <div class="admin-table-wrap">
-    <table class="admin-table table table-hover align-middle js-datatable">
+    <table class="admin-table admin-table--jobs table table-hover align-middle" aria-labelledby="admin-list-title">
       <thead>
         <tr>
           <th>Mã</th><th>Tiêu đề</th><th>Khu</th><th>Lương</th><th>Hạn nộp</th>
@@ -50,13 +57,14 @@ $end = min($result['page'] * $result['per_page'], $result['total']);
           <td><?= e(salary_short((string) $job['salary_text']) ?: 'Thoả thuận') ?></td>
           <td class="admin-muted admin-nowrap"><?= e(vn_date($job['deadline']) ?: '—') ?></td>
           <td>
-            <form method="POST" action="<?= url('admin/jobs/' . $job['id'] . '/status') ?>" class="admin-inline" data-ajax data-ajax-reload>
+            <form data-ajax-refresh method="POST" action="<?= url('admin/jobs/' . $job['id'] . '/status') ?>" class="admin-inline" data-ajax>
               <?= csrf_field() ?>
               <select name="status" class="admin-select-sm" data-submit-onchange aria-label="Đổi trạng thái">
                 <?php foreach ($statuses as $key => $label): ?>
                 <option value="<?= e($key) ?>"<?= $job['status'] === $key ? ' selected' : '' ?>><?= e($label) ?></option>
                 <?php endforeach; ?>
               </select>
+              <noscript><button type="submit" class="btn btn-outline btn-sm">Lưu</button></noscript>
             </form>
             <span class="admin-badge <?= $statusBadge[$job['status']] ?? '' ?>"><?= e($statuses[$job['status']] ?? $job['status']) ?></span>
           </td>
@@ -68,7 +76,7 @@ $end = min($result['page'] * $result['per_page'], $result['total']);
               <form method="POST" action="<?= url('admin/jobs/' . $job['id'] . '/duplicate') ?>" data-ajax>
                 <?= csrf_field() ?><button class="btn btn-outline btn-icon" type="submit" title="Nhân bản" aria-label="Nhân bản"><?= admin_icon_svg('copy') ?></button>
               </form>
-              <form method="POST" action="<?= url('admin/jobs/' . $job['id'] . '/delete') ?>" data-ajax
+              <form data-ajax-refresh method="POST" action="<?= url('admin/jobs/' . $job['id'] . '/delete') ?>" data-ajax
                     data-confirm="Xoá tin &quot;<?= e($job['title']) ?>&quot;? Hồ sơ ứng tuyển liên quan vẫn được giữ lại.">
                 <?= csrf_field() ?><button class="btn btn-danger btn-icon" type="submit" title="Xoá" aria-label="Xoá"><?= admin_icon_svg('trash') ?></button>
               </form>
@@ -80,20 +88,6 @@ $end = min($result['page'] * $result['per_page'], $result['total']);
     </table>
   </div>
 
-  <?php if ($result['pages'] > 1): ?>
-  <div class="admin-pager">
-    <p class="admin-muted">Hiển thị <?= $start ?>–<?= $end ?> / <?= (int) $result['total'] ?></p>
-    <div class="admin-pager__links">
-      <?php for ($p = 1; $p <= $result['pages']; $p++): ?>
-        <?php $qs = http_build_query(array_filter(['q' => $filters['q'], 'status' => $filters['status'], 'page' => $p])); ?>
-        <?php if ($p === $result['page']): ?>
-        <span class="admin-pager__item is-current"><?= $p ?></span>
-        <?php else: ?>
-        <a class="admin-pager__item" href="<?= url('admin/jobs') ?>?<?= e($qs) ?>"><?= $p ?></a>
-        <?php endif; ?>
-      <?php endfor; ?>
-    </div>
-  </div>
-  <?php endif; ?>
+  <?php $listUrl = url('admin/jobs'); require BASE_PATH . '/app/Views/partials/admin/pager.php'; ?>
   <?php endif; ?>
 </div>

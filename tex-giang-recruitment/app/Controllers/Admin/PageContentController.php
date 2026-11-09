@@ -267,10 +267,7 @@ final class PageContentController extends Controller
         if (count($certs) > 20) { $errors[] = 'Tối đa 20 chứng nhận.'; }
 
         if ($errors !== []) {
-            Session::flash('_old', $_POST);
-            Session::flash('_errors', ['general' => $errors[0]]);
-            Session::flash('_error', $errors[0]);
-            $this->redirect(url('admin/pages/about'));
+            $this->formError($errors[0], url('admin/pages/about'), old: $_POST);
         }
 
         $pdo = \App\Core\Database::connection();
@@ -298,13 +295,11 @@ final class PageContentController extends Controller
         } catch (\Throwable $e) {
             $pdo->rollBack();
             error_log('[TEX-GIANG] Lỗi lưu nội dung Về chúng tôi: ' . $e->getMessage());
-            Session::flash('_error', 'Không lưu được nội dung. Vui lòng thử lại.');
-            $this->redirect(url('admin/pages/about'));
+            $this->formError('Không lưu được nội dung. Vui lòng thử lại.', url('admin/pages/about'), status: 500);
         }
 
         AuditLog::record('pagecontent.about_save', 'page', null, ['milestones' => count($milestones)]);
-        Session::flash('_success', 'Đã lưu nội dung trang Về chúng tôi.');
-        $this->redirect(url('admin/pages/about'));
+        $this->formSuccess('Đã lưu nội dung trang Về chúng tôi.', url('admin/pages/about'));
     }
 
     // ===== Trang Phúc lợi: nhóm + dòng con + bảng so sánh trong MỘT form =====
@@ -406,10 +401,7 @@ final class PageContentController extends Controller
         }
 
         if ($errors !== []) {
-            Session::flash('_old', $_POST);
-            Session::flash('_errors', ['general' => $errors[0]]);
-            Session::flash('_error', $errors[0]);
-            $this->redirect(url('admin/pages/benefits'));
+            $this->formError($errors[0], url('admin/pages/benefits'), old: $_POST);
         }
 
         $pdo = \App\Core\Database::connection();
@@ -446,13 +438,11 @@ final class PageContentController extends Controller
         } catch (\Throwable $e) {
             $pdo->rollBack();
             error_log('[TEX-GIANG] Lỗi lưu nội dung Phúc lợi: ' . $e->getMessage());
-            Session::flash('_error', 'Không lưu được nội dung. Vui lòng thử lại.');
-            $this->redirect(url('admin/pages/benefits'));
+            $this->formError('Không lưu được nội dung. Vui lòng thử lại.', url('admin/pages/benefits'), status: 500);
         }
 
         AuditLog::record('pagecontent.benefits_save', 'page', null, ['groups' => count($groups)]);
-        Session::flash('_success', 'Đã lưu nội dung trang Phúc lợi.');
-        $this->redirect(url('admin/pages/benefits'));
+        $this->formSuccess('Đã lưu nội dung trang Phúc lợi.', url('admin/pages/benefits'));
     }
 
     /**

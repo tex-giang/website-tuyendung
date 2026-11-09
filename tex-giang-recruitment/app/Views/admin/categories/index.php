@@ -1,4 +1,5 @@
 <?php
+$page['ajax_fragment'] = true;
 /** Danh mục dùng chung: khu sản xuất, khối phòng ban, chuyên mục tin tức. */
 $sections = [
     'branch' => [
@@ -64,12 +65,12 @@ $sections = [
           </td>
           <td class="is-actions">
             <div class="admin-actions">
-              <form method="POST" action="<?= url('admin/categories/' . $type . '/' . $row['id'] . '/toggle') ?>">
+              <form data-ajax method="POST" action="<?= url('admin/categories/' . $type . '/' . $row['id'] . '/toggle') ?>">
                 <?= csrf_field() ?>
                 <button class="btn btn-outline btn-icon" type="submit" title="<?= (int) $row['is_active'] === 1 ? 'Tắt' : 'Bật' ?>" aria-label="Bật/Tắt"><?= (int) $row['is_active'] === 1 ? admin_icon_svg('eye-off') : admin_icon_svg('eye') ?></button>
               </form>
               <a href="<?= url('admin/categories/' . $type . '/' . $row['id'] . '/edit') ?>" class="btn btn-outline btn-icon" title="Sửa" aria-label="Sửa"><?= admin_icon_svg('pencil') ?></a>
-              <form method="POST" action="<?= url('admin/categories/' . $type . '/' . $row['id'] . '/delete') ?>"
+              <form data-ajax method="POST" action="<?= url('admin/categories/' . $type . '/' . $row['id'] . '/delete') ?>"
                     data-confirm="Xoá &quot;<?= e($row['name']) ?>&quot;?">
                 <?= csrf_field() ?><button class="btn btn-danger btn-icon" type="submit" title="Xoá" aria-label="Xoá"><?= admin_icon_svg('trash') ?></button>
               </form>

@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Controllers\Admin;
 
 use App\Core\Controller;
-use App\Core\Session;
 use App\Models\AuditLog;
 use App\Models\Setting;
 
@@ -64,14 +63,11 @@ final class ContentController extends Controller
         }
 
         if ($errors !== []) {
-            Session::flash('_errors', $errors);
-            Session::flash('_error', 'Vui lòng kiểm tra lại các trường được đánh dấu.');
-            $this->redirect(url('admin/content'));
+            $this->formError('Vui lòng kiểm tra lại các trường được đánh dấu.', url('admin/content'), $errors);
         }
 
         Setting::setMany($values);
         AuditLog::record('content.update', 'settings', null, ['keys' => array_keys($values)]);
-        Session::flash('_success', 'Đã cập nhật nội dung website.');
-        $this->redirect(url('admin/content'));
+        $this->formSuccess('Đã cập nhật nội dung website.', url('admin/content'));
     }
 }

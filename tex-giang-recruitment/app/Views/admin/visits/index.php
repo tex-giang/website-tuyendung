@@ -1,4 +1,5 @@
 <?php
+$page['ajax_fragment'] = true;
 /**
  * Thống kê lượt truy cập — bảng theo ngày + biểu đồ 14/30 ngày + tách thiết bị.
  *
@@ -29,12 +30,13 @@ $deviceTotal = max(1, $summary['total']);
   <form method="GET" action="<?= url('admin/visits') ?>" class="admin-period-form">
     <label class="field">
       <span class="field__label">Khoảng thời gian</span>
-      <select class="field__input" name="days" onchange="this.form.submit()">
+      <select class="field__input" name="days" data-submit-onchange>
         <?php foreach ($periods as $value => $label): ?>
         <option value="<?= (int) $value ?>"<?= (int) $days === (int) $value ? ' selected' : '' ?>><?= e($label) ?></option>
         <?php endforeach; ?>
       </select>
     </label>
+    <noscript><button type="submit" class="btn btn-outline btn-sm">Áp dụng</button></noscript>
   </form>
 </div>
 
@@ -69,7 +71,7 @@ $deviceTotal = max(1, $summary['total']);
     <div class="visit-chart__col" title="<?= e(date('d/m/Y', strtotime($point['date']))) ?>: <?= number_format((int) $point['total'], 0, ',', '.') ?> lượt">
       <span class="visit-chart__value"><?= (int) $point['total'] ?></span>
       <div class="visit-chart__bar-wrap">
-        <div class="visit-chart__bar" style="height: <?= max(2, $height) ?>%"></div>
+        <div class="visit-chart__bar" style="height: <?= $height ?>%"></div>
       </div>
       <span class="visit-chart__label"><?= e(date('d/m', strtotime($point['date']))) ?></span>
     </div>
@@ -82,7 +84,11 @@ $deviceTotal = max(1, $summary['total']);
     <h2 class="admin-h2">Chi tiết theo ngày</h2>
     <span class="admin-badge admin-badge--soft"><?= count($rows) ?> ngày có lượt · kỳ <?= e($periods[$days] ?? ($days . ' ngày')) ?></span>
   </div>
-  <table class="admin-table table table-hover align-middle js-datatable">
+  <?php if ($rows === []): ?>
+  <p class="admin-empty">Chưa ghi nhận lượt truy cập trong khoảng thời gian này.</p>
+  <?php else: ?>
+  <div class="admin-table-wrap">
+  <table class="admin-table table table-hover align-middle js-datatable" data-dt-compact aria-label="Lượt truy cập theo ngày">
     <thead>
       <tr>
         <th>Ngày</th>
@@ -93,11 +99,6 @@ $deviceTotal = max(1, $summary['total']);
       </tr>
     </thead>
     <tbody>
-      <?php if ($rows === []): ?>
-      <tr>
-        <td colspan="5" class="admin-muted">Chưa có dữ liệu truy cập. Mở website công khai vài lần để bắt đầu thống kê.</td>
-      </tr>
-      <?php endif; ?>
       <?php foreach ($rows as $row): ?>
       <tr>
         <td data-order="<?= e((string) $row['stat_date']) ?>"><strong><?= e(date('d/m/Y', strtotime((string) $row['stat_date']))) ?></strong></td>
@@ -109,6 +110,8 @@ $deviceTotal = max(1, $summary['total']);
       <?php endforeach; ?>
     </tbody>
   </table>
+  </div>
+  <?php endif; ?>
 </section>
 
 <section class="admin-card">
@@ -116,11 +119,11 @@ $deviceTotal = max(1, $summary['total']);
     <h2 class="admin-h2">Theo thiết bị (tổng cộng)</h2>
   </div>
   <div class="visit-device-list">
-    <?php foreach ($devices as $key => $device): ?>
+    <?php foreach ($devices as $device): ?>
     <?php $percent = round(((int) $device['count'] / $deviceTotal) * 100); ?>
     <div class="visit-device">
       <span class="visit-device__name"><?= e($device['label']) ?></span>
-      <div class="visit-device__track"><span class="visit-device__fill visit-device__fill--<?= e($key) ?>" style="width: <?= max(2, $percent) ?>%"></span></div>
+      <div class="visit-device__track"><span class="visit-device__fill" style="width: <?= $percent ?>%"></span></div>
       <span class="visit-device__num"><?= number_format((int) $device['count'], 0, ',', '.') ?> <em>(<?= $percent ?>%)</em></span>
     </div>
     <?php endforeach; ?>

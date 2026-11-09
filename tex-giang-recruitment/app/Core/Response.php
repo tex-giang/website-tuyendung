@@ -5,6 +5,19 @@ namespace App\Core;
 
 final class Response
 {
+    public static function isAjaxRequest(): bool
+    {
+        return strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'xmlhttprequest'
+            || str_contains(strtolower($_SERVER['HTTP_ACCEPT'] ?? ''), 'application/json');
+    }
+
+    public static function wantsAdminFragment(): bool
+    {
+        return ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET'
+            && ($_SERVER['HTTP_X_ADMIN_FRAGMENT'] ?? '') === '1'
+            && self::isAjaxRequest();
+    }
+
     public static function json(array $data, int $status = 200): never
     {
         http_response_code($status);

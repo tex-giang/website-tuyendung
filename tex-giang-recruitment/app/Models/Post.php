@@ -127,7 +127,15 @@ final class Post
         if ($related !== []) {
             return $related;
         }
-        return self::latest($limit);
+        // Fallback: bài mới nhất nhưng vẫn loại trừ bài đang xem (tránh "Đọc thêm" lặp lại chính nó).
+        $stmt = Database::connection()->prepare(
+            self::SELECT . " WHERE p.status = 'published' AND p.deleted_at IS NULL AND p.id <> :id
+                             ORDER BY p.published_at DESC, p.id DESC LIMIT :limit"
+        );
+        $stmt->bindValue(':id', (int) $post['id'], \PDO::PARAM_INT);
+        $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll();
     }
 
     // ------------------------------------------------------------------ ADMIN

@@ -1,4 +1,5 @@
 <?php
+$page['ajax_fragment'] = true;
 /** Form thêm/sửa tài khoản quản trị. */
 $isEdit = $user !== null;
 $action = $isEdit ? url('admin/users/' . $user['id'] . '/edit') : url('admin/users/create');
@@ -17,7 +18,7 @@ $err = static fn(string $key): string => (string) ($errors[$key] ?? '');
 <div class="admin-alert admin-alert--error" role="alert">Có <?= count($errors) ?> trường cần kiểm tra lại.</div>
 <?php endif; ?>
 
-<form method="POST" action="<?= $action ?>" class="admin-form">
+<form data-ajax method="POST" action="<?= $action ?>" class="admin-form">
   <?= csrf_field() ?>
   <section class="admin-card">
     <h2 class="admin-h2">Thông tin tài khoản</h2>
@@ -81,7 +82,7 @@ $err = static fn(string $key): string => (string) ($errors[$key] ?? '');
 </form>
 
 <?php if ($isEdit): ?>
-<form method="POST" action="<?= url('admin/users/' . $user['id'] . '/password') ?>" class="admin-form mt-4">
+<form data-ajax method="POST" action="<?= url('admin/users/' . $user['id'] . '/password') ?>" class="admin-form mt-4">
   <?= csrf_field() ?>
   <section class="admin-card">
     <h2 class="admin-h2">Đặt lại mật khẩu</h2>

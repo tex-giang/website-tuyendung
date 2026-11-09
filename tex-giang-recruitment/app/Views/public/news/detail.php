@@ -3,9 +3,16 @@
  * Chi tiết bài viết — port markup từ news-detail.js bản tĩnh, nội dung từ bảng posts.
  * @var array $post @var array $related
  */
-$paragraphs = preg_split('/\r\n\r\n|\n\n|\r\r/', trim((string) $post['body'])) ?: [];
-$paragraphs = array_values(array_filter(array_map('trim', $paragraphs), static fn(string $p): bool => $p !== ''));
+$bodyRaw = trim((string) ($post['body'] ?? ''));
+$bodyIsHtml = $bodyRaw !== '' && preg_match('/<(?:p|br|h[2-4]|ul|ol|li|figure|img|blockquote|table|pre|div|span|strong|em|a)\b[^>]*>/i', $bodyRaw) === 1;
+$bodyHtml = $bodyIsHtml ? sanitize_html($bodyRaw) : '';
+$paragraphs = [];
+if (!$bodyIsHtml && $bodyRaw !== '') {
+    $paragraphs = preg_split('/\r\n\r\n|\n\n|\r\r/', $bodyRaw) ?: [];
+    $paragraphs = array_values(array_filter(array_map('trim', $paragraphs), static fn(string $p): bool => $p !== ''));
+}
 $imageUrl = ($post['image_path'] ?? '') !== '' ? asset((string) $post['image_path']) : asset('images/banner-texgiang.webp');
+$imageCaption = trim((string) ($post['image_caption'] ?? ''));
 $publishedDate = vn_date($post['published_at'] ?? $post['created_at']);
 ?>
 <article class="tg-container news-reading" data-reveal>
@@ -26,15 +33,25 @@ $publishedDate = vn_date($post['published_at'] ?? $post['created_at']);
   <figure>
     <img src="<?= e($imageUrl) ?>" alt="<?= e($post['image_alt'] ?? $post['title']) ?>" width="1280" height="850" loading="eager" decoding="async">
     <figcaption>
-      <?= e($post['image_caption'] ?? 'Ảnh: TEX-GIANG') ?> —
-      <a href="https://tex-giang.com.vn/" target="_blank" rel="noopener">TEX-GIANG</a>.
+      <?php if ($imageCaption !== ''): ?>
+      <?= e($imageCaption) ?>
+      <?php else: ?>
+      Ảnh: <a href="https://tex-giang.com.vn/" target="_blank" rel="noopener">TEX-GIANG</a>.
+      <?php endif; ?>
     </figcaption>
   </figure>
 
-  <h2>Thông tin cần biết</h2>
-  <?php foreach ($paragraphs as $paragraph): ?>
-  <p><?= e($paragraph) ?></p>
-  <?php endforeach; ?>
+  <?php if ($bodyHtml !== ''): ?>
+  <div class="news-reading-body">
+    <?= $bodyHtml ?>
+  </div>
+  <?php elseif ($paragraphs !== []): ?>
+  <div class="news-reading-body">
+    <?php foreach ($paragraphs as $paragraph): ?>
+    <p><?= e($paragraph) ?></p>
+    <?php endforeach; ?>
+  </div>
+  <?php endif; ?>
 
   <div class="article-actions">
     <a class="tg-btn tg-btn--primary" href="<?= url('jobs') ?>">Xem việc đang tuyển</a>

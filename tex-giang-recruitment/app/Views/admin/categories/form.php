@@ -21,7 +21,7 @@ $backUrl = url('admin/categories');
 <div class="admin-alert admin-alert--error" role="alert">Có <?= count($errors) ?> trường cần kiểm tra lại.</div>
 <?php endif; ?>
 
-<form method="POST" action="<?= $action ?>" class="admin-form">
+<form data-ajax method="POST" action="<?= $action ?>" class="admin-form">
   <?= csrf_field() ?>
   <section class="admin-card">
     <h2 class="admin-h2">Thông tin <?= e($config['singular']) ?></h2>
@@ -102,10 +102,10 @@ $backUrl = url('admin/categories');
       <div class="admin-repeater__rows" data-contact-rows>
         <?php foreach ($contacts as $index => $contact): ?>
         <div class="admin-repeater__row" data-contact-row>
-          <input class="field__input" type="text" name="contacts[<?= (int) $index ?>][full_name]"
+          <input class="field__input" type="text" name="contacts[<?= (int) $index ?>][full_name]" aria-label="Họ tên người liên hệ"
                  value="<?= e((string) ($contact['full_name'] ?? '')) ?>" maxlength="120" placeholder="VD: Chị Trân">
 
-          <input class="field__input" type="tel" name="contacts[<?= (int) $index ?>][phone]"
+          <input class="field__input" type="tel" name="contacts[<?= (int) $index ?>][phone]" aria-label="Số điện thoại người liên hệ"
                  value="<?= e((string) ($contact['phone'] ?? '')) ?>" maxlength="30" placeholder="VD: 0913 131 090">
           <button type="button" class="btn btn-ghost btn-icon" data-contact-remove title="Xoá" aria-label="Xoá"><?= admin_icon_svg('trash') ?></button>
         </div>
@@ -114,9 +114,9 @@ $backUrl = url('admin/categories');
 
       <template id="contact-row-template">
         <div class="admin-repeater__row" data-contact-row>
-          <input class="field__input" type="text" name="contacts[__INDEX__][full_name]" maxlength="120" placeholder="VD: Chị Trân">
+          <input class="field__input" type="text" name="contacts[__INDEX__][full_name]" aria-label="Họ tên người liên hệ" maxlength="120" placeholder="VD: Chị Trân">
 
-          <input class="field__input" type="tel" name="contacts[__INDEX__][phone]" maxlength="30" placeholder="VD: 0913 131 090">
+          <input class="field__input" type="tel" name="contacts[__INDEX__][phone]" aria-label="Số điện thoại người liên hệ" maxlength="30" placeholder="VD: 0913 131 090">
           <button type="button" class="btn btn-ghost btn-icon" data-contact-remove title="Xoá" aria-label="Xoá"><?= admin_icon_svg('trash') ?></button>
         </div>
       </template>

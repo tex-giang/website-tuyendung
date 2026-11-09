@@ -34,8 +34,14 @@ final class AuthController extends Controller
         Session::put('_login_attempts', $attempts);
 
         if (count($attempts) >= self::LOGIN_MAX_ATTEMPTS) {
-            $waitMinutes = max(1, (int) ceil((min($attempts) + self::LOGIN_WINDOW - $now) / 60));
-            Session::flash('_errors', ['login' => 'Bạn đã đăng nhập sai quá nhiều lần. Vui lòng thử lại sau khoảng ' . $waitMinutes . ' phút.']);
+            $wait = min($attempts) + self::LOGIN_WINDOW - $now;
+            $waitMinutes = max(1, (int) ceil($wait / 60));
+            $message = 'Bạn đã đăng nhập sai quá nhiều lần. Vui lòng thử lại sau khoảng ' . $waitMinutes . ' phút.';
+            if ($this->isAjaxRequest()) {
+                header('Retry-After: ' . $wait);
+                $this->jsonResult(false, $message, status: 429);
+            }
+            Session::flash('_errors', ['login' => $message]);
             Session::flash('_old', ['username' => $username]);
             $this->redirect(url('admin/login'));
         }
@@ -61,6 +67,12 @@ final class AuthController extends Controller
         }
 
         if ($errors !== []) {
+            if ($this->isAjaxRequest()) {
+                if (isset($errors['login'])) {
+                    $this->jsonResult(false, $errors['login'], status: 401);
+                }
+                $this->jsonResult(false, 'Vui lòng kiểm tra thông tin đăng nhập.', errors: $errors);
+            }
             Session::flash('_errors', $errors);
             Session::flash('_old', ['username' => $username]);
             $this->redirect(url('admin/login'));
@@ -79,13 +91,21 @@ final class AuthController extends Controller
 
         $intended = Session::get('_intended');
         Session::forget('_intended');
-        $this->redirect($intended !== null && str_starts_with((string) $intended, '/admin') ? url((string) $intended) : url('admin/dashboard'));
+        $target = $intended !== null && str_starts_with((string) $intended, '/admin')
+            ? url((string) $intended) : url('admin/dashboard');
+        if ($this->isAjaxRequest()) {
+            $this->jsonResult(true, 'Đã đăng nhập.', $target);
+        }
+        $this->redirect($target);
     }
 
     public function logout(): void
     {
         AuditLog::record('auth.logout', 'user', (int) Session::get('auth_id'));
         Session::logout();
+        if ($this->isAjaxRequest()) {
+            $this->jsonResult(true, 'Đã đăng xuất.', url('admin/login'));
+        }
         $this->redirect(url('admin/login'));
     }
 }

@@ -57,6 +57,10 @@ final class Permissions
             return;
         }
 
+        if (Response::isAjaxRequest()) {
+            Response::json(['ok' => false, 'code' => 'forbidden', 'message' => 'Bạn không có quyền thực hiện thao tác này.'], 403);
+        }
+
         http_response_code(403);
         $page = [
             'title' => 'Không có quyền truy cập | ' . settings('site_name'),

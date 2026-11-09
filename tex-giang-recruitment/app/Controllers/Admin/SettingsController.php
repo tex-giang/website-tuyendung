@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Controllers\Admin;
 
 use App\Core\Controller;
-use App\Core\Session;
 use App\Models\AuditLog;
 use App\Models\Setting;
 
@@ -97,14 +96,11 @@ final class SettingsController extends Controller
         }
 
         if ($errors !== []) {
-            Session::flash('_errors', $errors);
-            Session::flash('_error', 'Vui lòng kiểm tra lại các trường được đánh dấu.');
-            $this->redirect(url('admin/settings'));
+            $this->formError('Vui lòng kiểm tra lại các trường được đánh dấu.', url('admin/settings'), $errors);
         }
 
         Setting::setMany($values);
         AuditLog::record('settings.update', 'settings', null, ['keys' => array_keys($values)]);
-        Session::flash('_success', 'Đã lưu cài đặt hệ thống.');
-        $this->redirect(url('admin/settings'));
+        $this->formSuccess('Đã lưu cài đặt hệ thống.', url('admin/settings'));
     }
 }

@@ -139,6 +139,7 @@ $currentImage = $val('image_path');
 </form>
 <?php endif; ?>
 
+<?php if (is_file(BASE_PATH . '/public/assets/vendor/ckeditor4/ckeditor.js')): ?>
 <script src="<?= asset('vendor/ckeditor4/ckeditor.js') ?>"></script>
 <script>
 (function () {
@@ -161,6 +162,7 @@ $currentImage = $val('image_path');
   // Textarea bị CKEditor ẩn đi — bỏ required để trình duyệt không chặn submit
   // (server vẫn kiểm tra nội dung tối thiểu 20 ký tự).
   if (editor) {
+    document.getElementById('body').form.addEventListener('submit', function () { editor.updateElement(); });
     editor.on('instanceReady', function () {
       var textarea = document.getElementById('body');
       if (textarea) textarea.removeAttribute('required');
@@ -168,3 +170,4 @@ $currentImage = $val('image_path');
   }
 })();
 </script>
+<?php endif; ?>

@@ -1,4 +1,5 @@
 <?php
+$page['ajax_fragment'] = true;
 /** Quản lý banner theo 4 loại: hero, notice, popup, ad. */
 $typeHints = [
     'hero' => 'Slide ảnh đầu trang chủ. Nên dùng ảnh ngang tỉ lệ 2048×768.',
@@ -62,12 +63,12 @@ $typeHints = [
           </td>
           <td class="is-actions">
             <div class="admin-actions">
-              <form method="POST" action="<?= url('admin/banners/' . $banner['id'] . '/toggle') ?>">
+              <form data-ajax method="POST" action="<?= url('admin/banners/' . $banner['id'] . '/toggle') ?>">
                 <?= csrf_field() ?>
                 <button class="btn btn-outline btn-icon" type="submit" title="<?= (int) $banner['is_active'] === 1 ? 'Tắt' : 'Bật' ?>" aria-label="Bật/Tắt"><?= (int) $banner['is_active'] === 1 ? admin_icon_svg('eye-off') : admin_icon_svg('eye') ?></button>
               </form>
               <a href="<?= url('admin/banners/' . $banner['id'] . '/edit') ?>" class="btn btn-outline btn-icon" title="Sửa" aria-label="Sửa"><?= admin_icon_svg('pencil') ?></a>
-              <form method="POST" action="<?= url('admin/banners/' . $banner['id'] . '/delete') ?>"
+              <form data-ajax method="POST" action="<?= url('admin/banners/' . $banner['id'] . '/delete') ?>"
                     data-confirm="Xoá banner &quot;<?= e($banner['name']) ?>&quot;?">
                 <?= csrf_field() ?><button class="btn btn-danger btn-icon" type="submit" title="Xoá" aria-label="Xoá"><?= admin_icon_svg('trash') ?></button>
               </form>

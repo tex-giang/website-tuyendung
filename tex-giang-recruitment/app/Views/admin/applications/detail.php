@@ -1,4 +1,5 @@
 <?php
+$page['ajax_fragment'] = true;
 /** Chi tiết hồ sơ ứng viên: thông tin, CV, đổi trạng thái, lịch sử xử lý. */
 $statusBadge = [
     'new' => 'admin-badge--new', 'contacted' => 'admin-badge--contacted',
@@ -59,7 +60,7 @@ $appointmentValue = $app['appointment_at'] ? date('Y-m-d\TH:i', strtotime((strin
 
     <section class="admin-card">
       <h2 class="admin-h2">Cập nhật trạng thái xử lý</h2>
-      <form method="POST" action="<?= url('admin/applications/' . $app['id'] . '/status') ?>">
+      <form data-ajax method="POST" action="<?= url('admin/applications/' . $app['id'] . '/status') ?>">
         <?= csrf_field() ?>
         <div class="field-grid">
           <label class="field">

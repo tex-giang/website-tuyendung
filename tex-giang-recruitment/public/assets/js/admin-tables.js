@@ -11,9 +11,8 @@
 (function () {
   'use strict';
 
-  if (!window.jQuery || !window.jQuery.fn || !window.jQuery.fn.DataTable) return;
-
   var $ = window.jQuery;
+  var scrollObservers = new WeakMap();
 
   var VI = {
     search: 'Tìm nhanh:',
@@ -107,7 +106,48 @@
   }
 
   function boot() {
-    Array.prototype.forEach.call(document.querySelectorAll('table.js-datatable'), initTable);
+    if ($ && $.fn.DataTable) {
+      document.querySelectorAll('table.js-datatable').forEach(function (table) {
+        if (!$.fn.DataTable.isDataTable(table)) initTable(table);
+      });
+    }
+
+    document.querySelectorAll('.admin-table-wrap, .visit-chart').forEach(function (wrap) {
+      var scroller = wrap.querySelector('.dt-layout-table table')?.parentElement || wrap;
+      if (scroller.dataset.scrollHint) return;
+      scroller.dataset.scrollHint = 'ready';
+      var hint = document.createElement('p');
+      hint.className = 'admin-table-scroll-hint';
+      hint.textContent = wrap.matches('.visit-chart') ? 'Cuộn ngang để xem thêm ngày.' : 'Cuộn ngang để xem các cột còn lại.';
+      wrap.before(hint);
+
+      function updateScrollHint() {
+        var overflow = scroller.scrollWidth > scroller.clientWidth + 1;
+        hint.hidden = !overflow;
+        if (overflow) {
+          scroller.setAttribute('tabindex', '0');
+          if (scroller !== wrap || !wrap.matches('.visit-chart')) {
+            scroller.setAttribute('role', 'region');
+            scroller.setAttribute('aria-label', 'Bảng có thể cuộn ngang');
+          }
+        } else {
+          scroller.removeAttribute('tabindex');
+          if (scroller.getAttribute('role') === 'region') {
+            scroller.removeAttribute('role');
+            scroller.removeAttribute('aria-label');
+          }
+        }
+      }
+
+      updateScrollHint();
+      if ('ResizeObserver' in window) {
+        var observer = new ResizeObserver(updateScrollHint);
+        scrollObservers.set(wrap, observer);
+        observer.observe(scroller);
+        var table = scroller.querySelector('table');
+        if (table) observer.observe(table);
+      }
+    });
   }
 
   if (document.readyState === 'loading') {
@@ -116,5 +156,16 @@
     boot();
   }
 
-  window.TGDataTable = { init: boot };
+  function destroy(root) {
+    root.querySelectorAll('.admin-table-wrap, .visit-chart').forEach(function (wrap) {
+      scrollObservers.get(wrap)?.disconnect();
+    });
+    if ($ && $.fn.DataTable) {
+      root.querySelectorAll('table.js-datatable').forEach(function (table) {
+        if ($.fn.DataTable.isDataTable(table)) $(table).DataTable().destroy();
+      });
+    }
+  }
+
+  window.TGDataTable = { init: boot, destroy: destroy };
 })();

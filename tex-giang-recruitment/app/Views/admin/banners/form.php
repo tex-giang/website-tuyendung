@@ -1,4 +1,5 @@
 <?php
+$page['ajax_fragment'] = true;
 /** Form thêm/sửa banner. */
 $isEdit = $banner !== null;
 $action = $isEdit ? url('admin/banners/' . $banner['id'] . '/edit') : url('admin/banners/create');
@@ -24,7 +25,7 @@ $typeHint = [
 <div class="admin-alert admin-alert--error" role="alert">Có <?= count($errors) ?> trường cần kiểm tra lại.</div>
 <?php endif; ?>
 
-<form method="POST" action="<?= $action ?>" enctype="multipart/form-data" class="admin-form">
+<form data-ajax method="POST" action="<?= $action ?>" enctype="multipart/form-data" class="admin-form">
   <?= csrf_field() ?>
 
   <section class="admin-card">

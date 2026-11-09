@@ -1,16 +1,15 @@
 <?php
+$page['ajax_fragment'] = true;
 /** Danh sách hồ sơ ứng tuyển (admin). */
 $statusBadge = [
     'new' => 'admin-badge--new', 'contacted' => 'admin-badge--contacted',
     'interview' => 'admin-badge--interview', 'hired' => 'admin-badge--hired',
     'rejected' => 'admin-badge--rejected',
 ];
-$start = $result['total'] === 0 ? 0 : (($result['page'] - 1) * $result['per_page']) + 1;
-$end = min($result['page'] * $result['per_page'], $result['total']);
 ?>
 <div class="admin-page-head">
   <div>
-    <h1 class="admin-h1">Hồ sơ ứng tuyển</h1>
+    <h1 class="admin-h1" id="admin-list-title">Hồ sơ ứng tuyển</h1>
   </div>
 </div>
 
@@ -23,22 +22,33 @@ $end = min($result['page'] * $result['per_page'], $result['total']);
   <?php endforeach; ?>
 </div>
 
-<form class="admin-filters" method="GET" action="<?= url('admin/applications') ?>">
-  <input type="search" name="q" value="<?= e($filters['q']) ?>" class="field__input" placeholder="Tìm theo tên, số điện thoại, email…">
-  <select name="status" class="field__input" data-submit-onchange>
-    <option value="">Tất cả trạng thái</option>
-    <?php foreach ($statuses as $key => $label): ?>
-    <option value="<?= e($key) ?>"<?= $filters['status'] === $key ? ' selected' : '' ?>><?= e($label) ?> (<?= (int) ($counts[$key] ?? 0) ?>)</option>
-    <?php endforeach; ?>
-  </select>
-  <select name="job_id" class="field__input" data-submit-onchange>
-    <option value="">Tất cả vị trí</option>
-    <?php foreach ($jobs as $jobId => $jobTitle): ?>
-    <option value="<?= (int) $jobId ?>"<?= (string) $filters['job_id'] === (string) $jobId ? ' selected' : '' ?>><?= e($jobTitle) ?></option>
-    <?php endforeach; ?>
-  </select>
-  <button type="submit" class="btn btn-outline"><i class="bi bi-funnel me-1" aria-hidden="true"></i> Lọc</button>
-  <a href="<?= url('admin/applications') ?>" class="btn btn-ghost"><i class="bi bi-x-circle me-1" aria-hidden="true"></i> Xoá lọc</a>
+<form class="admin-filters" method="GET" role="search" aria-label="Bộ lọc danh sách" action="<?= url('admin/applications') ?>">
+  <label class="field">
+    <span class="field__label">Từ khóa</span>
+    <input type="search" name="q" value="<?= e($filters['q']) ?>" class="field__input" placeholder="Tìm theo tên, số điện thoại, email…">
+  </label>
+  <label class="field">
+    <span class="field__label">Trạng thái</span>
+    <select name="status" class="field__input">
+      <option value="">Tất cả trạng thái</option>
+      <?php foreach ($statuses as $key => $label): ?>
+      <option value="<?= e($key) ?>"<?= $filters['status'] === $key ? ' selected' : '' ?>><?= e($label) ?> (<?= (int) ($counts[$key] ?? 0) ?>)</option>
+      <?php endforeach; ?>
+    </select>
+  </label>
+  <label class="field">
+    <span class="field__label">Vị trí tuyển dụng</span>
+    <select name="job_id" class="field__input">
+      <option value="">Tất cả vị trí</option>
+      <?php foreach ($jobs as $jobId => $jobTitle): ?>
+      <option value="<?= (int) $jobId ?>"<?= (string) $filters['job_id'] === (string) $jobId ? ' selected' : '' ?>><?= e($jobTitle) ?></option>
+      <?php endforeach; ?>
+    </select>
+  </label>
+  <div class="admin-filter-actions">
+    <button type="submit" class="btn btn-outline"><i class="bi bi-funnel me-1" aria-hidden="true"></i> Áp dụng</button>
+    <a href="<?= url('admin/applications') ?>" class="btn btn-ghost"><i class="bi bi-x-circle me-1" aria-hidden="true"></i> Xoá lọc</a>
+  </div>
 </form>
 
 <div class="admin-card">
@@ -46,9 +56,9 @@ $end = min($result['page'] * $result['per_page'], $result['total']);
   <p class="admin-empty">Chưa có hồ sơ nào khớp bộ lọc. Hồ sơ ứng viên gửi từ website sẽ xuất hiện tại đây.</p>
   <?php else: ?>
   <div class="admin-table-wrap">
-    <table class="admin-table table table-hover align-middle js-datatable">
+    <table class="admin-table table table-hover align-middle" aria-labelledby="admin-list-title">
       <thead>
-        <tr><th>Ứng viên</th><th>Vị trí</th><th>Khu / nguồn</th><th>Trạng thái</th><th>Nhận lúc</th><th class="is-actions">Thao tác</th></tr>
+        <tr><th>Ứng viên</th><th>Vị trí</th><th>Nguồn hồ sơ</th><th>Trạng thái</th><th>Nhận lúc</th><th class="is-actions">Thao tác</th></tr>
       </thead>
       <tbody>
         <?php foreach ($result['items'] as $app): ?>
@@ -79,20 +89,6 @@ $end = min($result['page'] * $result['per_page'], $result['total']);
     </table>
   </div>
 
-  <?php if ($result['pages'] > 1): ?>
-  <div class="admin-pager">
-    <p class="admin-muted">Hiển thị <?= $start ?>–<?= $end ?> / <?= (int) $result['total'] ?></p>
-    <div class="admin-pager__links">
-      <?php for ($p = 1; $p <= $result['pages']; $p++): ?>
-        <?php $qs = http_build_query(array_filter(['q' => $filters['q'], 'status' => $filters['status'], 'job_id' => $filters['job_id'], 'page' => $p])); ?>
-        <?php if ($p === $result['page']): ?>
-        <span class="admin-pager__item is-current"><?= $p ?></span>
-        <?php else: ?>
-        <a class="admin-pager__item" href="<?= url('admin/applications') ?>?<?= e($qs) ?>"><?= $p ?></a>
-        <?php endif; ?>
-      <?php endfor; ?>
-    </div>
-  </div>
-  <?php endif; ?>
+  <?php $listUrl = url('admin/applications'); require BASE_PATH . '/app/Views/partials/admin/pager.php'; ?>
   <?php endif; ?>
 </div>

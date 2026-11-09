@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controllers\Admin;
 
 use App\Core\Controller;
+use App\Core\Response;
 use App\Core\Session;
 use App\Models\AuditLog;
 use App\Models\ContactMessage;
@@ -16,7 +17,7 @@ final class ContactController extends Controller
         if (!isset(ContactMessage::STATUSES[$filters['status']])) {
             $filters['status'] = '';
         }
-        $result = ContactMessage::paginate($filters, max(1, (int) ($_GET['page'] ?? 1)), 500);
+        $result = ContactMessage::paginate($filters, max(1, (int) ($_GET['page'] ?? 1)));
 
         $this->view('admin/contact/index', [
             'result'   => $result,
@@ -34,7 +35,7 @@ final class ContactController extends Controller
             Session::flash('_error', 'Tin nhắn không tồn tại.');
             $this->redirect(url('admin/contact'));
         }
-        if ($message['status'] === 'new') {
+        if ($message['status'] === 'new' && !Response::wantsAdminFragment()) {
             ContactMessage::updateStatus((int) $message['id'], 'read', (int) Session::get('auth_id'));
             $message['status'] = 'read';
         }
@@ -51,14 +52,15 @@ final class ContactController extends Controller
         $messageId = (int) $id;
         $message = ContactMessage::find($messageId);
         $status = (string) ($_POST['status'] ?? '');
-        if ($message === null || !isset(ContactMessage::STATUSES[$status])) {
-            Session::flash('_error', 'Tin nhắn hoặc trạng thái không hợp lệ.');
-            $this->redirect(url('admin/contact'));
+        if ($message === null) {
+            $this->formError('Tin nhắn không tồn tại.', url('admin/contact'), status: 404);
+        }
+        if (!isset(ContactMessage::STATUSES[$status])) {
+            $this->formError('Trạng thái không hợp lệ.', url('admin/contact/' . $messageId), ['status' => 'Trạng thái không hợp lệ.']);
         }
         ContactMessage::updateStatus($messageId, $status, (int) Session::get('auth_id'));
         AuditLog::record('contact.status', 'contact_message', $messageId, ['status' => $status]);
-        Session::flash('_success', 'Đã cập nhật trạng thái tin nhắn.');
-        $this->redirect(url('admin/contact/' . $messageId));
+        $this->formSuccess('Đã cập nhật trạng thái tin nhắn.', url('admin/contact/' . $messageId));
     }
 
     public function destroy(string $id): void
@@ -66,12 +68,10 @@ final class ContactController extends Controller
         $messageId = (int) $id;
         $message = ContactMessage::find($messageId);
         if ($message === null) {
-            Session::flash('_error', 'Tin nhắn không tồn tại.');
-            $this->redirect(url('admin/contact'));
+            $this->formError('Tin nhắn không tồn tại.', url('admin/contact'), status: 404);
         }
         ContactMessage::delete($messageId);
         AuditLog::record('contact.delete', 'contact_message', $messageId, ['name' => $message['full_name']]);
-        Session::flash('_success', 'Đã xoá tin nhắn của "' . $message['full_name'] . '".');
-        $this->redirect(url('admin/contact'));
+        $this->formSuccess('Đã xoá tin nhắn của "' . $message['full_name'] . '".', url('admin/contact'));
     }
 }

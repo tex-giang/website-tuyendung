@@ -46,15 +46,13 @@ final class UserController extends Controller
         $errors = $this->validate($data, null);
 
         if ($errors !== []) {
-            $this->remember($data, $errors);
-            $this->redirect(url('admin/users/create'));
+            $this->formError('Vui lòng kiểm tra lại các trường được đánh dấu.', url('admin/users/create'), $errors, $data);
         }
 
         $data['password_hash'] = password_hash((string) $_POST['password'], PASSWORD_DEFAULT);
         $id = User::create($data);
         AuditLog::record('user.create', 'user', $id, ['username' => $data['username']]);
-        Session::flash('_success', 'Đã tạo tài khoản "' . $data['username'] . '".');
-        $this->redirect(url('admin/users'));
+        $this->formSuccess('Đã tạo tài khoản "' . $data['username'] . '".', url('admin/users'));
     }
 
     public function update(string $id): void
@@ -63,8 +61,7 @@ final class UserController extends Controller
         $userId = (int) $id;
         $user = User::find($userId);
         if ($user === null) {
-            Session::flash('_error', 'Tài khoản không tồn tại.');
-            $this->redirect(url('admin/users'));
+            $this->formError('Tài khoản không tồn tại.', url('admin/users'), status: 404);
         }
 
         $data = $this->collect($_POST);
@@ -99,14 +96,12 @@ final class UserController extends Controller
         }
 
         if ($errors !== []) {
-            $this->remember($data, $errors);
-            $this->redirect(url('admin/users/' . $userId . '/edit'));
+            $this->formError('Vui lòng kiểm tra lại các trường được đánh dấu.', url('admin/users/' . $userId . '/edit'), $errors, $data);
         }
 
         User::update($userId, $data);
         AuditLog::record('user.update', 'user', $userId, ['username' => $user['username']]);
-        Session::flash('_success', 'Đã cập nhật tài khoản.');
-        $this->redirect(url('admin/users'));
+        $this->formSuccess('Đã cập nhật tài khoản.', url('admin/users'));
     }
 
     public function resetPassword(string $id): void
@@ -115,25 +110,21 @@ final class UserController extends Controller
         $userId = (int) $id;
         $user = User::find($userId);
         if ($user === null) {
-            Session::flash('_error', 'Tài khoản không tồn tại.');
-            $this->redirect(url('admin/users'));
+            $this->formError('Tài khoản không tồn tại.', url('admin/users'), status: 404);
         }
 
         $password = (string) ($_POST['password'] ?? '');
         $confirm = (string) ($_POST['password_confirm'] ?? '');
         if (mb_strlen($password) < 8) {
-            Session::flash('_error', 'Mật khẩu mới tối thiểu 8 ký tự.');
-            $this->redirect(url('admin/users/' . $userId . '/edit'));
+            $this->formError('Mật khẩu mới tối thiểu 8 ký tự.', url('admin/users/' . $userId . '/edit'), ['password' => 'Mật khẩu mới tối thiểu 8 ký tự.']);
         }
         if ($password !== $confirm) {
-            Session::flash('_error', 'Mật khẩu nhập lại không khớp.');
-            $this->redirect(url('admin/users/' . $userId . '/edit'));
+            $this->formError('Mật khẩu nhập lại không khớp.', url('admin/users/' . $userId . '/edit'), ['password_confirm' => 'Mật khẩu nhập lại không khớp.']);
         }
 
         User::updatePassword($userId, password_hash($password, PASSWORD_DEFAULT));
         AuditLog::record('user.password_reset', 'user', $userId, ['username' => $user['username']]);
-        Session::flash('_success', 'Đã đặt lại mật khẩu cho "' . $user['username'] . '".');
-        $this->redirect(url('admin/users/' . $userId . '/edit'));
+        $this->formSuccess('Đã đặt lại mật khẩu cho "' . $user['username'] . '".', url('admin/users/' . $userId . '/edit'));
     }
 
     private function guardSuperAdmin(): void
@@ -190,14 +181,6 @@ final class UserController extends Controller
             }
         }
         return $errors;
-    }
-
-    private function remember(array $data, array $errors): void
-    {
-        unset($data['password_hash']);
-        Session::flash('_old', $data);
-        Session::flash('_errors', $errors);
-        Session::flash('_error', 'Vui lòng kiểm tra lại các trường được đánh dấu.');
     }
 
     /** @param array<string, mixed>|null $user */

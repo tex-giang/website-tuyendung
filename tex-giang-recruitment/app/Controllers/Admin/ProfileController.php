@@ -31,8 +31,7 @@ final class ProfileController extends Controller
         $userId = (int) Session::get('auth_id');
         $user = User::find($userId);
         if ($user === null) {
-            Session::flash('_error', 'Không tìm thấy tài khoản.');
-            $this->redirect(url('admin/login'));
+            $this->formError('Không tìm thấy tài khoản.', url('admin/login'), status: 404);
         }
 
         $current = (string) ($_POST['current_password'] ?? '');
@@ -53,13 +52,11 @@ final class ProfileController extends Controller
         }
 
         if ($errors !== []) {
-            Session::flash('_errors', $errors);
-            $this->redirect(url('admin/profile'));
+            $this->formError('Vui lòng kiểm tra lại các trường được đánh dấu.', url('admin/profile'), $errors);
         }
 
         User::updatePassword($userId, password_hash($password, PASSWORD_DEFAULT));
         AuditLog::record('user.password_change', 'user', $userId);
-        Session::flash('_success', 'Đã đổi mật khẩu. Hãy dùng mật khẩu mới cho lần đăng nhập sau.');
-        $this->redirect(url('admin/profile'));
+        $this->formSuccess('Đã đổi mật khẩu. Hãy dùng mật khẩu mới cho lần đăng nhập sau.', url('admin/profile'));
     }
 }

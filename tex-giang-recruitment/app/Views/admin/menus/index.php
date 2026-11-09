@@ -1,4 +1,5 @@
 <?php
+$page['ajax_fragment'] = true;
 /**
  * Danh sách menu website (header/footer). Menu bật mới hiện ngoài public.
  *

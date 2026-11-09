@@ -35,6 +35,7 @@ final class Csrf
 
     public static function checkRequest(): bool
     {
-        return self::verify($_POST['_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? null);
+        $token = $_POST['_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? null;
+        return is_string($token) && self::verify($token);
     }
 }

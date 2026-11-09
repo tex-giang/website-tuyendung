@@ -1,4 +1,5 @@
 <?php
+$page['ajax_fragment'] = true;
 /** Chi tiết tin nhắn liên hệ. */
 $msg = $message;
 $statusBadge = ['new' => 'admin-badge--new', 'read' => 'admin-badge--draft', 'replied' => 'admin-badge--published'];
@@ -37,7 +38,7 @@ $statusBadge = ['new' => 'admin-badge--new', 'read' => 'admin-badge--draft', 're
     </table>
 
     <h2 class="admin-h2 mt-4">Xử lý</h2>
-    <form method="POST" action="<?= url('admin/contact/' . $msg['id'] . '/status') ?>">
+    <form data-ajax method="POST" action="<?= url('admin/contact/' . $msg['id'] . '/status') ?>">
       <?= csrf_field() ?>
       <div class="field-grid">
         <label class="field">
@@ -54,7 +55,7 @@ $statusBadge = ['new' => 'admin-badge--new', 'read' => 'admin-badge--draft', 're
       </div>
     </form>
 
-    <form method="POST" action="<?= url('admin/contact/' . $msg['id'] . '/delete') ?>" class="mt-4"
+    <form data-ajax method="POST" action="<?= url('admin/contact/' . $msg['id'] . '/delete') ?>" class="mt-4"
           data-confirm="Xoá tin nhắn của &quot;<?= e($msg['full_name']) ?>&quot;?">
       <?= csrf_field() ?>
       <button type="submit" class="btn btn-danger"><i class="bi bi-trash me-1" aria-hidden="true"></i> Xoá tin nhắn</button>

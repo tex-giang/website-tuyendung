@@ -1,4 +1,5 @@
 <?php
+$page['ajax_fragment'] = true;
 /** Form thêm/sửa tin tuyển dụng. $job = null khi tạo mới. */
 $isEdit = $job !== null;
 $action = $isEdit ? url('admin/jobs/' . $job['id'] . '/edit') : url('admin/jobs/create');

@@ -28,7 +28,7 @@ final class PostController extends Controller
             $filters['status'] = '';
         }
 
-        $result = Post::adminPaginate($filters, max(1, (int) ($_GET['page'] ?? 1)), 500);
+        $result = Post::adminPaginate($filters, max(1, (int) ($_GET['page'] ?? 1)));
 
         $this->view('admin/posts/index', [
             'result'     => $result,

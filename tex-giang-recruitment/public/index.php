@@ -19,6 +19,9 @@ $router->setNotFound(static function (int $code): void {
         'nav'         => '',
     ];
     if (str_starts_with(current_path(), '/admin')) {
+        if (\App\Core\Response::isAjaxRequest()) {
+            \App\Core\Response::json(['ok' => false, 'message' => 'Đường dẫn quản trị không tồn tại.'], $code);
+        }
         $title = 'Không tìm thấy trang';
         $content = '<div class="admin-card"><h1 class="admin-h1">404 — Không tìm thấy trang</h1>'
             . '<p class="mt-2 text-muted">Đường dẫn không tồn tại trong hệ thống quản trị.</p>'
@@ -50,6 +53,10 @@ if ($base === '' && ($path === '/public' || $path === '/public/index.php')) {
     $path = '/';
 } elseif ($base === '' && str_starts_with($path, '/public/')) {
     $path = substr($path, strlen('/public')) ?: '/';
+}
+
+if ($path === '/admin' || str_starts_with($path, '/admin/')) {
+    header('Cache-Control: no-store');
 }
 
 // Thống kê lượt truy cập (chỉ trang public, dedupe theo thiết bị/ngày — F5 không tăng)

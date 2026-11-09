@@ -1,4 +1,5 @@
 <?php
+$page['ajax_fragment'] = true;
 /** Hồ sơ cá nhân: thông tin tài khoản + đổi mật khẩu. */
 $user = $user;
 $errors = $errors ?? [];
@@ -33,7 +34,7 @@ $flashError = \App\Core\Session::pull('_error');
 
   <section class="admin-card" id="doi-mat-khau">
     <h2 class="admin-h2">Đổi mật khẩu</h2>
-    <form method="POST" action="<?= url('admin/profile/password') ?>">
+    <form data-ajax method="POST" action="<?= url('admin/profile/password') ?>">
       <?= csrf_field() ?>
       <div class="field-grid">
         <label class="field field--span2">

@@ -15,7 +15,7 @@ final class AuditController extends Controller
             'q'       => trim((string) ($_GET['q'] ?? '')),
             'user_id' => (string) ($_GET['user_id'] ?? ''),
         ];
-        $result = AuditLog::paginate($filters, max(1, (int) ($_GET['page'] ?? 1)), 500);
+        $result = AuditLog::paginate($filters, max(1, (int) ($_GET['page'] ?? 1)));
 
         $this->view('admin/audit/index', [
             'result'  => $result,

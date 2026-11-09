@@ -32,7 +32,7 @@ $guard = static function (string $module, bool $write = false): array {
         static fn(): mixed => Permissions::require($module),
     ];
     if ($write) {
-        $middleware[] = static fn(): mixed => CsrfMiddleware::handle();
+        $middleware[] = static fn(): mixed => CsrfMiddleware::handle(admin: true);
     }
     return $middleware;
 };
@@ -43,11 +43,11 @@ $router->get('/admin/login', [AuthController::class, 'showLogin'], [
 ]);
 $router->post('/admin/login', [AuthController::class, 'login'], [
     static fn(): mixed => GuestMiddleware::handle(),
-    static fn(): mixed => CsrfMiddleware::handle(),
+    static fn(): mixed => CsrfMiddleware::handle(admin: true),
 ]);
 $router->post('/admin/logout', [AuthController::class, 'logout'], [
     static fn(): mixed => AuthMiddleware::handle(),
-    static fn(): mixed => CsrfMiddleware::handle(),
+    static fn(): mixed => CsrfMiddleware::handle(admin: true),
 ]);
 
 $router->get('/admin', static fn(): never => redirect(url('admin/dashboard')), $guard('dashboard'));

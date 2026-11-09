@@ -1,7 +1,6 @@
 <?php
 /** Layout riêng cho trang đăng nhập (không sidebar). */
 $page = $page ?? [];
-$error = \App\Core\Session::pull('_error');
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -15,12 +14,10 @@ $error = \App\Core\Session::pull('_error');
   <link rel="stylesheet" href="<?= asset('css/admin-app.css') ?>">
   <link rel="icon" href="<?= asset('images/logo-tgi.png') ?>" type="image/png">
 </head>
-<body class="admin-body admin-body--auth">
+<body class="admin-body admin-body--auth" data-admin-base="<?= e(url('admin')) ?>">
   <main class="auth-wrap">
-    <?php if ($error): ?>
-    <div class="admin-alert admin-alert--error" role="alert"><?= e((string) $error) ?></div>
-    <?php endif; ?>
     <?= $content ?>
   </main>
+  <script src="<?= asset('js/admin-ajax.js') ?>"></script>
 </body>
 </html>

@@ -1,14 +1,13 @@
 <?php
 /** Sidebar quản trị: nhóm theo nghiệp vụ, ẩn module ngoài quyền của vai trò hiện tại. */
 $nav = $page['nav'] ?? '';
-$user = \App\Core\Session::user() ?? ['full_name' => '', 'role' => ''];
 $can = static fn(string $module): bool => \App\Core\Permissions::currentCan($module);
 
 $groups = [
     'Tuyển dụng' => [
         ['dashboard', 'Bảng điều khiển', url('admin/dashboard'), 0, 'dashboard', 'bi-speedometer2'],
         ['jobs', 'Tin tuyển dụng', url('admin/jobs'), 0, 'jobs', 'bi-briefcase'],
-        ['applications', 'Hồ sơ ứng tuyển', url('admin/applications'), \App\Models\Application::newCount(), 'applications', 'bi-file-earmark-person'],
+        ['applications', 'Hồ sơ ứng tuyển', url('admin/applications'), $counts['applications'], 'applications', 'bi-file-earmark-person'],
         ['visits', 'Thống kê truy cập', url('admin/visits'), 0, 'dashboard', 'bi-bar-chart-line'],
     ],
     'Nội dung' => [
@@ -19,7 +18,7 @@ $groups = [
         ['pages-benefits', 'Phúc lợi', url('admin/pages/benefits'), 0, 'content', 'bi-gift'],
         ['menus', 'Menu website', url('admin/menus'), 0, 'content', 'bi-menu-button-wide'],
         ['categories', 'Danh mục dùng chung', url('admin/categories'), 0, 'categories', 'bi-tags'],
-        ['contact', 'Hộp thư liên hệ', url('admin/contact'), \App\Models\ContactMessage::newCount(), 'contact', 'bi-envelope'],
+        ['contact', 'Hộp thư liên hệ', url('admin/contact'), $counts['contact'], 'contact', 'bi-envelope'],
     ],
     'Hệ thống' => [
         ['settings', 'Cài đặt hệ thống', url('admin/settings'), 0, 'settings', 'bi-gear'],
@@ -27,21 +26,18 @@ $groups = [
         ['audit', 'Nhật ký thao tác', url('admin/audit'), 0, 'audit', 'bi-clock-history'],
     ],
 ];
-$roleLabel = \App\Core\Permissions::roleLabels()[$user['role'] ?? ''] ?? ($user['role'] ?? '');
-$words = preg_split('/\s+/u', trim((string) $user['full_name'])) ?: [];
-$initials = '';
-foreach (array_slice($words, 0, 2) as $word) {
-    $initials .= mb_substr($word, 0, 1, 'UTF-8');
-}
-$initials = mb_strtoupper($initials !== '' ? $initials : 'TG', 'UTF-8');
 ?>
-<aside class="admin-sidebar" id="admin-sidebar" aria-label="Menu quản trị">
-  <a href="<?= url('admin/dashboard') ?>" class="admin-brand">
-    <img src="<?= asset('images/logo-tgi-mark.webp') ?>" alt="TEX-GIANG" width="60" height="40">
-    <span>Quản trị HR</span>
-  </a>
+<aside class="offcanvas-lg offcanvas-start admin-sidebar" id="admin-sidebar" tabindex="-1" aria-labelledby="admin-sidebar-title">
+  <div class="admin-sidebar__head">
+    <a href="<?= url('admin/dashboard') ?>" class="admin-brand" id="admin-sidebar-title">
+      <img src="<?= asset('images/logo-tgi-mark.webp') ?>" alt="" width="44" height="36">
+      <span translate="no">TEX-GIANG</span>
+    </a>
+    <button type="button" class="admin-sidebar-toggle admin-sidebar__close" aria-label="Đóng menu quản trị"
+            data-bs-dismiss="offcanvas" data-bs-target="#admin-sidebar"><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+  </div>
 
-  <nav class="admin-nav">
+  <nav class="admin-nav" aria-label="Menu quản trị">
     <?php foreach ($groups as $groupLabel => $items): ?>
       <?php
       $visible = array_values(array_filter($items, static fn(array $item): bool => $can((string) ($item[4] ?? $item[0]))));
@@ -51,23 +47,16 @@ $initials = mb_strtoupper($initials !== '' ? $initials : 'TG', 'UTF-8');
       ?>
       <p class="admin-nav__group"><?= e($groupLabel) ?></p>
       <?php foreach ($visible as [$key, $label, $href, $badge, $perm, $icon]): ?>
-      <a href="<?= $href ?>" class="admin-nav__item <?= $nav === $key ? 'is-active' : '' ?>" title="<?= e($label) ?>">
+      <a href="<?= $href ?>" data-admin-nav="<?= e($key) ?>" class="admin-nav__item<?= $nav === $key ? ' is-active' : '' ?>"<?= $nav === $key ? ' aria-current="page"' : '' ?>>
         <i class="bi <?= e($icon) ?> admin-nav__icon" aria-hidden="true"></i>
         <span class="admin-nav__label"><?= e($label) ?></span>
-        <?php if ((int) $badge > 0): ?><span class="admin-nav__count"><?= (int) $badge ?></span><?php endif; ?>
+        <?php if (array_key_exists($key, $counts)): ?><span class="admin-nav__count"<?= $badge > 0 ? '' : ' hidden' ?>><span data-admin-count><?= (int) $badge ?></span><span class="visually-hidden"> mới</span></span><?php endif; ?>
       </a>
       <?php endforeach; ?>
     <?php endforeach; ?>
   </nav>
 
   <div class="admin-sidebar__foot">
-    <a href="<?= url('admin/profile') ?>" class="admin-sidebar__user">
-      <span class="admin-sidebar__avatar" aria-hidden="true"><?= e($initials) ?></span>
-      <span class="admin-sidebar__meta">
-        <strong title="<?= e($user['full_name']) ?>"><?= e($user['full_name']) ?></strong>
-        <em><?= e($roleLabel) ?></em>
-      </span>
-    </a>
-    <a href="<?= url('') ?>" target="_blank" rel="noopener" class="admin-sidebar__link"><i class="bi bi-box-arrow-up-right me-1" aria-hidden="true"></i> Website công khai</a>
+    <a href="<?= url('') ?>" target="_blank" rel="noopener" class="admin-sidebar__link" aria-label="Website tuyển dụng (mở tab mới)"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> Website tuyển dụng</a>
   </div>
 </aside>

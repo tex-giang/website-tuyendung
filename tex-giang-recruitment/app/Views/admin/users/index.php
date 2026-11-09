@@ -1,4 +1,5 @@
 <?php
+$page['ajax_fragment'] = true;
 /** Danh sách người dùng quản trị (super_admin). */
 $me = \App\Core\Session::get('auth_id');
 ?>

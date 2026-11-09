@@ -23,7 +23,7 @@ final class ApplicationController extends Controller
             $filters['status'] = '';
         }
 
-        $result = Application::paginate($filters, max(1, (int) ($_GET['page'] ?? 1)), 500);
+        $result = Application::paginate($filters, max(1, (int) ($_GET['page'] ?? 1)));
 
         $this->view('admin/applications/index', [
             'result'   => $result,
@@ -56,8 +56,7 @@ final class ApplicationController extends Controller
         $applicationId = (int) $id;
         $application = Application::find($applicationId);
         if ($application === null) {
-            Session::flash('_error', 'Hồ sơ không tồn tại.');
-            $this->redirect(url('admin/applications'));
+            $this->formError('Hồ sơ không tồn tại.', url('admin/applications'), status: 404);
         }
 
         $status = (string) ($_POST['status'] ?? '');
@@ -65,12 +64,10 @@ final class ApplicationController extends Controller
         $appointment = trim((string) ($_POST['appointment_at'] ?? ''));
 
         if (!isset(Application::STATUSES[$status])) {
-            Session::flash('_error', 'Trạng thái không hợp lệ.');
-            $this->redirect(url('admin/applications/' . $applicationId));
+            $this->formError('Vui lòng kiểm tra lại các trường được đánh dấu.', url('admin/applications/' . $applicationId), ['status' => 'Trạng thái không hợp lệ.']);
         }
         if (mb_strlen($note) > 2000) {
-            Session::flash('_error', 'Ghi chú tối đa 2000 ký tự.');
-            $this->redirect(url('admin/applications/' . $applicationId));
+            $this->formError('Vui lòng kiểm tra lại các trường được đánh dấu.', url('admin/applications/' . $applicationId), ['admin_note' => 'Ghi chú tối đa 2000 ký tự.']);
         }
 
         $appointmentAt = null;
@@ -78,16 +75,14 @@ final class ApplicationController extends Controller
             $appointment = str_replace('T', ' ', $appointment);
             $timestamp = strtotime($appointment);
             if ($timestamp === false) {
-                Session::flash('_error', 'Lịch phỏng vấn không đúng định dạng.');
-                $this->redirect(url('admin/applications/' . $applicationId));
+                $this->formError('Vui lòng kiểm tra lại các trường được đánh dấu.', url('admin/applications/' . $applicationId), ['appointment_at' => 'Lịch phỏng vấn không đúng định dạng.']);
             }
             $appointmentAt = date('Y-m-d H:i:s', $timestamp);
         }
 
         Application::updateStatus($applicationId, $status, $note !== '' ? $note : null, (int) Session::get('auth_id'), $appointmentAt);
         AuditLog::record('application.status', 'application', $applicationId, ['status' => $status]);
-        Session::flash('_success', 'Đã cập nhật hồ sơ sang "' . Application::STATUSES[$status] . '".');
-        $this->redirect(url('admin/applications/' . $applicationId));
+        $this->formSuccess('Đã cập nhật hồ sơ sang "' . Application::STATUSES[$status] . '".', url('admin/applications/' . $applicationId));
     }
 
     /** Tải CV — chỉ người đã đăng nhập, file nằm ngoài public. */

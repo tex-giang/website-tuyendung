@@ -72,7 +72,7 @@ final class TaxonomyController extends Controller
 
         if ($errors !== []) {
             $data['contacts'] = $contacts;
-            $this->remember($data, $errors, url('admin/categories/' . $type . '/create'));
+            $this->formError('Vui lòng kiểm tra lại các trường được đánh dấu.', url('admin/categories/' . $type . '/create'), $errors, $data);
         }
 
         $model = $config['model'];
@@ -81,8 +81,7 @@ final class TaxonomyController extends Controller
             BranchContact::replaceForBranch($id, $contacts);
         }
         AuditLog::record('taxonomy.create', $type, $id, ['name' => $data['name']]);
-        Session::flash('_success', 'Đã thêm ' . $config['singular'] . ' "' . $data['name'] . '".');
-        $this->redirect(url('admin/categories'));
+        $this->formSuccess('Đã thêm ' . $config['singular'] . ' "' . $data['name'] . '".', url('admin/categories'));
     }
 
     public function update(string $type, string $id): void
@@ -91,8 +90,7 @@ final class TaxonomyController extends Controller
         $recordId = (int) $id;
         $model = $config['model'];
         if ($model::find($recordId) === null) {
-            Session::flash('_error', 'Không tìm thấy ' . $config['singular'] . '.');
-            $this->redirect(url('admin/categories'));
+            $this->formError('Không tìm thấy ' . $config['singular'] . '.', url('admin/categories'), status: 404);
         }
 
         [$data, $errors] = $this->validate($type, $_POST, $recordId);
@@ -100,7 +98,7 @@ final class TaxonomyController extends Controller
         $errors = array_merge($errors, $contactErrors);
         if ($errors !== []) {
             $data['contacts'] = $contacts;
-            $this->remember($data, $errors, url('admin/categories/' . $type . '/' . $recordId . '/edit'));
+            $this->formError('Vui lòng kiểm tra lại các trường được đánh dấu.', url('admin/categories/' . $type . '/' . $recordId . '/edit'), $errors, $data);
         }
 
         $model::update($recordId, $data);
@@ -108,8 +106,7 @@ final class TaxonomyController extends Controller
             BranchContact::replaceForBranch($recordId, $contacts);
         }
         AuditLog::record('taxonomy.update', $type, $recordId, ['name' => $data['name']]);
-        Session::flash('_success', 'Đã cập nhật ' . $config['singular'] . '.');
-        $this->redirect(url('admin/categories'));
+        $this->formSuccess('Đã cập nhật ' . $config['singular'] . '.', url('admin/categories'));
     }
 
     public function destroy(string $type, string $id): void
@@ -119,23 +116,19 @@ final class TaxonomyController extends Controller
         $model = $config['model'];
         $record = $model::find($recordId);
         if ($record === null) {
-            Session::flash('_error', 'Không tìm thấy ' . $config['singular'] . '.');
-            $this->redirect(url('admin/categories'));
+            $this->formError('Không tìm thấy ' . $config['singular'] . '.', url('admin/categories'), status: 404);
         }
 
         if ($type === 'branch' && Branch::jobCount($recordId) > 0) {
-            Session::flash('_error', 'Không xoá được: còn ' . Branch::jobCount($recordId) . ' tin tuyển dụng thuộc khu này. Hãy chuyển tin sang khu khác trước.');
-            $this->redirect(url('admin/categories'));
+            $this->formError('Không xoá được: còn ' . Branch::jobCount($recordId) . ' tin tuyển dụng thuộc khu này. Hãy chuyển tin sang khu khác trước.', url('admin/categories'), status: 409);
         }
         if ($type === 'post-category' && PostCategory::postCount($recordId) > 0) {
-            Session::flash('_error', 'Không xoá được: còn ' . PostCategory::postCount($recordId) . ' bài viết thuộc chuyên mục này.');
-            $this->redirect(url('admin/categories'));
+            $this->formError('Không xoá được: còn ' . PostCategory::postCount($recordId) . ' bài viết thuộc chuyên mục này.', url('admin/categories'), status: 409);
         }
 
         $model::delete($recordId);
         AuditLog::record('taxonomy.delete', $type, $recordId, ['name' => $record['name']]);
-        Session::flash('_success', 'Đã xoá ' . $config['singular'] . ' "' . $record['name'] . '".');
-        $this->redirect(url('admin/categories'));
+        $this->formSuccess('Đã xoá ' . $config['singular'] . ' "' . $record['name'] . '".', url('admin/categories'));
     }
 
     public function toggle(string $type, string $id): void
@@ -145,21 +138,18 @@ final class TaxonomyController extends Controller
         $model = $config['model'];
         $record = $model::find($recordId);
         if ($record === null) {
-            Session::flash('_error', 'Không tìm thấy ' . $config['singular'] . '.');
-            $this->redirect(url('admin/categories'));
+            $this->formError('Không tìm thấy ' . $config['singular'] . '.', url('admin/categories'), status: 404);
         }
         $model::toggleActive($recordId);
         AuditLog::record('taxonomy.toggle', $type, $recordId, ['name' => $record['name']]);
-        Session::flash('_success', ((int) $record['is_active'] === 1 ? 'Đã tắt' : 'Đã bật') . ' ' . $config['singular'] . ' "' . $record['name'] . '".');
-        $this->redirect(url('admin/categories'));
+        $this->formSuccess(((int) $record['is_active'] === 1 ? 'Đã tắt' : 'Đã bật') . ' ' . $config['singular'] . ' "' . $record['name'] . '".', url('admin/categories'));
     }
 
     /** @return array{label:string, singular:string, model:class-string} */
     private function config(string $type): array
     {
         if (!isset(self::TYPES[$type])) {
-            Session::flash('_error', 'Loại danh mục không hợp lệ.');
-            $this->redirect(url('admin/categories'));
+            $this->formError('Loại danh mục không hợp lệ.', url('admin/categories'), status: 404);
         }
         return self::TYPES[$type];
     }
@@ -308,13 +298,5 @@ final class TaxonomyController extends Controller
         }
 
         return [$data, $errors];
-    }
-
-    private function remember(array $data, array $errors, string $redirect): never
-    {
-        Session::flash('_old', $data);
-        Session::flash('_errors', $errors);
-        Session::flash('_error', 'Vui lòng kiểm tra lại các trường được đánh dấu.');
-        $this->redirect($redirect);
     }
 }

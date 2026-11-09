@@ -1,4 +1,5 @@
 <?php
+$page['ajax_fragment'] = true;
 /**
  * Trang Phúc lợi — sửa TẤT CẢ trong một form repeater (kiểu Người liên hệ tuyển dụng).
  * Mỗi nhóm: tiêu đề + icon + mô tả, bên dưới là các dòng phúc lợi (thêm/xoá từng dòng).
@@ -156,11 +157,11 @@ $val = static function (array $row, string $key, string $default = ''): string {
       <div class="admin-repeater__rows" data-rows>
         <?php foreach ($comparisons as $ci => $row): ?>
         <div class="admin-repeater__row" data-row>
-          <input class="field__input" type="text" name="comparisons[<?= (int) $ci ?>][label]"
+          <input class="field__input" type="text" name="comparisons[<?= (int) $ci ?>][label]" aria-label="Hạng mục so sánh"
                  value="<?= e($val($row, 'label')) ?>" maxlength="120" placeholder="VD: Thưởng tuyển mới">
-          <input class="field__input" type="text" name="comparisons[<?= (int) $ci ?>][tex_giang]"
+          <input class="field__input" type="text" name="comparisons[<?= (int) $ci ?>][tex_giang]" aria-label="Phúc lợi tại TEX-GIANG"
                  value="<?= e($val($row, 'tex_giang')) ?>" maxlength="300" placeholder="Tại TEX-GIANG">
-          <input class="field__input" type="text" name="comparisons[<?= (int) $ci ?>][other_value]"
+          <input class="field__input" type="text" name="comparisons[<?= (int) $ci ?>][other_value]" aria-label="Phúc lợi ở nơi khác"
                  value="<?= e($val($row, 'other_value')) ?>" maxlength="300" placeholder="Nơi khác">
           <div class="admin-repeater__actions">
           <button type="button" class="btn btn-outline btn-icon" data-move="up" title="Lên" aria-label="Di chuyển dòng lên"><?= admin_icon_svg('arrow-up') ?></button>
@@ -172,9 +173,9 @@ $val = static function (array $row, string $key, string $default = ''): string {
       </div>
       <template data-template>
         <div class="admin-repeater__row" data-row>
-          <input class="field__input" type="text" name="comparisons[__INDEX__][label]" maxlength="120" placeholder="Hạng mục">
-          <input class="field__input" type="text" name="comparisons[__INDEX__][tex_giang]" maxlength="300" placeholder="Tại TEX-GIANG">
-          <input class="field__input" type="text" name="comparisons[__INDEX__][other_value]" maxlength="300" placeholder="Nơi khác">
+          <input class="field__input" type="text" name="comparisons[__INDEX__][label]" aria-label="Hạng mục so sánh" maxlength="120" placeholder="Hạng mục">
+          <input class="field__input" type="text" name="comparisons[__INDEX__][tex_giang]" aria-label="Phúc lợi tại TEX-GIANG" maxlength="300" placeholder="Tại TEX-GIANG">
+          <input class="field__input" type="text" name="comparisons[__INDEX__][other_value]" aria-label="Phúc lợi ở nơi khác" maxlength="300" placeholder="Nơi khác">
           <div class="admin-repeater__actions">
           <button type="button" class="btn btn-outline btn-icon" data-move="up" title="Lên" aria-label="Di chuyển dòng lên"><?= admin_icon_svg('arrow-up') ?></button>
           <button type="button" class="btn btn-outline btn-icon" data-move="down" title="Xuống" aria-label="Di chuyển dòng xuống"><?= admin_icon_svg('arrow-down') ?></button>
@@ -190,176 +191,3 @@ $val = static function (array $row, string $key, string $default = ''): string {
     <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1" aria-hidden="true"></i> Lưu thay đổi</button>
   </div>
 </form>
-
-<script>
-(function () {
-  var list = document.querySelector('[data-group-list]');
-  var groupTemplate = document.getElementById('group-template');
-  var itemTemplate = document.getElementById('item-template');
-  var groupCountEl = document.querySelector('[data-group-count]');
-
-  function renumberGroups() {
-    var groups = list.querySelectorAll('[data-group]');
-    groups.forEach(function (group, index) {
-      var badge = group.querySelector('[data-group-number]');
-      if (badge) badge.textContent = index + 1;
-      // đổi lại index trong name để server nhận mảng liền mạch
-      group.querySelectorAll('[name]').forEach(function (input) {
-        input.name = input.name.replace(/groups\[\d+\]/, 'groups[' + index + ']');
-        input.name = input.name.replace(/items\[\d+\]/, function (m) {
-          return m; // giữ nguyên index item, chỉ đổi group
-        });
-      });
-    });
-    if (groupCountEl) groupCountEl.textContent = groups.length;
-    return groups.length;
-  }
-
-  function addItem(group) {
-    var rows = group.querySelector('[data-item-rows]');
-    var groupIndex = Array.prototype.indexOf.call(list.querySelectorAll('[data-group]'), group);
-    var itemIndex = rows.querySelectorAll('[data-item-row]').length;
-    var html = itemTemplate.innerHTML
-      .replace(/__G__/g, groupIndex)
-      .replace(/__I__/g, itemIndex);
-    var wrap = document.createElement('div');
-    wrap.innerHTML = html.trim();
-    var row = wrap.firstElementChild;
-    rows.appendChild(row);
-    var input = row.querySelector('input[type="text"]');
-    if (input) input.focus();
-  }
-
-  // thêm nhóm
-  document.querySelector('[data-group-add]').addEventListener('click', function () {
-    var index = renumberGroups();
-    var html = groupTemplate.innerHTML.replace(/__G__/g, index);
-    var wrap = document.createElement('div');
-    wrap.innerHTML = html.trim();
-    var group = wrap.firstElementChild;
-    list.appendChild(group);
-    renumberGroups();
-    var input = group.querySelector('input[type="text"]');
-    if (input) input.focus();
-  });
-
-  // thêm/xoá dòng trong nhóm (uỷ quyền)
-  list.addEventListener('click', function (event) {
-    var addItemBtn = event.target.closest('[data-item-add]');
-    if (addItemBtn) {
-      addItem(addItemBtn.closest('[data-group]'));
-      return;
-    }
-    var removeItemBtn = event.target.closest('[data-item-remove]');
-    if (removeItemBtn) {
-      removeItemBtn.closest('[data-item-row]').remove();
-      return;
-    }
-    var removeGroupBtn = event.target.closest('[data-group-remove]');
-    if (removeGroupBtn) {
-      removeGroupBtn.closest('[data-group]').remove();
-      renumberGroups();
-    }
-  });
-
-  // repeater đơn giản (bảng so sánh)
-  document.querySelectorAll('[data-repeater]').forEach(function (repeater) {
-    var rows = repeater.querySelector('[data-rows]');
-    var template = repeater.querySelector('[data-template]');
-    var addButton = repeater.querySelector('[data-add]');
-    var counter = repeater.closest('.admin-card').querySelector('[data-count]');
-
-    function refresh() {
-      if (counter) counter.textContent = rows.querySelectorAll('[data-row]').length;
-    }
-
-    addButton.addEventListener('click', function () {
-      var index = rows.querySelectorAll('[data-row]').length;
-      var html = template.innerHTML.replace(/__INDEX__/g, index);
-      var wrap = document.createElement('div');
-      wrap.innerHTML = html.trim();
-      var row = wrap.firstElementChild;
-      rows.appendChild(row);
-      var input = row.querySelector('input[type="text"]');
-      if (input) input.focus();
-      refresh();
-    });
-
-    addButton.closest('.admin-repeater').addEventListener('click', function (event) {
-      var remove = event.target.closest('[data-remove]');
-      if (!remove) return;
-      remove.closest('[data-row]').remove();
-      refresh();
-    });
-  });
-})();
-</script>
-
-<script>
-(function () {
-  var list = document.querySelector('[data-group-list]');
-  if (!list) return;
-
-  function reindexGroups() {
-    list.querySelectorAll('[data-group]').forEach(function (group, gi) {
-      group.querySelectorAll('[name]').forEach(function (input) {
-        input.name = input.name.replace(/groups\[\d+\]/, 'groups[' + gi + ']');
-      });
-      reindexItems(group, gi);
-    });
-  }
-  function reindexItems(group, gi) {
-    group.querySelectorAll('[data-item-row]').forEach(function (row, ii) {
-      row.querySelectorAll('[name]').forEach(function (input) {
-        input.name = input.name.replace(/groups\[\d+\]/, 'groups[' + gi + ']').replace(/items\[\d+\]/, 'items[' + ii + ']');
-      });
-    });
-  }
-
-  document.addEventListener('click', function (event) {
-    var move = event.target.closest('[data-move]');
-    if (!move) return;
-    var itemRow = move.closest('[data-item-row]');
-    if (itemRow) {
-      var rows = itemRow.parentNode;
-      if (move.getAttribute('data-move') === 'up' && itemRow.previousElementSibling) {
-        rows.insertBefore(itemRow, itemRow.previousElementSibling);
-      } else if (move.getAttribute('data-move') === 'down' && itemRow.nextElementSibling) {
-        rows.insertBefore(itemRow.nextElementSibling, itemRow);
-      } else { return; }
-      var group = itemRow.closest('[data-group]');
-      var gi = Array.prototype.indexOf.call(list.querySelectorAll('[data-group]'), group);
-      reindexItems(group, gi);
-      return;
-    }
-
-    var cmpRow = move.closest('[data-row]');
-    if (cmpRow) {
-      var container = cmpRow.parentNode;
-      var repeater = cmpRow.closest('[data-repeater]');
-      if (move.getAttribute('data-move') === 'up' && cmpRow.previousElementSibling) {
-        container.insertBefore(cmpRow, cmpRow.previousElementSibling);
-      } else if (move.getAttribute('data-move') === 'down' && cmpRow.nextElementSibling) {
-        container.insertBefore(cmpRow.nextElementSibling, cmpRow);
-      } else { return; }
-      var prefix = repeater.getAttribute('data-repeater');
-      container.querySelectorAll('[data-row]').forEach(function (row, index) {
-        row.querySelectorAll('[name]').forEach(function (input) {
-          input.name = input.name.replace(new RegExp('^' + prefix + '\\[\\d+\\]'), prefix + '[' + index + ']');
-        });
-      });
-      return;
-    }
-
-    var groupCard = move.closest('[data-group]');
-    if (groupCard) {
-      if (move.getAttribute('data-move') === 'up' && groupCard.previousElementSibling) {
-        list.insertBefore(groupCard, groupCard.previousElementSibling);
-      } else if (move.getAttribute('data-move') === 'down' && groupCard.nextElementSibling) {
-        list.insertBefore(groupCard.nextElementSibling, groupCard);
-      } else { return; }
-      reindexGroups();
-    }
-  });
-})();
-</script>

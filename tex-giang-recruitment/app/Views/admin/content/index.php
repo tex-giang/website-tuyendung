@@ -1,4 +1,5 @@
 <?php
+$page['ajax_fragment'] = true;
 /** Nội dung trang chủ: hero, giới thiệu, số liệu, footer. */
 $errors = \App\Core\Session::pull('_errors', []);
 $values = array_merge($settings, \App\Core\Session::pull('_old', []));
@@ -15,7 +16,7 @@ $e = static fn(string $key): string => (string) ($errors[$key] ?? '');
 <div class="admin-alert admin-alert--error" role="alert">Có <?= count($errors) ?> trường cần kiểm tra lại.</div>
 <?php endif; ?>
 
-<form method="POST" action="<?= url('admin/content') ?>" class="admin-form">
+<form data-ajax method="POST" action="<?= url('admin/content') ?>" class="admin-form">
   <?= csrf_field() ?>
 
   <section class="admin-card">

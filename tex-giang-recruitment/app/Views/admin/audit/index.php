@@ -1,7 +1,6 @@
 <?php
+$page['ajax_fragment'] = true;
 /** Nhật ký thao tác quản trị. */
-$start = $result['total'] === 0 ? 0 : (($result['page'] - 1) * $result['per_page']) + 1;
-$end = min($result['page'] * $result['per_page'], $result['total']);
 $actionLabels = [
     'auth.login' => 'Đăng nhập', 'auth.logout' => 'Đăng xuất',
     'job.create' => 'Tạo tin', 'job.update' => 'Sửa tin', 'job.status' => 'Đổi trạng thái tin',
@@ -19,20 +18,28 @@ $actionLabels = [
 ?>
 <div class="admin-page-head">
   <div>
-    <h1 class="admin-h1">Nhật ký thao tác</h1>
+    <h1 class="admin-h1" id="admin-list-title">Nhật ký thao tác</h1>
   </div>
 </div>
 
-<form class="admin-filters" method="GET" action="<?= url('admin/audit') ?>">
-  <input type="search" name="q" value="<?= e($filters['q']) ?>" class="field__input" placeholder="Tìm theo hành động, người dùng, IP…">
-  <select name="user_id" class="field__input" data-submit-onchange>
-    <option value="">Tất cả người dùng</option>
-    <?php foreach ($users as $user): ?>
-    <option value="<?= (int) $user['id'] ?>"<?= (string) $filters['user_id'] === (string) $user['id'] ? ' selected' : '' ?>><?= e($user['full_name']) ?></option>
-    <?php endforeach; ?>
-  </select>
-  <button type="submit" class="btn btn-outline"><i class="bi bi-funnel me-1" aria-hidden="true"></i> Lọc</button>
-  <a href="<?= url('admin/audit') ?>" class="btn btn-ghost"><i class="bi bi-x-circle me-1" aria-hidden="true"></i> Xoá lọc</a>
+<form class="admin-filters" method="GET" role="search" aria-label="Bộ lọc danh sách" action="<?= url('admin/audit') ?>">
+  <label class="field">
+    <span class="field__label">Từ khóa</span>
+    <input type="search" name="q" value="<?= e($filters['q']) ?>" class="field__input" placeholder="Tìm theo hành động, người dùng, IP…">
+  </label>
+  <label class="field">
+    <span class="field__label">Người dùng</span>
+    <select name="user_id" class="field__input">
+      <option value="">Tất cả người dùng</option>
+      <?php foreach ($users as $user): ?>
+      <option value="<?= (int) $user['id'] ?>"<?= (string) $filters['user_id'] === (string) $user['id'] ? ' selected' : '' ?>><?= e($user['full_name']) ?></option>
+      <?php endforeach; ?>
+    </select>
+  </label>
+  <div class="admin-filter-actions">
+    <button type="submit" class="btn btn-outline"><i class="bi bi-funnel me-1" aria-hidden="true"></i> Áp dụng</button>
+    <a href="<?= url('admin/audit') ?>" class="btn btn-ghost"><i class="bi bi-x-circle me-1" aria-hidden="true"></i> Xoá lọc</a>
+  </div>
 </form>
 
 <div class="admin-card">
@@ -40,7 +47,7 @@ $actionLabels = [
   <p class="admin-empty">Chưa có bản ghi nào.</p>
   <?php else: ?>
   <div class="admin-table-wrap">
-    <table class="admin-table table table-hover align-middle js-datatable">
+    <table class="admin-table table table-hover align-middle" aria-labelledby="admin-list-title">
       <thead><tr><th>Thời gian</th><th>Người thực hiện</th><th>Hành động</th><th>Đối tượng</th><th>IP</th></tr></thead>
       <tbody>
         <?php foreach ($result['items'] as $row): ?>
@@ -61,17 +68,6 @@ $actionLabels = [
     </table>
   </div>
 
-  <?php if ($result['pages'] > 1): ?>
-  <div class="admin-pager">
-    <p class="admin-muted">Hiển thị <?= $start ?>–<?= $end ?> / <?= (int) $result['total'] ?></p>
-    <div class="admin-pager__links">
-      <?php for ($p = 1; $p <= $result['pages']; $p++): ?>
-        <?php $qs = http_build_query(array_filter(['q' => $filters['q'], 'user_id' => $filters['user_id'], 'page' => $p])); ?>
-        <?php if ($p === $result['page']): ?><span class="admin-pager__item is-current"><?= $p ?></span>
-        <?php else: ?><a class="admin-pager__item" href="<?= url('admin/audit') ?>?<?= e($qs) ?>"><?= $p ?></a><?php endif; ?>
-      <?php endfor; ?>
-    </div>
-  </div>
-  <?php endif; ?>
+  <?php $listUrl = url('admin/audit'); require BASE_PATH . '/app/Views/partials/admin/pager.php'; ?>
   <?php endif; ?>
 </div>

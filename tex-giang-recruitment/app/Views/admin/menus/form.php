@@ -1,4 +1,5 @@
 <?php
+$page['ajax_fragment'] = true;
 /**
  * Form thêm/sửa menu website.
  *

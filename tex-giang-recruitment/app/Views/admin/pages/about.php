@@ -1,4 +1,5 @@
 <?php
+$page['ajax_fragment'] = true;
 /**
  * Trang Về chúng tôi — sửa TẤT CẢ trong một form repeater (kiểu Người liên hệ tuyển dụng).
  * Mỗi khối là danh sách dòng: thêm dòng / xoá dòng, lưu một lần bằng AJAX.
@@ -150,67 +151,3 @@ $val = static function (array $row, string $key, string $default = ''): string {
     <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1" aria-hidden="true"></i> Lưu thay đổi</button>
   </div>
 </form>
-
-<script>
-(function () {
-  document.querySelectorAll('[data-repeater]').forEach(function (repeater) {
-    var card = repeater.closest('.admin-card');
-    var rows = repeater.querySelector('[data-rows]');
-    var template = repeater.querySelector('[data-template]');
-    var addButton = repeater.querySelector('[data-add]');
-    var counter = card ? card.querySelector('[data-count]') : null;
-
-    function refresh() {
-      if (counter) counter.textContent = rows.querySelectorAll('[data-row]').length;
-    }
-
-    addButton.addEventListener('click', function () {
-      var index = rows.querySelectorAll('[data-row]').length;
-      var html = template.innerHTML.replace(/__INDEX__/g, index);
-      var wrap = document.createElement('div');
-      wrap.innerHTML = html.trim();
-      var row = wrap.firstElementChild;
-      rows.appendChild(row);
-      var first = row.querySelector('input[type="text"]');
-      if (first) first.focus();
-      refresh();
-    });
-
-    repeater.addEventListener('click', function (event) {
-      var remove = event.target.closest('[data-remove]');
-      if (!remove) return;
-      remove.closest('[data-row]').remove();
-      refresh();
-    });
-  });
-})();
-</script>
-
-<script>
-(function () {
-  document.querySelectorAll('[data-repeater]').forEach(function (repeater) {
-    var rows = repeater.querySelector('[data-rows]');
-    var prefix = repeater.getAttribute('data-repeater');
-    function reindex() {
-      rows.querySelectorAll('[data-row]').forEach(function (row, index) {
-        row.querySelectorAll('[name]').forEach(function (input) {
-          input.name = input.name.replace(new RegExp('^' + prefix + '\\[\\d+\\]'), prefix + '[' + index + ']');
-        });
-      });
-    }
-    repeater.addEventListener('click', function (event) {
-      var move = event.target.closest('[data-move]');
-      if (move) {
-        var row = move.closest('[data-row]');
-        if (!row) return;
-        if (move.getAttribute('data-move') === 'up' && row.previousElementSibling) {
-          rows.insertBefore(row, row.previousElementSibling);
-        } else if (move.getAttribute('data-move') === 'down' && row.nextElementSibling) {
-          rows.insertBefore(row.nextElementSibling, row);
-        }
-        reindex();
-      }
-    });
-  });
-})();
-</script>

@@ -39,6 +39,9 @@ set_exception_handler(static function (Throwable $e): void {
     error_log('[TEX-GIANG] ' . $e::class . ': ' . $e->getMessage()
         . ' in ' . $e->getFile() . ':' . $e->getLine());
     http_response_code(500);
+    if (str_starts_with(current_path(), '/admin') && \App\Core\Response::isAjaxRequest()) {
+        \App\Core\Response::json(['ok' => false, 'message' => 'Máy chủ chưa xử lý xong yêu cầu. Vui lòng kiểm tra dữ liệu trước khi thử lại.'], 500);
+    }
     if (env_bool('APP_DEBUG', false)) {
         header('Content-Type: text/plain; charset=utf-8');
         echo $e::class . ': ' . $e->getMessage() . "\n\n" . $e->getTraceAsString();

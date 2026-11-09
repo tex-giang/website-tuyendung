@@ -78,14 +78,12 @@ final class BannerController extends Controller
             if ($uploadSmall['ok'] && $uploadSmall['path'] !== '') {
                 UploadService::deletePublicImage($uploadSmall['path']);
             }
-            $this->rememberForm($data, $errors);
-            $this->redirect(url('admin/banners/create'));
+            $this->formError('Vui lòng kiểm tra lại các trường được đánh dấu.', url('admin/banners/create'), $errors, $data);
         }
 
         $id = Banner::create($data);
         AuditLog::record('banner.create', 'banner', $id, ['name' => $data['name']]);
-        Session::flash('_success', 'Đã tạo banner "' . $data['name'] . '".');
-        $this->redirect(url('admin/banners'));
+        $this->formSuccess('Đã tạo banner "' . $data['name'] . '".', url('admin/banners'));
     }
 
     public function update(string $id): void
@@ -93,8 +91,7 @@ final class BannerController extends Controller
         $bannerId = (int) $id;
         $existing = Banner::find($bannerId);
         if ($existing === null) {
-            Session::flash('_error', 'Banner không tồn tại.');
-            $this->redirect(url('admin/banners'));
+            $this->formError('Banner không tồn tại.', url('admin/banners'), status: 404);
         }
 
         [$data, $errors] = $this->validate($_POST);
@@ -124,8 +121,7 @@ final class BannerController extends Controller
             if ($uploadSmall['ok'] && $uploadSmall['path'] !== '') {
                 UploadService::deletePublicImage($uploadSmall['path']);
             }
-            $this->rememberForm($data, $errors);
-            $this->redirect(url('admin/banners/' . $bannerId . '/edit'));
+            $this->formError('Vui lòng kiểm tra lại các trường được đánh dấu.', url('admin/banners/' . $bannerId . '/edit'), $errors, $data);
         }
 
         Banner::update($bannerId, $data);
@@ -136,21 +132,18 @@ final class BannerController extends Controller
             UploadService::deletePublicImage((string) ($existing['image_path_small'] ?? ''));
         }
         AuditLog::record('banner.update', 'banner', $bannerId, ['name' => $data['name']]);
-        Session::flash('_success', 'Đã cập nhật banner.');
-        $this->redirect(url('admin/banners'));
+        $this->formSuccess('Đã cập nhật banner.', url('admin/banners'));
     }
 
     public function toggle(string $id): void
     {
         $banner = Banner::find((int) $id);
         if ($banner === null) {
-            Session::flash('_error', 'Banner không tồn tại.');
-            $this->redirect(url('admin/banners'));
+            $this->formError('Banner không tồn tại.', url('admin/banners'), status: 404);
         }
         Banner::toggleActive((int) $id);
         AuditLog::record('banner.toggle', 'banner', (int) $id);
-        Session::flash('_success', ((int) $banner['is_active'] === 1 ? 'Đã tắt' : 'Đã bật') . ' banner "' . $banner['name'] . '".');
-        $this->redirect(url('admin/banners'));
+        $this->formSuccess(((int) $banner['is_active'] === 1 ? 'Đã tắt' : 'Đã bật') . ' banner "' . $banner['name'] . '".', url('admin/banners'));
     }
 
     public function destroy(string $id): void
@@ -158,15 +151,13 @@ final class BannerController extends Controller
         $bannerId = (int) $id;
         $banner = Banner::find($bannerId);
         if ($banner === null) {
-            Session::flash('_error', 'Banner không tồn tại.');
-            $this->redirect(url('admin/banners'));
+            $this->formError('Banner không tồn tại.', url('admin/banners'), status: 404);
         }
         Banner::delete($bannerId);
         UploadService::deletePublicImage((string) ($banner['image_path'] ?? ''));
         UploadService::deletePublicImage((string) ($banner['image_path_small'] ?? ''));
         AuditLog::record('banner.delete', 'banner', $bannerId, ['name' => $banner['name']]);
-        Session::flash('_success', 'Đã xoá banner "' . $banner['name'] . '".');
-        $this->redirect(url('admin/banners'));
+        $this->formSuccess('Đã xoá banner "' . $banner['name'] . '".', url('admin/banners'));
     }
 
     /** @param array<string, mixed>|null $banner */
@@ -264,12 +255,5 @@ final class BannerController extends Controller
         }
 
         return [$data, $errors];
-    }
-
-    private function rememberForm(array $data, array $errors): void
-    {
-        Session::flash('_old', $data);
-        Session::flash('_errors', $errors);
-        Session::flash('_error', 'Vui lòng kiểm tra lại các trường được đánh dấu.');
     }
 }
