@@ -44,6 +44,14 @@ if ($base !== '' && str_starts_with($path, $base)) {
     $path = substr($path, strlen($base)) ?: '/';
 }
 
+// Hosting trỏ DocumentRoot vào thư mục cha (truy cập qua /public/...):
+// tự bỏ tiền tố /public để website vẫn chạy đúng như ở domain gốc.
+if ($base === '' && ($path === '/public' || $path === '/public/index.php')) {
+    $path = '/';
+} elseif ($base === '' && str_starts_with($path, '/public/')) {
+    $path = substr($path, strlen('/public')) ?: '/';
+}
+
 // Thống kê lượt truy cập (chỉ trang public, dedupe theo thiết bị/ngày — F5 không tăng)
 if ($method === 'GET' && !str_starts_with($path, '/admin')) {
     \App\Services\VisitTracker::track();

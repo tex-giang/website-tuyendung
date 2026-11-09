@@ -387,3 +387,17 @@ Tài liệu chi tiết thêm: `docs/01-ui-inventory.md`, `docs/02-database.md`,
 > `2026-11-08-visit-stats.sql` (bảng thống kê lượt truy cập theo ngày + thiết bị),
 > `2026-11-08-job-code-td26.sql` (chuyển mã tin tuyển dụng sang định dạng TD26-0001), `2026-11-08-job-expiry.sql` (trạng thái Hết hạn + số ngày nhận hồ sơ mặc định).
 > Bản `schema.sql`/`seed.sql` mới đã gồm sẵn các bảng/cột này cho cài mới.
+
+### Nếu hosting không đổi được DocumentRoot vào `public/`
+
+Hosting mặc định trỏ vào `public_html/` sẽ chạy được `.../public/index.php` nhưng URL bị dư `/public`.
+Có 2 cách:
+
+1. **Khuyến nghị:** cPanel → Domains → đổi Document Root của domain/subdomain vào thư mục `public/`.
+   Sau đó `.env` để `APP_BASE=` và mở `https://domain.com/`.
+2. **Không đổi được DocumentRoot:** upload code sao cho gốc domain có `app/`, `public/`, `.env`…
+   rồi copy file `docs/deploy-root-htaccess.txt` → đổi tên thành `.htaccess` đặt ở gốc domain.
+   `.env` để `APP_BASE=`. Website chạy tại `https://domain.com/` (URL sạch, không cần `/public`).
+
+Nếu chấp nhận URL dư `/public/` tạm thời: chỉ cần `.env` đặt `APP_BASE=/public` rồi vào
+`https://domain.com/public/`.

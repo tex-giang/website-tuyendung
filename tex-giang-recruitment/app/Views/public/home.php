@@ -178,19 +178,6 @@ for ($i = 1; $i <= 4; $i++) {
   </div>
 </section>
 
-<section class="tg-container pb-20 lg:pb-28" aria-labelledby="company-scenes">
-  <div class="image-story">
-    <div>
-      <h2 id="company-scenes">Con người và nơi làm việc</h2>
-      <p>Khám phá không gian nhà máy, hoạt động cộng đồng và định hướng phát triển bền vững trong hệ thống TEX-GIANG.</p>
-      <?php if (menu_link_visible('about')): ?><a href="<?= url('about') ?>" class="tg-link mt-5">Tìm hiểu doanh nghiệp
-        <img class="tg-icon" src="<?= asset('images/icons/arrow-right.svg') ?>" alt="" width="20" height="20"></a><?php endif; ?>
-    </div>
-    <figure><img src="<?= asset('images/company/social.webp') ?>" width="600" height="450" loading="lazy" alt="Đại diện doanh nghiệp trao quà trong hoạt động cộng đồng"><figcaption>Gắn kết cùng cộng đồng</figcaption></figure>
-    <figure><img src="<?= asset('images/company/environment.webp') ?>" width="600" height="450" loading="lazy" alt="Hệ thống điện mặt trời trên mái nhà xưởng TEX-GIANG"><figcaption>Hướng tới sản xuất bền vững</figcaption></figure>
-  </div>
-</section>
-
 <?php
 /* Dữ liệu cho dialog "Tuyển gấp" — lấy từ DB, render sẵn để JS chỉ việc dựng dialog. */
 $urgentJson = [];
