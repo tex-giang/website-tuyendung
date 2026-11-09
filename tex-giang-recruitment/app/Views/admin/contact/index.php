@@ -7,7 +7,6 @@ $end = min($result['page'] * $result['per_page'], $result['total']);
 <div class="admin-page-head">
   <div>
     <h1 class="admin-h1">Hộp thư liên hệ</h1>
-    <p class="admin-sub"><?= (int) $result['total'] ?> tin nhắn khớp bộ lọc · <?= (int) ($counts['new'] ?? 0) ?> tin chưa đọc.</p>
   </div>
 </div>
 
@@ -56,7 +55,7 @@ $end = min($result['page'] * $result['per_page'], $result['total']);
               <a href="<?= url('admin/contact/' . $item['id']) ?>" class="btn btn-outline btn-sm">Xem</a>
               <form method="POST" action="<?= url('admin/contact/' . $item['id'] . '/delete') ?>"
                     data-confirm="Xoá tin nhắn của &quot;<?= e($item['full_name']) ?>&quot;?">
-                <?= csrf_field() ?><button class="btn btn-danger btn-sm" type="submit">Xoá</button>
+                <?= csrf_field() ?><button class="btn btn-danger btn-icon" type="submit" title="Xoá" aria-label="Xoá"><?= admin_icon_svg('trash') ?></button>
               </form>
             </div>
           </td>

@@ -32,15 +32,6 @@
     return '<ul class="tg-swal-errors">' + lis + '</ul>';
   }
 
-  function toast(icon, title) {
-    if (!hasSwal) return;
-    Swal.fire({
-      toast: true, position: 'top-end', icon: icon, title: title,
-      showConfirmButton: false, timer: 2800, timerProgressBar: true,
-      didOpen: function (el) { el.addEventListener('mouseenter', Swal.stopTimer); el.addEventListener('mouseleave', Swal.resumeTimer); }
-    });
-  }
-
   function confirmDialog(message) {
     if (!hasSwal) return Promise.resolve(window.confirm(message));
     var text = String(message || 'Bạn chắc chắn muốn thực hiện thao tác này?')
@@ -116,7 +107,6 @@
         if (data && data.ok) {
           var message = data.message || 'Đã lưu thành công.';
           if (data.redirect) {
-            try { sessionStorage.setItem('tg_admin_flash', JSON.stringify({ icon: 'success', title: message })); } catch (_) {}
             if (hasSwal) {
               Swal.fire({
                 icon: 'success', title: 'Thành công', text: message,
@@ -127,7 +117,14 @@
             }
             return;
           }
-          toast('success', message);
+          if (hasSwal) {
+            Swal.fire({
+              icon: 'success', title: 'Thành công', text: message,
+              timer: 2000, showConfirmButton: false, timerProgressBar: true
+            });
+          } else {
+            window.alert(message);
+          }
           if (form.hasAttribute('data-ajax-reload')) {
             setTimeout(function () { window.location.reload(); }, 700);
           }
@@ -204,19 +201,7 @@
     }
   });
 
-  // Thông báo còn lại sau khi AJAX chuyển trang thành công.
-  document.addEventListener('DOMContentLoaded', function () {
-    var raw = null;
-    try { raw = sessionStorage.getItem('tg_admin_flash'); } catch (_) {}
-    if (!raw) return;
-    try { sessionStorage.removeItem('tg_admin_flash'); } catch (_) {}
-    var flash = null;
-    try { flash = JSON.parse(raw); } catch (_) {}
-    if (flash && flash.title) toast(flash.icon || 'success', flash.title);
-  });
-
   window.TGAdminAjax = {
-    toast: toast,
     confirm: confirmDialog,
     error: errorDialog
   };

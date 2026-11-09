@@ -1,8 +1,6 @@
 <?php
 /** Trang xác nhận đã gửi hồ sơ (thật, lưu DB). */
 $last = $last ?? [];
-$hotline = settings('hotline', '02733937274');
-$hotlineDisplay = settings('hotline_display', '0273 393 7274');
 ?>
 <div class="tg-container">
   <div class="mx-auto max-w-[640px]">
@@ -31,18 +29,8 @@ $hotlineDisplay = settings('hotline_display', '0273 393 7274');
       <a href="<?= url('') ?>" class="tg-btn tg-btn--ghost">Về trang chủ</a>
     </div>
 
-    <div class="mt-10 rounded-card bg-surface p-6 lg:p-8">
-      <h2 class="text-[16px] font-medium text-ink">Các bước tiếp theo</h2>
-      <ol class="mt-4 space-y-4 text-[16px] leading-[1.6] text-muted">
-        <li><span class="block font-medium text-body">Trong 24 – 48 giờ làm việc</span> Nhân sự gọi xác nhận thông tin và sắp lịch.</li>
-        <li><span class="block font-medium text-body">Buổi phỏng vấn tại nhà máy</span> Mang CCCD, gặp trực tiếp tại Nhà máy Tân Hương 2.</li>
-        <li><span class="block font-medium text-body">Nhận việc</span> Thử tay nghề hoặc vào lớp đào tạo nghề có lương.</li>
-      </ol>
-    </div>
-
     <p class="mt-6 max-w-[62ch] text-[14px] leading-[1.7] text-muted">
-      Cần hỏi gấp? Gọi <a href="tel:<?= e($hotline) ?>" class="text-body underline underline-offset-2 hover:text-accent"><?= e($hotlineDisplay) ?></a>
-      hoặc chat Zalo <a href="https://zalo.me/<?= e(settings('zalo', $hotline)) ?>" target="_blank" rel="noopener" class="text-body underline underline-offset-2 hover:text-accent"><?= e($hotlineDisplay) ?></a>.
+      Cần hỏi gấp? Xem người phụ trách theo khu vực tại <a href="<?= url('contact') ?>" class="text-body underline underline-offset-2 hover:text-accent">trang Liên hệ</a>.
     </p>
   </div>
   <img class="notice-art" src="<?= asset('images/application-success.svg') ?>" width="400" height="330" alt="" aria-hidden="true">

@@ -10,7 +10,6 @@ $flashError = \App\Core\Session::pull('_error');
 <div class="admin-page-head">
   <div>
     <h1 class="admin-h1">Hồ sơ cá nhân</h1>
-    <p class="admin-sub">Thông tin tài khoản đang đăng nhập và đổi mật khẩu.</p>
   </div>
 </div>
 
@@ -44,7 +43,7 @@ $flashError = \App\Core\Session::pull('_error');
           <?php if ($err('current_password')): ?><span class="field__error"><?= e($err('current_password')) ?></span><?php endif; ?>
         </label>
         <label class="field">
-          <span class="field__label">Mật khẩu mới <small>tối thiểu 8 ký tự</small></span>
+          <span class="field__label">Mật khẩu mới</span>
           <input class="field__input<?= $err('password') ? ' is-invalid' : '' ?>" type="password"
                  name="password" required autocomplete="new-password">
           <?php if ($err('password')): ?><span class="field__error"><?= e($err('password')) ?></span><?php endif; ?>

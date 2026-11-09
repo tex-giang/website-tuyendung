@@ -83,6 +83,14 @@ abstract class Controller
         Response::back();
     }
 
+    /** Nếu trang thuộc menu đang bị ẩn (is_active=0) thì trả 404 — không hiển thị trang đó. */
+    protected function guardMenu(string $url): void
+    {
+        if (!menu_link_visible($url)) {
+            $this->notFound('Trang này đang được ẩn khỏi menu website.');
+        }
+    }
+
     protected function notFound(string $message = 'Không tìm thấy trang.'): never
     {
         http_response_code(404);

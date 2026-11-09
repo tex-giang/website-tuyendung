@@ -8,7 +8,10 @@ use App\Controllers\Admin\BannerController;
 use App\Controllers\Admin\ContactController;
 use App\Controllers\Admin\ContentController;
 use App\Controllers\Admin\DashboardController;
+use App\Controllers\Admin\VisitStatController;
 use App\Controllers\Admin\JobController;
+use App\Controllers\Admin\MenuController;
+use App\Controllers\Admin\PageContentController;
 use App\Controllers\Admin\PostController;
 use App\Controllers\Admin\ProfileController;
 use App\Controllers\Admin\SettingsController;
@@ -52,6 +55,9 @@ $router->get('/admin', static fn(): never => redirect(url('admin/dashboard')), $
 // Bảng điều khiển
 $router->get('/admin/dashboard', [DashboardController::class, 'index'], $guard('dashboard'));
 
+// Thống kê truy cập
+$router->get('/admin/visits', [VisitStatController::class, 'index'], $guard('dashboard'));
+
 // Tin tuyển dụng
 $router->get('/admin/jobs', [JobController::class, 'index'], $guard('jobs'));
 $router->get('/admin/jobs/create', [JobController::class, 'create'], $guard('jobs'));
@@ -72,6 +78,13 @@ $router->get('/admin/applications/{id}/cv', [ApplicationController::class, 'down
 $router->get('/admin/posts', [PostController::class, 'index'], $guard('posts'));
 $router->get('/admin/posts/create', [PostController::class, 'create'], $guard('posts'));
 $router->post('/admin/posts/create', [PostController::class, 'store'], $guard('posts', true));
+
+// Upload ảnh cho CKEditor — token CSRF gửi kèm query vì CKEditor không gửi header.
+$router->post('/admin/posts/upload-image', [PostController::class, 'uploadImage'], [
+    static fn(): mixed => AuthMiddleware::handle(),
+    static fn(): mixed => Permissions::require('posts'),
+]);
+
 $router->get('/admin/posts/{id}/edit', [PostController::class, 'edit'], $guard('posts'));
 $router->post('/admin/posts/{id}/edit', [PostController::class, 'update'], $guard('posts', true));
 $router->post('/admin/posts/{id}/status', [PostController::class, 'changeStatus'], $guard('posts', true));
@@ -98,6 +111,22 @@ $router->post('/admin/categories/{type}/{id}/toggle', [TaxonomyController::class
 // Nội dung website & cài đặt hệ thống
 $router->get('/admin/content', [ContentController::class, 'index'], $guard('content'));
 $router->post('/admin/content', [ContentController::class, 'update'], $guard('content', true));
+// Menu website (header/footer) — bật/tắt hiển thị ngoài public.
+$router->get('/admin/menus', [MenuController::class, 'index'], $guard('content'));
+$router->get('/admin/menus/create', [MenuController::class, 'create'], $guard('content'));
+$router->post('/admin/menus/create', [MenuController::class, 'store'], $guard('content', true));
+$router->get('/admin/menus/{id}/edit', [MenuController::class, 'edit'], $guard('content'));
+$router->post('/admin/menus/{id}/edit', [MenuController::class, 'update'], $guard('content', true));
+$router->post('/admin/menus/{id}/delete', [MenuController::class, 'destroy'], $guard('content', true));
+$router->post('/admin/menus/{id}/toggle', [MenuController::class, 'toggle'], $guard('content', true));
+
+// Trang Về chúng tôi / Phúc lợi — sửa toàn bộ bằng form repeater (kiểu Người liên hệ)
+$router->get('/admin/pages/about', [PageContentController::class, 'about'], $guard('content'));
+$router->post('/admin/pages/about', [PageContentController::class, 'aboutSave'], $guard('content', true));
+$router->get('/admin/pages/benefits', [PageContentController::class, 'benefits'], $guard('content'));
+$router->post('/admin/pages/benefits', [PageContentController::class, 'benefitsSave'], $guard('content', true));
+
+
 $router->get('/admin/settings', [SettingsController::class, 'index'], $guard('settings'));
 $router->post('/admin/settings', [SettingsController::class, 'update'], $guard('settings', true));
 

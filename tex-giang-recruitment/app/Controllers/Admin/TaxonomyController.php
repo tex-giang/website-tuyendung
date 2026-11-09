@@ -7,6 +7,7 @@ use App\Core\Controller;
 use App\Core\Session;
 use App\Models\AuditLog;
 use App\Models\Branch;
+use App\Models\BranchContact;
 use App\Models\Category;
 use App\Models\PostCategory;
 
@@ -37,10 +38,11 @@ final class TaxonomyController extends Controller
     public function index(): void
     {
         $this->view('admin/categories/index', [
-            'branches'      => Branch::all(),
-            'categories'    => Category::all(),
+            'branches'       => Branch::all(),
+            'categories'     => Category::all(),
             'postCategories' => PostCategory::all(),
-            'page'          => ['title' => 'Danh mục dùng chung | ' . settings('site_name'), 'nav' => 'categories'],
+            'branchContacts' => BranchContact::allGrouped(),
+            'page'           => ['title' => 'Danh mục dùng chung | ' . settings('site_name'), 'nav' => 'categories'],
         ], 'layouts/admin');
     }
 
@@ -65,13 +67,19 @@ final class TaxonomyController extends Controller
     {
         $config = $this->config($type);
         [$data, $errors] = $this->validate($type, $_POST, null);
+        [$contacts, $contactErrors] = $this->validateContacts($_POST);
+        $errors = array_merge($errors, $contactErrors);
 
         if ($errors !== []) {
+            $data['contacts'] = $contacts;
             $this->remember($data, $errors, url('admin/categories/' . $type . '/create'));
         }
 
         $model = $config['model'];
         $id = $model::create($data);
+        if ($type === 'branch') {
+            BranchContact::replaceForBranch($id, $contacts);
+        }
         AuditLog::record('taxonomy.create', $type, $id, ['name' => $data['name']]);
         Session::flash('_success', 'Đã thêm ' . $config['singular'] . ' "' . $data['name'] . '".');
         $this->redirect(url('admin/categories'));
@@ -88,11 +96,17 @@ final class TaxonomyController extends Controller
         }
 
         [$data, $errors] = $this->validate($type, $_POST, $recordId);
+        [$contacts, $contactErrors] = $this->validateContacts($_POST);
+        $errors = array_merge($errors, $contactErrors);
         if ($errors !== []) {
+            $data['contacts'] = $contacts;
             $this->remember($data, $errors, url('admin/categories/' . $type . '/' . $recordId . '/edit'));
         }
 
         $model::update($recordId, $data);
+        if ($type === 'branch') {
+            BranchContact::replaceForBranch($recordId, $contacts);
+        }
         AuditLog::record('taxonomy.update', $type, $recordId, ['name' => $data['name']]);
         Session::flash('_success', 'Đã cập nhật ' . $config['singular'] . '.');
         $this->redirect(url('admin/categories'));
@@ -159,23 +173,85 @@ final class TaxonomyController extends Controller
 
         $values = $record ?? [
             'id' => null, 'slug' => '', 'name' => '', 'address' => '', 'phone' => '',
-            'map_url' => '', 'description' => '', 'sort_order' => 0, 'is_active' => 1,
+            'map_url' => '', 'map_link' => '', 'description' => '', 'sort_order' => 0, 'is_active' => 1,
         ];
         if ($old !== []) {
             $values = array_merge($values, $old);
         }
 
+        $contacts = [];
+        if (isset($values['contacts']) && is_array($values['contacts'])) {
+            $contacts = $values['contacts'];
+        } elseif ($record !== null && $type === 'branch') {
+            $contacts = BranchContact::byBranch((int) $record['id'], false);
+        }
+        unset($values['contacts']);
+
         $this->view('admin/categories/form', [
-            'type'   => $type,
-            'config' => $config,
-            'record' => $record,
-            'values' => $values,
-            'errors' => $errors,
-            'page'   => [
+            'type'     => $type,
+            'config'   => $config,
+            'record'   => $record,
+            'values'   => $values,
+            'errors'   => $errors,
+            'contacts' => $contacts,
+            'page'     => [
                 'title' => ($record === null ? 'Thêm ' : 'Sửa ') . $config['singular'] . ' | ' . settings('site_name'),
                 'nav'   => 'categories',
             ],
         ], 'layouts/admin');
+    }
+
+    /**
+     * Danh sách người liên hệ (chỉ áp dụng cho khu sản xuất): mỗi dòng họ tên + vai trò + SĐT.
+     * @return array{0: array<int, array{full_name:string,title:string,phone:string,is_active:int}>, 1: array<string,string>}
+     */
+    private function validateContacts(array $post): array
+    {
+        $raw = $post['contacts'] ?? [];
+        if (!is_array($raw)) {
+            return [[], []];
+        }
+
+        $contacts = [];
+        $errors = [];
+        $row = 0;
+        foreach ($raw as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+            $fullName = trim((string) ($item['full_name'] ?? ''));
+            $phone    = trim((string) ($item['phone'] ?? ''));
+            if ($fullName === '' && $phone === '') {
+                continue;
+            }
+            $row++;
+
+            if (mb_strlen($fullName) < 2 || mb_strlen($fullName) > 120) {
+                $errors['contacts'] = 'Dòng liên hệ ' . $row . ': họ tên phải từ 2 đến 120 ký tự.';
+                continue;
+            }
+
+            if ($phone === '' || !preg_match('/^[0-9+\s.\-()]{6,30}$/', $phone)) {
+                $errors['contacts'] = 'Dòng liên hệ ' . $row . ': số điện thoại không hợp lệ (chỉ số, khoảng trắng, +, -, ., ngoặc).';
+                continue;
+            }
+            if (mb_strlen($phone) > 30) {
+                $errors['contacts'] = 'Dòng liên hệ ' . $row . ': số điện thoại tối đa 30 ký tự.';
+                continue;
+            }
+            if (count($contacts) >= 20) {
+                $errors['contacts'] = 'Mỗi khu sản xuất tối đa 20 người liên hệ.';
+                break;
+            }
+
+            $contacts[] = [
+                'full_name' => $fullName,
+                'phone'     => $phone,
+                'is_active' => 1,
+            ];
+        }
+
+        return [$contacts, $errors];
     }
 
     /** @return array{0: array<string,mixed>, 1: array<string,string>} */
@@ -188,6 +264,8 @@ final class TaxonomyController extends Controller
             'address'     => trim((string) ($post['address'] ?? '')),
             'phone'       => trim((string) ($post['phone'] ?? '')),
             'map_url'     => trim((string) ($post['map_url'] ?? '')),
+            'map_link'    => trim((string) ($post['map_link'] ?? '')),
+            'map_link'    => trim((string) ($post['map_link'] ?? '')),
             'description' => trim((string) ($post['description'] ?? '')),
             'sort_order'  => (int) ($post['sort_order'] ?? 0),
             'is_active'   => !empty($post['is_active']) ? 1 : 0,

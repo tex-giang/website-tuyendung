@@ -10,7 +10,7 @@ $currentImage = $val('image_path');
   <div>
     <p class="admin-breadcrumb"><a href="<?= url('admin/posts') ?>">Tin tức &amp; bài viết</a> / <?= $isEdit ? 'Sửa bài' : 'Thêm bài' ?></p>
     <h1 class="admin-h1"><?= $isEdit ? 'Sửa bài viết' : 'Thêm bài viết' ?></h1>
-    <?php if ($isEdit): ?><p class="admin-sub">slug <code><?= e($post['slug']) ?></code> · <?= (int) $post['views'] ?> lượt xem</p><?php endif; ?>
+    <?php if ($isEdit): ?><?php endif; ?>
   </div>
   <div class="admin-head-actions">
     <?php if ($isEdit && $post['status'] === 'published'): ?>
@@ -38,7 +38,7 @@ $currentImage = $val('image_path');
       </label>
 
       <label class="field">
-        <span class="field__label">Đường dẫn (slug) <small>để trống tự sinh</small></span>
+        <span class="field__label">Đường dẫn (slug)</span>
         <input class="field__input<?= $err('slug') ? ' is-invalid' : '' ?>" type="text" name="slug"
                value="<?= e($val('slug')) ?>" maxlength="220">
         <?php if ($err('slug')): ?><span class="field__error"><?= e($err('slug')) ?></span><?php endif; ?>
@@ -56,13 +56,13 @@ $currentImage = $val('image_path');
       </label>
 
       <label class="field field--span2">
-        <span class="field__label">Mô tả ngắn <small>hiển thị trên card, tối đa 400 ký tự</small></span>
+        <span class="field__label">Mô tả ngắn</span>
         <textarea class="field__input" name="excerpt" rows="2" maxlength="400"><?= e($val('excerpt')) ?></textarea>
         <?php if ($err('excerpt')): ?><span class="field__error"><?= e($err('excerpt')) ?></span><?php endif; ?>
       </label>
 
       <label class="field field--span2">
-        <span class="field__label">Nội dung <em>*</em> <small>mỗi đoạn cách nhau một dòng trống</small></span>
+        <span class="field__label">Nội dung <em>*</em></span>
         <textarea class="field__input<?= $err('body') ? ' is-invalid' : '' ?>" name="body" rows="14" required><?= e($val('body')) ?></textarea>
         <?php if ($err('body')): ?><span class="field__error"><?= e($err('body')) ?></span><?php endif; ?>
       </label>
@@ -73,7 +73,7 @@ $currentImage = $val('image_path');
     <h2 class="admin-h2">Ảnh đại diện</h2>
     <div class="field-grid">
       <div class="field">
-        <span class="field__label">Chọn ảnh <small>JPG, PNG, WebP · tối đa 5MB</small></span>
+        <span class="field__label">Chọn ảnh</span>
         <input class="field__input" type="file" name="image" accept=".jpg,.jpeg,.png,.webp">
         <?php if ($err('image')): ?><span class="field__error"><?= e($err('image')) ?></span><?php endif; ?>
       </div>
@@ -116,7 +116,7 @@ $currentImage = $val('image_path');
         </select>
       </label>
       <label class="field">
-        <span class="field__label">Ngày đăng <small>để trống = hiện tại khi đăng</small></span>
+        <span class="field__label">Ngày đăng</span>
         <input class="field__input<?= $err('published_at') ? ' is-invalid' : '' ?>" type="datetime-local" name="published_at"
                value="<?= e($publishedAt) ?>">
         <?php if ($err('published_at')): ?><span class="field__error"><?= e($err('published_at')) ?></span><?php endif; ?>
@@ -138,3 +138,33 @@ $currentImage = $val('image_path');
   <button type="submit" class="btn btn-danger">Xoá bài viết</button>
 </form>
 <?php endif; ?>
+
+<script src="<?= asset('vendor/ckeditor4/ckeditor.js') ?>"></script>
+<script>
+(function () {
+  if (typeof CKEDITOR === 'undefined') return;
+
+  // Ảnh upload qua server (lưu public/assets/uploads/posts/YYYY-MM/post-<thời-gian>-<random>.<ext>)
+  var uploadUrl = <?= json_encode(url('admin/posts/upload-image') . '?token=' . csrf_token()) ?>;
+
+  var editor = CKEDITOR.replace('body', {
+    language: 'vi',
+    height: 460,
+    versionCheck: false,
+    enterMode: CKEDITOR.ENTER_P,
+    shiftEnterMode: CKEDITOR.ENTER_BR,
+    filebrowserImageUploadUrl: uploadUrl,
+    filebrowserUploadUrl: uploadUrl,
+    removePlugins: 'flash',
+  });
+
+  // Textarea bị CKEditor ẩn đi — bỏ required để trình duyệt không chặn submit
+  // (server vẫn kiểm tra nội dung tối thiểu 20 ký tự).
+  if (editor) {
+    editor.on('instanceReady', function () {
+      var textarea = document.getElementById('body');
+      if (textarea) textarea.removeAttribute('required');
+    });
+  }
+})();
+</script>

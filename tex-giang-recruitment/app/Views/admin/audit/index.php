@@ -20,7 +20,6 @@ $actionLabels = [
 <div class="admin-page-head">
   <div>
     <h1 class="admin-h1">Nhật ký thao tác</h1>
-    <p class="admin-sub"><?= (int) $result['total'] ?> bản ghi. Ghi nhận thao tác quản trị và đăng nhập.</p>
   </div>
 </div>
 

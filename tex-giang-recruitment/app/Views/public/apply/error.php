@@ -1,8 +1,6 @@
 <?php
 /** Trang báo lỗi gửi hồ sơ. */
 $message = $message ?? 'Có lỗi khi gửi hồ sơ. Vui lòng thử lại.';
-$hotline = settings('hotline', '02733937274');
-$hotlineDisplay = settings('hotline_display', '0273 393 7274');
 ?>
 <div class="tg-container">
   <div class="mx-auto max-w-[640px]">
@@ -17,15 +15,15 @@ $hotlineDisplay = settings('hotline_display', '0273 393 7274');
       <ul class="mt-4 space-y-4 text-[16px] leading-[1.6] text-muted">
         <li><span class="block font-medium text-body">Kiểm tra tệp CV</span> Chỉ nhận PDF, DOC, DOCX, JPG, PNG và tối đa 10MB.</li>
         <li><span class="block font-medium text-body">Gửi lại</span> Bấm nút bên dưới, điền lại nhanh các trường bắt buộc.</li>
-        <li><span class="block font-medium text-body">Vẫn lỗi?</span> Gọi
-          <a href="tel:<?= e($hotline) ?>" class="text-body underline underline-offset-2 hover:text-accent"><?= e($hotlineDisplay) ?></a>
-          hoặc Zalo để nhân sự nhận hồ sơ trực tiếp.</li>
+        <li><span class="block font-medium text-body">Vẫn lỗi?</span> Liên hệ người phụ trách theo khu vực tại
+          <a href="<?= url('contact') ?>" class="text-body underline underline-offset-2 hover:text-accent">trang Liên hệ</a>
+          để nhân sự nhận hồ sơ trực tiếp.</li>
       </ul>
     </div>
 
     <div class="mt-10 flex flex-wrap gap-3">
       <a href="<?= url('apply') ?>" class="tg-btn tg-btn--primary">Gửi lại hồ sơ</a>
-      <a href="tel:<?= e($hotline) ?>" class="tg-btn tg-btn--ghost">Gọi <?= e($hotlineDisplay) ?></a>
+      <a href="<?= url('contact') ?>" class="tg-btn tg-btn--ghost">Liên hệ ban tuyển dụng</a>
     </div>
   </div>
   <img class="notice-art" src="<?= asset('images/application-error.svg') ?>" width="400" height="330" alt="" aria-hidden="true">

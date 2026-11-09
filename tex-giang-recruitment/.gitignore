@@ -7,3 +7,6 @@
 /public/assets/uploads/*
 !/public/assets/uploads/.gitkeep
 /node_modules/
+
+# CKEditor 4 — tải riêng bằng tools/fetch-ckeditor.ps1 (2637 file, 4.2 MB) — không commit
+/public/assets/vendor/ckeditor4/

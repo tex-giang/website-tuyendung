@@ -7,10 +7,6 @@ $statusBadge = ['new' => 'admin-badge--new', 'read' => 'admin-badge--draft', 're
   <div>
     <p class="admin-breadcrumb"><a href="<?= url('admin/contact') ?>">Hộp thư liên hệ</a> / #<?= (int) $msg['id'] ?></p>
     <h1 class="admin-h1"><?= e($msg['full_name']) ?></h1>
-    <p class="admin-sub">
-      <span class="admin-badge <?= $statusBadge[$msg['status']] ?? '' ?>"><?= e($statuses[$msg['status']] ?? $msg['status']) ?></span>
-      · Nhận lúc <?= e(vn_date($msg['created_at'], 'd/m/Y H:i')) ?>
-    </p>
   </div>
   <div class="admin-head-actions">
     <a href="tel:<?= e($msg['phone']) ?>" class="btn btn-outline">Gọi <?= e($msg['phone']) ?></a>

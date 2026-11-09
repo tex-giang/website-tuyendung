@@ -29,7 +29,12 @@ Hiện phân quyền theo **module**; chưa giới hạn theo từng bản ghi �
 
 ### Tin tuyển dụng (`/admin/jobs`)
 - Thêm/sửa/nhân bản/xoá mềm; đổi trạng thái nhanh ngay trên bảng.
-- Trạng thái: `draft` (nháp) → `published` (đăng) → `paused` (tạm dừng) / `closed` (đóng).
+- Trạng thái: `draft` (nháp) → `published` (đăng) → `paused` (tạm dừng) / `closed` (đóng) / `expired` (hết hạn).
+- **Tự động tính hạn nộp**: đăng tin mà để trống *Hạn nộp* → hệ thống tự đặt = ngày đăng + **số ngày nhận hồ sơ mặc định**
+  (Cài đặt hệ thống → Thông tin chung, mặc định 30 ngày).
+- **Tự động chuyển trạng thái**: tin đang đăng mà quá `deadline` sẽ tự chuyển sang **Hết hạn** (chạy khi mở trang
+  tin/dashboard hoặc qua cron `tools/cron-expire-jobs.php`), và biến mất khỏi website công khai.
+- **Đăng lại tin hết hạn**: phải cập nhật *Hạn nộp* mới (không được để ngày đã qua) rồi mới chọn *Đang đăng*.
 - Tin chỉ hiển thị công khai khi `published`, chưa xoá và `deadline` chưa qua.
 - Xoá là **xoá mềm**: hồ sơ ứng tuyển liên quan vẫn giữ nguyên.
 
@@ -61,7 +66,7 @@ Soạn nội dung trang chủ: tiêu đề hero 2 dòng, mô tả hero, 2 đoạ
 Lưu là website cập nhật ngay (không cần build lại CSS).
 
 ### Cài đặt hệ thống (`/admin/settings`)
-Tên website/pháp nhân, địa chỉ, giờ làm việc, số tin mỗi trang, hotline/email/Zalo/map, mạng xã hội, SEO.
+Tên website/pháp nhân, số tin mỗi trang, số ngày nhận hồ sơ mặc định, email/Zalo OA, mạng xã hội, SEO. Zalo nhận **link OA đầy đủ** hoặc số Zalo.
 
 ### Danh mục dùng chung (`/admin/categories`)
 Ba nhóm dữ liệu nền cho toàn website:
@@ -157,3 +162,123 @@ Thư viện vendor cục bộ: `public/assets/vendor/{bootstrap,jquery,datatable
 Bảng chỉ-đọc dạng key–value (chi tiết hồ sơ, hồ sơ cá nhân) vẫn dùng `.admin-table--kv`,
 không gắn DataTables. Phân trang do DataTables xử lý phía client; controller nạp tối đa
 500 dòng/trang để đủ dữ liệu cho tìm kiếm/sắp xếp.
+
+## Người liên hệ tuyển dụng theo chi nhánh
+
+Mỗi khu sản xuất (Tân Hương / Cái Lậy / Chợ Gạo) có danh sách người phụ trách tuyển dụng:
+họ tên + số điện thoại. Danh sách này hiển thị tự động ở:
+- **Footer**: nút **“Liên hệ chi nhánh”** ở cột *Kết nối* — bấm vào mở hộp thoại danh sách 3 khu
+  (thứ tự Tân Hương → Cái Lậy → Chợ Gạo, mỗi người kèm số điện thoại bấm gọi được).
+- **Nút nổi cố định** (góc phải dưới, luôn hiển thị khi cuộn): nút điện thoại màu xanh mở cùng
+  hộp thoại liên hệ — nằm cạnh nút Lên đầu trang và Zalo.
+- Khối “Liên hệ ứng tuyển” ở **trang Liên hệ**.
+- Sidebar **chi tiết tin tuyển dụng** (theo khu của tin).
+
+Cách sửa: **Danh mục dùng chung** → bảng *Khu sản xuất* → **Sửa** → khối **“Người liên hệ tuyển dụng”**:
+
+- `+ Thêm người liên hệ` để thêm dòng mới (họ tên bắt buộc, SĐT bắt buộc).
+- Nút **Xoá** ở cuối mỗi dòng để bỏ người đó.
+- Bấm **Lưu thay đổi** — danh sách cũ của khu được thay bằng danh sách mới (tối đa 20 người/khu).
+- Số điện thoại nhận số, khoảng trắng, `+ - . ( )`; hiển thị đúng như nhập, link gọi tự lấy phần số.
+
+Hotline chung đã được bỏ khỏi header/các trang và **bỏ luôn khỏi Cài đặt hệ thống**; số điện thoại
+công khai giờ chỉ lấy từ danh sách người liên hệ này.
+
+## Fanpage Facebook (plugin + nút cố định)
+
+- Footer cột *Kết nối* nhúng **Facebook Page Plugin chính thức**:
+  `data-href="https://www.facebook.com/congtycophantexgiang"`, tự co theo cột
+  (`data-width="500"`, `data-adapt-container-width="true"`), cần internet để tải.
+- Muốn đổi fanpage: sửa `data-href` + `blockquote cite` + link dự phòng trong
+  `app/Views/partials/public/footer.php` (và bản tĩnh — xem `docs/06`).
+- Link cho nút **FB** nổi và chữ “Facebook” ở footer vẫn lấy từ
+  **Cài đặt hệ thống → Mạng xã hội → Facebook**.
+- Ảnh `public/assets/images/fanpage-fb.svg` (placeholder cũ) không còn dùng — có thể xoá.
+- **Zalo OA**: dán link Zalo OA đầy đủ (dạng `https://zalo.me/...`) vào **Cài đặt → Liên hệ → Zalo**;
+  nếu chỉ nhập số điện thoại, hệ thống tự tạo link `https://zalo.me/<số>`.
+- Nút **FB** tròn nằm trong cụm nút cố định góc phải dưới (cùng nút gọi điện và Zalo), luôn hiển thị khi cuộn.
+
+## Soạn bài viết bằng CKEditor 4
+
+- Trang **Tin tức & bài viết → Thêm/Sửa bài**: ô *Nội dung* dùng **CKEditor 4.22.1** (vendor cục bộ
+  `public/assets/vendor/ckeditor4/`, giao diện tiếng Việt) thay cho textarea thuần.
+- **Chèn ảnh**: bấm nút *Image* → tab *Upload* → chọn ảnh. Ảnh được tải lên **server**
+  (`POST /admin/posts/upload-image`, có CSRF token + kiểm tra quyền `posts`), lưu tại
+  `public/assets/uploads/posts/YYYY-MM/` với tên dạng `post-YYYYMMDD-HHMMSS-<random>.<ext>`.
+  Chỉ nhận JPG/PNG/WebP ≤ 5 MB. Endpoint tự trả **JSON** cho CKEditor 4.22 (filetools) và **JS callback** cho chế độ iframe cũ — không còn lỗi “phản hồi sai”.
+- **Xoá ảnh**: ảnh nằm trong nội dung bài được theo dõi bằng **đường dẫn** (`assets/uploads/...`).
+  Khi **lưu bài** mà ảnh bị gỡ khỏi nội dung → file bị xoá; khi **xoá bài viết** → xoá toàn bộ ảnh
+  trong nội dung + ảnh đại diện. Ảnh thay thế ảnh đại diện cũ cũng bị dọn.
+- Nội dung HTML được **lọc allowlist** ở server (`sanitize_html()`): bỏ `<script>`, `<iframe>`,
+  thuộc tính `on*`, link `javascript:`; giữ các thẻ định dạng cơ bản + ảnh + liên kết.
+- Không có `required` trên textarea (CKEditor ẩn nó); server vẫn bắt buộc nội dung ≥ 20 ký tự.
+
+## Nội dung trang Về chúng tôi & Phúc lợi (dạng repeater)
+
+Mỗi trang là **một form duy nhất** kiểu “Người liên hệ tuyển dụng”: các khối danh sách dòng,
+mỗi dòng có ô nhập + nút **Xoá**, cuối khối có nút **+ Thêm dòng**; bấm **Lưu thay đổi** là lưu
+tất cả (AJAX, có thông báo căn giữa).
+
+- **Nội dung → Về chúng tôi**: 3 khối — *Mốc phát triển* (mốc + nội dung + tick “Đang vận hành”),
+  *Tầm nhìn — Sứ mệnh — Giá trị*, *Chứng nhận đang áp dụng*.
+- **Nội dung → Phúc lợi**: mỗi **nhóm phúc lợi** là một khối (tiêu đề + icon + mô tả); bên trong có
+  các dòng phúc lợi với nút **+ Thêm dòng**; cuối trang là **Bảng so sánh** dạng dòng.
+  Có nút **+ Thêm nhóm phúc lợi** / **Xoá nhóm**.
+- Tiêu đề + đoạn dẫn 2 trang sửa ở **Nội dung website → khối “Trang Về chúng tôi & Phúc lợi”**.
+- Lưu là website công khai (`/about`, `/why-tex-giang`) cập nhật ngay.
+## Menu website (dùng chung header + footer)
+
+- Menu **Nội dung → Menu website** quản lý **một danh sách duy nhất**, hiển thị giống nhau ở
+  **menu đầu trang** và **cột Menu chân trang** (không còn tách riêng vị trí).
+- Thêm/sửa/xoá, đổi thứ tự, bật/tắt từng mục; **chỉ mục đang bật** mới hiển thị ngoài website.
+- Trường *Đường dẫn*: `jobs`, `about`, `why-tex-giang`, `news`, `contact`…; để trống = trang chủ.
+- Thao tác bật/tắt/xoá chạy AJAX, có SweetAlert xác nhận.
+## Bản đồ theo khu vực
+
+- Vào **Danh mục dùng chung → Khu sản xuất → Sửa**, có 2 trường:
+  - **Link nhúng bản đồ** (`map_url`): dán link `https://www.google.com/maps/embed?...` **hoặc cả mã `<iframe>`**
+    (hệ thống tự lấy `src`) — hiển thị ở trang **Liên hệ**.
+  - **Link mở Google Maps** (`map_link`): link `https://maps.app.goo.gl/...` cho nút “Mở Google Maps”
+    và “Bản đồ →” trong hộp thoại liên hệ ở footer.
+- Sửa lưu xong là bản đồ ngoài website đổi theo ngay. Để trống → hiện ô “Chưa cấu hình bản đồ”.
+
+## Ẩn menu = ẩn luôn trang đó
+
+- Menu website chỉ có **một danh sách dùng chung**; mục bị tắt sẽ ẩn ở cả header và footer.
+- Trang tương ứng với mục menu bị tắt cũng **không truy cập được nữa** (trả 404 “Trang này đang được ẩn khỏi menu website”),
+  và các link trỏ tới trang đó ở trang chủ cũng tự ẩn.
+- Muốn mở lại: **Nội dung → Menu website** → bật mục đó.
+
+## Nút thao tác dạng icon + chọn icon có hình
+
+- Các nút **Sửa / Xoá / Nhân bản / Ẩn-Hiện / Bật-Tắt** trong bảng quản trị đổi sang **icon**
+  (có tooltip + aria-label), gọn và đẹp hơn.
+- Ở **Phúc lợi**, chọn icon nhóm bằng **lưới icon có hình** (12 icon brand) thay vì dropdown tên.
+- Mỗi dòng/nhóm trong 2 trang nội dung có nút **↑ / ↓** để chèn dòng lên trên / xuống dưới;
+  thứ tự được lưu lại đúng khi bấm Lưu.
+
+## Nhân bản tin tuyển dụng
+
+- Bấm **Nhân bản** chỉ **nạp dữ liệu tin gốc vào form tạo mới**, chưa ghi DB.
+- Kiểm tra/sửa nội dung rồi bấm **Lưu** thì bản sao mới thực sự được tạo (trạng thái nháp).
+
+## Thống kê truy cập
+
+- Menu **Tuyển dụng → Thống kê truy cập** (`/admin/visits`).
+- Hiển thị: **ngày tháng năm · tổng lượt truy cập · tách theo thiết bị** (Máy tính / Điện thoại / Máy tính bảng),
+  kèm 4 thẻ tổng quan (hôm nay, 7 ngày, 30 ngày, tổng cộng), biểu đồ 14 ngày và bảng chi tiết theo ngày.
+- Lọc kỳ: 7 / 30 / 90 ngày, 6 tháng, 1 năm.
+- **Chống tăng khi F5**: mỗi thiết bị/trình duyệt (cookie `tg_visitor`, 1 năm) chỉ được tính **1 lượt/ngày**;
+  refresh liên tục không làm tăng lượt. Truy cập bằng thiết bị/trình duyệt khác sẽ tính lượt mới.
+- Bot/crawler và công cụ tự động (curl, PowerShell, Postman…) bị loại khỏi thống kê; trang quản trị không tính lượt.
+- Dữ liệu ghi tự động khi khách xem trang công khai, không cần cấu hình gì thêm.
+- **Footer công khai** có khối *Thống kê truy cập*: lượt hôm nay, lượt truy cập tháng và tổng lượt truy cập (thay cho khối “Kết nối” cũ).
+
+## Cron tự động hết hạn tin (tuỳ chọn)
+
+Website đã tự chuyển tin quá hạn mỗi khi có truy cập. Muốn chắc chắn cập nhật cả khi không ai truy cập,
+thêm Cron Job trong cPanel chạy mỗi giờ:
+
+```
+/usr/local/bin/php /home/TAI_KHOAN/tex-giang-recruitment/tools/cron-expire-jobs.php
+```

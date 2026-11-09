@@ -24,7 +24,6 @@ $sections = [
 <div class="admin-page-head">
   <div>
     <h1 class="admin-h1">Danh mục dùng chung</h1>
-    <p class="admin-sub">Ba danh mục cấp dữ liệu cho tin tuyển dụng và tin tức. Tắt một danh mục sẽ ẩn khỏi bộ lọc công khai.</p>
   </div>
 </div>
 
@@ -34,7 +33,6 @@ $sections = [
     <h2 class="admin-h2"><?= e($section['title']) ?> <span class="admin-badge admin-badge--soft"><?= count($section['items']) ?></span></h2>
     <a href="<?= url('admin/categories/' . $type . '/create') ?>" class="btn btn-primary btn-sm">+ Thêm</a>
   </div>
-  <p class="admin-hint"><?= e($section['hint']) ?></p>
 
   <?php if ($section['items'] === []): ?>
   <p class="admin-empty">Chưa có dữ liệu.</p>
@@ -49,7 +47,9 @@ $sections = [
           <td class="admin-mono"><?= e($row['slug']) ?></td>
           <td class="admin-muted">
             <?php if ($type === 'branch'): ?>
-              <?= e($row['address'] ?? '—') ?><?= !empty($row['phone']) ? ' · ' . e((string) $row['phone']) : '' ?>
+              <?= e($row['address'] ?? '—') ?>
+              <?php $contactCount = count($branchContacts[(int) $row['id']] ?? []); ?>
+              <span class="admin-badge admin-badge--soft"><?= $contactCount ?> người liên hệ</span>
             <?php elseif ($type === 'category'): ?>
               <?= e($row['description'] ?? '—') ?>
             <?php else: ?>
@@ -66,12 +66,12 @@ $sections = [
             <div class="admin-actions">
               <form method="POST" action="<?= url('admin/categories/' . $type . '/' . $row['id'] . '/toggle') ?>">
                 <?= csrf_field() ?>
-                <button class="btn btn-outline btn-sm" type="submit"><?= (int) $row['is_active'] === 1 ? 'Tắt' : 'Bật' ?></button>
+                <button class="btn btn-outline btn-icon" type="submit" title="<?= (int) $row['is_active'] === 1 ? 'Tắt' : 'Bật' ?>" aria-label="Bật/Tắt"><?= (int) $row['is_active'] === 1 ? admin_icon_svg('eye-off') : admin_icon_svg('eye') ?></button>
               </form>
-              <a href="<?= url('admin/categories/' . $type . '/' . $row['id'] . '/edit') ?>" class="btn btn-outline btn-sm">Sửa</a>
+              <a href="<?= url('admin/categories/' . $type . '/' . $row['id'] . '/edit') ?>" class="btn btn-outline btn-icon" title="Sửa" aria-label="Sửa"><?= admin_icon_svg('pencil') ?></a>
               <form method="POST" action="<?= url('admin/categories/' . $type . '/' . $row['id'] . '/delete') ?>"
                     data-confirm="Xoá &quot;<?= e($row['name']) ?>&quot;?">
-                <?= csrf_field() ?><button class="btn btn-danger btn-sm" type="submit">Xoá</button>
+                <?= csrf_field() ?><button class="btn btn-danger btn-icon" type="submit" title="Xoá" aria-label="Xoá"><?= admin_icon_svg('trash') ?></button>
               </form>
             </div>
           </td>

@@ -1277,3 +1277,65 @@ body.has-dialog { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .job-slider__track { transition: none; }
 }
+
+/* Icon thương hiệu trong cụm nút nổi (Facebook, Zalo): to hơn icon thường */
+.float-btn .float-btn__icon { width: 24px; height: 24px; object-fit: contain; }
+
+/* Nút Zalo cố định: nền xanh thương hiệu, wordmark trắng cho nổi và đẹp hơn */
+.float-btn--zalo {
+  border-color: #0068FF;
+  background: #0068FF;
+}
+.float-btn--zalo:hover {
+  border-color: #0057D9;
+  background: #0057D9;
+}
+.float-btn--zalo .float-btn__icon { width: 26px; height: 26px; }
+
+/* Nút Facebook cố định: nền xanh FB, chữ f trắng — đồng bộ kiểu nút Zalo */
+.float-btn--facebook {
+  border-color: #1877F2;
+  background: #1877F2;
+}
+.float-btn--facebook:hover {
+  border-color: #0F5FCC;
+  background: #0F5FCC;
+}
+.float-btn--facebook .float-btn__icon { width: 22px; height: 24px; }
+
+
+/* Cảnh báo lỗi đầu form nộp hồ sơ độc lập */
+.gf-alert {
+  margin: 0 0 18px;
+  padding: 12px 14px;
+  border: 1px solid #f0c8c4;
+  border-radius: 10px;
+  background: #fdf3f2;
+  color: #8f1f18;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+
+/* Fanpage Facebook — khung plugin chính thức trong footer */
+.footer-fanpage { max-width: 340px; overflow: hidden; }
+.footer-fanpage .fb-page,
+.footer-fanpage .fb-page > span,
+.footer-fanpage .fb-page iframe { max-width: 100% !important; }
+
+/* Validate hiển thị ngay trên dialog ứng tuyển */
+.form-input.is-invalid {
+  border-color: #b42318 !important;
+  box-shadow: 0 0 0 3px rgba(180, 35, 24, .12);
+}
+.apply-dialog__alert {
+  display: block;
+  padding: 11px 14px;
+  border: 1px solid #f3c3bd;
+  border-radius: 10px;
+  background: #fdf3f2;
+  color: #b42318;
+  font-size: 14px;
+  line-height: 1.55;
+}
+.apply-dialog__alert[hidden] { display: none; }

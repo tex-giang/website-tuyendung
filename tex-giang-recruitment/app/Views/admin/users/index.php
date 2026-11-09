@@ -5,7 +5,6 @@ $me = \App\Core\Session::get('auth_id');
 <div class="admin-page-head">
   <div>
     <h1 class="admin-h1">Người dùng quản trị</h1>
-    <p class="admin-sub"><?= count($users) ?> tài khoản. Chỉ quản trị viên cấp cao mới thấy trang này.</p>
   </div>
   <a href="<?= url('admin/users/create') ?>" class="btn btn-primary">+ Thêm tài khoản</a>
 </div>
@@ -31,7 +30,7 @@ $me = \App\Core\Session::get('auth_id');
           <td class="admin-muted"><?= e(vn_date($user['last_login_at'], 'd/m/Y H:i') ?: '—') ?></td>
           <td class="is-actions">
             <div class="admin-actions">
-              <a href="<?= url('admin/users/' . $user['id'] . '/edit') ?>" class="btn btn-outline btn-sm">Sửa</a>
+              <a href="<?= url('admin/users/' . $user['id'] . '/edit') ?>" class="btn btn-outline btn-icon" title="Sửa" aria-label="Sửa"><?= admin_icon_svg('pencil') ?></a>
             </div>
           </td>
         </tr>

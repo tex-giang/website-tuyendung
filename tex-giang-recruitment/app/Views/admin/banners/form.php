@@ -16,7 +16,6 @@ $typeHint = [
   <div>
     <p class="admin-breadcrumb"><a href="<?= url('admin/banners') ?>">Banner</a> / <?= $isEdit ? 'Sửa' : 'Thêm' ?></p>
     <h1 class="admin-h1"><?= $isEdit ? 'Sửa banner' : 'Thêm banner' ?></h1>
-    <p class="admin-sub"><?= e($typeHint) ?></p>
   </div>
   <a href="<?= url('admin/banners') ?>" class="btn btn-ghost">← Danh sách</a>
 </div>
@@ -68,7 +67,6 @@ $typeHint = [
         <span class="field__label">Link đích</span>
         <input class="field__input" type="text" name="link_url" value="<?= e($val('link_url')) ?>" maxlength="500"
                placeholder="/apply hoặc https://…">
-        <span class="admin-hint" style="margin:0">Đường dẫn nội bộ viết dạng /apply, /jobs…</span>
       </label>
       <label class="field">
         <span class="field__label">Nhãn link</span>
@@ -82,7 +80,7 @@ $typeHint = [
     <h2 class="admin-h2">Ảnh banner</h2>
     <div class="field-grid">
       <div class="field">
-        <span class="field__label">Chọn ảnh <small>JPG, PNG, WebP · tối đa 5MB</small></span>
+        <span class="field__label">Chọn ảnh</span>
         <input class="field__input" type="file" name="image" accept=".jpg,.jpeg,.png,.webp">
         <?php if ($err('image')): ?><span class="field__error"><?= e($err('image')) ?></span><?php endif; ?>
         <input type="hidden" name="image_path" value="<?= e($currentImage) ?>">
@@ -100,10 +98,9 @@ $typeHint = [
         <?php endif; ?>
       </div>
       <label class="field">
-        <span class="field__label">Ảnh nhỏ (mobile) <small>tuỳ chọn, JPG/PNG/WebP ≤ 5MB</small></span>
+        <span class="field__label">Ảnh nhỏ (mobile)</span>
         <input class="field__input" type="file" name="image_small" accept=".jpg,.jpeg,.png,.webp">
         <?php if ($err('image_small')): ?><span class="field__error"><?= e($err('image_small')) ?></span><?php endif; ?>
-        <span class="admin-hint" style="margin:0">Dùng cho srcset slide đầu trang; để trống sẽ dùng ảnh chính.</span>
       </label>
       <label class="field field--span2">
         <span class="field__label">Mô tả ảnh (alt)</span>
@@ -117,12 +114,12 @@ $typeHint = [
     <h2 class="admin-h2">Lịch &amp; trạng thái</h2>
     <div class="field-grid">
       <label class="field">
-        <span class="field__label">Bắt đầu hiển thị <small>để trống = ngay</small></span>
+        <span class="field__label">Bắt đầu hiển thị</span>
         <input class="field__input<?= $err('starts_at') ? ' is-invalid' : '' ?>" type="datetime-local" name="starts_at" value="<?= e($startsAt) ?>">
         <?php if ($err('starts_at')): ?><span class="field__error"><?= e($err('starts_at')) ?></span><?php endif; ?>
       </label>
       <label class="field">
-        <span class="field__label">Kết thúc <small>để trống = vô thời hạn</small></span>
+        <span class="field__label">Kết thúc</span>
         <input class="field__input<?= $err('ends_at') ? ' is-invalid' : '' ?>" type="datetime-local" name="ends_at" value="<?= e($endsAt) ?>">
         <?php if ($err('ends_at')): ?><span class="field__error"><?= e($err('ends_at')) ?></span><?php endif; ?>
       </label>

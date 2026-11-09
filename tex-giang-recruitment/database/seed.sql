@@ -25,7 +25,17 @@ FROM roles WHERE name = 'super_admin';
 INSERT INTO branches (slug, name, address, phone, sort_order) VALUES
   ('tan-huong', 'Tân Hương', 'Lô BII-8, đường D3, KCN Tân Hương, Xã Tân Hương, Tỉnh Đồng Tháp', '02733937274', 1),
   ('cai-lay',   'Cái Lậy',   'Ấp Bình Quới, Xã Bình Phú, Tỉnh Đồng Tháp', '02733937274', 2),
-  ('cho-gao',   'Chợ Gạo',   'Ấp Hòa Lợi Tiểu, Xã Bình Ninh, Tỉnh Đồng Tháp', '02733937274', 3);
+('cho-gao',   'Chợ Gạo',   'Ấp Hòa Lợi Tiểu, Xã Bình Ninh, Tỉnh Đồng Tháp', '02733937274', 3);
+
+-- 3b. NGƯỜI LIÊN HỆ TUYỂN DỤNG THEO KHU SẢN XUẤT ---------------------------
+INSERT INTO branch_contacts (branch_id, full_name, title, phone, sort_order) VALUES
+  ((SELECT id FROM branches WHERE slug='tan-huong'), 'Chị Trân',   'Phụ trách tuyển dụng', '0913 131 090', 1),
+  ((SELECT id FROM branches WHERE slug='tan-huong'), 'Chị Ngân',   'Phụ trách tuyển dụng', '0332 629 650', 2),
+  ((SELECT id FROM branches WHERE slug='tan-huong'), 'Anh Linh',   'Phụ trách tuyển dụng', '0945 609 942', 3),
+  ((SELECT id FROM branches WHERE slug='cho-gao'),   'Chị Tuyết',  'Phụ trách tuyển dụng', '0963 181 431', 1),
+  ((SELECT id FROM branches WHERE slug='cho-gao'),   'Anh Sơn',    'Phụ trách tuyển dụng', '0924 772 499', 2),
+  ((SELECT id FROM branches WHERE slug='cai-lay'),   'Anh Nguyên', 'Phụ trách tuyển dụng', '0938 583 943', 1),
+  ((SELECT id FROM branches WHERE slug='cai-lay'),   'Chị Hằng',   'Phụ trách tuyển dụng', '0908 813 822', 2);
 
 -- 4. KHỐI PHÒNG BAN --------------------------------------------------------
 INSERT INTO categories (slug, name, description, sort_order) VALUES
@@ -48,27 +58,20 @@ INSERT INTO post_categories (slug, name, sort_order) VALUES
 INSERT INTO settings (`key`, `value`, `group`) VALUES
   ('site_name',        'Tuyển dụng TEX-GIANG', 'general'),
   ('legal_name',       'Công ty Cổ phần TEX-GIANG (TGI)', 'general'),
-  ('tagline',          'Một công việc ổn định. Thu nhập xứng đáng.', 'general'),
-  ('address',          'Lô BII-8, đường D3, KCN Tân Hương, xã Tân Hương, tỉnh Đồng Tháp', 'general'),
-  ('working_hours',    'Thứ 2 – Thứ 6 · 07:30 – 16:30, Thứ 7 · 07:30 – 11:30', 'general'),
-  ('hotline',          '02733937274', 'contact'),
-  ('hotline_display',  '0273 393 7274', 'contact'),
-  ('fax',              '(0273) 393 7275', 'contact'),
   ('email',            'nhansu@tex-giang.com.vn', 'contact'),
   ('zalo',             '02733937274', 'contact'),
-  ('map_embed',        'https://www.google.com/maps?q=KCN+T%C3%A2n+H%C6%B0%C6%A1ng,+Ch%C3%A2u+Th%C3%A0nh,+%C4%90%E1%BB%93ng+Th%C3%A1p&output=embed', 'contact'),
-  ('facebook',         'https://www.facebook.com/', 'social'),
+  ('facebook',         'https://www.facebook.com/profile.php?id=100063719192197', 'social'),
   ('youtube',          'https://www.youtube.com/', 'social'),
   ('website',          'https://tex-giang.com.vn', 'social'),
   ('seo_title',        'Tuyển dụng TEX-GIANG — Tân Hương, Cái Lậy, Chợ Gạo', 'seo'),
   ('seo_description',  'Cổng tuyển dụng của Công ty Cổ phần TEX-GIANG (TGI) tại KCN Tân Hương, Đồng Tháp. Xe đưa rước, cơm ca, thưởng tháng 13, BHXH đầy đủ.', 'seo'),
   ('jobs_per_page',    '6', 'general'),
+  ('jobs_deadline_days', '30', 'general'),
   ('content_hero_title_1',  'Một công việc ổn định.', 'content'),
   ('content_hero_title_2',  'Thu nhập xứng đáng.', 'content'),
   ('content_hero_subtitle', 'Cổng tuyển dụng chính thức của TEX-GIANG — may mặc xuất khẩu tại 3 khu sản xuất Tân Hương, Cái Lậy, Chợ Gạo (Đồng Tháp).', 'content'),
   ('content_about_1', 'Công ty Cổ phần TEX-GIANG (TGI) thành lập tháng 3/2007, vận hành 3 khu sản xuất tại Tân Hương, Cái Lậy, Chợ Gạo; xuất khẩu sang châu Âu, Mỹ, Úc và New Zealand.', 'content'),
   ('content_about_2', 'Triết lý “Vì con người — Vì chất lượng — Vì tương lai bền vững”: môi trường làm việc an toàn, nhà xưởng thoáng mát, thu nhập xứng đáng với người lao động.', 'content'),
-  ('content_philosophy', 'Vì con người — Vì chất lượng — Vì tương lai bền vững', 'content'),
   ('content_footer_intro', 'Cổng tuyển dụng chính thức của Công ty Cổ phần TEX-GIANG tại KCN Tân Hương, Đồng Tháp.', 'content'),
   ('stat_1_value', '2007',    'content'), ('stat_1_label', 'Thành lập tại KCN Tân Hương', 'content'),
   ('stat_2_value', '3',       'content'), ('stat_2_label', 'Khu sản xuất tại Đồng Tháp', 'content'),
@@ -107,7 +110,7 @@ INSERT INTO jobs
    salary_text, salary_min, salary_max, salary_range, description, requirements, benefits,
    status, is_urgent, posted_at, deadline, meta_title, meta_description, created_by)
 VALUES
-  ('300-cong-nhan-may-chuyen-cong-nghiep', 'TG-01',
+  ('300-cong-nhan-may-chuyen-cong-nghiep', 'TD26-0001',
    (SELECT id FROM branches WHERE slug='tan-huong'), (SELECT id FROM categories WHERE slug='production'),
    '300 Công nhân may chuyền công nghiệp (áo polo, jacket xuất khẩu)', 300,
    'Khu Tân Hương — Nhà máy 2', 'Toàn thời gian, chính thức', 'Không yêu cầu, có đào tạo',
@@ -120,7 +123,7 @@ VALUES
    'Tuyển 300 công nhân may công nghiệp tại Nhà máy Tân Hương 2, Đồng Tháp. Thu nhập 8–16 triệu/tháng, đào tạo nghề miễn phí có lương.',
    (SELECT id FROM users WHERE username='admin')),
 
-  ('giam-sat-kiem-pham-qc', 'TG-02',
+  ('giam-sat-kiem-pham-qc', 'TD26-0002',
    (SELECT id FROM branches WHERE slug='tan-huong'), (SELECT id FROM categories WHERE slug='qc'),
    '05 Giám sát kiểm phẩm chất lượng QC may mặc (QC Team Leader)', 5,
    'Khu Tân Hương — Nhà máy 1', 'Toàn thời gian, chính thức', 'Có kinh nghiệm QC may',
@@ -133,7 +136,7 @@ VALUES
    'Tuyển 05 giám sát kiểm phẩm chất lượng QC tại TEX-GIANG, Tân Hương, Đồng Tháp.',
    (SELECT id FROM users WHERE username='admin')),
 
-  ('ky-su-cong-nghiep-ie', 'TG-03',
+  ('ky-su-cong-nghiep-ie', 'TD26-0003',
    (SELECT id FROM branches WHERE slug='tan-huong'), (SELECT id FROM categories WHERE slug='ie'),
    '02 Kỹ sư công nghiệp & định mức năng suất (IE Engineer)', 2,
    'Khu Tân Hương — Nhà máy 2', 'Toàn thời gian, chính thức', 'Có kinh nghiệm IE may mặc',
@@ -146,7 +149,7 @@ VALUES
    'Tuyển 02 kỹ sư công nghiệp & định mức năng suất (IE Engineer) tại TEX-GIANG, Tân Hương.',
    (SELECT id FROM users WHERE username='admin')),
 
-  ('quan-ly-don-hang-merchandiser', 'TG-04',
+  ('quan-ly-don-hang-merchandiser', 'TD26-0004',
    (SELECT id FROM branches WHERE slug='cai-lay'), (SELECT id FROM categories WHERE slug='office'),
    '03 Chuyên viên quản lý đơn hàng ngành may (Merchandiser)', 3,
    'Khu Cái Lậy', 'Toàn thời gian, chính thức', 'Có kinh nghiệm merchandiser',
@@ -159,7 +162,7 @@ VALUES
    'Tuyển 03 chuyên viên quản lý đơn hàng ngành may tại chi nhánh Cái Lậy, TEX-GIANG.',
    (SELECT id FROM users WHERE username='admin')),
 
-  ('nhan-vien-bao-tri-may-may', 'TG-05',
+  ('nhan-vien-bao-tri-may-may', 'TD26-0005',
    (SELECT id FROM branches WHERE slug='tan-huong'), (SELECT id FROM categories WHERE slug='maintenance'),
    '04 Nhân viên bảo trì máy may công nghiệp & điện xưởng', 4,
    'Khu Tân Hương', 'Toàn thời gian, chính thức', 'Có kinh nghiệm bảo trì máy may',
@@ -172,7 +175,7 @@ VALUES
    'Tuyển 04 nhân viên bảo trì máy may công nghiệp & điện xưởng tại TEX-GIANG, Tân Hương.',
    (SELECT id FROM users WHERE username='admin')),
 
-  ('ke-toan-chi-phi-gia-thanh', 'TG-06',
+  ('ke-toan-chi-phi-gia-thanh', 'TD26-0006',
    (SELECT id FROM branches WHERE slug='cho-gao'), (SELECT id FROM categories WHERE slug='office'),
    '02 Kế toán chi phí & giá thành may xuất khẩu', 2,
    'Khu Chợ Gạo', 'Toàn thời gian, chính thức', 'Có kinh nghiệm kế toán giá thành',
@@ -185,7 +188,7 @@ VALUES
    'Tuyển 02 kế toán chi phí & giá thành may xuất khẩu tại chi nhánh Chợ Gạo.',
    (SELECT id FROM users WHERE username='admin')),
 
-  ('hoc-nghe-may-mien-phi', 'TG-07',
+  ('hoc-nghe-may-mien-phi', 'TD26-0007',
    (SELECT id FROM branches WHERE slug='tan-huong'), (SELECT id FROM categories WHERE slug='production'),
    '100 Học nghề may miễn phí (được trợ cấp lương học việc)', 100,
    'Khu Tân Hương — trung tâm đào tạo', 'Toàn thời gian sau đào tạo', 'Không yêu cầu kinh nghiệm',
@@ -198,7 +201,7 @@ VALUES
    'Tuyển 100 học viên học nghề may miễn phí, có trợ cấp lương học việc tại TEX-GIANG, Tân Hương.',
    (SELECT id FROM users WHERE username='admin')),
 
-  ('lai-xe-dua-don-cbcnv', 'TG-08',
+  ('lai-xe-dua-don-cbcnv', 'TD26-0008',
    (SELECT id FROM branches WHERE slug='tan-huong'), (SELECT id FROM categories WHERE slug='office'),
    'Nhân viên lái xe đưa đón cán bộ công nhân viên (bằng D/E)', 2,
    'Khu Tân Hương — tuyến Châu Thành', 'Toàn thời gian, chính thức', 'Có giấy phép lái xe D/E',
@@ -244,3 +247,76 @@ INSERT INTO posts (slug, title, category_id, excerpt, body, image_path, image_al
    'assets/images/company/tan-huong-2.webp', 'Toàn cảnh Nhà máy Tân Hương 2',
    'Nhà máy Tân Hương 2 · Ảnh TEX-GIANG.', 'published', '2026-10-30 08:00:00',
    (SELECT id FROM users WHERE username='admin'));
+
+-- 7b. NỘI DUNG TRANG VỀ CHÚNG TÔI / PHÚC LỢI --------------------------
+INSERT INTO about_milestones (year_label, text, is_highlight, sort_order) VALUES
+  ('2007', 'Thành lập, khởi công nhà máy trong KCN Tân Hương.', 0, 1),
+  ('2012', 'Đạt chứng nhận SA8000.', 0, 2),
+  ('2014', 'Bổ sung công nghệ laser cut và dán (lamination).', 0, 3),
+  ('03/2015', 'Khai trương nhà máy Cái Lậy, cách trụ sở 40 km; đạt ISO 9001 do SGS cấp.', 0, 4),
+  ('2016', 'Đạt OEKO-TEX STEP.', 0, 5),
+  ('2021–2022', 'Mở nhà máy Chợ Gạo; tham gia Higg FEM và FSLM.', 0, 6),
+  ('08/2024', 'Nhận Nhà máy Tân Hương 2 rộng 4,8 ha trong KCN Tân Hương.', 0, 7),
+  ('Hiện tại', '3 khu sản xuất: Tân Hương, Cái Lậy và Chợ Gạo; khoảng 3.500 lao động.', 1, 8);
+
+INSERT INTO about_values (title, body, sort_order) VALUES
+  ('Tầm nhìn', 'Trở thành doanh nghiệp may mặc xuất khẩu dẫn đầu khu vực miền Nam, tiên phong sản xuất xanh và là nơi làm việc đáng gắn bó với người lao động.', 1),
+  ('Sứ mệnh', 'Giao đúng hẹn những lô hàng đạt chuẩn quốc tế, đồng thời nâng cao thu nhập và đời sống của công nhân viên tại Đồng Tháp.', 2),
+  ('Giá trị cốt lõi', 'Tâm — Tín — Tinh — Đoàn — Nghĩa: tận tâm với việc, giữ chữ tín với khách hàng, tinh gọn trong sản xuất, đoàn kết nội bộ và nghĩa tình với người lao động.', 3);
+
+INSERT INTO about_certifications (label, sort_order) VALUES
+  ('SA8000 — trách nhiệm xã hội (từ 2012)', 1),
+  ('ISO 9001 — do SGS chứng nhận (từ 2015)', 2),
+  ('OEKO-TEX STEP (từ 2016)', 3),
+  ('Higg FEM & FSLM (từ 2022)', 4);
+
+INSERT INTO benefit_groups (title, icon, intro, sort_order) VALUES
+  ('Môi trường làm việc an toàn, mát', 'shield-check', 'Nhà xưởng tại KCN Tân Hương có điều hòa, ánh sáng chuẩn bảo vệ mắt, hệ thống hút bụi vải và PCCC tự động.', 1),
+  ('Thu nhập minh bạch, trả đúng hạn', 'check2', 'Lương tính theo sản phẩm và năng suất chuyền; mức cụ thể trao đổi khi phỏng vấn. Ngoài lương còn các khoản thưởng và phụ cấp đang áp dụng.', 2),
+  ('Đào tạo nghề miễn phí, có lương', 'briefcase', 'Công ty tuyển cả người chưa có tay nghề may; người mới được kèm tại chuyền theo từng công đoạn (1 kim, 2 kim, vắt sổ) trước khi vào định mức chính thức.', 3),
+  ('Xe đưa rước và ăn ca miễn phí', 'bus-front', 'Công ty bố trí xe đưa đón công nhân ở xa miễn phí giữa các nhà máy Tân Hương, Cái Lậy và Chợ Gạo.', 4);
+
+INSERT INTO benefit_items (group_id, text, sort_order) VALUES
+  (1, 'Đạt SA8000 từ 2012 — trách nhiệm xã hội.', 1),
+  (1, 'ISO 9001 do SGS chứng nhận từ 2015; OEKO-TEX STEP từ 2016.', 2),
+  (1, 'Tham gia Higg FEM & FSLM từ 2022; điện mặt trời tại tất cả nhà máy.', 3),
+  (2, 'Thưởng tháng 13; thưởng dịp 30/4, 1/5, 2/9, Tết Dương lịch.', 1),
+  (2, 'Thưởng hoàn thành kế hoạch, thi đua, thâm niên; tiền nuôi con nhỏ, tiền xăng xe.', 2),
+  (2, 'BHXH, BHYT, BHTN đầy đủ theo luật lao động.', 3),
+  (3, 'Học tại xưởng, có tổ trưởng kỹ thuật hướng dẫn trực tiếp.', 1),
+  (3, 'Lộ trình lên chuyền phó, chuyền trưởng, kỹ thuật mẫu.', 2),
+  (3, 'Thời gian học và mức lương học việc trao đổi khi phỏng vấn.', 3),
+  (4, 'Cơm trưa và cơm tăng ca tại nhà máy.', 1),
+  (4, 'Đồng phục, bảo hộ lao động theo ca sản xuất.', 2),
+  (4, 'Điểm đón và giờ xe do nhân sự xác nhận theo từng khu vực.', 3);
+
+INSERT INTO benefit_comparisons (label, tex_giang, other_value, sort_order) VALUES
+  ('Thưởng tuyển mới', '2.000.000đ tiền mặt', 'Không có hoặc điều kiện khắt khe', 1),
+  ('Người chưa biết may', 'Đào tạo miễn phí, có lương học việc', 'Chỉ tuyển thợ sẵn tay nghề', 2),
+  ('Đi lại', 'Xe đưa rước miễn phí nhiều tuyến', 'Tự túc phương tiện', 3),
+  ('Bữa ăn ca', 'Miễn phí, đổi món mỗi ngày', 'Trừ vào lương', 4),
+  ('Ngày trả lương', 'Mùng 10 hằng tháng qua tài khoản', 'Trễ hạn hoặc chia đợt', 5);
+
+
+-- 7c. BẢN ĐỒ THEO KHU SẢN XUẤT -----------------------------------------
+UPDATE branches SET map_url = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3923.203881427061!2d106.3586310739038!3d10.484587964511139!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x310ab768cef00851%3A0x75cf2c4b6dcf43cd!2zQ8O0bmcgVHkgQ-G7lSBQaOG6p24gVGV4LUdpYW5n!5e0!3m2!1svi!2s!4v1793765708852!5m2!1svi!2s', map_link = 'https://maps.app.goo.gl/ju91J21xxb4KCDEe8' WHERE slug = 'tan-huong';
+UPDATE branches SET map_url = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3925.2436624600177!2d106.52494427390207!3d10.32237476740696!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x310aadd3a04d3db5%3A0x6df16003b97e9aba!2zQ8O0bmcgVHkgQ1AgVGV4LUdpYW5nIGNoaSBuaMOhbmggQ2jhu6MgR-G6oW8!5e0!3m2!1svi!2s!4v1793765777202!5m2!1svi!2s', map_link = 'https://maps.app.goo.gl/ouoWhsTAtT7F4ma28' WHERE slug = 'cho-gao';
+UPDATE branches SET map_url = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6832.276131181911!2d106.08859122953558!3d10.41266722163212!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x310a97c35289cfa5%3A0x38fbaef867a1615!2zQ8O0bmcgdHkgY-G7lSBwaOG6p24gVEVYIC0gR0lBTkc!5e0!3m2!1svi!2s!4v1793765738154!5m2!1svi!2s', map_link = 'https://maps.app.goo.gl/Nvd2xR3BMxEWgCSz7' WHERE slug = 'cai-lay';
+
+
+-- 7d. TIÊU ĐỀ TRANG VỀ CHÚNG TÔI / PHÚC LỢI ---------------------------
+INSERT INTO settings (`key`, `value`, `group`) VALUES
+  ('content_about_title', 'May xuất khẩu tại Tân Hương từ năm 2007', 'content'),
+  ('content_about_lead', 'Công ty Cổ phần TEX-GIANG (TGI) thành lập tháng 3/2007, vận hành 3 khu sản xuất tại Tân Hương, Cái Lậy và Chợ Gạo.', 'content'),
+  ('content_why_title', 'Vì sao chọn TEX-GIANG', 'content'),
+  ('content_why_lead', 'Bốn điều người lao động hỏi nhiều nhất khi đến nhà máy: môi trường có an toàn không, thu nhập bao nhiêu, có được dạy nghề không, và đi lại thế nào.', 'content')
+ON DUPLICATE KEY UPDATE `key` = `key`;
+
+-- 7e. MENU WEBSITE (header/footer) --------------------------------------
+INSERT INTO menus (label, url, sort_order) VALUES
+  ('Trang chủ',    '',              1),
+  ('Việc làm',     'jobs',          2),
+  ('Về chúng tôi', 'about',         3),
+  ('Phúc lợi',     'why-tex-giang', 4),
+  ('Tin tức',      'news',          5),
+  ('Liên hệ',      'contact',       6);

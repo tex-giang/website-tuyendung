@@ -2,7 +2,7 @@
 /** Danh sách tin tuyển dụng (admin). */
 $statusBadge = [
     'published' => 'admin-badge--published', 'draft' => 'admin-badge--draft',
-    'paused' => 'admin-badge--paused', 'closed' => 'admin-badge--closed',
+    'paused' => 'admin-badge--paused', 'closed' => 'admin-badge--closed', 'expired' => 'admin-badge--expired',
 ];
 $start = $result['total'] === 0 ? 0 : (($result['page'] - 1) * $result['per_page']) + 1;
 $end = min($result['page'] * $result['per_page'], $result['total']);
@@ -10,7 +10,6 @@ $end = min($result['page'] * $result['per_page'], $result['total']);
 <div class="admin-page-head">
   <div>
     <h1 class="admin-h1">Tin tuyển dụng</h1>
-    <p class="admin-sub">Thêm, sửa, nhân bản, đóng/mở và xoá tin. Tổng <?= (int) $result['total'] ?> tin khớp bộ lọc.</p>
   </div>
   <a href="<?= url('admin/jobs/create') ?>" class="btn btn-primary">+ Thêm tin</a>
 </div>
@@ -65,13 +64,13 @@ $end = min($result['page'] * $result['per_page'], $result['total']);
           <td class="is-actions">
             <div class="admin-actions">
               <a href="<?= url('jobs/' . $job['slug']) ?>" target="_blank" rel="noopener" class="btn btn-icon" title="Xem trên website">↗</a>
-              <a href="<?= url('admin/jobs/' . $job['id'] . '/edit') ?>" class="btn btn-outline btn-sm">Sửa</a>
+              <a href="<?= url('admin/jobs/' . $job['id'] . '/edit') ?>" class="btn btn-outline btn-icon" title="Sửa" aria-label="Sửa"><?= admin_icon_svg('pencil') ?></a>
               <form method="POST" action="<?= url('admin/jobs/' . $job['id'] . '/duplicate') ?>" data-ajax>
-                <?= csrf_field() ?><button class="btn btn-outline btn-sm" type="submit">Nhân bản</button>
+                <?= csrf_field() ?><button class="btn btn-outline btn-icon" type="submit" title="Nhân bản" aria-label="Nhân bản"><?= admin_icon_svg('copy') ?></button>
               </form>
               <form method="POST" action="<?= url('admin/jobs/' . $job['id'] . '/delete') ?>" data-ajax
                     data-confirm="Xoá tin &quot;<?= e($job['title']) ?>&quot;? Hồ sơ ứng tuyển liên quan vẫn được giữ lại.">
-                <?= csrf_field() ?><button class="btn btn-danger btn-sm" type="submit">Xoá</button>
+                <?= csrf_field() ?><button class="btn btn-danger btn-icon" type="submit" title="Xoá" aria-label="Xoá"><?= admin_icon_svg('trash') ?></button>
               </form>
             </div>
           </td>

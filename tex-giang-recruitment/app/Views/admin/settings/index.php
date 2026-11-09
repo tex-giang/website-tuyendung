@@ -10,7 +10,6 @@ $e = static fn(string $key): string => (string) ($errors[$key] ?? '');
 <div class="admin-page-head">
   <div>
     <h1 class="admin-h1">Cài đặt hệ thống</h1>
-    <p class="admin-sub">Các thông tin dùng chung toàn website: tên, liên hệ, mạng xã hội, SEO.</p>
   </div>
 </div>
 

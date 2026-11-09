@@ -10,7 +10,6 @@ $typeHints = [
 <div class="admin-page-head">
   <div>
     <h1 class="admin-h1">Banner &amp; thông báo</h1>
-    <p class="admin-sub"><?= (int) $total ?> banner. Banner đang bật và trong thời gian hiệu lực sẽ hiển thị trên website.</p>
   </div>
   <a href="<?= url('admin/banners/create') ?>" class="btn btn-primary">+ Thêm banner</a>
 </div>
@@ -65,12 +64,12 @@ $typeHints = [
             <div class="admin-actions">
               <form method="POST" action="<?= url('admin/banners/' . $banner['id'] . '/toggle') ?>">
                 <?= csrf_field() ?>
-                <button class="btn btn-outline btn-sm" type="submit"><?= (int) $banner['is_active'] === 1 ? 'Tắt' : 'Bật' ?></button>
+                <button class="btn btn-outline btn-icon" type="submit" title="<?= (int) $banner['is_active'] === 1 ? 'Tắt' : 'Bật' ?>" aria-label="Bật/Tắt"><?= (int) $banner['is_active'] === 1 ? admin_icon_svg('eye-off') : admin_icon_svg('eye') ?></button>
               </form>
-              <a href="<?= url('admin/banners/' . $banner['id'] . '/edit') ?>" class="btn btn-outline btn-sm">Sửa</a>
+              <a href="<?= url('admin/banners/' . $banner['id'] . '/edit') ?>" class="btn btn-outline btn-icon" title="Sửa" aria-label="Sửa"><?= admin_icon_svg('pencil') ?></a>
               <form method="POST" action="<?= url('admin/banners/' . $banner['id'] . '/delete') ?>"
                     data-confirm="Xoá banner &quot;<?= e($banner['name']) ?>&quot;?">
-                <?= csrf_field() ?><button class="btn btn-danger btn-sm" type="submit">Xoá</button>
+                <?= csrf_field() ?><button class="btn btn-danger btn-icon" type="submit" title="Xoá" aria-label="Xoá"><?= admin_icon_svg('trash') ?></button>
               </form>
             </div>
           </td>

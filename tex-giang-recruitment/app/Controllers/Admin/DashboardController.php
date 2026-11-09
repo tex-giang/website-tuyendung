@@ -13,6 +13,7 @@ final class DashboardController extends Controller
 {
     public function index(): void
     {
+        Job::syncExpired();
         $jobCounts = Job::countsByStatus();
         $appCounts = Application::countsByStatus();
 

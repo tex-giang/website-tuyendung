@@ -18,8 +18,6 @@ if ($deadline !== '' && str_contains($deadline, ' ')) {
     <p class="admin-breadcrumb"><a href="<?= url('admin/jobs') ?>">Tin tuyển dụng</a> / <?= $isEdit ? 'Sửa tin' : 'Thêm tin' ?></p>
     <h1 class="admin-h1"><?= $isEdit ? 'Sửa tin tuyển dụng' : 'Thêm tin tuyển dụng' ?></h1>
     <?php if ($isEdit): ?>
-    <p class="admin-sub">Mã tin <strong><?= e($job['code'] ?: '—') ?></strong> · slug <code><?= e($job['slug']) ?></code>
-      · <?= (int) $job['views'] ?> lượt xem</p>
     <?php endif; ?>
   </div>
   <div class="admin-head-actions">
@@ -48,14 +46,14 @@ if ($deadline !== '' && str_contains($deadline, ' ')) {
       </label>
 
       <label class="field">
-        <span class="field__label">Mã tin <small>(duy nhất, tuỳ chọn)</small></span>
+        <span class="field__label">Mã tin</span>
         <input class="field__input<?= isset($errors['code']) ? ' is-invalid' : '' ?>" type="text" name="code"
-               value="<?= e($val('code')) ?>" maxlength="20" placeholder="TG-01">
+               value="<?= e($val('code')) ?>" maxlength="20" placeholder="TD26-0001">
         <?php if (isset($errors['code'])): ?><span class="field__error"><?= e($errors['code']) ?></span><?php endif; ?>
       </label>
 
       <label class="field">
-        <span class="field__label">Đường dẫn (slug) <small>để trống sẽ tự sinh</small></span>
+        <span class="field__label">Đường dẫn (slug)</span>
         <input class="field__input<?= isset($errors['slug']) ? ' is-invalid' : '' ?>" type="text" name="slug"
                value="<?= e($val('slug')) ?>" maxlength="220" placeholder="cong-nhan-may">
         <?php if (isset($errors['slug'])): ?><span class="field__error"><?= e($errors['slug']) ?></span><?php endif; ?>
@@ -141,8 +139,6 @@ if ($deadline !== '' && str_contains($deadline, ' ')) {
 
   <section class="admin-card">
     <h2 class="admin-h2">Nội dung tin</h2>
-    <p class="admin-hint">Mỗi dòng là một gạch đầu dòng. Riêng <strong>Quyền lợi</strong> dùng dạng
-      <code>Tiêu đề | Mô tả</code> để hiển thị thành thẻ.</p>
     <div class="field-grid">
       <label class="field field--span2">
         <span class="field__label">Mô tả công việc <em>*</em></span>
@@ -154,7 +150,7 @@ if ($deadline !== '' && str_contains($deadline, ' ')) {
         <textarea class="field__input" name="requirements" rows="4"><?= e($val('requirements')) ?></textarea>
       </label>
       <label class="field field--span2">
-        <span class="field__label">Quyền lợi <small>(Tiêu đề | Mô tả)</small></span>
+        <span class="field__label">Quyền lợi</span>
         <textarea class="field__input" name="benefits" rows="5"><?= e($val('benefits')) ?></textarea>
       </label>
     </div>
@@ -192,7 +188,7 @@ if ($deadline !== '' && str_contains($deadline, ' ')) {
         <input class="field__input" type="number" name="sort_order" value="<?= e($val('sort_order', '0')) ?>">
       </label>
       <label class="field">
-        <span class="field__label">Meta title <small>để trống dùng tiêu đề tin</small></span>
+        <span class="field__label">Meta title</span>
         <input class="field__input" type="text" name="meta_title" value="<?= e($val('meta_title')) ?>" maxlength="220">
       </label>
       <label class="field field--span2">

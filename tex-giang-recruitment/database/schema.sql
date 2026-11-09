@@ -23,6 +23,7 @@ DROP TABLE IF EXISTS post_categories;
 DROP TABLE IF EXISTS application_history;
 DROP TABLE IF EXISTS applications;
 DROP TABLE IF EXISTS jobs;
+DROP TABLE IF EXISTS branch_contacts;
 DROP TABLE IF EXISTS categories;
 DROP TABLE IF EXISTS branches;
 DROP TABLE IF EXISTS users;
@@ -69,12 +70,28 @@ CREATE TABLE branches (
   address    VARCHAR(255) NULL,
   phone      VARCHAR(30)  NULL,
   map_url    VARCHAR(500) NULL,
+  map_link   VARCHAR(500) NULL,
   sort_order SMALLINT NOT NULL DEFAULT 0,
   is_active  TINYINT(1) NOT NULL DEFAULT 1,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   UNIQUE KEY uq_branches_slug (slug)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE branch_contacts (
+  id         SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  branch_id  SMALLINT UNSIGNED NOT NULL,
+  full_name  VARCHAR(120) NOT NULL,
+  title      VARCHAR(80)  NULL,
+  phone      VARCHAR(30)  NOT NULL,
+  sort_order SMALLINT NOT NULL DEFAULT 0,
+  is_active  TINYINT(1) NOT NULL DEFAULT 1,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_branch_contacts_branch (branch_id, sort_order),
+  CONSTRAINT fk_branch_contacts_branch FOREIGN KEY (branch_id) REFERENCES branches (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE categories (
@@ -114,7 +131,7 @@ CREATE TABLE jobs (
   description      MEDIUMTEXT NOT NULL,
   requirements     MEDIUMTEXT NULL,
   benefits         MEDIUMTEXT NULL,
-  status           ENUM('draft','published','paused','closed') NOT NULL DEFAULT 'draft',
+  status           ENUM('draft','published','paused','closed','expired') NOT NULL DEFAULT 'draft',
   is_urgent        TINYINT(1) NOT NULL DEFAULT 0,
   posted_at        DATETIME NULL,
   deadline         DATE NULL,
@@ -305,4 +322,108 @@ CREATE TABLE audit_logs (
   KEY idx_audit_user (user_id, created_at),
   KEY idx_audit_entity (entity_type, entity_id),
   CONSTRAINT fk_audit_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Nội dung trang Về chúng tôi / Phúc lợi
+CREATE TABLE IF NOT EXISTS about_milestones (
+  id smallint unsigned NOT NULL AUTO_INCREMENT,
+  year_label varchar(40) NOT NULL,
+  text varchar(500) NOT NULL,
+  is_highlight tinyint(1) NOT NULL DEFAULT 0,
+  sort_order smallint NOT NULL DEFAULT 0,
+  is_active tinyint(1) NOT NULL DEFAULT 1,
+  created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS about_values (
+  id smallint unsigned NOT NULL AUTO_INCREMENT,
+  title varchar(120) NOT NULL,
+  body varchar(800) NOT NULL,
+  sort_order smallint NOT NULL DEFAULT 0,
+  is_active tinyint(1) NOT NULL DEFAULT 1,
+  created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS about_certifications (
+  id smallint unsigned NOT NULL AUTO_INCREMENT,
+  label varchar(200) NOT NULL,
+  sort_order smallint NOT NULL DEFAULT 0,
+  is_active tinyint(1) NOT NULL DEFAULT 1,
+  created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS benefit_groups (
+  id smallint unsigned NOT NULL AUTO_INCREMENT,
+  title varchar(200) NOT NULL,
+  icon varchar(80) NOT NULL DEFAULT 'check2',
+  intro varchar(500) NOT NULL DEFAULT '',
+  sort_order smallint NOT NULL DEFAULT 0,
+  is_active tinyint(1) NOT NULL DEFAULT 1,
+  created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS benefit_items (
+  id smallint unsigned NOT NULL AUTO_INCREMENT,
+  group_id smallint unsigned NOT NULL,
+  text varchar(500) NOT NULL,
+  sort_order smallint NOT NULL DEFAULT 0,
+  is_active tinyint(1) NOT NULL DEFAULT 1,
+  created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY group_id (group_id),
+  CONSTRAINT fk_benefit_items_group FOREIGN KEY (group_id) REFERENCES benefit_groups (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS benefit_comparisons (
+  id smallint unsigned NOT NULL AUTO_INCREMENT,
+  label varchar(120) NOT NULL,
+  tex_giang varchar(300) NOT NULL,
+  other_value varchar(300) NOT NULL,
+  sort_order smallint NOT NULL DEFAULT 0,
+  is_active tinyint(1) NOT NULL DEFAULT 1,
+  created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Menu website (header/footer)
+CREATE TABLE IF NOT EXISTS menus (
+  id smallint unsigned NOT NULL AUTO_INCREMENT,
+  label varchar(120) NOT NULL,
+  url varchar(255) NOT NULL DEFAULT '',
+  sort_order smallint NOT NULL DEFAULT 0,
+  is_active tinyint(1) NOT NULL DEFAULT 1,
+  created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Thống kê lượt truy cập theo ngày (dedupe theo thiết bị/trình duyệt)
+CREATE TABLE IF NOT EXISTS visit_stats (
+  stat_date date NOT NULL,
+  total int unsigned NOT NULL DEFAULT 0,
+  mobile int unsigned NOT NULL DEFAULT 0,
+  desktop int unsigned NOT NULL DEFAULT 0,
+  tablet int unsigned NOT NULL DEFAULT 0,
+  updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (stat_date)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS visit_devices (
+  id bigint unsigned NOT NULL AUTO_INCREMENT,
+  stat_date date NOT NULL,
+  visitor_id char(32) NOT NULL,
+  device_type enum('mobile','desktop','tablet') NOT NULL DEFAULT 'desktop',
+  created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_visit_day_device (stat_date, visitor_id),
+  KEY idx_visit_date (stat_date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

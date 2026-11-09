@@ -12,7 +12,7 @@ $backUrl = url('admin/categories');
   <div>
     <p class="admin-breadcrumb"><a href="<?= $backUrl ?>">Danh mục</a> / <?= e($config['label']) ?></p>
     <h1 class="admin-h1"><?= $isEdit ? 'Sửa ' : 'Thêm ' ?><?= e($config['singular']) ?></h1>
-    <?php if ($isEdit): ?><p class="admin-sub">slug hiện tại <code><?= e($record['slug']) ?></code></p><?php endif; ?>
+    <?php if ($isEdit): ?><?php endif; ?>
   </div>
   <a href="<?= $backUrl ?>" class="btn btn-ghost">← Danh sách</a>
 </div>
@@ -33,7 +33,7 @@ $backUrl = url('admin/categories');
         <?php if ($err('name')): ?><span class="field__error"><?= e($err('name')) ?></span><?php endif; ?>
       </label>
       <label class="field">
-        <span class="field__label">Đường dẫn (slug) <small>để trống tự sinh</small></span>
+        <span class="field__label">Đường dẫn (slug)</span>
         <input class="field__input<?= $err('slug') ? ' is-invalid' : '' ?>" type="text" name="slug"
                value="<?= e($val('slug')) ?>" maxlength="80">
         <?php if ($err('slug')): ?><span class="field__error"><?= e($err('slug')) ?></span><?php endif; ?>
@@ -52,11 +52,16 @@ $backUrl = url('admin/categories');
                value="<?= e($val('phone')) ?>" maxlength="30">
         <?php if ($err('phone')): ?><span class="field__error"><?= e($err('phone')) ?></span><?php endif; ?>
       </label>
-      <label class="field">
-        <span class="field__label">Link Google Maps</span>
-        <input class="field__input<?= $err('map_url') ? ' is-invalid' : '' ?>" type="text" name="map_url"
-               value="<?= e($val('map_url')) ?>" maxlength="500" placeholder="https://maps.app.goo.gl/…">
+      <label class="field field--span2">
+        <span class="field__label">Link nhúng bản đồ (iframe src)</span>
+        <textarea class="field__input<?= $err('map_url') ? ' is-invalid' : '' ?>" name="map_url" rows="2" maxlength="500" placeholder="https://www.google.com/maps/embed?pb=…"><?= e($val('map_url')) ?></textarea>
         <?php if ($err('map_url')): ?><span class="field__error"><?= e($err('map_url')) ?></span><?php endif; ?>
+      </label>
+      <label class="field">
+        <span class="field__label">Link mở Google Maps</span>
+        <input class="field__input<?= $err('map_link') ? ' is-invalid' : '' ?>" type="text" name="map_link"
+               value="<?= e($val('map_link')) ?>" maxlength="500" placeholder="https://maps.app.goo.gl/…">
+        <?php if ($err('map_link')): ?><span class="field__error"><?= e($err('map_link')) ?></span><?php endif; ?>
       </label>
       <?php elseif ($type === 'category'): ?>
       <label class="field field--span2">
@@ -78,8 +83,82 @@ $backUrl = url('admin/categories');
     </div>
   </section>
 
+  <?php if ($type === 'branch'): ?>
+  <section class="admin-card" id="branch-contacts">
+    <div class="admin-card__head">
+      <h2 class="admin-h2">Người liên hệ tuyển dụng</h2>
+      <span class="admin-badge admin-badge--soft"><?= count($contacts) ?> người</span>
+    </div>
+    <?php if ($err('contacts')): ?>
+    <div class="admin-alert admin-alert--error" role="alert"><?= e($err('contacts')) ?></div>
+    <?php endif; ?>
+
+    <div class="admin-repeater" data-contact-repeater>
+      <div class="admin-repeater__head" aria-hidden="true">
+        <span>Họ tên</span>
+        <span>Số điện thoại</span>
+        <span></span>
+      </div>
+      <div class="admin-repeater__rows" data-contact-rows>
+        <?php foreach ($contacts as $index => $contact): ?>
+        <div class="admin-repeater__row" data-contact-row>
+          <input class="field__input" type="text" name="contacts[<?= (int) $index ?>][full_name]"
+                 value="<?= e((string) ($contact['full_name'] ?? '')) ?>" maxlength="120" placeholder="VD: Chị Trân">
+
+          <input class="field__input" type="tel" name="contacts[<?= (int) $index ?>][phone]"
+                 value="<?= e((string) ($contact['phone'] ?? '')) ?>" maxlength="30" placeholder="VD: 0913 131 090">
+          <button type="button" class="btn btn-ghost btn-icon" data-contact-remove title="Xoá" aria-label="Xoá"><?= admin_icon_svg('trash') ?></button>
+        </div>
+        <?php endforeach; ?>
+      </div>
+
+      <template id="contact-row-template">
+        <div class="admin-repeater__row" data-contact-row>
+          <input class="field__input" type="text" name="contacts[__INDEX__][full_name]" maxlength="120" placeholder="VD: Chị Trân">
+
+          <input class="field__input" type="tel" name="contacts[__INDEX__][phone]" maxlength="30" placeholder="VD: 0913 131 090">
+          <button type="button" class="btn btn-ghost btn-icon" data-contact-remove title="Xoá" aria-label="Xoá"><?= admin_icon_svg('trash') ?></button>
+        </div>
+      </template>
+
+      <button type="button" class="btn btn-outline btn-sm" data-contact-add>+ Thêm người liên hệ</button>
+    </div>
+  </section>
+  <?php endif; ?>
+
   <div class="admin-form__actions">
     <button type="submit" class="btn btn-primary"><?= $isEdit ? 'Lưu thay đổi' : 'Thêm ' . e($config['singular']) ?></button>
     <a href="<?= $backUrl ?>" class="btn btn-ghost">Huỷ</a>
   </div>
 </form>
+
+<?php if ($type === 'branch'): ?>
+<script>
+(function () {
+  var root = document.querySelector('[data-contact-repeater]');
+  if (!root) return;
+  var rows = root.querySelector('[data-contact-rows]');
+  var template = document.getElementById('contact-row-template');
+  var addButton = root.querySelector('[data-contact-add]');
+  var nextIndex = rows.querySelectorAll('[data-contact-row]').length + 1;
+
+  addButton.addEventListener('click', function () {
+    var html = template.innerHTML.replace(/__INDEX__/g, String(nextIndex++));
+    rows.insertAdjacentHTML('beforeend', html);
+    var last = rows.lastElementChild;
+    if (last) {
+      last.style.animation = 'none';
+      var input = last.querySelector('input');
+      if (input) input.focus();
+    }
+  });
+
+  rows.addEventListener('click', function (event) {
+    var removeButton = event.target.closest('[data-contact-remove]');
+    if (!removeButton) return;
+    var row = removeButton.closest('[data-contact-row]');
+    if (row) row.remove();
+  });
+})();
+</script>
+<?php endif; ?>

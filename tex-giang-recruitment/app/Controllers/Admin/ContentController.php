@@ -19,6 +19,10 @@ final class ContentController extends Controller
         'content_about_2'       => ['Trang chủ — đoạn giới thiệu 2', 'textarea', 800],
         'content_philosophy'    => ['Triết lý / khẩu hiệu', 'text', 200],
         'content_footer_intro'  => ['Giới thiệu ngắn ở footer', 'textarea', 300],
+        'content_about_title'   => ['Trang Về chúng tôi — tiêu đề', 'text', 150],
+        'content_about_lead'    => ['Trang Về chúng tôi — mô tả dẫn', 'textarea', 300],
+        'content_why_title'     => ['Trang Phúc lợi — tiêu đề', 'text', 150],
+        'content_why_lead'      => ['Trang Phúc lợi — mô tả dẫn', 'textarea', 400],
         'stat_1_value'          => ['Số liệu 1 — giá trị', 'text', 20],
         'stat_1_label'          => ['Số liệu 1 — nhãn', 'text', 120],
         'stat_2_value'          => ['Số liệu 2 — giá trị', 'text', 20],
@@ -52,7 +56,7 @@ final class ContentController extends Controller
                 $errors[$key] = $label . ' tối đa ' . $max . ' ký tự.';
                 continue;
             }
-            if (in_array($key, ['content_hero_title_1', 'content_hero_title_2', 'content_about_1'], true) && $value === '') {
+            if (in_array($key, ['content_hero_title_1', 'content_hero_title_2', 'content_about_1', 'content_about_title', 'content_why_title'], true) && $value === '') {
                 $errors[$key] = $label . ' không được để trống.';
                 continue;
             }

@@ -9,11 +9,15 @@ $groups = [
         ['dashboard', 'Bảng điều khiển', url('admin/dashboard'), 0],
         ['jobs', 'Tin tuyển dụng', url('admin/jobs'), 0],
         ['applications', 'Hồ sơ ứng tuyển', url('admin/applications'), \App\Models\Application::newCount()],
+        ['visits', 'Thống kê truy cập', url('admin/visits'), 0, 'dashboard'],
     ],
     'Nội dung' => [
         ['posts', 'Tin tức & bài viết', url('admin/posts'), 0],
         ['banners', 'Banner & thông báo', url('admin/banners'), 0],
         ['content', 'Nội dung website', url('admin/content'), 0],
+        ['pages-about', 'Về chúng tôi', url('admin/pages/about'), 0, 'content'],
+        ['pages-benefits', 'Phúc lợi', url('admin/pages/benefits'), 0, 'content'],
+        ['menus', 'Menu website', url('admin/menus'), 0, 'content'],
         ['categories', 'Danh mục dùng chung', url('admin/categories'), 0],
         ['contact', 'Hộp thư liên hệ', url('admin/contact'), \App\Models\ContactMessage::newCount()],
     ],
@@ -40,7 +44,7 @@ $initials = mb_strtoupper($initials !== '' ? $initials : 'TG', 'UTF-8');
   <nav class="admin-nav">
     <?php foreach ($groups as $groupLabel => $items): ?>
       <?php
-      $visible = array_values(array_filter($items, static fn(array $item): bool => $can($item[0])));
+      $visible = array_values(array_filter($items, static fn(array $item): bool => $can((string) ($item[4] ?? $item[0]))));
       if ($visible === []) {
           continue;
       }

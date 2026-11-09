@@ -4,6 +4,17 @@
  * Chạy: node tools/port-static-page.mjs contact
  * Nội dung tĩnh; phần cần động (số liệu, timeline, form) chỉnh tay sau khi port.
  */
+$contactsByBranch = \App\Models\BranchContact::activeGrouped();
+$contactsBySlug = [];
+$addressBySlug = [];
+$mapBySlug = [];
+$mapLinkBySlug = [];
+foreach (\App\Models\Branch::active() as $branchRow) {
+    $contactsBySlug[$branchRow['slug']] = $contactsByBranch[(int) $branchRow['id']] ?? [];
+    $addressBySlug[$branchRow['slug']] = (string) ($branchRow['address'] ?? '');
+    $mapBySlug[$branchRow['slug']] = map_embed_src((string) ($branchRow['map_url'] ?? ''));
+    $mapLinkBySlug[$branchRow['slug']] = (string) ($branchRow['map_link'] ?? '');
+}
 ?>
 <section class="tg-container pt-14 lg:pt-20"><div class="page-intro"><div>
       <nav aria-label="Breadcrumb" class="text-[14px] text-muted">
@@ -34,7 +45,7 @@
       <div class="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 
         <!-- 1. TÂN HƯƠNG -->
-        <article class="flex flex-col rounded-card border border-line bg-surface p-6 transition-shadow hover:shadow-float" data-reveal>
+        <article id="khu-vuc-tan-huong" class="flex flex-col rounded-card border border-line bg-surface p-6 transition-shadow hover:shadow-float" data-reveal>
           <div class="flex items-center gap-3">
             <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-accent-soft text-[15px] font-semibold text-accent">1</span>
             <h3 class="text-[18px] font-medium leading-snug text-ink">Khu vực Tân Hương</h3>
@@ -51,34 +62,40 @@
               <dt class="flex items-center gap-2 font-medium text-body">
                 <img class="tg-icon text-accent" src="<?= asset('images/icons/telephone.svg') ?>" width="20" height="20" alt="" aria-hidden="true"> Liên hệ ứng tuyển
               </dt>
-              <dd class="mt-1 space-y-1 text-muted">
-                <span class="block">Chị Trân: <a href="tel:0913131090" class="font-medium text-body transition-colors hover:text-accent">0913 131 090</a></span>
-                <span class="block">Chị Ngân: <a href="tel:0332629650" class="font-medium text-body transition-colors hover:text-accent">0332 629 650</a></span>
-                <span class="block">Anh Linh: <a href="tel:0945609942" class="font-medium text-body transition-colors hover:text-accent">0945 609 942</a></span>
+                            <dd class="mt-1 space-y-1 text-muted">
+                <?php foreach ($contactsBySlug['tan-huong'] as $contact): ?>
+                <span class="block"><?= e($contact['full_name']) ?>: <a href="tel:<?= e(\App\Models\BranchContact::telHref((string) $contact['phone'])) ?>" class="font-medium text-body transition-colors hover:text-accent"><?= e($contact['phone']) ?></a></span>
+                <?php endforeach; ?>
               </dd>
             </div>
             <div>
               <dt class="flex items-center gap-2 font-medium text-body">
                 <img class="tg-icon text-accent" src="<?= asset('images/icons/geo-alt.svg') ?>" width="20" height="20" alt="" aria-hidden="true"> Địa chỉ nhận hồ sơ
               </dt>
-              <dd class="mt-1 text-muted">BI-5-6-7-8 Đ. D3, Khu công nghiệp, Tân Hương, Đồng Tháp.</dd>
+              <dd class="mt-1 text-muted"><?= e($addressBySlug['tan-huong'] ?? '') ?></dd>
             </div>
           </dl>
 
           <div class="map-frame mb-4">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3923.203881427061!2d106.3586310739038!3d10.484587964511139!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x310ab768cef00851%3A0x75cf2c4b6dcf43cd!2zQ8O0bmcgVHkgQ-G7lSBQaOG6p24gVGV4LUdpYW5n!5e0!3m2!1svi!2s!4v1793765708852!5m2!1svi!2s"
-                    title="Bản đồ Khu vực Tân Hương — TEX-GIANG"
-                    style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+            <?php if (($mapBySlug['tan-huong'] ?? '') !== ''): ?>
+                    <iframe src="<?= e($mapBySlug['tan-huong']) ?>"
+                            title="Bản đồ Khu vực Tân Hương — TEX-GIANG"
+                            style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                    <?php else: ?>
+                    <p class="grid h-[240px] place-items-center rounded-card bg-surface text-[14px] text-muted">Chưa cấu hình bản đồ cho khu vực này.</p>
+                    <?php endif; ?>
           </div>
 
-          <a href="https://maps.app.goo.gl/ju91J21xxb4KCDEe8" target="_blank" rel="noopener"
-             class="tg-btn tg-btn--ghost mt-auto h-11 w-full text-[15px]">
+          <?php if (($mapLinkBySlug['tan-huong'] ?? '') !== ''): ?>
+             <a href="<?= e($mapLinkBySlug['tan-huong']) ?>" target="_blank" rel="noopener"
+                class="tg-btn tg-btn--ghost mt-auto h-11 w-full text-[15px]">
             <img src="<?= asset('images/icons/geo-alt.svg') ?>" alt="" aria-hidden="true" width="20" height="20" class="tg-icon"> Mở Google Maps
           </a>
+          <?php endif; ?>
         </article>
 
         <!-- 2. CHỢ GẠO -->
-        <article class="flex flex-col rounded-card border border-line bg-surface p-6 transition-shadow hover:shadow-float" data-reveal>
+        <article id="khu-vuc-cho-gao" class="flex flex-col rounded-card border border-line bg-surface p-6 transition-shadow hover:shadow-float" data-reveal>
           <div class="flex items-center gap-3">
             <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-accent-soft text-[15px] font-semibold text-accent">2</span>
             <h3 class="text-[18px] font-medium leading-snug text-ink">Khu vực Chợ Gạo</h3>
@@ -89,15 +106,16 @@
               <dt class="flex items-center gap-2 font-medium text-body">
                 <img class="tg-icon text-accent" src="<?= asset('images/icons/buildings.svg') ?>" width="20" height="20" alt="" aria-hidden="true"> Địa điểm làm việc
               </dt>
-              <dd class="mt-1 text-muted">Ấp Hòa Lợi Tiểu, Xã Bình Ninh, Tỉnh Đồng Tháp.</dd>
+              <dd class="mt-1 text-muted"><?= e($addressBySlug['cho-gao'] ?? '') ?></dd>
             </div>
             <div>
               <dt class="flex items-center gap-2 font-medium text-body">
                 <img class="tg-icon text-accent" src="<?= asset('images/icons/telephone.svg') ?>" width="20" height="20" alt="" aria-hidden="true"> Liên hệ ứng tuyển
               </dt>
-              <dd class="mt-1 space-y-1 text-muted">
-                <span class="block">Chị Tuyết: <a href="tel:0963181431" class="font-medium text-body transition-colors hover:text-accent">0963 181 431</a></span>
-                <span class="block">Anh Sơn: <a href="tel:0924772499" class="font-medium text-body transition-colors hover:text-accent">0924 772 499</a></span>
+                            <dd class="mt-1 space-y-1 text-muted">
+                <?php foreach ($contactsBySlug['cho-gao'] as $contact): ?>
+                <span class="block"><?= e($contact['full_name']) ?>: <a href="tel:<?= e(\App\Models\BranchContact::telHref((string) $contact['phone'])) ?>" class="font-medium text-body transition-colors hover:text-accent"><?= e($contact['phone']) ?></a></span>
+                <?php endforeach; ?>
               </dd>
             </div>
             <div>
@@ -109,19 +127,25 @@
           </dl>
 
           <div class="map-frame mb-4">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3925.2436624600177!2d106.52494427390207!3d10.32237476740696!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x310aadd3a04d3db5%3A0x6df16003b97e9aba!2zQ8O0bmcgVHkgQ1AgVGV4LUdpYW5nIGNoaSBuaMOhbmggQ2jhu6MgR-G6oW8!5e0!3m2!1svi!2s!4v1793765777202!5m2!1svi!2s"
-                    title="Bản đồ Khu vực Chợ Gạo — TEX-GIANG"
-                    style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+            <?php if (($mapBySlug['cho-gao'] ?? '') !== ''): ?>
+                    <iframe src="<?= e($mapBySlug['cho-gao']) ?>"
+                            title="Bản đồ Khu vực Chợ Gạo — TEX-GIANG"
+                            style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                    <?php else: ?>
+                    <p class="grid h-[240px] place-items-center rounded-card bg-surface text-[14px] text-muted">Chưa cấu hình bản đồ cho khu vực này.</p>
+                    <?php endif; ?>
           </div>
 
-          <a href="https://maps.app.goo.gl/ouoWhsTAtT7F4ma28" target="_blank" rel="noopener"
-             class="tg-btn tg-btn--ghost mt-auto h-11 w-full text-[15px]">
+          <?php if (($mapLinkBySlug['cho-gao'] ?? '') !== ''): ?>
+             <a href="<?= e($mapLinkBySlug['cho-gao']) ?>" target="_blank" rel="noopener"
+                class="tg-btn tg-btn--ghost mt-auto h-11 w-full text-[15px]">
             <img src="<?= asset('images/icons/geo-alt.svg') ?>" alt="" aria-hidden="true" width="20" height="20" class="tg-icon"> Mở Google Maps
           </a>
+          <?php endif; ?>
         </article>
 
         <!-- 3. CÁI LẬY -->
-        <article class="flex flex-col rounded-card border border-line bg-surface p-6 transition-shadow hover:shadow-float" data-reveal>
+        <article id="khu-vuc-cai-lay" class="flex flex-col rounded-card border border-line bg-surface p-6 transition-shadow hover:shadow-float" data-reveal>
           <div class="flex items-center gap-3">
             <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-accent-soft text-[15px] font-semibold text-accent">3</span>
             <h3 class="text-[18px] font-medium leading-snug text-ink">Khu vực Cai Lậy</h3>
@@ -132,15 +156,16 @@
               <dt class="flex items-center gap-2 font-medium text-body">
                 <img class="tg-icon text-accent" src="<?= asset('images/icons/buildings.svg') ?>" width="20" height="20" alt="" aria-hidden="true"> Địa điểm làm việc
               </dt>
-              <dd class="mt-1 text-muted">Ấp Bình Quới, Xã Bình Phú, Tỉnh Đồng Tháp.</dd>
+              <dd class="mt-1 text-muted"><?= e($addressBySlug['cai-lay'] ?? '') ?></dd>
             </div>
             <div>
               <dt class="flex items-center gap-2 font-medium text-body">
                 <img class="tg-icon text-accent" src="<?= asset('images/icons/telephone.svg') ?>" width="20" height="20" alt="" aria-hidden="true"> Liên hệ ứng tuyển
               </dt>
-              <dd class="mt-1 space-y-1 text-muted">
-                <span class="block">Anh Nguyên: <a href="tel:0938583943" class="font-medium text-body transition-colors hover:text-accent">0938 583 943</a></span>
-                <span class="block">Chị Hằng: <a href="tel:0908813822" class="font-medium text-body transition-colors hover:text-accent">0908 813 822</a></span>
+                            <dd class="mt-1 space-y-1 text-muted">
+                <?php foreach ($contactsBySlug['cai-lay'] as $contact): ?>
+                <span class="block"><?= e($contact['full_name']) ?>: <a href="tel:<?= e(\App\Models\BranchContact::telHref((string) $contact['phone'])) ?>" class="font-medium text-body transition-colors hover:text-accent"><?= e($contact['phone']) ?></a></span>
+                <?php endforeach; ?>
               </dd>
             </div>
             <div>
@@ -152,15 +177,21 @@
           </dl>
 
           <div class="map-frame mb-4">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6832.276131181911!2d106.08859122953558!3d10.41266722163212!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x310a97c35289cfa5%3A0x38fbaef867a1615!2zQ8O0bmcgdHkgY-G7lSBwaOG6p24gVEVYIC0gR0lBTkc!5e0!3m2!1svi!2s!4v1793765738154!5m2!1svi!2s"
-                    title="Bản đồ Khu vực Cái Lậy — TEX-GIANG"
-                    style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+            <?php if (($mapBySlug['cai-lay'] ?? '') !== ''): ?>
+                    <iframe src="<?= e($mapBySlug['cai-lay']) ?>"
+                            title="Bản đồ Khu vực Cái Lậy — TEX-GIANG"
+                            style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                    <?php else: ?>
+                    <p class="grid h-[240px] place-items-center rounded-card bg-surface text-[14px] text-muted">Chưa cấu hình bản đồ cho khu vực này.</p>
+                    <?php endif; ?>
           </div>
 
-          <a href="https://maps.app.goo.gl/Nvd2xR3BMxEWgCSz7" target="_blank" rel="noopener"
-             class="tg-btn tg-btn--ghost mt-auto h-11 w-full text-[15px]">
+          <?php if (($mapLinkBySlug['cai-lay'] ?? '') !== ''): ?>
+             <a href="<?= e($mapLinkBySlug['cai-lay']) ?>" target="_blank" rel="noopener"
+                class="tg-btn tg-btn--ghost mt-auto h-11 w-full text-[15px]">
             <img src="<?= asset('images/icons/geo-alt.svg') ?>" alt="" aria-hidden="true" width="20" height="20" class="tg-icon"> Mở Google Maps
           </a>
+          <?php endif; ?>
         </article>
 
       </div>
@@ -202,7 +233,7 @@
             <div>
               <label class="form-label" for="contact-phone">Số điện thoại <span class="req">*</span></label>
               <input type="tel" id="contact-phone" name="phone" required autocomplete="tel" inputmode="tel"
-                     placeholder="09xx xxx xxx" class="form-input<?= $err('phone') ? ' is-invalid' : '' ?>"
+                     placeholder="09xx xxx xxx" class="form-input<?= $err('phone') ? ' is-invalid' : '' ?>" data-phone-format>
                      value="<?= e($val('phone')) ?>">
               <?php if ($err('phone')): ?><p class="field-error"><?= e($err('phone')) ?></p><?php endif; ?>
             </div>
@@ -217,9 +248,9 @@
               <label class="form-label" for="contact-area">Khu vực muốn liên hệ <span class="req">*</span></label>
               <select id="contact-area" name="area" required class="form-input">
                 <option value="">— Chọn khu vực —</option>
-                <option value="tan-huong"<?= $val('area') === 'tan-huong' ? ' selected' : '' ?>>Khu vực Tân Hương</option>
-                <option value="cho-gao"<?= $val('area') === 'cho-gao' ? ' selected' : '' ?>>Khu vực Chợ Gạo</option>
-                <option value="cai-lay"<?= $val('area') === 'cai-lay' ? ' selected' : '' ?>>Khu vực Cai Lậy</option>
+                <option value="tan-huong"<?= $val('area', (string) ($_GET['khu-vuc'] ?? '')) === 'tan-huong' ? ' selected' : '' ?>>Khu vực Tân Hương</option>
+                <option value="cho-gao"<?= $val('area', (string) ($_GET['khu-vuc'] ?? '')) === 'cho-gao' ? ' selected' : '' ?>>Khu vực Chợ Gạo</option>
+                <option value="cai-lay"<?= $val('area', (string) ($_GET['khu-vuc'] ?? '')) === 'cai-lay' ? ' selected' : '' ?>>Khu vực Cai Lậy</option>
                 <option value="khac"<?= $val('area') === 'khac' ? ' selected' : '' ?>>Không chắc — cần tư vấn thêm</option>
               </select>
               <?php if ($err('area')): ?><p class="field-error"><?= e($err('area')) ?></p><?php endif; ?>

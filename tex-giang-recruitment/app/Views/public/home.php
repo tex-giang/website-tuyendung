@@ -1,7 +1,5 @@
 <?php
 /** Trang chủ — port từ index.html tĩnh, dữ liệu lấy từ MySQL. */
-$hotline = settings('hotline', '02733937274');
-$hotlineDisplay = settings('hotline_display', '0273 393 7274');
 $branches = \App\Models\Branch::options();
 $stats = [];
 for ($i = 1; $i <= 4; $i++) {
@@ -59,7 +57,7 @@ for ($i = 1; $i <= 4; $i++) {
       </p>
 
       <div class="mt-10 flex flex-wrap items-center justify-center gap-x-7 gap-y-3">
-        <a href="<?= url('jobs') ?>" class="tg-btn tg-btn--primary">Xem vị trí đang tuyển</a>
+        <?php if (menu_link_visible('jobs')): ?><a href="<?= url('jobs') ?>" class="tg-btn tg-btn--primary">Xem vị trí đang tuyển</a><?php endif; ?>
         <a href="<?= url('apply') ?>" class="tg-link">Nộp hồ sơ trong 2 phút
           <img src="<?= asset('images/icons/arrow-right.svg') ?>" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[14px]"></a>
       </div>
@@ -112,8 +110,8 @@ for ($i = 1; $i <= 4; $i++) {
         <h2 class="text-[clamp(1.75rem,3.4vw,2.75rem)] font-medium leading-[1.2] tracking-[-0.015em] text-ink">Vị trí đang tuyển</h2>
         <p class="mt-2.5 text-[16px] text-muted">Bổ sung nhân sự cho khu Tân Hương.</p>
       </div>
-      <a href="<?= url('jobs') ?>" class="tg-link">Xem tất cả <span data-open-job-count><?= (int) $jobCount ?></span> vị trí
-        <img src="<?= asset('images/icons/arrow-right.svg') ?>" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[14px]"></a>
+      <?php if (menu_link_visible('jobs')): ?><a href="<?= url('jobs') ?>" class="tg-link">Xem tất cả <span data-open-job-count><?= (int) $jobCount ?></span> vị trí
+        <img src="<?= asset('images/icons/arrow-right.svg') ?>" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[14px]"></a><?php endif; ?>
     </div>
 
     <div class="mt-10" data-job-slider>
@@ -139,7 +137,7 @@ for ($i = 1; $i <= 4; $i++) {
     </div>
     <div class="flex w-full flex-col items-start gap-5 sm:flex-row sm:items-center lg:w-auto">
       <a href="<?= e(url((string) ($ad['link_url'] ?: 'apply'))) ?>" class="tg-btn tg-btn--white w-full sm:w-auto"><?= e($ad['cta_label'] ?: 'Đăng ký ngay') ?></a>
-      <a href="https://zalo.me/<?= e(settings('zalo', $hotline)) ?>" target="_blank" rel="noopener" class="inline-flex items-center gap-2 whitespace-nowrap text-[16px] font-medium text-white/90 transition-colors hover:text-white">
+      <a href="<?= e(zalo_url()) ?>" target="_blank" rel="noopener" class="inline-flex items-center gap-2 whitespace-nowrap text-[16px] font-medium text-white/90 transition-colors hover:text-white">
         Chat Zalo tuyển dụng <img src="<?= asset('images/icons/arrow-right.svg') ?>" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[14px]">
       </a>
     </div>
@@ -172,10 +170,10 @@ for ($i = 1; $i <= 4; $i++) {
     </div>
 
     <div class="mt-8 flex flex-wrap gap-7">
-      <a href="<?= url('about') ?>" class="tg-link">Về chúng tôi
-        <img src="<?= asset('images/icons/arrow-right.svg') ?>" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[14px]"></a>
-      <a href="<?= url('why-tex-giang') ?>" class="tg-link">Chế độ phúc lợi
-        <img src="<?= asset('images/icons/arrow-right.svg') ?>" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[14px]"></a>
+      <?php if (menu_link_visible('about')): ?><a href="<?= url('about') ?>" class="tg-link">Về chúng tôi
+        <img src="<?= asset('images/icons/arrow-right.svg') ?>" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[14px]"></a><?php endif; ?>
+      <?php if (menu_link_visible('why-tex-giang')): ?><a href="<?= url('why-tex-giang') ?>" class="tg-link">Chế độ phúc lợi
+        <img src="<?= asset('images/icons/arrow-right.svg') ?>" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[14px]"></a><?php endif; ?>
     </div>
   </div>
 </section>
@@ -185,8 +183,8 @@ for ($i = 1; $i <= 4; $i++) {
     <div>
       <h2 id="company-scenes">Con người và nơi làm việc</h2>
       <p>Khám phá không gian nhà máy, hoạt động cộng đồng và định hướng phát triển bền vững trong hệ thống TEX-GIANG.</p>
-      <a href="<?= url('about') ?>" class="tg-link mt-5">Tìm hiểu doanh nghiệp
-        <img class="tg-icon" src="<?= asset('images/icons/arrow-right.svg') ?>" alt="" width="20" height="20"></a>
+      <?php if (menu_link_visible('about')): ?><a href="<?= url('about') ?>" class="tg-link mt-5">Tìm hiểu doanh nghiệp
+        <img class="tg-icon" src="<?= asset('images/icons/arrow-right.svg') ?>" alt="" width="20" height="20"></a><?php endif; ?>
     </div>
     <figure><img src="<?= asset('images/company/social.webp') ?>" width="600" height="450" loading="lazy" alt="Đại diện doanh nghiệp trao quà trong hoạt động cộng đồng"><figcaption>Gắn kết cùng cộng đồng</figcaption></figure>
     <figure><img src="<?= asset('images/company/environment.webp') ?>" width="600" height="450" loading="lazy" alt="Hệ thống điện mặt trời trên mái nhà xưởng TEX-GIANG"><figcaption>Hướng tới sản xuất bền vững</figcaption></figure>

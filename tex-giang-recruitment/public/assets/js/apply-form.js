@@ -99,8 +99,84 @@
       input.focus();
     });
   }
+    // ---- Bắt buộc đồng ý điều khoản mới cho phép gửi hồ sơ ----
+    var termsBox = document.getElementById('apply-terms');
+    var submitButton = form.querySelector('button[type="submit"]');
+    if (termsBox && submitButton) {
+      var syncTerms = function () {
+        submitButton.disabled = !termsBox.checked;
+        if (!termsBox.checked) {
+          submitButton.setAttribute('title', 'Vui lòng đồng ý để nhân sự liên hệ về hồ sơ');
+          submitButton.setAttribute('aria-disabled', 'true');
+        } else {
+          submitButton.removeAttribute('title');
+          submitButton.removeAttribute('aria-disabled');
+        }
+      };
+      termsBox.addEventListener('change', syncTerms);
+      syncTerms();
+    }
+    // ---- Chọn khu sản xuất trước → lọc danh sách vị trí theo khu ----
+    var branchSelect = document.getElementById('apply-branch');
+    var positionSelect = document.getElementById('apply-position');
+    var positionHint = document.getElementById('apply-position-hint');
 
-  form.addEventListener('submit', function () {
+    if (branchSelect && positionSelect) {
+      var allPositionOptions = Array.prototype.slice.call(positionSelect.options).map(function (option) {
+        return {
+          value: option.value,
+          label: option.textContent.trim(),
+          branch: option.getAttribute('data-branch') || '',
+          isOther: option.value === 'khac',
+          isPlaceholder: option.value === ''
+        };
+      });
+
+      var rebuildPositions = function () {
+        var branch = branchSelect.value;
+        var current = positionSelect.value;
+        var matched = 0;
+
+        positionSelect.innerHTML = '';
+
+        allPositionOptions.forEach(function (item) {
+          if (item.isPlaceholder) {
+            var placeholder = document.createElement('option');
+            placeholder.value = '';
+            placeholder.textContent = branch ? '— Chọn vị trí —' : '— Chọn khu sản xuất trước —';
+            positionSelect.appendChild(placeholder);
+            return;
+          }
+          if (item.isOther || (branch && item.branch === branch)) {
+            var option = document.createElement('option');
+            option.value = item.value;
+            option.textContent = item.label;
+            positionSelect.appendChild(option);
+            if (!item.isOther) matched++;
+          }
+        });
+
+        positionSelect.disabled = !branch;
+        if (branch && current) {
+          positionSelect.value = current;
+          if (positionSelect.value !== current) positionSelect.value = '';
+        }
+
+        if (positionHint) {
+          if (!branch) {
+            positionHint.textContent = 'Chọn khu sản xuất trước để lọc vị trí đang tuyển.';
+          } else if (matched === 0) {
+            positionHint.textContent = 'Khu vực này chưa có vị trí đang tuyển — chọn “Vị trí khác” hoặc khu khác.';
+          } else {
+            positionHint.textContent = matched + ' vị trí đang tuyển tại khu vực này.';
+          }
+        }
+      };
+
+      branchSelect.addEventListener('change', rebuildPositions);
+      rebuildPositions();
+    }
+    form.addEventListener('submit', function () {
     if (!form.checkValidity()) return;
     if (submitBtn) {
       submitBtn.disabled = true;

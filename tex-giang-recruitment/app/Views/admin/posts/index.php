@@ -7,7 +7,6 @@ $end = min($result['page'] * $result['per_page'], $result['total']);
 <div class="admin-page-head">
   <div>
     <h1 class="admin-h1">Tin tức &amp; bài viết</h1>
-    <p class="admin-sub"><?= (int) $result['total'] ?> bài khớp bộ lọc. Bài đã đăng hiển thị ngay trên website.</p>
   </div>
   <a href="<?= url('admin/posts/create') ?>" class="btn btn-primary">+ Thêm bài viết</a>
 </div>
@@ -75,10 +74,10 @@ $end = min($result['page'] * $result['per_page'], $result['total']);
               <?php if ($item['status'] === 'published'): ?>
               <a href="<?= url('news/' . $item['slug']) ?>" target="_blank" rel="noopener" class="btn btn-icon" title="Xem trên website">↗</a>
               <?php endif; ?>
-              <a href="<?= url('admin/posts/' . $item['id'] . '/edit') ?>" class="btn btn-outline btn-sm">Sửa</a>
+              <a href="<?= url('admin/posts/' . $item['id'] . '/edit') ?>" class="btn btn-outline btn-icon" title="Sửa" aria-label="Sửa"><?= admin_icon_svg('pencil') ?></a>
               <form method="POST" action="<?= url('admin/posts/' . $item['id'] . '/delete') ?>"
                     data-ajax data-confirm="Xoá bài &quot;<?= e($item['title']) ?>&quot;? Bài sẽ gỡ khỏi website.">
-                <?= csrf_field() ?><button class="btn btn-danger btn-sm" type="submit">Xoá</button>
+                <?= csrf_field() ?><button class="btn btn-danger btn-icon" type="submit" title="Xoá" aria-label="Xoá"><?= admin_icon_svg('trash') ?></button>
               </form>
             </div>
           </td>

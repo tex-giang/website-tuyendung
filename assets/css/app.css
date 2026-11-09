@@ -367,7 +367,7 @@ html {
   .filters-drawer {
     display: block;
     position: sticky;
-    top: 88px;
+    top: var(--tg-header-h, 85px);
   }
 }
 
@@ -943,4 +943,44 @@ select.form-input {
   .no-print {
     display: none !important;
   }
+}
+
+/* ---------- Dialog ứng tuyển: chọn khu vực (radio group) ---------- */
+.apply-branch-picker {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 8px;
+}
+.apply-branch-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border: 1px solid var(--tg-line);
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1.35;
+  color: var(--tg-body);
+  transition: border-color var(--tg-t), background var(--tg-t), box-shadow var(--tg-t);
+}
+.apply-branch-option:hover { border-color: #b4c8bd; }
+.apply-branch-option:has(input:checked) {
+  border-color: var(--tg-accent);
+  background: var(--tg-accent-soft);
+  box-shadow: 0 0 0 1px var(--tg-accent) inset;
+}
+.apply-branch-option input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  flex: none;
+  accent-color: var(--tg-accent);
+}
+.apply-branch-option span { min-width: 0; }
+#apply-dialog-job:disabled {
+  background: #f6f9f7;
+  color: var(--tg-muted);
+  cursor: not-allowed;
 }

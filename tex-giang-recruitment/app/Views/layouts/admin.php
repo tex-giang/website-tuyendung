@@ -55,8 +55,6 @@ $initials = mb_strtoupper($initials !== '' ? $initials : 'TG', 'UTF-8');
     </div>
 
     <div class="admin-topbar__actions">
-      <a href="<?= url('') ?>" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">↗ Xem website</a>
-
       <div class="admin-avatar-wrap" id="admin-avatar">
         <button type="button" class="admin-avatar-btn" id="admin-avatar-btn"
                 aria-haspopup="menu" aria-expanded="false" aria-controls="admin-avatar-menu">

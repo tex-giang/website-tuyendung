@@ -61,7 +61,7 @@ $err = static fn(string $key): string => (string) ($errors[$key] ?? '');
       </label>
       <?php if (!$isEdit): ?>
       <label class="field">
-        <span class="field__label">Mật khẩu <em>*</em> <small>tối thiểu 8 ký tự</small></span>
+        <span class="field__label">Mật khẩu <em>*</em></span>
         <input class="field__input<?= $err('password') ? ' is-invalid' : '' ?>" type="password" name="password" required autocomplete="new-password">
         <?php if ($err('password')): ?><span class="field__error"><?= e($err('password')) ?></span><?php endif; ?>
       </label>
@@ -85,7 +85,6 @@ $err = static fn(string $key): string => (string) ($errors[$key] ?? '');
   <?= csrf_field() ?>
   <section class="admin-card">
     <h2 class="admin-h2">Đặt lại mật khẩu</h2>
-    <p class="admin-hint">Dùng khi người dùng quên mật khẩu. Mật khẩu mới tối thiểu 8 ký tự.</p>
     <div class="field-grid">
       <label class="field">
         <span class="field__label">Mật khẩu mới</span>

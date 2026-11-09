@@ -11,7 +11,6 @@ $end = min($result['page'] * $result['per_page'], $result['total']);
 <div class="admin-page-head">
   <div>
     <h1 class="admin-h1">Hồ sơ ứng tuyển</h1>
-    <p class="admin-sub"><?= (int) $result['total'] ?> hồ sơ khớp bộ lọc · <?= (int) ($counts['new'] ?? 0) ?> hồ sơ mới chờ xử lý.</p>
   </div>
 </div>
 

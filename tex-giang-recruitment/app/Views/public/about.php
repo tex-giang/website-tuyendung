@@ -13,10 +13,10 @@
       </nav>
 
       <h1 class="mt-4 max-w-[720px] text-[clamp(2rem,5vw,3.25rem)] font-medium leading-[1.15] tracking-[-0.02em] text-ink">
-        May xuất khẩu tại Tân Hương từ năm 2007
+        <?= e(settings('content_about_title', 'May xuất khẩu tại Tân Hương từ năm 2007')) ?>
       </h1>
       <p class="mt-4 max-w-[62ch] text-[18px] leading-[1.6] text-muted">
-        Công ty Cổ phần TEX-GIANG (TGI) thành lập tháng 3/2007, vận hành 3 khu sản xuất tại Tân Hương, Cái Lậy và Chợ Gạo.
+        <?= e(settings('content_about_lead', 'Công ty Cổ phần TEX-GIANG (TGI) thành lập tháng 3/2007, vận hành 3 khu sản xuất tại Tân Hương, Cái Lậy và Chợ Gạo.')) ?>
       </p>
 
       <figure class="mt-12 lg:mt-16">
@@ -28,22 +28,12 @@
 
     <section class="mt-16 bg-surface py-16 lg:mt-20 lg:py-20">
       <div class="tg-container grid grid-cols-2 gap-x-5 gap-y-7 md:gap-x-8 lg:grid-cols-4">
+        <?php for ($i = 1; $i <= 4; $i++): ?>
         <div class="stat" data-reveal>
-          <span class="block text-[clamp(1.75rem,3vw,3rem)] font-medium leading-none tracking-[-0.02em] text-accent">2007</span>
-          <span class="mt-2 block text-[14px] leading-snug text-muted">Thành lập tại KCN Tân Hương</span>
+          <span class="block text-[clamp(1.75rem,3vw,3rem)] font-medium leading-none tracking-[-0.02em] text-accent"><?= e(settings('stat_' . $i . '_value')) ?></span>
+          <span class="mt-2 block text-[14px] leading-snug text-muted"><?= e(settings('stat_' . $i . '_label')) ?></span>
         </div>
-        <div class="stat" data-reveal>
-          <span class="block text-[clamp(1.75rem,3vw,3rem)] font-medium leading-none tracking-[-0.02em] text-accent">3</span>
-          <span class="mt-2 block text-[14px] leading-snug text-muted">Khu sản xuất: Tân Hương, Cái Lậy, Chợ Gạo</span>
-        </div>
-        <div class="stat" data-reveal>
-          <span class="block text-[clamp(1.75rem,3vw,3rem)] font-medium leading-none tracking-[-0.02em] text-accent">3.500</span>
-          <span class="mt-2 block text-[14px] leading-snug text-muted">Cán bộ, kỹ sư và công nhân (TGI)</span>
-        </div>
-        <div class="stat" data-reveal>
-          <span class="block text-[clamp(1.75rem,3vw,3rem)] font-medium leading-none tracking-[-0.02em] text-accent">8 triệu</span>
-          <span class="mt-2 block text-[14px] leading-snug text-muted">Sản phẩm xuất khẩu mỗi năm</span>
-        </div>
+        <?php endfor; ?>
       </div>
     </section>
 
@@ -64,46 +54,13 @@
 
                     <h2 class="mt-12 text-[20px] font-medium text-ink">Mốc phát triển</h2>
           <ol class="about-timeline">
-            <li class="about-timeline__item">
-              <span class="about-timeline__year">2007</span>
+            <?php foreach ($milestones as $milestone): ?>
+            <li class="about-timeline__item<?= (int) $milestone['is_highlight'] === 1 ? ' about-timeline__item--now' : '' ?>">
+              <span class="about-timeline__year"><?= e($milestone['year_label']) ?></span>
               <span class="about-timeline__rail" aria-hidden="true"></span>
-              <p class="about-timeline__text">Thành lập, khởi công nhà máy trong KCN Tân Hương.</p>
+              <p class="about-timeline__text"><?= e($milestone['text']) ?><?php if ((int) $milestone['is_highlight'] === 1): ?> <span class="about-timeline__badge">Đang vận hành</span><?php endif; ?></p>
             </li>
-            <li class="about-timeline__item">
-              <span class="about-timeline__year">2012</span>
-              <span class="about-timeline__rail" aria-hidden="true"></span>
-              <p class="about-timeline__text">Đạt chứng nhận SA8000.</p>
-            </li>
-            <li class="about-timeline__item">
-              <span class="about-timeline__year">2014</span>
-              <span class="about-timeline__rail" aria-hidden="true"></span>
-              <p class="about-timeline__text">Bổ sung công nghệ laser cut và dán (lamination).</p>
-            </li>
-            <li class="about-timeline__item">
-              <span class="about-timeline__year">03/2015</span>
-              <span class="about-timeline__rail" aria-hidden="true"></span>
-              <p class="about-timeline__text">Khai trương nhà máy Cái Lậy, cách trụ sở 40 km; đạt ISO 9001 do SGS cấp.</p>
-            </li>
-            <li class="about-timeline__item">
-              <span class="about-timeline__year">2016</span>
-              <span class="about-timeline__rail" aria-hidden="true"></span>
-              <p class="about-timeline__text">Đạt OEKO-TEX STEP.</p>
-            </li>
-            <li class="about-timeline__item">
-              <span class="about-timeline__year">2021–2022</span>
-              <span class="about-timeline__rail" aria-hidden="true"></span>
-              <p class="about-timeline__text">Mở nhà máy Chợ Gạo; tham gia Higg FEM và FSLM.</p>
-            </li>
-            <li class="about-timeline__item">
-              <span class="about-timeline__year">08/2024</span>
-              <span class="about-timeline__rail" aria-hidden="true"></span>
-              <p class="about-timeline__text">Nhận Nhà máy Tân Hương 2 rộng 4,8 ha trong KCN Tân Hương.</p>
-            </li>
-            <li class="about-timeline__item about-timeline__item--now">
-              <span class="about-timeline__year">Hiện tại</span>
-              <span class="about-timeline__rail" aria-hidden="true"></span>
-              <p class="about-timeline__text">3 khu sản xuất: Tân Hương, Cái Lậy và Chợ Gạo; khoảng 3.500 lao động. <span class="about-timeline__badge">Đang vận hành</span></p>
-            </li>
+            <?php endforeach; ?>
           </ol>
 
           <p class="mt-14 text-[clamp(1.25rem,2.4vw,1.5rem)] font-medium leading-[1.4] text-ink">
@@ -118,10 +75,9 @@
           <div class="rounded-card bg-surface p-6">
             <h2 class="text-[16px] font-medium text-ink">Chứng nhận đang áp dụng</h2>
             <ul class="mt-4 space-y-3 text-[16px] leading-[1.6] text-muted">
-              <li>SA8000 — trách nhiệm xã hội (từ 2012)</li>
-              <li>ISO 9001 — do SGS chứng nhận (từ 2015)</li>
-              <li>OEKO-TEX STEP (từ 2016)</li>
-              <li>Higg FEM &amp; FSLM (từ 2022)</li>
+              <?php foreach ($certifications as $certification): ?>
+              <li><?= e($certification['label']) ?></li>
+              <?php endforeach; ?>
             </ul>
           </div>
 
@@ -130,7 +86,7 @@
             <p class="mt-4 text-[16px] leading-[1.7] text-muted">
               <strong class="font-medium text-body">Công ty Cổ phần TEX-GIANG (TGI)</strong><br>
               Lô BII-8, đường D3, KCN Tân Hương, xã Tân Hương, tỉnh Đồng Tháp<br>
-              ĐT: <a href="tel:02733937274" class="text-body hover:text-accent">(0273) 393 7274</a> · Fax: (0273) 393 7275
+              Liên hệ người phụ trách theo khu vực tại <a href="<?= url('contact') ?>" class="text-body hover:text-accent">trang Liên hệ</a>
             </p>
             <a href="<?= url('contact') ?>" class="tg-link mt-5">Xem bản đồ và liên hệ <img src="<?= asset('images/icons/arrow-right.svg') ?>" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[14px]"></a>
           </div>
@@ -140,24 +96,12 @@
 
     <section class="tg-container pb-20 lg:pb-28">
       <div class="grid gap-10 md:grid-cols-3 md:gap-12" data-reveal>
+        <?php foreach ($values as $valueItem): ?>
         <div>
-          <h2 class="text-[20px] font-medium text-ink">Tầm nhìn</h2>
-          <p class="mt-3 max-w-[46ch] text-[16px] leading-[1.7] text-muted">
-            Trở thành doanh nghiệp may mặc xuất khẩu dẫn đầu khu vực miền Nam, tiên phong sản xuất xanh và là nơi làm việc đáng gắn bó với người lao động.
-          </p>
+          <h2 class="text-[20px] font-medium text-ink"><?= e($valueItem['title']) ?></h2>
+          <p class="mt-3 max-w-[46ch] text-[16px] leading-[1.7] text-muted"><?= e($valueItem['body']) ?></p>
         </div>
-        <div>
-          <h2 class="text-[20px] font-medium text-ink">Sứ mệnh</h2>
-          <p class="mt-3 max-w-[46ch] text-[16px] leading-[1.7] text-muted">
-            Giao đúng hẹn những lô hàng đạt chuẩn quốc tế, đồng thời nâng cao thu nhập và đời sống của công nhân viên tại Đồng Tháp.
-          </p>
-        </div>
-        <div>
-          <h2 class="text-[20px] font-medium text-ink">Giá trị cốt lõi</h2>
-          <p class="mt-3 max-w-[46ch] text-[16px] leading-[1.7] text-muted">
-            Tâm — Tín — Tinh — Đoàn — Nghĩa: tận tâm với việc, giữ chữ tín với khách hàng, tinh gọn trong sản xuất, đoàn kết nội bộ và nghĩa tình với người lao động.
-          </p>
-        </div>
+        <?php endforeach; ?>
       </div>
     </section>
 

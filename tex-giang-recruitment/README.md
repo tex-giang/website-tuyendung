@@ -39,7 +39,7 @@ tex-giang-recruitment/
 ├── storage/                   logs/ · uploads/cv (ngoài public)
 ├── tools/serve.ps1            server dev Windows
 ├── package.json · tailwind.config.cjs   build CSS (Node, chỉ dùng khi phát triển giao diện)
-├── docs/                      01-ui-inventory · 02-database · 03-admin-guide · 04-fe-admin-field-map · 05-cai-dat-may-khac
+├── docs/                      01-ui-inventory · 02-database · 03-admin-guide · 04-fe-admin-field-map · 05-cai-dat-may-khac · 06-dong-bo-giao-dien
 │   └── reference/static-site/ bản gốc site tĩnh (HTML/CSS/JS demo, docs, tools) để đối chiếu
 └── .env.example
 ```
@@ -59,7 +59,7 @@ tex-giang-recruitment/
 3. **Tạo file `.env`** từ `.env.example`, điền thông tin DB.
 4. **Chạy**:
    ```powershell
-   # Windows: script đã bật sẵn extension cần thiết
+   # Windows: double-click RUN.bat (tự tìm PHP, mở trình duyệt) hoặc:
    powershell -ExecutionPolicy Bypass -File tools/serve.ps1
 
    # hoặc nếu php.ini đã bật extension:
@@ -79,7 +79,7 @@ Giao diện dùng **Tailwind CSS 3.4.17 build cục bộ** (không CDN, chạy �
 | `public/assets/css/app.css`, `public.css`, `custom.css` | CSS component/hoàn thiện viết tay (giữ nguyên từ bản thiết kế) |
 | `public/assets/css/admin-app.css` | CSS riêng cho giao diện quản trị (không phụ thuộc Tailwind) |
 | `public/assets/vendor/sweetalert2/` | SweetAlert2 11.26.25 (vendor cục bộ) cho thông báo AJAX ở trang quản trị |
-| `public/assets/vendor/{bootstrap,jquery,datatables}/` | Bootstrap 5.3.3 + jQuery 3.7.1 + DataTables 2.3.8 (vendor cục bộ) cho bảng quản trị |
+| `public/assets/vendor/ckeditor4/` | CKEditor 4.22.1 (vendor cục bộ, lang vi) cho ô soạn nội dung bài viết |`n| `public/assets/vendor/{bootstrap,jquery,datatables}/` | Bootstrap 5.3.3 + jQuery 3.7.1 + DataTables 2.3.8 (vendor cục bộ) cho bảng quản trị |
 
 Build lại sau khi thêm/sửa class Tailwind trong view hoặc JS:
 
@@ -205,4 +205,4 @@ Chi tiết cách suy ra trường từ FE + thiết kế Admin + ma trận quy�
 > Lưu ý upload ảnh/CV: trên hosting cần đặt `upload_max_filesize` và `post_max_size` ≥ `12M`
 > (form giới hạn CV 10MB, ảnh 5MB) — kiểm tra trong cPanel → Select PHP Version → Options hoặc `.user.ini`.
 
-Xem chi tiết tiến độ: [docs/01-ui-inventory.md](docs/01-ui-inventory.md) · thiết kế DB: [docs/02-database.md](docs/02-database.md) · hướng dẫn quản trị: [docs/03-admin-guide.md](docs/03-admin-guide.md) · bản đồ trường FE→Admin + phân quyền: [docs/04-fe-admin-field-map.md](docs/04-fe-admin-field-map.md) · cài đặt máy khác: [docs/05-cai-dat-may-khac.md](docs/05-cai-dat-may-khac.md).
+Xem chi tiết tiến độ: [docs/01-ui-inventory.md](docs/01-ui-inventory.md) · thiết kế DB: [docs/02-database.md](docs/02-database.md) · hướng dẫn quản trị: [docs/03-admin-guide.md](docs/03-admin-guide.md) · bản đồ trường FE→Admin + phân quyền: [docs/04-fe-admin-field-map.md](docs/04-fe-admin-field-map.md) · cài đặt máy khác: [docs/05-cai-dat-may-khac · 06-dong-bo-giao-dien.md](docs/05-cai-dat-may-khac · 06-dong-bo-giao-dien.md).

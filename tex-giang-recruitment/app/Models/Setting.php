@@ -53,11 +53,8 @@ final class Setting
         }
         return match (true) {
             str_starts_with($key, 'seo_')       => 'seo',
-            str_starts_with($key, 'hotline'),
             str_starts_with($key, 'email'),
-            str_starts_with($key, 'zalo'),
-            str_starts_with($key, 'fax'),
-            str_starts_with($key, 'map_')       => 'contact',
+            str_starts_with($key, 'zalo')       => 'contact',
             str_starts_with($key, 'facebook'),
             str_starts_with($key, 'youtube'),
             str_starts_with($key, 'website')    => 'social',

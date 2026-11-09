@@ -176,8 +176,7 @@ $end = min($result['page'] * $result['per_page'], $result['total']);
       <?php endif; ?>
 
       <p class="mt-8 text-[14px] leading-[1.6] text-muted">
-        Không thấy vị trí phù hợp? Gọi <a href="tel:<?= e(settings('hotline')) ?>" class="text-body underline underline-offset-2 hover:text-accent"><?= e(settings('hotline_display')) ?></a>
-        hoặc <a href="https://zalo.me/<?= e(settings('zalo')) ?>" target="_blank" rel="noopener" class="text-body underline underline-offset-2 hover:text-accent">chat Zalo</a> để được tư vấn.
+        Không thấy vị trí phù hợp? Xem <a href="<?= url('contact') ?>" class="text-body underline underline-offset-2 hover:text-accent">người phụ trách theo khu vực</a> để được tư vấn nhanh.
       </p>
     </div>
   </div>

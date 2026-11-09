@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400" role="img" aria-label="Fanpage Facebook TEX-GIANG (ảnh tạm)">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#087A55"/>
+      <stop offset="1" stop-color="#0B223D"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" fill="url(#bg)"/>
+  <circle cx="330" cy="70" r="120" fill="#ffffff" opacity="0.06"/>
+  <circle cx="60" cy="350" r="150" fill="#ffffff" opacity="0.05"/>
+
+  <!-- Logo chữ -->
+  <text x="40" y="96" font-family="Arial, Helvetica, sans-serif" font-size="46" font-weight="700" fill="#ffffff" letter-spacing="1">TGI</text>
+  <text x="40" y="122" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="600" fill="#b7dcc8" letter-spacing="4">TEX-GIANG</text>
+
+  <!-- Icon Facebook -->
+  <g transform="translate(40,170)">
+    <rect width="86" height="86" rx="20" fill="#ffffff"/>
+    <path d="M52 86V50h12l2-15H52V27c0-4 1-7 7-7h8V7c-2 0-7-1-13-1-13 0-22 8-22 22v13H20v15h12v36z" fill="#087A55"/>
+  </g>
+
+  <text x="142" y="205" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="700" fill="#ffffff">Fanpage</text>
+  <text x="142" y="235" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="600" fill="#b7dcc8">TEX-GIANG</text>
+
+  <text x="40" y="318" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="600" fill="#ffffff">Theo dõi tin tuyển dụng</text>
+  <text x="40" y="346" font-family="Arial, Helvetica, sans-serif" font-size="15" fill="#dcefe5">Cập nhật việc làm, đãi ngộ mới nhất</text>
+  <text x="40" y="376" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#9fc7b6">(Ảnh tạm — thay bằng ảnh fanpage thật)</text>
+</svg>

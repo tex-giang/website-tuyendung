@@ -50,22 +50,6 @@
           <p class="gf-error" data-error-for="phone">Số di động Việt Nam chưa đúng, ví dụ 0912 345 678.</p>
         </div>
 
-        <div class="gf-field" data-field="position">
-          <label class="gf-label" for="gf-position">Vị trí tuyển dụng <span class="req">*</span></label>
-          <select class="form-input" id="gf-position" name="position" required>
-            <option value="">— Chọn vị trí —</option>
-            <option value="cn-may" data-job-id="TG-01">Công nhân may chuyền</option>
-            <option value="qc" data-job-id="TG-02">Giám sát kiểm phẩm QC</option>
-            <option value="ie" data-job-id="TG-03">Kỹ sư công nghiệp &amp; định mức (IE)</option>
-            <option value="merchandiser" data-job-id="TG-04">Chuyên viên quản lý đơn hàng (Merchandiser)</option>
-            <option value="bao-tri" data-job-id="TG-05">Nhân viên bảo trì máy may &amp; điện xưởng</option>
-            <option value="ke-toan" data-job-id="TG-06">Kế toán chi phí &amp; giá thành</option>
-            <option value="hoc-nghe" data-job-id="TG-07">Học nghề may miễn phí (có trợ cấp)</option>
-            <option value="khac" data-job-id="">Vị trí khác</option>
-          </select>
-          <p class="gf-error" data-error-for="position">Chọn vị trí bạn muốn ứng tuyển.</p>
-        </div>
-
         <fieldset class="gf-field" data-field="location">
           <legend class="gf-label">Nơi muốn làm việc <span class="req">*</span></legend>
           <div class="gf-radios">
@@ -89,6 +73,23 @@
           <p class="gf-error" data-error-for="location">Chọn một nơi bạn muốn làm việc.</p>
         </fieldset>
 
+        <div class="gf-field" data-field="position">
+          <label class="gf-label" for="gf-position">Vị trí tuyển dụng <span class="req">*</span></label>
+          <select class="form-input" id="gf-position" name="position" required>
+            <option value="">— Chọn vị trí —</option>
+            <option value="cn-may" data-job-id="TG-01">Công nhân may chuyền</option>
+            <option value="qc" data-job-id="TG-02">Giám sát kiểm phẩm QC</option>
+            <option value="ie" data-job-id="TG-03">Kỹ sư công nghiệp &amp; định mức (IE)</option>
+            <option value="merchandiser" data-job-id="TG-04">Chuyên viên quản lý đơn hàng (Merchandiser)</option>
+            <option value="bao-tri" data-job-id="TG-05">Nhân viên bảo trì máy may &amp; điện xưởng</option>
+            <option value="ke-toan" data-job-id="TG-06">Kế toán chi phí &amp; giá thành</option>
+            <option value="hoc-nghe" data-job-id="TG-07">Học nghề may miễn phí (có trợ cấp)</option>
+            <option value="khac" data-job-id="">Vị trí khác</option>
+          </select>
+          <p class="gf-hint" data-position-hint>Chọn nơi làm việc trước để lọc vị trí đang tuyển.</p>
+          <p class="gf-error" data-error-for="position">Chọn vị trí bạn muốn ứng tuyển.</p>
+        </div>
+
         <div class="gf-submit">
           <button type="submit" class="tg-btn tg-btn--primary">
             <img src="assets/images/icons/send.svg" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[16px]"> Gửi hồ sơ
@@ -110,8 +111,8 @@
     </div>
 
     <p class="gf-foot">
-      Cần hỗ trợ? Gọi <a href="tel:02733937274">0273 393 7274</a> (giờ hành chính) hoặc
-      <a href="https://zalo.me/02733937274" target="_blank" rel="noopener">chat Zalo</a>.
+      Cần hỗ trợ? Gọi <a href="contact.html" class="text-body hover:text-accent">Liên hệ ban tuyển dụng</a> (giờ hành chính) hoặc
+      <a href="https://zalo.me" target="_blank" rel="noopener">chat Zalo</a>.
       <span class="gf-foot__sep" aria-hidden="true">·</span>
       <a href="index.html">Về trang tuyển dụng</a>
     </p>
@@ -119,6 +120,9 @@
   </main>
 
   <script src="assets/js/demo-store.js"></script>
+  <script src="assets/js/jobs-data.js"></script>
   <script src="assets/js/ung-tuyen.js"></script>
+  <div id="fb-root"></div>
+  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v21.0"></script>
 </body>
 </html>

@@ -9,8 +9,8 @@ Ngày lập: 06/11/2026 · Nguồn: `E:\websitetuyendung` (site tĩnh) → `E:\w
 | 1 | `index.html` | Hero slider, tìm kiếm nhanh, 4 số liệu, carousel việc làm, dải CTA, giới thiệu, image story | `GET /` | ✅ đã port, dữ liệu DB + dialog "Tuyển gấp" tự mở |
 | 2 | `jobs.html` | Bộ lọc 4 tiêu chí + sắp xếp + phân trang + trạng thái đóng | `GET /jobs` | ✅ server-side filter/phân trang |
 | 3 | `job-detail.html` | JD, yêu cầu, quyền lợi, địa điểm, card ứng tuyển, share, QR | `GET /jobs/{slug}` | ✅ |
-| 4 | `apply.html` | Form ứng tuyển, chọn vị trí, kéo thả CV, validate | `GET/POST /apply` | ✅ form POST thật + upload CV; dialog ứng tuyển nhanh mở từ mọi nút "Ứng tuyển" |
-| 5 | `ung-tuyen.html` | Bản ứng tuyển rút gọn | gộp vào `/apply` | ✅ |
+| 4 | `apply.html` | Form ứng tuyển, chọn vị trí, kéo thả CV, validate | `GET/POST /apply` | ✅ form POST thật + upload CV; dialog ứng tuyển nhanh mở từ mọi nút "Ứng tuyển" (chọn khu vực → lọc vị trí) |
+| 5 | `ung-tuyen.html` | Bản ứng tuyển rút gọn — dựng trang riêng `/tuyen-dung` (layout độc lập, không header/footer) | `/tuyen-dung` | ✅ |
 | 6 | `application-success.html` | Xác nhận đã gửi hồ sơ | `GET /apply/success` | ✅ kèm mã hồ sơ HS-xxxxx |
 | 7 | `application-error.html` | Báo lỗi gửi hồ sơ | `GET /apply/error` | ✅ |
 | 8 | `about.html` | Giới thiệu, tầm nhìn, timeline chứng nhận | `GET /about` | ✅ port nguyên design |
@@ -47,7 +47,7 @@ Ngày lập: 06/11/2026 · Nguồn: `E:\websitetuyendung` (site tĩnh) → `E:\w
 | `admin-data.js` → seedJobs | requirements, benefits, salaryMin/Max, state | `jobs` |
 | `admin-data.js` → candidates | name, phone, email, birth, address, jobId, status, note, source, message, history | `applications`, `application_history` |
 | `news-data.js` (14 bài) | title, category, ảnh, alt, caption, excerpt, paragraphs, date | `posts`, `post_categories` (đã seed 4 bài) |
-| `admin-data.js` → settings/content | siteName, legalName, address, SEO, hotline, ưu đãi… | `settings` (nhóm general/contact/seo/social/content) |
+| `admin-data.js` → settings/content | siteName, legalName, SEO, mạng xã hội… (địa chỉ lấy theo từng chi nhánh) | `settings` (nhóm general/contact/seo/social/content) |
 | `admin-data.js` → banner | ảnh, alt, focal, notice, link, enabled | `banners` (4 hero + notice + popup + ad) |
 | `assets/js/main.js` | QR, share, popup, toast, mobile menu | giữ nguyên, chỉ đổi `.html` → route PHP |
 | `assets/js/jobs.js` | lọc client + phân trang client | thay bằng lọc server + GET params |
@@ -67,3 +67,11 @@ Ngày lập: 06/11/2026 · Nguồn: `E:\websitetuyendung` (site tĩnh) → `E:\w
 2. Nhập nốt 9 bài viết còn lại từ `news-data.js` qua module Tin tức (DB đang có 4 bài seed).
 3. Kiểm thử bảo mật độc lập + rà soát trên hosting cPanel thật (upload limit, quyền `storage/`), backup định kỳ.
 4. Rate limit cho form Liên hệ (form Ứng tuyển đã có giới hạn 5 hồ sơ/giờ/phiên).
+## Trang nộp hồ sơ nhanh — `/tuyen-dung`
+
+- Form rút gọn 4 bước: Họ tên → SĐT → **khu vực (radio)** → **vị trí (lọc theo khu)** → đồng ý → gửi.
+- Submit POST thật về `/tuyen-dung`, lưu vào `applications` (source “Website — form nộp nhanh”,
+  message ghi “Khu mong muốn: … (nộp nhanh)”), sau đó chuyển `/apply/success`.
+- **Điều khoản bắt buộc**: nút “Gửi hồ sơ” bị khoá cho tới khi tick đồng ý; server (`quickSubmit`) kiểm tra
+  `terms` — thiếu/không tick thì không ghi DB, quay lại form kèm lỗi và giữ dữ liệu đã nhập.
+- Có link “Dùng mẫu nộp nhanh” từ trang `/apply`; JS lọc vị trí: `public/assets/js/quick-apply.js`.

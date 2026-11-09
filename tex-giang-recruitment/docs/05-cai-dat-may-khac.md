@@ -55,6 +55,20 @@ Những file **không có trong git** (phải tạo/copy riêng):
 Những thứ **đã có sẵn trong git**, không cần cài: `public/assets/vendor/` (Bootstrap, jQuery,
 DataTables, SweetAlert2), `public/assets/css/utilities.css` (Tailwind build sẵn).
 
+**Riêng CKEditor 4.22.1 KHÔNG nằm trong git** (2.637 file / 4,2 MB — để commit/push nhanh).
+Sau khi clone, tải một lần:
+
+```bash
+# Linux/macOS/cPanel
+bash tools/fetch-ckeditor.sh
+
+# Windows PowerShell
+powershell -ExecutionPolicy Bypass -File tools/fetch-ckeditor.ps1
+```
+
+Script tải package `ckeditor4@4.22.1` (bản open-source, không cần license) và giải nén vào
+`public/assets/vendor/ckeditor4/`. Hoặc copy thủ công thư mục này từ máy khác lên server.
+
 ---
 
 ## 3. Tạo database & import dữ liệu
@@ -160,6 +174,24 @@ Cần ghi được: `storage/logs/`, `storage/uploads/cv/` (CV ứng viên — *
 ---
 
 ## 6. Chạy website ở máy local
+
+### Cách nhanh nhất: double-click file chạy sẵn
+
+| Hệ điều hành | File | Cách dùng |
+|---|---|---|
+| Windows | **`RUN.bat`** | Double-click. Hoặc `RUN.bat 8080` nếu cổng 8000 bận |
+| Linux/macOS | **`run.sh`** | `chmod +x run.sh` rồi `./run.sh` (hoặc `./run.sh 8080`) |
+
+File chạy tự:
+- Xác định đường dẫn dự án theo vị trí file (`%~dp0`) → **copy/move thư mục đi đâu cũng chạy được**,
+  không cần `cd` và không hard-code ổ đĩa.
+- Tìm PHP theo thứ tự: biến `PHP_EXE` → `PATH` → `C:\xampp\php` → `C:\laragon\bin\php` →
+  `C:\php` → `C:\php\php-8.5.5-nts-Win32-vs17-x64`.
+- Bật `pdo_mysql` + `mbstring`, kiểm tra cổng đang bận, rồi mở server tại
+  `http://127.0.0.1:8000` và tự mở trình duyệt (đặt `NO_BROWSER=1` để không mở).
+- Đóng cửa sổ / `Ctrl + C` là dừng server.
+
+### Cách khác (dòng lệnh)
 
 ### Windows (khuyến nghị)
 
@@ -347,3 +379,11 @@ tex-giang-recruitment/
 
 Tài liệu chi tiết thêm: `docs/01-ui-inventory.md`, `docs/02-database.md`,
 `docs/03-admin-guide.md` (phân quyền, AJAX, bảng DataTables), `docs/04-fe-admin-field-map.md`.
+
+> **Nâng cấp DB đang có dữ liệu:** không import lại `schema.sql`. Chạy lần lượt các file trong
+> `database/migrations/` (theo thứ tự tên file): `2026-11-07-branch-contacts.sql`,
+> `2026-11-08-page-content-maps.sql` (thêm bảng nội dung Về chúng tôi/Phúc lợi + cột bản đồ cho `branches`),
+> `2026-11-08-menus.sql` (bảng menu website), `2026-11-08-menus-single.sql` (gộp menu header/footer thành một danh sách),
+> `2026-11-08-visit-stats.sql` (bảng thống kê lượt truy cập theo ngày + thiết bị),
+> `2026-11-08-job-code-td26.sql` (chuyển mã tin tuyển dụng sang định dạng TD26-0001), `2026-11-08-job-expiry.sql` (trạng thái Hết hạn + số ngày nhận hồ sơ mặc định).
+> Bản `schema.sql`/`seed.sql` mới đã gồm sẵn các bảng/cột này cho cài mới.

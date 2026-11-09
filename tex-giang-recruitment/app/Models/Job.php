@@ -8,7 +8,7 @@ use PDO;
 
 final class Job
 {
-    private const SELECT = 'SELECT j.*, b.name AS branch_name, b.slug AS branch_slug,
+    private const SELECT = 'SELECT j.*, b.name AS branch_name, b.slug AS branch_slug, b.address AS branch_address, b.phone AS branch_phone,
                                    c.name AS category_name, c.slug AS category_slug
                             FROM jobs j
                             LEFT JOIN branches b ON b.id = j.branch_id
@@ -52,8 +52,8 @@ final class Job
     private static function orderBy(array $filters): string
     {
         return (($filters['sort'] ?? '') === 'urgent')
-            ? ' ORDER BY j.is_urgent DESC, j.posted_at DESC, j.id DESC'
-            : ' ORDER BY j.posted_at DESC, j.id DESC';
+            ? ' ORDER BY j.is_urgent DESC, COALESCE(j.posted_at, j.created_at) DESC, j.id DESC'
+            : ' ORDER BY COALESCE(j.posted_at, j.created_at) DESC, j.id DESC';
     }
 
     /**
@@ -103,7 +103,7 @@ final class Job
         $stmt = Database::connection()->prepare(
             self::SELECT . " WHERE j.status = 'published' AND j.deleted_at IS NULL
                              AND (j.deadline IS NULL OR j.deadline >= CURDATE())
-                             ORDER BY j.posted_at DESC, j.id DESC LIMIT :limit"
+                             ORDER BY COALESCE(j.posted_at, j.created_at) DESC, j.id DESC LIMIT :limit"
         );
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->execute();
@@ -144,7 +144,7 @@ final class Job
             self::SELECT . " WHERE j.status = 'published' AND j.deleted_at IS NULL
                              AND (j.deadline IS NULL OR j.deadline >= CURDATE())
                              AND (j.is_urgent = 1 OR (j.deadline IS NOT NULL AND j.deadline <= DATE_ADD(CURDATE(), INTERVAL 7 DAY)))
-                             ORDER BY j.is_urgent DESC, j.deadline ASC, j.posted_at DESC LIMIT :limit"
+                             ORDER BY j.is_urgent DESC, j.deadline ASC, COALESCE(j.posted_at, j.created_at) DESC LIMIT :limit"
         );
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->execute();
@@ -165,7 +165,7 @@ final class Job
             $params[':category'] = (int) $job['category_id'];
         }
 
-        $stmt = Database::connection()->prepare($sql . ' ORDER BY j.posted_at DESC LIMIT :limit');
+        $stmt = Database::connection()->prepare($sql . ' ORDER BY COALESCE(j.posted_at, j.created_at) DESC LIMIT :limit');
         foreach ($params as $key => $value) {
             $stmt->bindValue($key, $value, PDO::PARAM_INT);
         }
@@ -234,6 +234,34 @@ final class Job
         return (int) $stmt->fetchColumn() > 0;
     }
 
+    /**
+     * Tự động chuyển tin đã quá hạn nộp sang trạng thái "Hết hạn".
+     * Chạy lazy mỗi khi có trang dùng dữ liệu tin (hoặc qua cron).
+     */
+    public static function syncExpired(): int
+    {
+        $stmt = Database::connection()->prepare(
+            "UPDATE jobs SET status = 'expired', updated_at = NOW()
+             WHERE status = 'published' AND deleted_at IS NULL
+               AND deadline IS NOT NULL AND deadline < CURDATE()"
+        );
+        $stmt->execute();
+        return $stmt->rowCount();
+    }
+
+    /** Sinh mã tin kế tiếp theo định dạng TD<yy>-0001 (reset theo năm). */
+    public static function generateCode(): string
+    {
+        $prefix = 'TD' . date('y') . '-';
+        $stmt = Database::connection()->prepare(
+            'SELECT code FROM jobs WHERE code LIKE :prefix ORDER BY code DESC LIMIT 1'
+        );
+        $stmt->execute(['prefix' => $prefix . '%']);
+        $last = (string) ($stmt->fetchColumn() ?: '');
+        $next = $last !== '' ? ((int) substr($last, strlen($prefix))) + 1 : 1;
+        return $prefix . str_pad((string) $next, 4, '0', STR_PAD_LEFT);
+    }
+
     public static function codeExists(string $code, ?int $exceptId = null): bool
     {
         if ($code === '') {
@@ -287,8 +315,11 @@ final class Job
 
     public static function changeStatus(int $id, string $status): void
     {
-        $stmt = Database::connection()->prepare('UPDATE jobs SET status = :status WHERE id = :id');
-        $stmt->execute(['status' => $status, 'id' => $id]);
+        // Đăng tin mà chưa có ngày đăng thì lấy thời điểm hiện tại để tin lên danh sách công khai.
+        $sql = $status === 'published'
+            ? 'UPDATE jobs SET status = :status, posted_at = COALESCE(posted_at, NOW()) WHERE id = :id'
+            : 'UPDATE jobs SET status = :status WHERE id = :id';
+        Database::connection()->prepare($sql)->execute(['status' => $status, 'id' => $id]);
     }
 
     /** Xoá mềm để không phá hồ sơ ứng tuyển đã tham chiếu. */
@@ -307,7 +338,7 @@ final class Job
         $data = $job;
         $data['title'] = $job['title'] . ' (bản sao)';
         $data['slug'] = $job['slug'] . '-ban-sao-' . date('YmdHis');
-        $data['code'] = null;
+        $data['code'] = self::generateCode();
         $data['status'] = 'draft';
         $data['posted_at'] = null;
         $data['views'] = 0;
@@ -332,7 +363,7 @@ final class Job
         $rows = Database::connection()->query(
             'SELECT status, COUNT(*) AS total FROM jobs WHERE deleted_at IS NULL GROUP BY status'
         )->fetchAll();
-        $counts = ['draft' => 0, 'published' => 0, 'paused' => 0, 'closed' => 0];
+        $counts = ['draft' => 0, 'published' => 0, 'paused' => 0, 'closed' => 0, 'expired' => 0];
         foreach ($rows as $row) {
             $counts[$row['status']] = (int) $row['total'];
         }

@@ -132,7 +132,7 @@ final class UploadService
      *
      * @return array{ok:bool, path:string, error:string}
      */
-    public static function storePublicImage(?array $file, string $folder): array
+    public static function storePublicImage(?array $file, string $folder, string $namePrefix = ''): array
     {
         if ($file === null || ($file['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) {
             return ['ok' => true, 'path' => '', 'error' => ''];
@@ -178,7 +178,10 @@ final class UploadService
             return ['ok' => false, 'path' => '', 'error' => 'Không tạo được thư mục lưu ảnh.'];
         }
 
-        $storedName = bin2hex(random_bytes(12)) . '.' . $extension;
+        $prefix = preg_replace('/[^a-z0-9-]/', '', strtolower($namePrefix)) ?? '';
+        $storedName = ($prefix !== ''
+            ? $prefix . '-' . date('Ymd-His') . '-' . bin2hex(random_bytes(4))
+            : bin2hex(random_bytes(12))) . '.' . $extension;
         $target = $absoluteDir . '/' . $storedName;
         if (!move_uploaded_file($tmp, $target)) {
             return ['ok' => false, 'path' => '', 'error' => 'Không lưu được ảnh. Vui lòng thử lại.'];

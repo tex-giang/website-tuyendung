@@ -12,11 +12,6 @@ $appointmentValue = $app['appointment_at'] ? date('Y-m-d\TH:i', strtotime((strin
   <div>
     <p class="admin-breadcrumb"><a href="<?= url('admin/applications') ?>">Hồ sơ ứng tuyển</a> / HS-<?= str_pad((string) (int) $app['id'], 5, '0', STR_PAD_LEFT) ?></p>
     <h1 class="admin-h1"><?= e($app['full_name']) ?></h1>
-    <p class="admin-sub">
-      <span class="admin-badge <?= $statusBadge[$app['status']] ?? '' ?>"><?= e($statuses[$app['status']] ?? $app['status']) ?></span>
-      · Nhận lúc <?= e(vn_date($app['created_at'], 'd/m/Y H:i')) ?>
-      · Nguồn: <?= e($app['source'] ?? 'Website') ?>
-    </p>
   </div>
   <div class="admin-head-actions">
     <?php if (!empty($app['cv_stored_name'])): ?>
@@ -76,7 +71,7 @@ $appointmentValue = $app['appointment_at'] ? date('Y-m-d\TH:i', strtotime((strin
             </select>
           </label>
           <label class="field">
-            <span class="field__label">Lịch phỏng vấn <small>(nếu có)</small></span>
+            <span class="field__label">Lịch phỏng vấn</span>
             <input class="field__input" type="datetime-local" name="appointment_at" value="<?= e($appointmentValue) ?>">
           </label>
           <label class="field field--span2">
@@ -86,7 +81,6 @@ $appointmentValue = $app['appointment_at'] ? date('Y-m-d\TH:i', strtotime((strin
           </label>
         </div>
         <button type="submit" class="btn btn-primary mt-4">Lưu cập nhật</button>
-        <p class="admin-hint mt-2">Mỗi lần lưu sẽ ghi thêm một mốc vào lịch sử xử lý hồ sơ.</p>
       </form>
     </section>
   </div>

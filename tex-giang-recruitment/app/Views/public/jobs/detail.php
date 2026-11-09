@@ -3,8 +3,6 @@
 $page['main_class'] = 'pb-24 lg:pb-0';
 $chip = job_chip($job);
 $applyUrl = url('apply?job=' . urlencode((string) $job['slug']));
-$hotline = settings('hotline', '02733937274');
-$hotlineDisplay = settings('hotline_display', '0273 393 7274');
 $descriptionLines = text_lines($job['description'] ?? '');
 $requirementLines = text_lines($job['requirements'] ?? '');
 $benefitCards = benefit_items($job['benefits'] ?? '');
@@ -101,8 +99,10 @@ $summary = ($job['meta_description'] ?? '') !== '' ? (string) $job['meta_descrip
         <p class="mt-4 max-w-[62ch] text-[16px] leading-[1.7] text-muted">
           <?= e($job['location'] ?: ($job['branch_name'] ?? '')) ?>
         </p>
-        <a href="<?= url('contact') ?>" class="tg-link mt-4">Xem bản đồ và tuyến xe
+        <?php if (menu_link_visible('contact')): ?>
+        <a href="<?= e(url('contact') . (($job['branch_slug'] ?? '') !== '' ? '?khu-vuc=' . urlencode((string) $job['branch_slug']) . '#khu-vuc-' . urlencode((string) $job['branch_slug']) : '')) ?>" class="tg-link mt-4">Xem bản đồ và tuyến xe
           <img src="<?= asset('images/icons/arrow-right.svg') ?>" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[14px]"></a>
+        <?php endif; ?>
       </div>
 
       <div class="rounded-media bg-accent p-8 lg:p-10" data-reveal>
@@ -119,7 +119,10 @@ $summary = ($job['meta_description'] ?? '') !== '' ? (string) $job['meta_descrip
         <p class="mt-4 text-[14px] leading-[1.6] text-muted">Hạn nộp hồ sơ</p>
         <p class="mt-1 text-[16px] font-medium text-ink"><?= e(vn_date($job['deadline']) ?: 'Đến khi tuyển đủ') ?></p>
         <a href="<?= $applyUrl ?>" class="tg-btn tg-btn--primary mt-6 w-full">Ứng tuyển vị trí này</a>
-        <a href="tel:<?= e($hotline) ?>" class="tg-btn tg-btn--ghost mt-3 w-full">Gọi <?= e($hotlineDisplay) ?></a>
+        <?php if (menu_link_visible('contact')): ?>
+        <?php $contactHref = url('contact') . (($job['branch_slug'] ?? '') !== '' ? '?khu-vuc=' . urlencode((string) $job['branch_slug']) . '#lien-he' : '#lien-he'); ?>
+        <a href="<?= e($contactHref) ?>" class="tg-btn tg-btn--ghost mt-3 w-full">Liên hệ người phụ trách</a>
+        <?php endif; ?>
         <div class="share-row mt-5 flex flex-wrap gap-4">
           <button type="button" class="open-qr-modal tg-link text-[15px]">Mã QR</button>
           <button type="button" onclick="shareFacebook()" class="tg-link text-[15px]">Facebook</button>
@@ -132,12 +135,22 @@ $summary = ($job['meta_description'] ?? '') !== '' ? (string) $job['meta_descrip
       <div class="rounded-card bg-surface p-6" data-reveal>
         <h2 class="text-[16px] font-medium text-ink">Liên hệ ban tuyển dụng</h2>
         <p class="mt-3 text-[14px] leading-[1.7] text-muted">
-          Phòng Nhân sự TEX-GIANG<br>
-          <?= e(settings('address')) ?>
+          Phòng Nhân sự TEX-GIANG<?= ($job['branch_name'] ?? '') !== '' ? ' — Khu vực ' . e((string) $job['branch_name']) : '' ?><br>
+          <?= e((string) ($job['branch_address'] ?? '')) ?>
         </p>
+        <?php $branchContactsForJob = \App\Models\BranchContact::byBranch((int) ($job['branch_id'] ?? 0)); ?>
+        <?php if ($branchContactsForJob !== []): ?>
+        <ul class="mt-3 space-y-1.5 text-[14px] leading-[1.7]">
+          <?php foreach ($branchContactsForJob as $contact): ?>
+          <li class="flex items-baseline justify-between gap-3">
+            <span class="text-muted"><?= e($contact['full_name']) ?></span>
+            <a href="tel:<?= e(\App\Models\BranchContact::telHref((string) $contact['phone'])) ?>" class="whitespace-nowrap font-medium text-body transition-colors hover:text-accent"><?= e($contact['phone']) ?></a>
+          </li>
+          <?php endforeach; ?>
+        </ul>
+        <?php endif; ?>
         <p class="mt-3 text-[14px] leading-[1.7] text-muted">
-          Hotline: <a href="tel:<?= e($hotline) ?>" class="text-body hover:text-accent"><?= e($hotlineDisplay) ?></a><br>
-          Zalo tuyển dụng: <a href="https://zalo.me/<?= e(settings('zalo')) ?>" target="_blank" rel="noopener" class="text-body hover:text-accent">chat ngay</a>
+          Zalo tuyển dụng: <a href="<?= e(zalo_url()) ?>" target="_blank" rel="noopener" class="text-body hover:text-accent">chat ngay</a>
         </p>
       </div>
     </aside>
@@ -161,8 +174,11 @@ $summary = ($job['meta_description'] ?? '') !== '' ? (string) $job['meta_descrip
 </section>
 
 <div class="bottom-bar lg:hidden">
-  <a href="tel:<?= e($hotline) ?>" class="tg-btn tg-btn--ghost h-12 px-4" aria-label="Gọi hotline">
+  <?php $primaryBranchPhone = \App\Models\BranchContact::primaryPhone((int) ($job['branch_id'] ?? 0)); ?>
+  <?php if ($primaryBranchPhone !== null || menu_link_visible('contact')): ?>
+  <a href="<?= $primaryBranchPhone !== null ? 'tel:' . e(\App\Models\BranchContact::telHref($primaryBranchPhone)) : url('contact') ?>" class="tg-btn tg-btn--ghost h-12 px-4" aria-label="Gọi người phụ trách">
     <img src="<?= asset('images/icons/telephone.svg') ?>" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[18px]">
   </a>
+  <?php endif; ?>
   <a href="<?= $applyUrl ?>" class="tg-btn tg-btn--primary flex-1">Ứng tuyển vị trí này</a>
 </div>

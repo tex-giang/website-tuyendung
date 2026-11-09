@@ -6,8 +6,6 @@
  */
 $val = static fn(string $key, string $default = ''): string => (string) ($old[$key] ?? $default);
 $err = static fn(string $key): string => (string) ($errors[$key] ?? '');
-$hotline = settings('hotline', '02733937274');
-$hotlineDisplay = settings('hotline_display', '0273 393 7274');
 $positionValue = $val('job_slug');
 $branchValue = $val('branch_slug');
 ?>
@@ -33,7 +31,8 @@ $branchValue = $val('branch_slug');
   <div class="grid items-start gap-12 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-16">
 
     <div>
-      <form id="online-apply-form" class="space-y-10" method="POST" action="<?= url('apply') ?>" enctype="multipart/form-data">
+      <p class="mb-6 text-[14px] text-muted">Chỉ muốn nộp nhanh 4 thông tin? <a href="<?= url('tuyen-dung') ?>" class="tg-link">Dùng mẫu nộp nhanh</a>.</p>
+<form id="online-apply-form" class="space-y-10" method="POST" action="<?= url('apply') ?>" enctype="multipart/form-data">
         <?= csrf_field() ?>
         <div class="sr-only" aria-hidden="true">
           <label for="apply-website">Website</label>
@@ -67,12 +66,13 @@ $branchValue = $val('branch_slug');
               <select id="apply-position" name="job_slug" class="form-input<?= $err('job_slug') ? ' is-invalid' : '' ?>" required>
                 <option value="">— Chọn vị trí —</option>
                 <?php foreach ($jobs as $job): ?>
-                <option value="<?= e($job['slug']) ?>"<?= $positionValue === $job['slug'] ? ' selected' : '' ?>>
+                <option value="<?= e($job['slug']) ?>" data-branch="<?= e((string) ($job['branch_slug'] ?? '')) ?>"<?= $positionValue === $job['slug'] ? ' selected' : '' ?>>
                   <?= e($job['title']) ?><?= $job['salary_text'] ? ' (' . e(salary_short((string) $job['salary_text'])) . ')' : '' ?>
                 </option>
                 <?php endforeach; ?>
                 <option value="khac"<?= $positionValue === 'khac' ? ' selected' : '' ?>>Vị trí khác — ghi rõ ở phần giới thiệu</option>
               </select>
+              <p class="form-hint" id="apply-position-hint">Chọn khu sản xuất trước để lọc vị trí đang tuyển.</p>
               <?php if ($err('job_slug')): ?><p class="field-error"><?= e($err('job_slug')) ?></p><?php endif; ?>
             </div>
           </div>
@@ -94,7 +94,7 @@ $branchValue = $val('branch_slug');
             <div>
               <label class="form-label" for="apply-phone">Số điện thoại <span class="req">*</span></label>
               <input type="tel" id="apply-phone" name="phone" required autocomplete="tel" inputmode="tel"
-                     placeholder="0912 345 678" class="form-input<?= $err('phone') ? ' is-invalid' : '' ?>"
+                     placeholder="0912 345 678" class="form-input<?= $err('phone') ? ' is-invalid' : '' ?>" data-phone-format>
                      value="<?= e($val('phone')) ?>">
               <?php if ($err('phone')): ?><p class="field-error"><?= e($err('phone')) ?></p><?php endif; ?>
             </div>
@@ -197,9 +197,11 @@ $branchValue = $val('branch_slug');
     <aside class="space-y-6 lg:sticky lg:top-24">
       <div class="rounded-card bg-surface p-6" data-reveal>
         <h2 class="text-[16px] font-medium text-ink">Cần hỗ trợ?</h2>
-        <p class="mt-3 text-[16px] leading-[1.7] text-muted">Gọi trực tiếp ban tuyển dụng nếu bạn không tiện điền form.</p>
-        <a href="tel:<?= e($hotline) ?>" class="tg-btn tg-btn--primary mt-4 w-full">Gọi <?= e($hotlineDisplay) ?></a>
-        <a href="https://zalo.me/<?= e(settings('zalo', $hotline)) ?>" target="_blank" rel="noopener" class="tg-btn tg-btn--ghost mt-3 w-full">Chat Zalo</a>
+        <p class="mt-3 text-[16px] leading-[1.7] text-muted">Xem người phụ trách theo khu vực nếu bạn không tiện điền form.</p>
+        <?php if (menu_link_visible('contact')): ?><a href="<?= url('contact') ?>" class="tg-btn tg-btn--primary mt-4 w-full">Liên hệ người phụ trách</a><?php endif; ?>
+        <?php if (settings('zalo') !== ''): ?>
+        <a href="<?= e(zalo_url()) ?>" target="_blank" rel="noopener" class="tg-btn tg-btn--ghost mt-3 w-full">Chat Zalo</a>
+        <?php endif; ?>
       </div>
 
       <div class="rounded-card bg-surface p-6" data-reveal>

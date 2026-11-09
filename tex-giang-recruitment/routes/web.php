@@ -17,6 +17,14 @@ $router->get('/jobs/{slug}', [JobController::class, 'show']);
 // Ứng tuyển trực tuyến: form POST thật + upload CV.
 $router->get('/apply', [ApplicationController::class, 'show']);
 $router->post('/apply', [ApplicationController::class, 'submit'], $csrf());
+// Trang nộp hồ sơ nhanh (4 bước: họ tên, SĐT, khu vực → vị trí).
+$router->get('/tuyen-dung', [ApplicationController::class, 'quickShow']);
+$router->post('/tuyen-dung', [ApplicationController::class, 'quickSubmit'], $csrf());
+
+// Alias cũ
+$router->get('/ung-tuyen', [ApplicationController::class, 'quickShow']);
+$router->post('/ung-tuyen', [ApplicationController::class, 'quickSubmit'], $csrf());
+
 $router->get('/apply/success', [ApplicationController::class, 'success']);
 $router->get('/apply/error', [ApplicationController::class, 'error']);
 

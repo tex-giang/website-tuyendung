@@ -11,6 +11,7 @@ final class HomeController extends Controller
 {
     public function index(): void
     {
+        \App\Models\Job::syncExpired();
         $this->view('public/home', [
             'heroBanners' => Banner::activeByType('hero'),
             'notice'      => Banner::firstActive('notice'),

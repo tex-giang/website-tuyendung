@@ -3,16 +3,33 @@
 // Hiển thị trên mọi trang: trang nào không truyền $notice thì tự lấy banner đang bật.
 $notice = $notice ?? \App\Models\Banner::firstActive('notice');
 $nav = $page['nav'] ?? '';
-$hotline = settings('hotline', '02733937274');
-$hotlineDisplay = settings('hotline_display', '0273 393 7274');
-$navItems = [
-    'home'         => ['Trang chủ', url('')],
-    'jobs'         => ['Việc làm', url('jobs')],
-    'about'        => ['Về chúng tôi', url('about')],
-    'why-tex-giang' => ['Phúc lợi', url('why-tex-giang')],
-    'news'         => ['Tin tức', url('news')],
-    'contact'      => ['Liên hệ', url('contact')],
-];
+
+// Menu đầu trang lấy từ bảng menus (chỉ mục đang bật). Nếu bảng trống thì dùng mặc định.
+$navItems = [];
+foreach (\App\Models\Menu::active() as $menuRow) {
+    $navItems[] = ['label' => (string) $menuRow['label'], 'href' => url((string) $menuRow['url'])];
+}
+if ($navItems === []) {
+    $navItems = [
+        ['label' => 'Trang chủ', 'href' => url('')],
+        ['label' => 'Việc làm', 'href' => url('jobs')],
+        ['label' => 'Về chúng tôi', 'href' => url('about')],
+        ['label' => 'Phúc lợi', 'href' => url('why-tex-giang')],
+        ['label' => 'Tin tức', 'href' => url('news')],
+        ['label' => 'Liên hệ', 'href' => url('contact')],
+    ];
+}
+$currentPath = current_path();
+$isMenuActive = static function (string $href) use ($currentPath): bool {
+    $target = (string) (parse_url($href, PHP_URL_PATH) ?? '/');
+    if ($target === '') {
+        $target = '/';
+    }
+    if ($target === '/') {
+        return $currentPath === '/';
+    }
+    return $currentPath === $target || str_starts_with($currentPath, rtrim($target, '/') . '/');
+};
 ?>
 <?php if ($notice !== null): ?>
 <div id="announce-strip" class="bg-accent-soft no-print">
@@ -39,14 +56,12 @@ $navItems = [
     </a>
 
     <nav class="hidden items-center gap-7 lg:flex xl:gap-8" aria-label="Điều hướng chính">
-      <?php foreach ($navItems as $key => [$label, $href]): ?>
-      <a href="<?= $href ?>" class="nav-link <?= nav_active($key, $nav) ?>"<?= $key === $nav ? ' aria-current="page"' : '' ?>><?= e($label) ?></a>
+      <?php foreach ($navItems as $item): ?>
+      <a href="<?= e($item['href']) ?>" class="nav-link <?= $isMenuActive($item['href']) ? 'is-active' : '' ?>"<?= $isMenuActive($item['href']) ? ' aria-current="page"' : '' ?>><?= e($item['label']) ?></a>
       <?php endforeach; ?>
     </nav>
 
     <div class="flex items-center gap-3.5">
-      <a href="tel:<?= e($hotline) ?>" class="hidden text-[14px] text-muted xl:inline-flex">Hotline
-        <strong class="ml-1 font-medium text-body"><?= e($hotlineDisplay) ?></strong></a>
       <a href="<?= url('apply') ?>" class="tg-btn tg-btn--primary h-10 px-4 text-[16px]">Ứng tuyển</a>
       <button id="mobile-menu-btn" type="button" aria-label="Mở menu" aria-expanded="false" aria-controls="mobile-menu"
               class="grid h-10 w-10 place-items-center rounded-lg border border-line text-body transition-colors hover:border-accent hover:text-accent lg:hidden">
@@ -56,10 +71,9 @@ $navItems = [
   </div>
 
   <div id="mobile-menu" class="nav-mobile hidden border-t border-line bg-white px-6 pb-6 pt-2">
-    <?php foreach ($navItems as $key => [$label, $href]): ?>
-    <a href="<?= $href ?>" class="block border-b border-line py-3 text-[16px] <?= $key === $nav ? 'font-medium text-accent' : 'text-body' ?>"><?= e($label) ?></a>
+    <?php foreach ($navItems as $item): ?>
+    <a href="<?= e($item['href']) ?>" class="block border-b border-line py-3 text-[16px] <?= $isMenuActive($item['href']) ? 'font-medium text-accent' : 'text-body' ?>"><?= e($item['label']) ?></a>
     <?php endforeach; ?>
     <a href="<?= url('admin/login') ?>" class="block border-b border-line py-3 text-[16px] text-body">Cổng quản trị HR</a>
-    <a href="tel:<?= e($hotline) ?>" class="block py-3 text-[16px] text-body">Hotline <?= e($hotlineDisplay) ?></a>
   </div>
 </header>

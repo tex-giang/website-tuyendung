@@ -70,8 +70,8 @@ final class Branch
     {
         $pdo = Database::connection();
         $stmt = $pdo->prepare(
-            'INSERT INTO branches (slug, name, address, phone, map_url, sort_order, is_active)
-             VALUES (:slug, :name, :address, :phone, :map_url, :sort_order, :is_active)'
+            'INSERT INTO branches (slug, name, address, phone, map_url, map_link, sort_order, is_active)
+             VALUES (:slug, :name, :address, :phone, :map_url, :map_link, :sort_order, :is_active)'
         );
         $stmt->execute(self::bindings($data));
         return (int) $pdo->lastInsertId();
@@ -81,7 +81,7 @@ final class Branch
     {
         $stmt = Database::connection()->prepare(
             'UPDATE branches SET slug = :slug, name = :name, address = :address, phone = :phone,
-                    map_url = :map_url, sort_order = :sort_order, is_active = :is_active WHERE id = :id'
+                    map_url = :map_url, map_link = :map_link, sort_order = :sort_order, is_active = :is_active WHERE id = :id'
         );
         $bindings = self::bindings($data);
         $bindings['id'] = $id;
@@ -112,6 +112,8 @@ final class Branch
             'address'    => ($data['address'] ?? '') !== '' ? $data['address'] : null,
             'phone'      => ($data['phone'] ?? '') !== '' ? $data['phone'] : null,
             'map_url'    => ($data['map_url'] ?? '') !== '' ? $data['map_url'] : null,
+            'map_link'   => ($data['map_link'] ?? '') !== '' ? $data['map_link'] : null,
+            'map_link'   => ($data['map_link'] ?? '') !== '' ? $data['map_link'] : null,
             'sort_order' => (int) ($data['sort_order'] ?? 0),
             'is_active'  => !empty($data['is_active']) ? 1 : 0,
         ];

@@ -8,7 +8,6 @@ $statusLabels = [
 <div class="admin-page-head">
   <div>
     <h1 class="admin-h1">Bảng điều khiển</h1>
-    <p class="admin-sub">Tổng quan tuyển dụng cập nhật trực tiếp từ cơ sở dữ liệu.</p>
   </div>
   <a href="<?= url('admin/jobs/create') ?>" class="btn btn-primary">+ Thêm tin tuyển dụng</a>
 </div>
@@ -81,7 +80,7 @@ $statusLabels = [
       <h2 class="admin-h2">Tin theo trạng thái</h2>
     </div>
     <ul class="admin-list">
-      <?php foreach (['published' => 'Đang đăng', 'paused' => 'Tạm dừng', 'draft' => 'Bản nháp', 'closed' => 'Đã đóng'] as $key => $label): ?>
+      <?php foreach (['published' => 'Đang đăng', 'paused' => 'Tạm dừng', 'draft' => 'Bản nháp', 'closed' => 'Đã đóng', 'expired' => 'Hết hạn'] as $key => $label): ?>
       <li>
         <span><?= e($label) ?></span>
         <strong><?= (int) $jobCounts[$key] ?></strong>

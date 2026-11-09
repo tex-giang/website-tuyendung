@@ -28,6 +28,9 @@ final class ApplicationController extends Controller
 
         // Honeypot: bot điền field ẩn thì coi như thành công nhưng không ghi DB.
         if (trim((string) ($_POST['website'] ?? '')) !== '') {
+            if ($this->isAjaxRequest()) {
+                $this->jsonResult(true, 'Đã gửi hồ sơ.', url('apply/success'));
+            }
             $this->redirect(url('apply/success'));
         }
 
@@ -46,6 +49,9 @@ final class ApplicationController extends Controller
 
         $errors = $this->validate($data);
         if ($errors !== []) {
+            if ($this->isAjaxRequest()) {
+                $this->jsonResult(false, 'Hồ sơ chưa hoàn tất. Vui lòng kiểm tra các mục được đánh dấu.', null, $errors);
+            }
             Session::flash('_errors', $errors);
             Session::flash('_old', $data);
             Session::flash('_error', 'Hồ sơ chưa hoàn tất. Vui lòng kiểm tra các mục được đánh dấu.');
@@ -66,6 +72,9 @@ final class ApplicationController extends Controller
 
         $upload = UploadService::storeCv($_FILES['cv'] ?? null);
         if (!$upload['ok']) {
+            if ($this->isAjaxRequest()) {
+                $this->jsonResult(false, (string) $upload['error'], null, ['cv' => (string) $upload['error']]);
+            }
             Session::flash('_error', $upload['error']);
             Session::flash('_old', $data);
             $this->redirect(url('apply/error'));
@@ -89,7 +98,10 @@ final class ApplicationController extends Controller
                 UploadService::delete((string) $upload['data']['cv_stored_name']);
             }
             error_log('[TEX-GIANG] Lỗi lưu hồ sơ: ' . $e->getMessage());
-            Session::flash('_error', 'Không lưu được hồ sơ do lỗi hệ thống. Vui lòng gọi hotline để được hỗ trợ.');
+            if ($this->isAjaxRequest()) {
+                $this->jsonResult(false, 'Không lưu được hồ sơ do lỗi hệ thống. Vui lòng thử lại hoặc dùng trang ứng tuyển đầy đủ.');
+            }
+            Session::flash('_error', 'Không lưu được hồ sơ do lỗi hệ thống. Vui lòng liên hệ người phụ trách khu vực (trang Liên hệ) để được hỗ trợ.');
             $this->redirect(url('apply/error'));
         }
 
@@ -103,9 +115,143 @@ final class ApplicationController extends Controller
         $used[] = time();
         Session::put('_apply_times', $used);
 
+        if ($this->isAjaxRequest()) {
+            $this->jsonResult(true, 'Đã gửi hồ sơ.', url('apply/success'));
+        }
         $this->redirect(url('apply/success'));
     }
 
+    /** Trang nộp hồ sơ nhanh (/tuyen-dung): họ tên, SĐT, khu vực → vị trí. */
+    public function quickShow(): void
+    {
+        $done = (string) ($_GET['done'] ?? '') === '1';
+        $last = Session::pull('_quick_last', []);
+
+        if ($done && $last === []) {
+            $this->redirect(url('tuyen-dung'));
+        }
+
+        $jobs = Job::latestPublished(50);
+        $branches = Branch::active();
+
+        $jobData = [];
+        foreach ($jobs as $job) {
+            $jobData[] = [
+                'slug'   => (string) $job['slug'],
+                'title'  => trim((string) preg_replace('/^\d+\s+/', '', (string) $job['title'])),
+                'branch' => (string) ($job['branch_slug'] ?? ''),
+                'salary' => ($job['salary_text'] ?? '') !== '' ? salary_short((string) $job['salary_text']) : '',
+            ];
+        }
+
+        $old = Session::pull('_quick_old', []);
+        $errors = Session::pull('_quick_errors', []);
+
+        $this->view('public/ung-tuyen', [
+            'branches' => $branches,
+            'jobData'  => $jobData,
+            'old'      => $old,
+            'errors'   => $errors,
+            'done'     => $done,
+            'last'     => $last,
+            'page'     => [
+                'title'       => 'Nộp hồ sơ ứng tuyển | ' . settings('site_name'),
+                'description' => 'Nộp hồ sơ ứng tuyển TEX-GIANG trong 1 phút: họ tên, số điện thoại, khu vực và vị trí mong muốn.',
+                'body_class'  => 'tg-public gf-page',
+                'robots'      => 'noindex',
+                'scripts'     => ['quick-apply.js'],
+            ],
+        ], 'layouts/standalone');
+    }
+
+    public function quickSubmit(): void
+    {
+        $this->enforceRateLimit();
+
+        // Honeypot: bot điền field ẩn thì coi như thành công nhưng không ghi DB.
+        if (trim((string) ($_POST['website'] ?? '')) !== '') {
+            $this->redirect(url('apply/success'));
+        }
+
+        $data = [
+            'full_name'   => trim((string) ($_POST['full_name'] ?? '')),
+            'phone'       => trim((string) ($_POST['phone'] ?? '')),
+            'branch_slug' => trim((string) ($_POST['branch_slug'] ?? '')),
+            'job_slug'    => trim((string) ($_POST['job_slug'] ?? '')),
+            'terms'       => !empty($_POST['terms']),
+        ];
+
+        $errors = [];
+        if (mb_strlen($data['full_name']) < 2 || mb_strlen($data['full_name']) > 150) {
+            $errors['full_name'] = 'Nhập họ và tên (2–150 ký tự).';
+        }
+        if (!preg_match('/^(?:0|\+?84)[35789]\d{8}$/', $this->normalizePhone($data['phone']))) {
+            $errors['phone'] = 'Nhập số di động Việt Nam hợp lệ, ví dụ 0918 123 456.';
+        }
+
+        $branch = $data['branch_slug'] !== '' ? Branch::findBySlug($data['branch_slug']) : null;
+        if ($branch === null || (int) ($branch['is_active'] ?? 0) !== 1) {
+            $errors['branch_slug'] = 'Chọn khu vực bạn muốn làm việc.';
+        }
+
+        $job = null;
+        if ($data['job_slug'] === '') {
+            $errors['job_slug'] = 'Chọn vị trí bạn muốn ứng tuyển.';
+        } elseif ($data['job_slug'] !== 'khac') {
+            $job = Job::findPublishedBySlug($data['job_slug']);
+            if ($job === null) {
+                $errors['job_slug'] = 'Vị trí đã chọn không còn tuyển. Vui lòng chọn lại.';
+            } elseif ($branch !== null && (string) ($job['branch_slug'] ?? '') !== $data['branch_slug']) {
+                $errors['job_slug'] = 'Vị trí đã chọn không thuộc khu vực bạn chọn.';
+            }
+        }
+
+        if (!$data['terms']) {
+            $errors['terms'] = 'Vui lòng đồng ý để nhân sự liên hệ về hồ sơ.';
+        }
+
+        if ($errors !== []) {
+            Session::flash('_quick_errors', $errors);
+            Session::flash('_quick_old', $data);
+            Session::flash('_error', 'Hồ sơ chưa hoàn tất. Vui lòng kiểm tra các mục được đánh dấu.');
+            $this->redirect(url('tuyen-dung'));
+        }
+
+        $note = 'Khu mong muốn: ' . (string) $branch['name'] . ' (nộp nhanh)';
+
+        try {
+            $applicationId = Application::create([
+                'job_id'    => $job !== null ? (int) $job['id'] : null,
+                'full_name' => $data['full_name'],
+                'phone'     => $this->normalizePhone($data['phone']),
+                'message'   => $note,
+                'source'    => 'Website — form nộp nhanh',
+            ]);
+        } catch (\Throwable $e) {
+            error_log('[TEX-GIANG] Lỗi lưu hồ sơ nhanh: ' . $e->getMessage());
+            Session::flash('_error', 'Không lưu được hồ sơ do lỗi hệ thống. Vui lòng thử lại hoặc dùng trang ứng tuyển đầy đủ.');
+            $this->redirect(url('apply/error'));
+        }
+
+        $code = sprintf('TG-%s-%04d', date('Y'), $applicationId);
+        Session::put('_quick_last', [
+            'id'        => $applicationId,
+            'code'      => $code,
+            'full_name' => $data['full_name'],
+            'job_title' => $job['title'] ?? null,
+        ]);
+        Session::put('_last_application', [
+            'id'        => $applicationId,
+            'full_name' => $data['full_name'],
+            'job_title' => $job['title'] ?? null,
+        ]);
+
+        $used = Session::get('_apply_times', []);
+        $used[] = time();
+        Session::put('_apply_times', $used);
+
+        $this->redirect(url('tuyen-dung') . '?done=1');
+    }
     public function success(): void
     {
         $last = Session::pull('_last_application', []);
@@ -180,8 +326,11 @@ final class ApplicationController extends Controller
         Session::put('_apply_times', $times);
 
         if (count($times) >= self::RATE_LIMIT) {
+            if ($this->isAjaxRequest()) {
+                $this->jsonResult(false, 'Bạn đã gửi ' . self::RATE_LIMIT . ' hồ sơ trong một giờ. Vui lòng liên hệ người phụ trách khu vực (xem trang Liên hệ) nếu cần gửi thêm.');
+            }
             Session::flash('_error', 'Bạn đã gửi ' . self::RATE_LIMIT . ' hồ sơ trong một giờ. '
-                . 'Vui lòng gọi hotline ' . settings('hotline_display') . ' nếu cần gửi thêm.');
+                . 'Vui lòng liên hệ người phụ trách khu vực (xem trang Liên hệ) nếu cần gửi thêm.');
             $this->redirect(url('apply/error'));
         }
     }
@@ -228,6 +377,14 @@ final class ApplicationController extends Controller
 
         if ($data['branch_slug'] !== '' && !isset(Branch::options()[$data['branch_slug']])) {
             $errors['branch_slug'] = 'Khu sản xuất không hợp lệ.';
+        }
+
+        if (!isset($errors['job_slug']) && !isset($errors['branch_slug'])
+            && $data['job_slug'] !== '' && $data['job_slug'] !== 'khac' && $data['branch_slug'] !== '') {
+            $jobForBranch = Job::findPublishedBySlug($data['job_slug']);
+            if ($jobForBranch !== null && (string) ($jobForBranch['branch_slug'] ?? '') !== $data['branch_slug']) {
+                $errors['job_slug'] = 'Vị trí đã chọn không thuộc khu vực bạn chọn. Vui lòng chọn lại.';
+            }
         }
 
         if (!$data['terms']) {

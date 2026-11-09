@@ -44,4 +44,9 @@ if ($base !== '' && str_starts_with($path, $base)) {
     $path = substr($path, strlen($base)) ?: '/';
 }
 
+// Thống kê lượt truy cập (chỉ trang public, dedupe theo thiết bị/ngày — F5 không tăng)
+if ($method === 'GET' && !str_starts_with($path, '/admin')) {
+    \App\Services\VisitTracker::track();
+}
+
 $router->dispatch($method, $path);

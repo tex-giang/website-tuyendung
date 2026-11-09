@@ -17,6 +17,7 @@ final class JobController extends Controller
         'published' => 'Đang đăng',
         'paused'    => 'Tạm dừng',
         'closed'    => 'Đã đóng',
+        'expired'   => 'Hết hạn',
     ];
 
     public const SALARY_RANGES = [
@@ -29,6 +30,7 @@ final class JobController extends Controller
 
     public function index(): void
     {
+        Job::syncExpired();
         $filters = [
             'q'      => trim((string) ($_GET['q'] ?? '')),
             'status' => (string) ($_GET['status'] ?? ''),
@@ -50,7 +52,10 @@ final class JobController extends Controller
 
     public function create(): void
     {
-        $this->form(null);
+        // Nhân bản: chỉ NẠP dữ liệu tin gốc vào form, chưa lưu DB.
+        $sourceId = (int) ($_GET['from'] ?? 0);
+        $source = $sourceId > 0 ? Job::adminFind($sourceId) : null;
+        $this->form(null, $source);
     }
 
     public function edit(string $id): void
@@ -77,10 +82,10 @@ final class JobController extends Controller
         $id = Job::create($data, (int) Session::get('auth_id'));
         AuditLog::record('job.create', 'job', $id, ['title' => $data['title']]);
         if ($this->isAjaxRequest()) {
-            $this->jsonResult(true, 'Đã tạo tin tuyển dụng "' . $data['title'] . '".', url('admin/jobs/' . $id . '/edit'));
+            $this->jsonResult(true, 'Đã tạo tin tuyển dụng "' . $data['title'] . '".', url('admin/jobs'));
         }
         Session::flash('_success', 'Đã tạo tin tuyển dụng "' . $data['title'] . '".');
-        $this->redirect(url('admin/jobs/' . $id . '/edit'));
+        $this->redirect(url('admin/jobs'));
     }
 
     public function update(string $id): void
@@ -104,21 +109,29 @@ final class JobController extends Controller
         Job::update($jobId, $data);
         AuditLog::record('job.update', 'job', $jobId, ['title' => $data['title']]);
         if ($this->isAjaxRequest()) {
-            $this->jsonResult(true, 'Đã cập nhật tin tuyển dụng.', url('admin/jobs/' . $jobId . '/edit'));
+            $this->jsonResult(true, 'Đã cập nhật tin tuyển dụng.', url('admin/jobs'));
         }
         Session::flash('_success', 'Đã cập nhật tin tuyển dụng.');
-        $this->redirect(url('admin/jobs/' . $jobId . '/edit'));
+        $this->redirect(url('admin/jobs'));
     }
 
     public function changeStatus(string $id): void
     {
         $jobId = (int) $id;
         $status = (string) ($_POST['status'] ?? '');
-        if (!isset(self::STATUSES[$status]) || Job::adminFind($jobId) === null) {
+        $jobRow = Job::adminFind($jobId);
+        if (!isset(self::STATUSES[$status]) || $jobRow === null) {
             if ($this->isAjaxRequest()) {
                 $this->jsonResult(false, 'Trạng thái không hợp lệ.');
             }
             Session::flash('_error', 'Trạng thái không hợp lệ.');
+            $this->redirect(url('admin/jobs'));
+        }
+        if ($status === 'published' && ($jobRow['deadline'] ?? '') !== '' && (string) $jobRow['deadline'] < date('Y-m-d')) {
+            if ($this->isAjaxRequest()) {
+                $this->jsonResult(false, 'Tin đã quá hạn nộp — cập nhật hạn nộp mới trước khi đăng lại.');
+            }
+            Session::flash('_error', 'Tin đã quá hạn nộp — cập nhật hạn nộp mới trước khi đăng lại.');
             $this->redirect(url('admin/jobs'));
         }
         Job::changeStatus($jobId, $status);
@@ -132,20 +145,23 @@ final class JobController extends Controller
 
     public function duplicate(string $id): void
     {
-        $newId = Job::duplicate((int) $id, (int) Session::get('auth_id'));
-        if ($newId === null) {
+        // Chỉ chuyển sang form tạo mới với dữ liệu đã nạp sẵn — KHÔNG ghi DB.
+        // Chỉ khi bấm "Lưu" ở form thì tin mới thực sự được tạo.
+        $job = Job::adminFind((int) $id);
+        if ($job === null) {
             if ($this->isAjaxRequest()) {
                 $this->jsonResult(false, 'Không tìm thấy tin để nhân bản.');
             }
             Session::flash('_error', 'Không tìm thấy tin để nhân bản.');
             $this->redirect(url('admin/jobs'));
         }
-        AuditLog::record('job.duplicate', 'job', $newId, ['from' => (int) $id]);
+
+        $message = 'Đã nạp dữ liệu tin "' . $job['title'] . '" vào form tạo mới. Bấm Lưu để lưu bản sao vào DB.';
         if ($this->isAjaxRequest()) {
-            $this->jsonResult(true, 'Đã nhân bản tin thành bản nháp mới.', url('admin/jobs/' . $newId . '/edit'));
+            $this->jsonResult(true, $message, url('admin/jobs/create') . '?from=' . (int) $id);
         }
-        Session::flash('_success', 'Đã nhân bản tin thành bản nháp mới.');
-        $this->redirect(url('admin/jobs/' . $newId . '/edit'));
+        Session::flash('_success', $message);
+        $this->redirect(url('admin/jobs/create') . '?from=' . (int) $id);
     }
 
     public function destroy(string $id): void
@@ -169,7 +185,8 @@ final class JobController extends Controller
     }
 
     /** @param array<string, mixed>|null $job */
-    private function form(?array $job): void
+    /** @param array<string, mixed>|null $job @param array<string, mixed>|null $source */
+    private function form(?array $job, ?array $source = null): void
     {
         $old = Session::pull('_old', []);
         $errors = Session::pull('_errors', []);
@@ -181,6 +198,19 @@ final class JobController extends Controller
             'description' => '', 'requirements' => '', 'benefits' => '', 'status' => 'draft', 'is_urgent' => 0,
             'posted_at' => '', 'deadline' => '', 'meta_title' => '', 'meta_description' => '', 'sort_order' => 0,
         ];
+        if ($source !== null) {
+            // Nạp dữ liệu tin gốc để hiển thị; chưa ghi DB.
+            $values = array_merge($values, $source);
+            $values['id'] = null;
+            $values['slug'] = '';
+            $values['code'] = '';
+            $values['status'] = 'draft';
+            $values['posted_at'] = '';
+            if (($values['deadline'] ?? '') !== '' && (string) $values['deadline'] < date('Y-m-d')) {
+                $values['deadline'] = '';
+            }
+            $values['title'] = (string) $source['title'] . ' (bản sao)';
+        }
         if ($old !== []) {
             $values = array_merge($values, $old);
         }
@@ -288,12 +318,26 @@ final class JobController extends Controller
             }
         }
 
-        if ($data['code'] !== '' && Job::codeExists($data['code'], $jobId)) {
+        if ($data['code'] === '') {
+            $data['code'] = Job::generateCode();
+        } elseif (preg_match('/^TD\d{2}-\d{4}$/', $data['code']) !== 1) {
+            $errors['code'] = 'Mã tin phải có định dạng TD26-0001.';
+        } elseif (Job::codeExists($data['code'], $jobId)) {
             $errors['code'] = 'Mã tin đã tồn tại.';
         }
 
         // Chuẩn hoá ngày để lưu DB.
         $data['posted_at'] = $data['posted_at'] !== '' ? date('Y-m-d H:i:s', strtotime($data['posted_at'])) : '';
+        // Tin đã đăng mà không nhập ngày đăng => lấy thời điểm hiện tại (tránh tin "mất tích" khỏi danh sách).
+        if ($data['status'] === 'published' && $data['posted_at'] === '') {
+            $data['posted_at'] = date('Y-m-d H:i:s');
+        }
+        // Tự tính hạn nộp khi để trống: ngày đăng + số ngày nhận hồ sơ mặc định.
+        if ($data['status'] === 'published' && $data['deadline'] === '') {
+            $days = max(1, min(365, setting_int('jobs_deadline_days', 30)));
+            $base = $data['posted_at'] !== '' ? strtotime($data['posted_at']) : time();
+            $data['deadline'] = date('Y-m-d', strtotime('+' . $days . ' day', $base));
+        }
         $data['deadline'] = $data['deadline'] !== '' ? date('Y-m-d', strtotime($data['deadline'])) : '';
         $data['sort_order'] = (int) $data['sort_order'];
 

@@ -19,6 +19,8 @@ final class JobController extends Controller
 
     public function index(): void
     {
+        Job::syncExpired();
+        $this->guardMenu('jobs');
         $filters = [
             'q'          => trim((string) ($_GET['q'] ?? '')),
             'location'   => (string) ($_GET['location'] ?? ''),
@@ -65,6 +67,8 @@ final class JobController extends Controller
 
     public function show(string $slug): void
     {
+        Job::syncExpired();
+        $this->guardMenu('jobs');
         $job = Job::findPublishedBySlug($slug);
         if ($job === null) {
             $this->notFound('Tin tuyển dụng không tồn tại hoặc đã hết hạn.');

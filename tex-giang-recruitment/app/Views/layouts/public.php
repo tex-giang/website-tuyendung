@@ -45,7 +45,8 @@ $scripts = $page['scripts'] ?? [];
 
 <div id="toast-container"></div>
 
-<script src="<?= asset('js/main.js') ?>"></script>
+<script src="<?= asset('js/phone-format.js') ?>"></script>
+      <script src="<?= asset('js/main.js') ?>"></script>
 <script src="<?= asset('js/ui.js') ?>"></script>
 <script src="<?= asset('js/apply-dialog.js') ?>"></script>
 <?php foreach ($scripts as $script): ?>

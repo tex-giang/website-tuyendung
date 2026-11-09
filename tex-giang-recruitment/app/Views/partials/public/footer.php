@@ -1,62 +1,76 @@
 <?php
 /** Footer công khai + nút nổi + thẻ popup + modal QR — theo design gốc. */
 $popup = $popup ?? null;
-$hotline = settings('hotline', '02733937274');
-$hotlineDisplay = settings('hotline_display', '0273 393 7274');
 $email = settings('email', 'nhansu@tex-giang.com.vn');
+$zalo = settings('zalo');
+
+// Menu chân trang lấy từ bảng menus (chỉ mục đang bật); bảng trống thì dùng mặc định.
+$footerMenuItems = [];
+foreach (\App\Models\Menu::active() as $menuRow) {
+    $footerMenuItems[] = ['label' => (string) $menuRow['label'], 'href' => url((string) $menuRow['url'])];
+}
+if ($footerMenuItems === []) {
+    $footerMenuItems = [
+        ['label' => 'Trang chủ', 'href' => url('')],
+        ['label' => 'Việc làm', 'href' => url('jobs')],
+        ['label' => 'Về chúng tôi', 'href' => url('about')],
+        ['label' => 'Phúc lợi', 'href' => url('why-tex-giang')],
+        ['label' => 'Tin tức', 'href' => url('news')],
+        ['label' => 'Liên hệ', 'href' => url('contact')],
+    ];
+}
 $branches = \App\Models\Branch::active();
+$branchContacts = \App\Models\BranchContact::activeGrouped();
 ?>
 <footer class="no-print border-t border-line bg-surface">
   <div class="tg-container py-12 lg:py-16">
-    <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1.3fr_1fr] lg:gap-12">
+    <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr] lg:gap-12">
 
       <div>
         <a href="<?= url('') ?>" class="inline-flex items-center gap-2.5" aria-label="TEX-GIANG — trang chủ">
           <img src="<?= asset('images/logo-tgi-mark.webp') ?>" alt="TEX-GIANG (TGI)" width="62" height="40" class="footer-logo">
         </a>
-        <p class="mt-4 max-w-[300px] text-[15px] leading-[1.7] text-muted"><?= e(settings('content_footer_intro')) ?></p>
+        <p class="mt-4 max-w-[320px] text-[15px] leading-[1.7] text-muted"><?= e(settings('content_footer_intro')) ?></p>
         <ul class="mt-4 space-y-2 text-[15px] text-muted">
-          <li class="flex items-center gap-2.5">
-            <img src="<?= asset('images/icons/telephone.svg') ?>" alt="" aria-hidden="true" width="20" height="20" class="tg-icon">
-            <a href="tel:<?= e($hotline) ?>" class="transition-colors hover:text-accent"><?= e($hotlineDisplay) ?></a>
-          </li>
           <li class="flex items-center gap-2.5">
             <img src="<?= asset('images/icons/envelope.svg') ?>" alt="" aria-hidden="true" width="20" height="20" class="tg-icon">
             <a href="mailto:<?= e($email) ?>" class="transition-colors hover:text-accent"><?= e($email) ?></a>
           </li>
         </ul>
+        <p class="mt-4 max-w-[320px] text-[13px] leading-[1.6] text-muted">Gọi trực tiếp người phụ trách khu vực — bấm nút điện thoại cố định ở góc phải màn hình.</p>
       </div>
 
       <nav aria-label="Menu chân trang">
         <h2 class="text-[13px] font-semibold uppercase tracking-[0.12em] text-ink">Menu</h2>
         <ul class="mt-4 space-y-2.5 text-[15px]">
-          <li><a href="<?= url('') ?>" class="text-muted transition-colors hover:text-accent">Trang chủ</a></li>
-          <li><a href="<?= url('jobs') ?>" class="text-muted transition-colors hover:text-accent">Việc làm</a></li>
-          <li><a href="<?= url('about') ?>" class="text-muted transition-colors hover:text-accent">Về chúng tôi</a></li>
-          <li><a href="<?= url('why-tex-giang') ?>" class="text-muted transition-colors hover:text-accent">Phúc lợi</a></li>
-          <li><a href="<?= url('news') ?>" class="text-muted transition-colors hover:text-accent">Tin tức</a></li>
-          <li><a href="<?= url('contact') ?>" class="text-muted transition-colors hover:text-accent">Liên hệ</a></li>
+          <?php foreach ($footerMenuItems as $menuItem): ?>
+          <li><a href="<?= e($menuItem['href']) ?>" class="text-muted transition-colors hover:text-accent"><?= e($menuItem['label']) ?></a></li>
+          <?php endforeach; ?>
         </ul>
       </nav>
 
       <div>
-        <h2 class="text-[13px] font-semibold uppercase tracking-[0.12em] text-ink">Liên hệ chi nhánh</h2>
-        <ul class="mt-4 space-y-3 text-[15px] leading-[1.6] text-muted">
-          <?php foreach ($branches as $branch): ?>
-          <li><span class="block font-medium text-body"><?= e($branch['name']) ?></span><?= e($branch['address'] ?? '') ?></li>
-          <?php endforeach; ?>
-        </ul>
-      </div>
-
-      <div>
-        <h2 class="text-[13px] font-semibold uppercase tracking-[0.12em] text-ink">Kết nối</h2>
+        <?php $footerStats = \App\Models\VisitStat::footer(); ?>
+        <h2 class="text-[13px] font-semibold uppercase tracking-[0.12em] text-ink">Thống kê truy cập</h2>
         <ul class="mt-4 space-y-2.5 text-[15px]">
-          <li><a href="https://zalo.me/<?= e(settings('zalo', $hotline)) ?>" target="_blank" rel="noopener" class="text-muted transition-colors hover:text-accent">Zalo tuyển dụng</a></li>
-          <li><a href="<?= e(settings('facebook', 'https://www.facebook.com/')) ?>" target="_blank" rel="noopener" class="text-muted transition-colors hover:text-accent">Facebook</a></li>
-          <li><a href="<?= e(settings('youtube', 'https://www.youtube.com/')) ?>" target="_blank" rel="noopener" class="text-muted transition-colors hover:text-accent">YouTube</a></li>
-          <li><a href="<?= e(settings('website', 'https://tex-giang.com.vn')) ?>" target="_blank" rel="noopener" class="text-muted transition-colors hover:text-accent">Website công ty</a></li>
-          <li><button type="button" class="open-qr-modal text-muted transition-colors hover:text-accent">Mã QR tuyển dụng</button></li>
+          <li class="text-muted">Lượt hôm nay: <span class="font-semibold text-ink"><?= number_format((int) $footerStats['today'], 0, ',', '.') ?></span></li>
+          <li class="text-muted">Lượt truy cập tháng: <span class="font-semibold text-ink"><?= number_format((int) $footerStats['month'], 0, ',', '.') ?></span></li>
+          <li class="text-muted">Tổng truy cập: <span class="font-semibold text-ink"><?= number_format((int) $footerStats['total'], 0, ',', '.') ?></span></li>
         </ul>
+        <!-- Fanpage Facebook — plugin chính thức (data-href: fanpage TEX-GIANG) -->
+      <div class="footer-fanpage mt-5">
+        <div class="fb-page"
+             data-href="https://www.facebook.com/congtycophantexgiang"
+             data-width="500"
+             data-small-header="false"
+             data-adapt-container-width="true"
+             data-hide-cover="false"
+             data-show-facepile="false">
+          <blockquote cite="https://www.facebook.com/congtycophantexgiang" class="fb-xfbml-parse-ignore">
+            <a href="https://www.facebook.com/congtycophantexgiang" target="_blank" rel="noopener">TEX-GIANG trên Facebook</a>
+          </blockquote>
+        </div>
+      </div>
       </div>
     </div>
 
@@ -74,10 +88,21 @@ $branches = \App\Models\Branch::active();
   <button id="back-to-top" type="button" aria-label="Lên đầu trang" class="float-btn opacity-0 pointer-events-none">
     <img src="<?= asset('images/icons/arrow-up.svg') ?>" alt="" aria-hidden="true" width="20" height="20" class="tg-icon">
   </button>
-  <a href="https://zalo.me/<?= e(settings('zalo', $hotline)) ?>" target="_blank" rel="noopener" class="float-btn" aria-label="Chat Zalo tuyển dụng">Zalo</a>
-  <a href="tel:<?= e($hotline) ?>" class="float-btn float-btn--primary" aria-label="Gọi hotline <?= e($hotlineDisplay) ?>">
+  <?php if ($branches !== []): ?>
+  <button type="button" class="float-btn float-btn--primary" data-open-contact-dialog
+          aria-label="Liên hệ chi nhánh tuyển dụng" title="Liên hệ chi nhánh">
     <img src="<?= asset('images/icons/telephone.svg') ?>" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[16px]">
+  </button>
+  <?php endif; ?>
+  <a href="<?= e(settings('facebook', 'https://www.facebook.com/')) ?>" target="_blank" rel="noopener"
+     class="float-btn float-btn--facebook" aria-label="Fanpage Facebook TEX-GIANG" title="Fanpage Facebook">
+    <img src="<?= asset('images/icons/facebook.svg') ?>" alt="" aria-hidden="true" width="24" height="24" class="tg-icon float-btn__icon">
   </a>
+  <?php if ($zalo !== ''): ?>
+  <a href="<?= e(zalo_url()) ?>" target="_blank" rel="noopener" class="float-btn float-btn--zalo" aria-label="Chat Zalo tuyển dụng" title="Chat Zalo">
+    <img src="<?= asset('images/icons/zalo.svg') ?>" alt="" aria-hidden="true" width="24" height="24" class="tg-icon float-btn__icon">
+  </a>
+  <?php endif; ?>
 </div>
 
 <?php if ($popup !== null): ?>
@@ -114,3 +139,103 @@ $branches = \App\Models\Branch::active();
     <button type="button" onclick="copyLink()" class="tg-btn tg-btn--primary mt-5 h-11 w-full text-[16px]">Sao chép đường dẫn</button>
   </div>
 </div>
+
+<?php if ($branches !== []): ?>
+<div id="contact-dialog" class="tg-modal hidden" role="dialog" aria-modal="true" aria-labelledby="contact-dialog-title" data-contact-dialog>
+  <div class="relative flex max-h-[min(90vh,760px)] w-full max-w-[760px] flex-col overflow-hidden rounded-2xl bg-white">
+    <div class="flex items-start justify-between gap-4 border-b border-line px-5 py-4 sm:px-7">
+      <div class="min-w-0">
+        <p class="text-[13px] font-medium uppercase tracking-[0.12em] text-accent">TEX-GIANG</p>
+        <h2 id="contact-dialog-title" class="mt-1 text-[20px] font-medium leading-tight text-ink sm:text-[23px]">Liên hệ chi nhánh tuyển dụng</h2>
+        <p class="mt-1 text-[14px] leading-[1.6] text-muted">Gọi trực tiếp người phụ trách khu vực bạn muốn làm việc.</p>
+      </div>
+      <button type="button" class="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-muted transition-colors hover:bg-surface hover:text-ink" data-close-contact-dialog aria-label="Đóng hộp thoại liên hệ">
+        <img src="<?= asset('images/icons/x-lg.svg') ?>" alt="" aria-hidden="true" width="20" height="20" class="tg-icon">
+      </button>
+    </div>
+
+    <div class="flex-1 space-y-3 overflow-y-auto px-4 py-4 sm:px-6">
+      <?php foreach ($branches as $branch): ?>
+      <?php $contacts = $branchContacts[(int) $branch['id']] ?? []; ?>
+      <section class="rounded-card border border-line p-4">
+        <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+          <h3 class="text-[16px] font-medium leading-snug text-ink">Khu vực <?= e($branch['name']) ?></h3>
+          <?php $branchMapHref = (string) ($branch['map_link'] ?? ''); ?>
+          <?php if ($branchMapHref !== '' || !empty($branch['map_url'])): ?>
+          <a href="<?= e($branchMapHref !== '' ? $branchMapHref : (string) $branch['map_url']) ?>" target="_blank" rel="noopener" class="text-[13px] text-muted transition-colors hover:text-accent">Bản đồ →</a>
+          <?php endif; ?>
+        </div>
+        <?php if (!empty($branch['address'])): ?>
+        <p class="mt-1 text-[13px] leading-[1.55] text-muted"><?= e($branch['address']) ?></p>
+        <?php endif; ?>
+
+        <?php if ($contacts !== []): ?>
+        <ul class="mt-3 space-y-2 border-t border-line pt-3">
+          <?php foreach ($contacts as $contact): ?>
+          <li class="flex items-baseline justify-between gap-3">
+            <span class="min-w-0 text-[15px] leading-[1.5] text-body">
+              <?= e($contact['full_name']) ?>
+              <?php if (!empty($contact['title'])): ?><span class="block text-[12px] text-muted"><?= e((string) $contact['title']) ?></span><?php endif; ?>
+            </span>
+            <a href="tel:<?= e(\App\Models\BranchContact::telHref((string) $contact['phone'])) ?>"
+               class="shrink-0 whitespace-nowrap text-[15px] font-semibold text-accent transition-colors hover:text-accent-strong"><?= e($contact['phone']) ?></a>
+          </li>
+          <?php endforeach; ?>
+        </ul>
+        <?php else: ?>
+        <p class="mt-3 border-t border-line pt-3 text-[13px] text-muted">Đang cập nhật người phụ trách.</p>
+        <?php endif; ?>
+      </section>
+      <?php endforeach; ?>
+    </div>
+
+    <div class="flex flex-wrap items-center justify-between gap-3 border-t border-line bg-surface px-5 py-3 sm:px-7">
+      <?php if (menu_link_visible('contact')): ?>
+      <a href="<?= url('contact') ?>" class="text-[14px] font-medium text-body transition-colors hover:text-accent">Xem bản đồ và giờ tiếp nhận hồ sơ →</a>
+      <?php endif; ?>
+      <button type="button" class="tg-btn tg-btn--ghost h-10 px-4 text-[14px]" data-close-contact-dialog>Đóng</button>
+    </div>
+  </div>
+</div>
+<?php endif; ?>
+
+<script>
+(function () {
+  var dialog = document.querySelector('[data-contact-dialog]');
+  if (!dialog) return;
+
+  var closeEls = dialog.querySelectorAll('[data-close-contact-dialog]');
+  var opener = null;
+
+  function open() {
+    dialog.classList.remove('hidden');
+    document.body.classList.add('has-dialog');
+    var first = dialog.querySelector('[data-close-contact-dialog]');
+    if (first) first.focus();
+  }
+  function close() {
+    dialog.classList.add('hidden');
+    document.body.classList.remove('has-dialog');
+    if (opener) opener.focus();
+  }
+
+  // Uỷ quyền click: nút có thể nằm sau script (nút cố định ở float-stack) vẫn bắt được.
+  document.addEventListener('click', function (event) {
+    var trigger = event.target.closest('[data-open-contact-dialog]');
+    if (!trigger) return;
+    if (!dialog.classList.contains('hidden')) return;
+    opener = trigger;
+    open();
+  });
+  closeEls.forEach(function (button) { button.addEventListener('click', close); });
+  dialog.addEventListener('click', function (event) {
+    if (event.target === dialog) close();
+  });
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape' && !dialog.classList.contains('hidden')) close();
+  });
+})();
+</script>
+
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v21.0"></script>

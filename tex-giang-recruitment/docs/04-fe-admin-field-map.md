@@ -21,7 +21,7 @@ Ký hiệu: ✅ Admin sửa được · 👁 chỉ hiển thị · 🔒 hệ th�
 
 | Nhóm trường | Trường | FE dùng ở đâu | Admin |
 |---|---|---|---|
-| Định danh | `slug`, `code` | URL `/jobs/{slug}`, mã tin (TG-01) | ✅ |
+| Định danh | `slug`, `code` | URL `/jobs/{slug}`, mã tin TD26-0001 (tự sinh) | ✅ |
 | Phân loại | `branch_id`, `category_id` | Bộ lọc địa điểm/phòng ban, thẻ việc làm | ✅ (select từ bảng danh mục) |
 | Tiêu đề & số lượng | `title`, `quantity` | Danh sách + chi tiết + card | ✅ |
 | Nơi làm | `location`, `employment_type`, `experience` | Chi tiết tin (dl 4 ô) | ✅ |
@@ -152,4 +152,4 @@ Hệ thống     → Cài đặt hệ thống · Người dùng quản trị · 
 
 1. Phân quyền **theo bản ghi** (ví dụ recruiter chỉ xem hồ sơ của khu mình phụ trách) — hiện là theo module.
 2. `focal_x/focal_y` của banner: chưa cần vì FE chưa dùng; nếu sau này cần crop ảnh thì mở 2 trường này.
-3. Hai field `settings` dạng `map_embed` có thể dài; UI đã cho textarea 3 dòng — đủ dùng.
+3. Các field `settings` còn lại đều ngắn; textarea 3 dòng là đủ.
