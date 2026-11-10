@@ -62,13 +62,6 @@
             </li>
             <?php endforeach; ?>
           </ol>
-
-          <p class="mt-14 text-[clamp(1.25rem,2.4vw,1.5rem)] font-medium leading-[1.4] text-ink">
-            Vì con người — vì chất lượng — vì tương lai bền vững
-          </p>
-          <p class="mt-5 max-w-[62ch] text-[16px] leading-[1.7] text-muted">
-            Người lao động là tài sản của công ty. Nhà xưởng có điều hòa, ánh sáng chuẩn, hút bụi vải và PCCC tự động; bếp ăn tập thể phục vụ miễn phí, xe đưa rước nhiều tuyến mỗi ngày.
-          </p>
         </div>
 
         <aside class="space-y-6" data-reveal>
