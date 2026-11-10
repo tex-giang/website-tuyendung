@@ -79,7 +79,8 @@ Giao diện dùng **Tailwind CSS 3.4.17 build cục bộ** (không CDN, chạy �
 | `public/assets/css/app.css`, `public.css`, `custom.css` | CSS component/hoàn thiện viết tay (giữ nguyên từ bản thiết kế) |
 | `public/assets/css/admin-app.css` | CSS riêng cho giao diện quản trị (không phụ thuộc Tailwind) |
 | `public/assets/vendor/sweetalert2/` | SweetAlert2 11.26.25 (vendor cục bộ) cho thông báo AJAX ở trang quản trị |
-| `public/assets/vendor/ckeditor4/` | CKEditor 4.22.1 (vendor cục bộ, lang vi) cho ô soạn nội dung bài viết |`n| `public/assets/vendor/{bootstrap,jquery,datatables}/` | Bootstrap 5.3.3 + jQuery 3.7.1 + DataTables 2.3.8 (vendor cục bộ) cho bảng quản trị |
+| `public/assets/vendor/quill/` | Quill 2.0.3 đóng gói cục bộ cho trình soạn thảo bài viết |
+| `public/assets/vendor/{bootstrap,jquery,datatables}/` | Bootstrap 5.3.3 + jQuery 3.7.1 + DataTables 2.3.8 (vendor cục bộ) cho bảng quản trị |
 
 Build lại sau khi thêm/sửa class Tailwind trong view hoặc JS:
 

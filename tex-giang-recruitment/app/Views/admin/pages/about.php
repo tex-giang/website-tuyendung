@@ -1,153 +1,97 @@
 <?php
 $page['ajax_fragment'] = true;
-/**
- * Trang Về chúng tôi — sửa TẤT CẢ trong một form repeater (kiểu Người liên hệ tuyển dụng).
- * Mỗi khối là danh sách dòng: thêm dòng / xoá dòng, lưu một lần bằng AJAX.
- *
- * @var array<int, array<string, mixed>> $milestones
- * @var array<int, array<string, mixed>> $values
- * @var array<int, array<string, mixed>> $certifications
- * @var array<string, string> $errors
- */
-$val = static function (array $row, string $key, string $default = ''): string {
-    return (string) ($row[$key] ?? $default);
-};
-?>
-<div class="admin-page-head">
-  <div>
-    <p class="admin-breadcrumb">Nội dung website / Trang Về chúng tôi</p>
-    <h1 class="admin-h1">Trang Về chúng tôi</h1>
+$partials = BASE_PATH . '/app/Views/partials/admin/';
+$valueGroups = ['Tầm nhìn' => [], 'Sứ mệnh' => [], 'Giá trị cốt lõi' => []];
+foreach ($values as $row) {
+    $valueGroups[(string) ($row['title'] ?? '')][] = $row;
+}
+$milestoneRow = static function (int|string $index, array $row = []) use ($partials): void { ?>
+  <div class="admin-editor-row admin-editor-row--milestone" data-row>
+    <input type="hidden" name="milestones[<?= $index ?>][is_active]" value="<?= (int) ($row['is_active'] ?? 1) ?>">
+    <input class="field__input" name="milestones[<?= $index ?>][year_label]" aria-label="Năm" maxlength="40" placeholder="Năm" value="<?= e($row['year_label'] ?? '') ?>">
+    <input class="field__input" name="milestones[<?= $index ?>][text]" aria-label="Nội dung mốc phát triển" maxlength="500" placeholder="Nội dung mốc phát triển" value="<?= e($row['text'] ?? '') ?>">
+    <label class="admin-cms-inline-check"><input type="checkbox" name="milestones[<?= $index ?>][is_highlight]" value="1"<?= !empty($row['is_highlight']) ? ' checked' : '' ?>> Hiện tại</label>
+    <?php require $partials . 'repeater-actions.php'; ?>
   </div>
+<?php };
+$valueRow = static function (string $title, string $index, array $row = []) use ($partials): void { ?>
+  <div class="admin-editor-row" data-row>
+    <input type="hidden" name="values[<?= $index ?>][is_active]" value="<?= (int) ($row['is_active'] ?? 1) ?>">
+    <input type="hidden" name="values[<?= $index ?>][title]" value="<?= e($title) ?>">
+    <input class="field__input" name="values[<?= $index ?>][body]" aria-label="Nội dung <?= e($title) ?>" maxlength="800" placeholder="Nhập nội dung" value="<?= e($row['body'] ?? '') ?>">
+    <?php require $partials . 'repeater-actions.php'; ?>
+  </div>
+<?php };
+$certificationRow = static function (int|string $index, array $row = []) use ($partials): void { ?>
+  <div class="admin-editor-row" data-row>
+    <input type="hidden" name="certifications[<?= $index ?>][is_active]" value="<?= (int) ($row['is_active'] ?? 1) ?>">
+    <input class="field__input" name="certifications[<?= $index ?>][label]" aria-label="Tên chứng nhận" maxlength="200" placeholder="Tên chứng nhận" value="<?= e($row['label'] ?? '') ?>">
+    <?php require $partials . 'repeater-actions.php'; ?>
+  </div>
+<?php }; ?>
+<div class="admin-content-editor admin-page-editor">
+  <div class="admin-page-head admin-cms-form-head">
+    <div>
+      <h1 class="admin-h1">Về chúng tôi</h1>
+      <p class="admin-sub">Chỉnh sửa mốc phát triển, tầm nhìn, sứ mệnh và chứng nhận.</p>
+    </div>
+  </div>
+  <?php if ($errors !== []): ?>
+  <div class="admin-alert admin-alert--error" role="alert"><?= e($errors['general'] ?? 'Có trường cần kiểm tra lại.') ?></div>
+  <?php endif; ?>
+
+  <form method="POST" action="<?= url('admin/pages/about') ?>" class="admin-form admin-cms-form" data-ajax>
+    <?= csrf_field() ?>
+    <section class="admin-cms-card admin-cms-fields" data-repeater="milestones">
+      <header class="admin-editor-heading">
+        <div class="admin-cms-section-intro">
+          <h2>Mốc phát triển</h2>
+          <p>Các cột mốc theo thứ tự hiển thị trên trang.</p>
+        </div>
+        <button type="button" class="btn btn-outline btn-sm" data-add><i class="bi bi-plus-lg" aria-hidden="true"></i> Thêm mốc</button>
+      </header>
+      <div class="admin-editor-milestones" data-rows>
+        <?php foreach ($milestones as $index => $row) { $milestoneRow($index, $row); } ?>
+      </div>
+      <template data-template><?php $milestoneRow('__INDEX__'); ?></template>
+    </section>
+
+    <section class="admin-cms-card admin-cms-fields">
+      <header class="admin-cms-section-intro">
+        <h2>Tầm nhìn – Sứ mệnh – Giá trị cốt lõi</h2>
+        <p>Mỗi dòng là một ý hiển thị riêng trên trang.</p>
+      </header>
+      <?php $groupIndex = 0; foreach ($valueGroups as $title => $rows): ?>
+      <div class="admin-editor-stack" data-repeater="values">
+        <div class="admin-editor-heading">
+          <h3><?= e($title !== '' ? $title : 'Mục chưa có tiêu đề') ?></h3>
+          <button type="button" class="btn btn-outline btn-sm" data-add aria-label="Thêm dòng <?= e($title) ?>"><i class="bi bi-plus-lg" aria-hidden="true"></i> Thêm dòng</button>
+        </div>
+        <div class="admin-editor-stack" data-rows>
+          <?php foreach ($rows as $index => $row) { $valueRow($title, $groupIndex . '_' . $index, $row); } ?>
+        </div>
+        <template data-template><?php $valueRow($title, $groupIndex . '___INDEX__'); ?></template>
+      </div>
+      <?php $groupIndex++; endforeach; ?>
+    </section>
+
+    <section class="admin-cms-card admin-cms-fields" data-repeater="certifications">
+      <header class="admin-cms-section-intro">
+        <h2>Chứng nhận</h2>
+        <p>Các chứng nhận, tiêu chuẩn công ty đã đạt được.</p>
+      </header>
+      <div class="admin-editor-stack">
+        <div class="admin-editor-heading">
+          <h3>Chứng nhận</h3>
+          <button type="button" class="btn btn-outline btn-sm" data-add aria-label="Thêm dòng chứng nhận"><i class="bi bi-plus-lg" aria-hidden="true"></i> Thêm dòng</button>
+        </div>
+        <div class="admin-editor-stack" data-rows>
+          <?php foreach ($certifications as $index => $row) { $certificationRow($index, $row); } ?>
+        </div>
+      </div>
+      <template data-template><?php $certificationRow('__INDEX__'); ?></template>
+    </section>
+
+    <?php require $partials . 'editor-save.php'; ?>
+  </form>
 </div>
-
-<?php if ($errors !== []): ?>
-<div class="admin-alert admin-alert--error" role="alert"><?= e((string) ($errors['general'] ?? 'Có trường cần kiểm tra lại.')) ?></div>
-<?php endif; ?>
-
-<form method="POST" action="<?= url('admin/pages/about') ?>" class="admin-form" data-ajax>
-  <?= csrf_field() ?>
-
-  <section class="admin-card">
-    <div class="admin-card__head">
-      <h2 class="admin-h2">Mốc phát triển</h2>
-      <span class="admin-badge admin-badge--soft"><span data-count="milestones"><?= count($milestones) ?></span> dòng</span>
-    </div>
-    <div class="admin-repeater" data-repeater="milestones">
-      <div class="admin-repeater__head" aria-hidden="true">
-        <span>Mốc</span><span>Nội dung</span><span>Đang vận hành</span><span></span>
-      </div>
-      <div class="admin-repeater__rows" data-rows>
-        <?php foreach ($milestones as $index => $row): ?>
-        <div class="admin-repeater__row" data-row>
-          <input class="field__input" type="text" name="milestones[<?= (int) $index ?>][year_label]"
-                 value="<?= e($val($row, 'year_label')) ?>" maxlength="40" placeholder="VD: 2025">
-          <input class="field__input" type="text" name="milestones[<?= (int) $index ?>][text]"
-                 value="<?= e($val($row, 'text')) ?>" maxlength="500" placeholder="Nội dung mốc">
-          <label class="admin-repeater__check">
-            <input type="checkbox" name="milestones[<?= (int) $index ?>][is_highlight]" value="1"<?= (int) $val($row, 'is_highlight', '0') === 1 ? ' checked' : '' ?>>
-          </label>
-          <div class="admin-repeater__actions">
-            <button type="button" class="btn btn-outline btn-icon" data-move="up" title="Lên" aria-label="Di chuyển lên"><?= admin_icon_svg('arrow-up') ?></button>
-            <button type="button" class="btn btn-outline btn-icon" data-move="down" title="Xuống" aria-label="Di chuyển xuống"><?= admin_icon_svg('arrow-down') ?></button>
-            <button type="button" class="btn btn-ghost btn-icon" data-remove title="Xoá" aria-label="Xoá"><?= admin_icon_svg('trash') ?></button>
-            
-          </div>
-        </div>
-        <?php endforeach; ?>
-      </div>
-      <template data-template>
-        <div class="admin-repeater__row" data-row>
-          <input class="field__input" type="text" name="milestones[__INDEX__][year_label]" maxlength="40" placeholder="VD: 2025">
-          <input class="field__input" type="text" name="milestones[__INDEX__][text]" maxlength="500" placeholder="Nội dung mốc">
-          <label class="admin-repeater__check"><input type="checkbox" name="milestones[__INDEX__][is_highlight]" value="1"></label>
-          <div class="admin-repeater__actions">
-            <button type="button" class="btn btn-outline btn-icon" data-move="up" title="Lên" aria-label="Di chuyển lên"><?= admin_icon_svg('arrow-up') ?></button>
-            <button type="button" class="btn btn-outline btn-icon" data-move="down" title="Xuống" aria-label="Di chuyển xuống"><?= admin_icon_svg('arrow-down') ?></button>
-            <button type="button" class="btn btn-ghost btn-icon" data-remove title="Xoá" aria-label="Xoá"><?= admin_icon_svg('trash') ?></button>
-            
-          </div>
-        </div>
-      </template>
-      <button type="button" class="btn btn-outline btn-sm" data-add><i class="bi bi-plus-lg me-1" aria-hidden="true"></i> Thêm mốc</button>
-    </div>
-  </section>
-
-  <section class="admin-card">
-    <div class="admin-card__head">
-      <h2 class="admin-h2">Tầm nhìn — Sứ mệnh — Giá trị cốt lõi</h2>
-      <span class="admin-badge admin-badge--soft"><span data-count="values"><?= count($values) ?></span> dòng</span>
-    </div>
-    <div class="admin-repeater" data-repeater="values">
-      <div class="admin-repeater__head" aria-hidden="true"><span>Tiêu đề</span><span>Nội dung</span><span></span></div>
-      <div class="admin-repeater__rows" data-rows>
-        <?php foreach ($values as $index => $row): ?>
-        <div class="admin-repeater__row" data-row>
-          <input class="field__input" type="text" name="values[<?= (int) $index ?>][title]"
-                 value="<?= e($val($row, 'title')) ?>" maxlength="120" placeholder="VD: Tầm nhìn">
-          <input class="field__input" type="text" name="values[<?= (int) $index ?>][body]"
-                 value="<?= e($val($row, 'body')) ?>" maxlength="800" placeholder="Nội dung">
-          <div class="admin-repeater__actions">
-            <button type="button" class="btn btn-outline btn-icon" data-move="up" title="Lên" aria-label="Di chuyển lên"><?= admin_icon_svg('arrow-up') ?></button>
-            <button type="button" class="btn btn-outline btn-icon" data-move="down" title="Xuống" aria-label="Di chuyển xuống"><?= admin_icon_svg('arrow-down') ?></button>
-            <button type="button" class="btn btn-ghost btn-icon" data-remove title="Xoá" aria-label="Xoá"><?= admin_icon_svg('trash') ?></button>
-            
-          </div>
-        </div>
-        <?php endforeach; ?>
-      </div>
-      <template data-template>
-        <div class="admin-repeater__row" data-row>
-          <input class="field__input" type="text" name="values[__INDEX__][title]" maxlength="120" placeholder="VD: Tầm nhìn">
-          <input class="field__input" type="text" name="values[__INDEX__][body]" maxlength="800" placeholder="Nội dung">
-          <div class="admin-repeater__actions">
-            <button type="button" class="btn btn-outline btn-icon" data-move="up" title="Lên" aria-label="Di chuyển lên"><?= admin_icon_svg('arrow-up') ?></button>
-            <button type="button" class="btn btn-outline btn-icon" data-move="down" title="Xuống" aria-label="Di chuyển xuống"><?= admin_icon_svg('arrow-down') ?></button>
-            <button type="button" class="btn btn-ghost btn-icon" data-remove title="Xoá" aria-label="Xoá"><?= admin_icon_svg('trash') ?></button>
-            
-          </div>
-        </div>
-      </template>
-      <button type="button" class="btn btn-outline btn-sm" data-add><i class="bi bi-plus-lg me-1" aria-hidden="true"></i> Thêm dòng</button>
-    </div>
-  </section>
-
-  <section class="admin-card">
-    <div class="admin-card__head">
-      <h2 class="admin-h2">Chứng nhận đang áp dụng</h2>
-      <span class="admin-badge admin-badge--soft"><span data-count="certifications"><?= count($certifications) ?></span> dòng</span>
-    </div>
-    <div class="admin-repeater" data-repeater="certifications">
-      <div class="admin-repeater__head" aria-hidden="true"><span>Chứng nhận</span><span></span></div>
-      <div class="admin-repeater__rows" data-rows>
-        <?php foreach ($certifications as $index => $row): ?>
-        <div class="admin-repeater__row" data-row>
-          <input class="field__input" type="text" name="certifications[<?= (int) $index ?>][label]"
-                 value="<?= e($val($row, 'label')) ?>" maxlength="200" placeholder="VD: SA8000 — trách nhiệm xã hội (từ 2012)">
-          <div class="admin-repeater__actions">
-            <button type="button" class="btn btn-outline btn-icon" data-move="up" title="Lên" aria-label="Di chuyển lên"><?= admin_icon_svg('arrow-up') ?></button>
-            <button type="button" class="btn btn-outline btn-icon" data-move="down" title="Xuống" aria-label="Di chuyển xuống"><?= admin_icon_svg('arrow-down') ?></button>
-            <button type="button" class="btn btn-ghost btn-icon" data-remove title="Xoá" aria-label="Xoá"><?= admin_icon_svg('trash') ?></button>
-            
-          </div>
-        </div>
-        <?php endforeach; ?>
-      </div>
-      <template data-template>
-        <div class="admin-repeater__row" data-row>
-          <input class="field__input" type="text" name="certifications[__INDEX__][label]" maxlength="200" placeholder="Tên chứng nhận">
-          <div class="admin-repeater__actions">
-            <button type="button" class="btn btn-outline btn-icon" data-move="up" title="Lên" aria-label="Di chuyển lên"><?= admin_icon_svg('arrow-up') ?></button>
-            <button type="button" class="btn btn-outline btn-icon" data-move="down" title="Xuống" aria-label="Di chuyển xuống"><?= admin_icon_svg('arrow-down') ?></button>
-            <button type="button" class="btn btn-ghost btn-icon" data-remove title="Xoá" aria-label="Xoá"><?= admin_icon_svg('trash') ?></button>
-            
-          </div>
-        </div>
-      </template>
-      <button type="button" class="btn btn-outline btn-sm" data-add><i class="bi bi-plus-lg me-1" aria-hidden="true"></i> Thêm chứng nhận</button>
-    </div>
-  </section>
-
-  <div class="admin-form__actions">
-    <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1" aria-hidden="true"></i> Lưu thay đổi</button>
-  </div>
-</form>

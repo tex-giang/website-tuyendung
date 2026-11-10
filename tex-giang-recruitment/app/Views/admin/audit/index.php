@@ -1,73 +1,64 @@
 <?php
 $page['ajax_fragment'] = true;
-/** Nhật ký thao tác quản trị. */
-$actionLabels = [
-    'auth.login' => 'Đăng nhập', 'auth.logout' => 'Đăng xuất',
-    'job.create' => 'Tạo tin', 'job.update' => 'Sửa tin', 'job.status' => 'Đổi trạng thái tin',
-    'job.duplicate' => 'Nhân bản tin', 'job.delete' => 'Xoá tin',
-    'application.status' => 'Đổi trạng thái hồ sơ', 'application.cv_download' => 'Tải CV',
-    'post.create' => 'Tạo bài viết', 'post.update' => 'Sửa bài viết', 'post.status' => 'Đổi trạng thái bài',
-    'post.delete' => 'Xoá bài viết',
-    'banner.create' => 'Tạo banner', 'banner.update' => 'Sửa banner', 'banner.toggle' => 'Bật/tắt banner',
-    'banner.delete' => 'Xoá banner',
-    'settings.update' => 'Lưu cài đặt', 'content.update' => 'Lưu nội dung',
-    'contact.status' => 'Xử lý tin nhắn', 'contact.delete' => 'Xoá tin nhắn',
-    'user.create' => 'Tạo tài khoản', 'user.update' => 'Sửa tài khoản',
-    'user.password_reset' => 'Đặt lại mật khẩu', 'user.password_change' => 'Đổi mật khẩu',
+$listUrl = url('admin/audit');
+$listPager = true;
+$actionLabels = \App\Models\AuditLog::ACTION_LABELS;
+$entities = [
+    'user' => 'Tài khoản', 'job' => 'Tin tuyển dụng', 'application' => 'Hồ sơ ứng tuyển',
+    'post' => 'Bài viết', 'banner' => 'Banner', 'settings' => 'Cài đặt', 'page' => 'Trang nội dung',
+    'menu' => 'Menu', 'branch' => 'Khu sản xuất', 'category' => 'Khối phòng ban',
+    'post-category' => 'Chuyên mục tin tức', 'contact_message' => 'Tin nhắn liên hệ',
 ];
 ?>
-<div class="admin-page-head">
+<div class="admin-page-head admin-list-head">
   <div>
     <h1 class="admin-h1" id="admin-list-title">Nhật ký thao tác</h1>
+    <p class="admin-sub">Theo dõi hoạt động và các thay đổi trong hệ thống quản trị.</p>
   </div>
 </div>
 
-<form class="admin-filters" method="GET" role="search" aria-label="Bộ lọc danh sách" action="<?= url('admin/audit') ?>">
-  <label class="field">
-    <span class="field__label">Từ khóa</span>
-    <input type="search" name="q" value="<?= e($filters['q']) ?>" class="field__input" placeholder="Tìm theo hành động, người dùng, IP…">
-  </label>
-  <label class="field">
-    <span class="field__label">Người dùng</span>
-    <select name="user_id" class="field__input">
-      <option value="">Tất cả người dùng</option>
-      <?php foreach ($users as $user): ?>
-      <option value="<?= (int) $user['id'] ?>"<?= (string) $filters['user_id'] === (string) $user['id'] ? ' selected' : '' ?>><?= e($user['full_name']) ?></option>
-      <?php endforeach; ?>
-    </select>
-  </label>
-  <div class="admin-filter-actions">
-    <button type="submit" class="btn btn-outline"><i class="bi bi-funnel me-1" aria-hidden="true"></i> Áp dụng</button>
-    <a href="<?= url('admin/audit') ?>" class="btn btn-ghost"><i class="bi bi-x-circle me-1" aria-hidden="true"></i> Xoá lọc</a>
-  </div>
-</form>
-
-<div class="admin-card">
+<section class="admin-list-panel">
+  <form class="admin-filters admin-list-toolbar" method="GET" role="search" aria-label="Bộ lọc nhật ký" action="<?= $listUrl ?>" data-admin-live-filter>
+    <label class="admin-list-search">
+      <span class="visually-hidden">Tìm trong nhật ký</span>
+      <i class="bi bi-search" aria-hidden="true"></i>
+      <input type="search" id="audit-search" name="q" value="<?= e($filters['q']) ?>" class="field__input" placeholder="Tìm theo thao tác, đối tượng, IP…">
+    </label>
+    <label>
+      <span class="visually-hidden">Lọc theo người thực hiện</span>
+      <select name="user_id" class="field__input admin-list-select" data-submit-onchange>
+        <option value="">Tất cả người thực hiện</option>
+        <?php foreach ($users as $user): ?>
+        <option value="<?= (int) $user['id'] ?>"<?= (string) $filters['user_id'] === (string) $user['id'] ? ' selected' : '' ?>><?= e($user['full_name']) ?></option>
+        <?php endforeach; ?>
+      </select>
+    </label>
+    <noscript><button type="submit" class="btn btn-outline">Áp dụng</button></noscript>
+  </form>
   <?php if ($result['items'] === []): ?>
-  <p class="admin-empty">Chưa có bản ghi nào.</p>
+  <p class="admin-list-empty">Không có bản ghi phù hợp.</p>
   <?php else: ?>
   <div class="admin-table-wrap">
-    <table class="admin-table table table-hover align-middle" aria-labelledby="admin-list-title">
-      <thead><tr><th>Thời gian</th><th>Người thực hiện</th><th>Hành động</th><th>Đối tượng</th><th>IP</th></tr></thead>
+    <table class="admin-table admin-directory-table admin-directory-table--audit" aria-labelledby="admin-list-title">
+      <thead><tr><th scope="col">Thời gian</th><th scope="col">Người thực hiện</th><th scope="col">Thao tác</th><th scope="col">Đối tượng</th><th scope="col">Địa chỉ IP</th></tr></thead>
       <tbody>
         <?php foreach ($result['items'] as $row): ?>
         <tr>
-          <td class="admin-muted"><?= e(vn_date($row['created_at'], 'd/m/Y H:i:s')) ?></td>
-          <td><?= e($row['user_name'] ?? '—') ?></td>
-          <td><strong><?= e($actionLabels[$row['action']] ?? $row['action']) ?></strong></td>
-          <td class="admin-muted admin-mono">
-            <?= $row['entity_type'] ? e((string) $row['entity_type']) : '—' ?><?= $row['entity_id'] ? ' #' . (int) $row['entity_id'] : '' ?>
+          <td class="admin-mono admin-audit-date" data-label="Thời gian"><?= e(vn_date($row['created_at'], 'H:i:s d/m/Y')) ?></td>
+          <td data-label="Người thực hiện"><?= e($row['user_name'] ?? '—') ?></td>
+          <td class="admin-directory-name"><strong><?= e($actionLabels[$row['action']] ?? $row['action']) ?></strong></td>
+          <td data-label="Đối tượng">
+            <?= e($entities[$row['entity_type']] ?? $row['entity_type'] ?? '—') ?><?= $row['entity_id'] ? ' #' . (int) $row['entity_id'] : '' ?>
             <?php if (!empty($row['meta'])): ?>
-            <span class="admin-muted"><?= e(excerpt((string) $row['meta'], 80)) ?></span>
+            <span class="admin-muted admin-mono"><?= e(excerpt((string) $row['meta'], 80)) ?></span>
             <?php endif; ?>
           </td>
-          <td class="admin-muted admin-mono"><?= e($row['ip_address'] ?? '') ?></td>
+          <td class="admin-mono" data-label="Địa chỉ IP"><?= e($row['ip_address'] ?: '—') ?></td>
         </tr>
         <?php endforeach; ?>
       </tbody>
     </table>
   </div>
-
-  <?php $listUrl = url('admin/audit'); require BASE_PATH . '/app/Views/partials/admin/pager.php'; ?>
+  <?php require BASE_PATH . '/app/Views/partials/admin/pager.php'; ?>
   <?php endif; ?>
-</div>
+</section>

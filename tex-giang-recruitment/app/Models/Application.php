@@ -87,7 +87,7 @@ final class Application
         $stmt = Database::connection()->prepare(
             'SELECT h.*, u.full_name AS changed_by_name
              FROM application_history h LEFT JOIN users u ON u.id = h.changed_by
-             WHERE h.application_id = :id ORDER BY h.created_at'
+             WHERE h.application_id = :id ORDER BY h.created_at, h.id'
         );
         $stmt->execute(['id' => $applicationId]);
         return $stmt->fetchAll();
@@ -134,33 +134,38 @@ final class Application
         return $id;
     }
 
-    /** Đổi trạng thái + ghi lịch sử trong cùng transaction. */
-    public static function updateStatus(int $id, string $status, ?string $note, ?int $userId, ?string $appointmentAt): void
+    /** Cập nhật các trường của một thao tác và ghi lịch sử trong cùng transaction. */
+    public static function updateReview(int $id, array $changes, ?string $note, int $userId): bool
     {
-        Database::transaction(static function () use ($id, $status, $note, $userId, $appointmentAt): void {
+        $columns = array_intersect_key($changes, array_flip(['status', 'admin_note', 'appointment_at', 'appointment_location']));
+        return Database::transaction(static function () use ($id, $columns, $note, $userId): bool {
             $pdo = Database::connection();
-            $stmt = $pdo->prepare(
-                'UPDATE applications SET status = :status, admin_note = :note,
-                        appointment_at = :appointment, handled_by = :user WHERE id = :id'
-            );
-            $stmt->execute([
-                'status'      => $status,
-                'note'        => $note,
-                'appointment' => $appointmentAt,
-                'user'        => $userId,
-                'id'          => $id,
-            ]);
+            $lock = $pdo->prepare('SELECT status FROM applications WHERE id = :id FOR UPDATE');
+            $lock->execute(['id' => $id]);
+            $currentStatus = $lock->fetchColumn();
+            $lock->closeCursor();
+            if ($currentStatus === false) {
+                return false;
+            }
+
+            $assignments = ['handled_by = :user'];
+            foreach (array_keys($columns) as $column) {
+                $assignments[] = $column . ' = :' . $column;
+            }
+            $stmt = $pdo->prepare('UPDATE applications SET ' . implode(', ', $assignments) . ' WHERE id = :id');
+            $stmt->execute($columns + ['user' => $userId, 'id' => $id]);
 
             $history = $pdo->prepare(
                 'INSERT INTO application_history (application_id, status, note, changed_by)
                  VALUES (:id, :status, :note, :user)'
             );
             $history->execute([
-                'id'     => $id,
-                'status' => $status,
-                'note'   => $note,
-                'user'   => $userId,
+                'id' => $id,
+                'status' => $columns['status'] ?? $currentStatus,
+                'note' => $note,
+                'user' => $userId,
             ]);
+            return true;
         });
     }
 

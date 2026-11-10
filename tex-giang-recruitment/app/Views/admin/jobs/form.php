@@ -14,35 +14,34 @@ if ($deadline !== '' && str_contains($deadline, ' ')) {
     $deadline = substr($deadline, 0, 10);
 }
 ?>
-<div class="admin-page-head">
+<div class="admin-page-head admin-job-heading">
   <div>
-    <p class="admin-breadcrumb"><a href="<?= url('admin/jobs') ?>">Tin tuyển dụng</a> / <?= $isEdit ? 'Sửa tin' : 'Thêm tin' ?></p>
+    <a href="<?= url('admin/jobs') ?>" class="admin-job-heading__back"><i class="bi bi-arrow-left" aria-hidden="true"></i> Tin tuyển dụng</a>
     <h1 class="admin-h1"><?= $isEdit ? 'Sửa tin tuyển dụng' : 'Thêm tin tuyển dụng' ?></h1>
-    <?php if ($isEdit): ?>
-    <?php endif; ?>
+    <p class="admin-sub"><?= $isEdit ? 'Cập nhật thông tin vị trí tuyển dụng.' : 'Điền thông tin vị trí cần tuyển.' ?> Các trường có dấu * là bắt buộc.</p>
   </div>
-  <div class="admin-head-actions">
-    <?php if ($isEdit): ?>
-    <a href="<?= url('jobs/' . $job['slug']) ?>" target="_blank" rel="noopener" class="btn btn-outline"><i class="bi bi-box-arrow-up-right me-1" aria-hidden="true"></i> Xem trên website</a>
-    <?php endif; ?>
-    <a href="<?= url('admin/jobs') ?>" class="btn btn-ghost"><i class="bi bi-arrow-left me-1" aria-hidden="true"></i> Danh sách</a>
-  </div>
+  <?php if ($isEdit): ?>
+  <a href="<?= url('jobs/' . $job['slug']) ?>" target="_blank" rel="noopener" class="btn btn-outline"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> Xem trên website</a>
+  <?php endif; ?>
 </div>
 
 <?php if ($errors !== []): ?>
 <div class="admin-alert admin-alert--error" role="alert">Có <?= count($errors) ?> trường cần kiểm tra lại. Chi tiết hiển thị dưới từng ô.</div>
 <?php endif; ?>
 
-<form method="POST" action="<?= $action ?>" class="admin-form" data-ajax="job">
+<form method="POST" action="<?= $action ?>" class="admin-form admin-job-form" data-ajax="job">
   <?= csrf_field() ?>
 
-  <section class="admin-card">
-    <h2 class="admin-h2">Thông tin chính</h2>
-    <div class="field-grid">
+  <section class="admin-job-form__section" aria-labelledby="job-section-overview">
+    <div class="admin-job-form__intro">
+      <h2 id="job-section-overview">Thông tin chung</h2>
+      <p>Tên vị trí, mã tin và đường dẫn hiển thị trên website.</p>
+    </div>
+    <div class="field-grid admin-job-form__fields">
       <label class="field field--span2">
         <span class="field__label">Tiêu đề tin <em>*</em></span>
         <input class="field__input<?= isset($errors['title']) ? ' is-invalid' : '' ?>" type="text" name="title"
-               value="<?= e($val('title')) ?>" maxlength="220" required>
+               value="<?= e($val('title')) ?>" maxlength="220" placeholder="Ví dụ: Công nhân may công nghiệp" required>
         <?php if (isset($errors['title'])): ?><span class="field__error"><?= e($errors['title']) ?></span><?php endif; ?>
       </label>
 
@@ -56,14 +55,23 @@ if ($deadline !== '' && str_contains($deadline, ' ')) {
       <label class="field">
         <span class="field__label">Đường dẫn (slug)</span>
         <input class="field__input<?= isset($errors['slug']) ? ' is-invalid' : '' ?>" type="text" name="slug"
-               value="<?= e($val('slug')) ?>" maxlength="220" placeholder="cong-nhan-may">
+               value="<?= e($val('slug')) ?>" maxlength="220" aria-describedby="job-slug-hint">
+        <span class="admin-job-form__hint" id="job-slug-hint">Để trống để tạo đường dẫn từ tiêu đề.</span>
         <?php if (isset($errors['slug'])): ?><span class="field__error"><?= e($errors['slug']) ?></span><?php endif; ?>
       </label>
+    </div>
+  </section>
 
+  <section class="admin-job-form__section" aria-labelledby="job-section-position">
+    <div class="admin-job-form__intro">
+      <h2 id="job-section-position">Vị trí tuyển dụng</h2>
+      <p>Khu sản xuất, bộ phận, số lượng và địa điểm làm việc.</p>
+    </div>
+    <div class="field-grid admin-job-form__fields">
       <label class="field">
         <span class="field__label">Khu sản xuất <em>*</em></span>
         <select class="field__input<?= isset($errors['branch_id']) ? ' is-invalid' : '' ?>" name="branch_id" required>
-          <option value="">— Chọn khu —</option>
+          <option value="" hidden>Chọn khu sản xuất</option>
           <?php foreach ($branches as $branch): ?>
           <option value="<?= (int) $branch['id'] ?>"<?= (string) $val('branch_id') === (string) $branch['id'] ? ' selected' : '' ?>><?= e($branch['name']) ?></option>
           <?php endforeach; ?>
@@ -72,9 +80,9 @@ if ($deadline !== '' && str_contains($deadline, ' ')) {
       </label>
 
       <label class="field">
-        <span class="field__label">Khối phòng ban</span>
+        <span class="field__label">Bộ phận</span>
         <select class="field__input" name="category_id">
-          <option value="">— Không chọn —</option>
+          <option value="">Chọn bộ phận</option>
           <?php foreach ($categories as $category): ?>
           <option value="<?= (int) $category['id'] ?>"<?= (string) $val('category_id') === (string) $category['id'] ? ' selected' : '' ?>><?= e($category['name']) ?></option>
           <?php endforeach; ?>
@@ -82,13 +90,13 @@ if ($deadline !== '' && str_contains($deadline, ' ')) {
       </label>
 
       <label class="field">
-        <span class="field__label">Số lượng tuyển <em>*</em></span>
+        <span class="field__label">Số lượng cần tuyển <em>*</em></span>
         <input class="field__input<?= isset($errors['quantity']) ? ' is-invalid' : '' ?>" type="number" name="quantity"
                min="1" max="10000" value="<?= e($val('quantity', '1')) ?>" required>
         <?php if (isset($errors['quantity'])): ?><span class="field__error"><?= e($errors['quantity']) ?></span><?php endif; ?>
       </label>
 
-      <label class="field field--span2">
+      <label class="field">
         <span class="field__label">Địa điểm làm việc</span>
         <input class="field__input" type="text" name="location" value="<?= e($val('location')) ?>" maxlength="255"
                placeholder="Khu Tân Hương — Nhà máy 2">
@@ -96,16 +104,19 @@ if ($deadline !== '' && str_contains($deadline, ' ')) {
     </div>
   </section>
 
-  <section class="admin-card">
-    <h2 class="admin-h2">Thu nhập & điều kiện</h2>
-    <div class="field-grid">
+  <section class="admin-job-form__section" aria-labelledby="job-section-pay">
+    <div class="admin-job-form__intro">
+      <h2 id="job-section-pay">Lương và yêu cầu</h2>
+      <p>Mức lương hiển thị, khoảng lương để lọc và hình thức làm việc.</p>
+    </div>
+    <div class="field-grid admin-job-form__fields">
       <label class="field">
-        <span class="field__label">Mức lương hiển thị</span>
+        <span class="field__label">Lương hiển thị</span>
         <input class="field__input" type="text" name="salary_text" value="<?= e($val('salary_text')) ?>" maxlength="150"
                placeholder="8.000.000 - 16.000.000 VNĐ">
       </label>
       <label class="field">
-        <span class="field__label">Khoảng lương (dùng cho bộ lọc)</span>
+        <span class="field__label">Khoảng lương</span>
         <select class="field__input<?= isset($errors['salary_range']) ? ' is-invalid' : '' ?>" name="salary_range">
           <?php foreach ($salaryRanges as $key => $label): ?>
           <option value="<?= e($key) ?>"<?= (string) $val('salary_range') === (string) $key ? ' selected' : '' ?>><?= e($label) ?></option>
@@ -138,12 +149,15 @@ if ($deadline !== '' && str_contains($deadline, ' ')) {
     </div>
   </section>
 
-  <section class="admin-card">
-    <h2 class="admin-h2">Nội dung tin</h2>
-    <div class="field-grid">
+  <section class="admin-job-form__section" aria-labelledby="job-section-content">
+    <div class="admin-job-form__intro">
+      <h2 id="job-section-content">Nội dung tin</h2>
+      <p>Mô tả công việc, yêu cầu ứng viên và quyền lợi.</p>
+    </div>
+    <div class="field-grid admin-job-form__fields">
       <label class="field field--span2">
         <span class="field__label">Mô tả công việc <em>*</em></span>
-        <textarea class="field__input<?= isset($errors['description']) ? ' is-invalid' : '' ?>" name="description" rows="6" required><?= e($val('description')) ?></textarea>
+        <textarea class="field__input<?= isset($errors['description']) ? ' is-invalid' : '' ?>" name="description" rows="5" required><?= e($val('description')) ?></textarea>
         <?php if (isset($errors['description'])): ?><span class="field__error"><?= e($errors['description']) ?></span><?php endif; ?>
       </label>
       <label class="field field--span2">
@@ -152,14 +166,17 @@ if ($deadline !== '' && str_contains($deadline, ' ')) {
       </label>
       <label class="field field--span2">
         <span class="field__label">Quyền lợi</span>
-        <textarea class="field__input" name="benefits" rows="5"><?= e($val('benefits')) ?></textarea>
+        <textarea class="field__input" name="benefits" rows="4"><?= e($val('benefits')) ?></textarea>
       </label>
     </div>
   </section>
 
-  <section class="admin-card">
-    <h2 class="admin-h2">Xuất bản & SEO</h2>
-    <div class="field-grid">
+  <section class="admin-job-form__section" aria-labelledby="job-section-publish">
+    <div class="admin-job-form__intro">
+      <h2 id="job-section-publish">Đăng tin</h2>
+      <p>Trạng thái, thời gian đăng và hạn nộp hồ sơ.</p>
+    </div>
+    <div class="field-grid admin-job-form__fields">
       <label class="field">
         <span class="field__label">Trạng thái <em>*</em></span>
         <select class="field__input" name="status">
@@ -167,6 +184,10 @@ if ($deadline !== '' && str_contains($deadline, ' ')) {
           <option value="<?= e($key) ?>"<?= $val('status') === $key ? ' selected' : '' ?>><?= e($label) ?></option>
           <?php endforeach; ?>
         </select>
+      </label>
+      <label class="field">
+        <span class="field__label">Thứ tự ưu tiên</span>
+        <input class="field__input" type="number" name="sort_order" value="<?= e($val('sort_order', '0')) ?>">
       </label>
       <label class="field">
         <span class="field__label">Ngày đăng</span>
@@ -180,28 +201,37 @@ if ($deadline !== '' && str_contains($deadline, ' ')) {
                value="<?= e($deadline) ?>">
         <?php if (isset($errors['deadline'])): ?><span class="field__error"><?= e($errors['deadline']) ?></span><?php endif; ?>
       </label>
-      <label class="field field--checkbox">
-        <input type="checkbox" name="is_urgent" value="1"<?= (int) $val('is_urgent', '0') === 1 ? ' checked' : '' ?>>
-        <span>Đánh dấu <strong>tuyển gấp</strong> (ưu tiên hiển thị)</span>
+      <label class="field field--span2 admin-job-form__switch-row">
+        <span>
+          <span class="field__label" id="job-urgent-label">Tuyển gấp</span>
+          <span class="admin-job-form__hint" id="job-urgent-hint">Ưu tiên hiển thị tin trên website tuyển dụng.</span>
+        </span>
+        <input type="checkbox" role="switch" name="is_urgent" value="1" aria-labelledby="job-urgent-label"
+               aria-describedby="job-urgent-hint"<?= (int) $val('is_urgent', '0') === 1 ? ' checked' : '' ?>>
       </label>
-      <label class="field">
-        <span class="field__label">Thứ tự ưu tiên</span>
-        <input class="field__input" type="number" name="sort_order" value="<?= e($val('sort_order', '0')) ?>">
-      </label>
-      <label class="field">
-        <span class="field__label">Meta title</span>
+    </div>
+  </section>
+
+  <section class="admin-job-form__section" aria-labelledby="job-section-seo">
+    <div class="admin-job-form__intro">
+      <h2 id="job-section-seo">SEO</h2>
+      <p>Nội dung hiển thị trên kết quả tìm kiếm.</p>
+    </div>
+    <div class="field-grid admin-job-form__fields">
+      <label class="field field--span2">
+        <span class="field__label">Tiêu đề SEO</span>
         <input class="field__input" type="text" name="meta_title" value="<?= e($val('meta_title')) ?>" maxlength="220">
       </label>
       <label class="field field--span2">
-        <span class="field__label">Meta description</span>
+        <span class="field__label">Mô tả SEO</span>
         <textarea class="field__input" name="meta_description" rows="2" maxlength="320"><?= e($val('meta_description')) ?></textarea>
       </label>
     </div>
   </section>
 
-  <div class="admin-form__actions">
-    <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1" aria-hidden="true"></i> <?= $isEdit ? 'Lưu thay đổi' : 'Tạo tin tuyển dụng' ?></button>
-    <a href="<?= url('admin/jobs') ?>" class="btn btn-ghost">Huỷ</a>
+  <div class="admin-job-form__actions">
+    <a href="<?= url('admin/jobs') ?>" class="btn btn-outline">Hủy</a>
+    <button type="submit" class="btn btn-primary"><?= $isEdit ? 'Lưu thay đổi' : 'Tạo tin tuyển dụng' ?></button>
   </div>
 </form>
 

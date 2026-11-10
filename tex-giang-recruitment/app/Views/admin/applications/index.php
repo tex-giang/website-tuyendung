@@ -6,80 +6,78 @@ $statusBadge = [
     'interview' => 'admin-badge--interview', 'hired' => 'admin-badge--hired',
     'rejected' => 'admin-badge--rejected',
 ];
+$listUrl = url('admin/applications');
+$listPager = true;
 ?>
-<div class="admin-page-head">
+<div class="admin-page-head admin-list-head">
   <div>
     <h1 class="admin-h1" id="admin-list-title">Hồ sơ ứng tuyển</h1>
+    <p class="admin-sub">Theo dõi, liên hệ và xử lý hồ sơ của ứng viên.</p>
   </div>
 </div>
 
-<div class="admin-kpis admin-kpis--compact">
+<nav class="admin-application-counts" aria-label="Lọc hồ sơ theo trạng thái">
   <?php foreach ($statuses as $key => $label): ?>
-  <div class="admin-kpi admin-kpi--sm">
-    <span class="admin-kpi__label"><?= e($label) ?></span>
-    <strong class="admin-kpi__value"><?= (int) ($counts[$key] ?? 0) ?></strong>
-  </div>
+  <?php
+  $active = $filters['status'] === $key;
+  $query = array_filter(array_replace($filters, ['status' => $active ? '' : $key]), static fn($value): bool => $value !== '');
+  $href = $listUrl . ($query === [] ? '' : '?' . http_build_query($query));
+  ?>
+  <a href="<?= e($href) ?>"<?= $active ? ' aria-current="page"' : '' ?>>
+    <span><?= e($label) ?></span>
+    <strong><?= (int) ($counts[$key] ?? 0) ?></strong>
+  </a>
   <?php endforeach; ?>
-</div>
+</nav>
 
-<form class="admin-filters" method="GET" role="search" aria-label="Bộ lọc danh sách" action="<?= url('admin/applications') ?>">
-  <label class="field">
-    <span class="field__label">Từ khóa</span>
-    <input type="search" name="q" value="<?= e($filters['q']) ?>" class="field__input" placeholder="Tìm theo tên, số điện thoại, email…">
-  </label>
-  <label class="field">
-    <span class="field__label">Trạng thái</span>
-    <select name="status" class="field__input">
+<div class="admin-list-panel">
+  <form class="admin-filters admin-list-toolbar" data-admin-live-filter method="GET" role="search" aria-label="Lọc danh sách hồ sơ" action="<?= $listUrl ?>">
+    <label class="admin-list-search">
+      <i class="bi bi-search" aria-hidden="true"></i>
+      <span class="visually-hidden">Tìm theo tên, số điện thoại hoặc email</span>
+      <input id="application-filter-q" type="search" name="q" value="<?= e($filters['q']) ?>" class="field__input" placeholder="Tìm theo tên, số điện thoại hoặc email">
+    </label>
+    <select id="application-filter-status" name="status" class="field__input admin-list-select admin-list-select--status" data-submit-onchange aria-label="Lọc theo trạng thái">
       <option value="">Tất cả trạng thái</option>
       <?php foreach ($statuses as $key => $label): ?>
-      <option value="<?= e($key) ?>"<?= $filters['status'] === $key ? ' selected' : '' ?>><?= e($label) ?> (<?= (int) ($counts[$key] ?? 0) ?>)</option>
+      <option value="<?= e($key) ?>"<?= $filters['status'] === $key ? ' selected' : '' ?>><?= e($label) ?></option>
       <?php endforeach; ?>
     </select>
-  </label>
-  <label class="field">
-    <span class="field__label">Vị trí tuyển dụng</span>
-    <select name="job_id" class="field__input">
+    <select id="application-filter-job" name="job_id" class="field__input admin-list-select admin-list-select--job" data-submit-onchange aria-label="Lọc theo vị trí">
       <option value="">Tất cả vị trí</option>
       <?php foreach ($jobs as $jobId => $jobTitle): ?>
       <option value="<?= (int) $jobId ?>"<?= (string) $filters['job_id'] === (string) $jobId ? ' selected' : '' ?>><?= e($jobTitle) ?></option>
       <?php endforeach; ?>
     </select>
-  </label>
-  <div class="admin-filter-actions">
-    <button type="submit" class="btn btn-outline"><i class="bi bi-funnel me-1" aria-hidden="true"></i> Áp dụng</button>
-    <a href="<?= url('admin/applications') ?>" class="btn btn-ghost"><i class="bi bi-x-circle me-1" aria-hidden="true"></i> Xoá lọc</a>
-  </div>
-</form>
+    <noscript><button type="submit" class="btn btn-outline">Áp dụng</button></noscript>
+  </form>
 
-<div class="admin-card">
   <?php if ($result['items'] === []): ?>
-  <p class="admin-empty">Chưa có hồ sơ nào khớp bộ lọc. Hồ sơ ứng viên gửi từ website sẽ xuất hiện tại đây.</p>
+  <p class="admin-list-empty">Chưa có hồ sơ ứng tuyển nào khớp bộ lọc.</p>
   <?php else: ?>
-  <div class="admin-table-wrap">
-    <table class="admin-table table table-hover align-middle" aria-labelledby="admin-list-title">
-      <thead>
-        <tr><th>Ứng viên</th><th>Vị trí</th><th>Nguồn hồ sơ</th><th>Trạng thái</th><th>Nhận lúc</th><th class="is-actions">Thao tác</th></tr>
+  <div class="admin-table-wrap admin-application-results">
+    <table class="admin-table admin-table--applications table table-hover align-middle" role="table" aria-labelledby="admin-list-title">
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Ứng viên</th><th scope="col" role="columnheader">Vị trí ứng tuyển</th><th scope="col" role="columnheader">Nguồn</th><th scope="col" role="columnheader">Trạng thái</th><th scope="col" role="columnheader">Thời gian nhận</th><th scope="col" role="columnheader" class="is-actions" aria-label="Thao tác"></th></tr>
       </thead>
-      <tbody>
+      <tbody role="rowgroup">
         <?php foreach ($result['items'] as $app): ?>
-        <tr>
-          <td>
+        <tr role="row">
+          <td role="cell" class="admin-application-results__person">
             <a class="admin-link" href="<?= url('admin/applications/' . $app['id']) ?>"><strong><?= e($app['full_name']) ?></strong></a>
             <span class="admin-muted"><?= e($app['phone']) ?><?= $app['email'] ? ' · ' . e($app['email']) : '' ?></span>
-            <span class="admin-muted"><?= e($app['address'] ?? '') ?></span>
           </td>
-          <td>
+          <td role="cell" class="admin-application-results__job" title="<?= e($app['job_title'] ?? 'CV tự do') ?>">
             <?= e($app['job_title'] ?? 'CV tự do') ?>
-            <?php if (!empty($app['job_code'])): ?><span class="admin-muted admin-mono"><?= e($app['job_code']) ?></span><?php endif; ?>
           </td>
-          <td class="admin-muted"><?= e($app['source'] ?? 'Website') ?></td>
-          <td><span class="admin-badge <?= $statusBadge[$app['status']] ?? '' ?>"><?= e($statuses[$app['status']] ?? $app['status']) ?></span></td>
-          <td class="admin-muted"><?= e(vn_date($app['created_at'], 'd/m/Y H:i')) ?></td>
-          <td class="is-actions">
+          <td role="cell" class="admin-muted admin-application-results__source"><?= e($app['source'] ?? 'Website') ?></td>
+          <td role="cell" class="admin-application-results__status"><span class="admin-badge <?= $statusBadge[$app['status']] ?? '' ?>"><?= e($statuses[$app['status']] ?? $app['status']) ?></span></td>
+          <td role="cell" class="admin-muted admin-application-results__date"><?= e(vn_date($app['created_at'], 'H:i d/m/Y')) ?></td>
+          <td role="cell" class="is-actions admin-application-results__actions">
             <div class="admin-actions">
               <a href="<?= url('admin/applications/' . $app['id']) ?>" class="btn btn-outline btn-sm"><i class="bi bi-eye me-1" aria-hidden="true"></i> Xem hồ sơ</a>
               <?php if (!empty($app['cv_stored_name'])): ?>
-              <a href="<?= url('admin/applications/' . $app['id'] . '/cv') ?>" class="btn btn-ghost btn-sm"><i class="bi bi-download me-1" aria-hidden="true"></i> Tải CV</a>
+              <a href="<?= url('admin/applications/' . $app['id'] . '/cv') ?>" class="btn btn-ghost btn-sm admin-application-results__cv" title="Tải CV" aria-label="Tải CV"><i class="bi bi-download" aria-hidden="true"></i></a>
               <?php endif; ?>
             </div>
           </td>
@@ -89,6 +87,6 @@ $statusBadge = [
     </table>
   </div>
 
-  <?php $listUrl = url('admin/applications'); require BASE_PATH . '/app/Views/partials/admin/pager.php'; ?>
+  <?php require BASE_PATH . '/app/Views/partials/admin/pager.php'; ?>
   <?php endif; ?>
 </div>

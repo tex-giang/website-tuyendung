@@ -1,62 +1,57 @@
 <?php
 $page['ajax_fragment'] = true;
-/** Hồ sơ cá nhân: thông tin tài khoản + đổi mật khẩu. */
-$user = $user;
-$errors = $errors ?? [];
-$err = static fn(string $key): string => (string) ($errors[$key] ?? '');
-$roleLabels = $roles ?? [];
-$flashSuccess = \App\Core\Session::pull('_success');
-$flashError = \App\Core\Session::pull('_error');
+$role = $roles[$user['role_name']] ?? $user['role_name'];
+$profileFields = [
+    'Tên đăng nhập' => $user['username'],
+    'Họ và tên' => $user['full_name'],
+    'Email' => $user['email'],
+    'Số điện thoại' => $user['phone'],
+    'Vai trò' => $role,
+    'Đăng nhập gần nhất' => vn_date($user['last_login_at'], 'H:i d/m/Y') ?: '—',
+];
 ?>
-<div class="admin-page-head">
-  <div>
-    <h1 class="admin-h1">Hồ sơ cá nhân</h1>
-  </div>
-</div>
-
-<?php if ($flashSuccess): ?><div class="admin-alert admin-alert--success" role="status"><?= e((string) $flashSuccess) ?></div><?php endif; ?>
-<?php if ($flashError): ?><div class="admin-alert admin-alert--error" role="alert"><?= e((string) $flashError) ?></div><?php endif; ?>
-
-<div class="admin-grid-2">
-  <section class="admin-card">
-    <h2 class="admin-h2">Thông tin tài khoản</h2>
-    <table class="admin-table admin-table--kv">
-      <tbody>
-        <tr><th>Tên đăng nhập</th><td class="admin-mono"><?= e($user['username']) ?></td></tr>
-        <tr><th>Họ và tên</th><td><?= e($user['full_name']) ?></td></tr>
-        <tr><th>Vai trò</th><td><?= e($roleLabels[$user['role_name']] ?? $user['role_name']) ?></td></tr>
-        <tr><th>Email</th><td><?= e($user['email'] ?? '—') ?></td></tr>
-        <tr><th>Điện thoại</th><td><?= e($user['phone'] ?? '—') ?></td></tr>
-        <tr><th>Đăng nhập gần nhất</th><td><?= e(vn_date($user['last_login_at'], 'd/m/Y H:i') ?: '—') ?></td></tr>
-      </tbody>
-    </table>
-  </section>
-
-  <section class="admin-card" id="doi-mat-khau">
-    <h2 class="admin-h2">Đổi mật khẩu</h2>
-    <form data-ajax method="POST" action="<?= url('admin/profile/password') ?>">
+<div class="admin-content-editor admin-profile-editor">
+  <div class="admin-page-head admin-cms-form-head">
+    <div>
+      <h1 class="admin-h1">Hồ sơ cá nhân</h1>
+      <p class="admin-sub">Thông tin tài khoản và quyền truy cập hệ thống quản trị.</p>
+    </div>
+    <form method="POST" action="<?= url('admin/logout') ?>">
       <?= csrf_field() ?>
-      <div class="field-grid">
-        <label class="field field--span2">
-          <span class="field__label">Mật khẩu hiện tại</span>
-          <input class="field__input<?= $err('current_password') ? ' is-invalid' : '' ?>" type="password"
-                 name="current_password" required autocomplete="current-password">
-          <?php if ($err('current_password')): ?><span class="field__error"><?= e($err('current_password')) ?></span><?php endif; ?>
-        </label>
-        <label class="field">
-          <span class="field__label">Mật khẩu mới</span>
-          <input class="field__input<?= $err('password') ? ' is-invalid' : '' ?>" type="password"
-                 name="password" required autocomplete="new-password">
-          <?php if ($err('password')): ?><span class="field__error"><?= e($err('password')) ?></span><?php endif; ?>
-        </label>
-        <label class="field">
-          <span class="field__label">Nhập lại mật khẩu mới</span>
-          <input class="field__input<?= $err('password_confirm') ? ' is-invalid' : '' ?>" type="password"
-                 name="password_confirm" required autocomplete="new-password">
-          <?php if ($err('password_confirm')): ?><span class="field__error"><?= e($err('password_confirm')) ?></span><?php endif; ?>
-        </label>
-      </div>
-      <button type="submit" class="btn btn-primary mt-4"><i class="bi bi-key me-1" aria-hidden="true"></i> Đổi mật khẩu</button>
+      <button type="submit" class="btn btn-outline"><i class="bi bi-box-arrow-right" aria-hidden="true"></i> Đăng xuất</button>
     </form>
-  </section>
+  </div>
+
+  <div class="admin-cms-form">
+    <section class="admin-cms-card admin-cms-fields" aria-label="Thông tin tài khoản">
+      <dl class="admin-information admin-information--profile">
+        <?php foreach ($profileFields as $label => $value): ?>
+        <div><dt><?= e($label) ?></dt><dd><?= e($value ?: '—') ?></dd></div>
+        <?php endforeach; ?>
+      </dl>
+    </section>
+
+    <section class="admin-cms-card admin-cms-fields" id="doi-mat-khau">
+      <header class="admin-cms-section-intro">
+        <h2>Đổi mật khẩu</h2>
+        <p>Mật khẩu mới có ít nhất 8 ký tự và khác mật khẩu hiện tại.</p>
+      </header>
+      <form class="admin-cms-fields" data-ajax method="POST" action="<?= url('admin/profile/password') ?>">
+        <?= csrf_field() ?>
+        <div class="field-grid admin-cms-fields">
+          <?php foreach (['current_password' => 'Mật khẩu hiện tại', 'password' => 'Mật khẩu mới', 'password_confirm' => 'Nhập lại mật khẩu mới'] as $name => $label): ?>
+          <label class="field<?= $name === 'current_password' ? ' field--span2' : '' ?>">
+            <span class="field__label"><?= e($label) ?> <em>*</em></span>
+            <input class="field__input<?= !empty($errors[$name]) ? ' is-invalid' : '' ?>" type="password" name="<?= e($name) ?>"
+                   autocomplete="<?= $name === 'current_password' ? 'current-password' : 'new-password' ?>"<?= $name !== 'current_password' ? ' minlength="8"' : '' ?> required>
+            <?php if (!empty($errors[$name])): ?><span class="field__error"><?= e($errors[$name]) ?></span><?php endif; ?>
+          </label>
+          <?php endforeach; ?>
+        </div>
+        <div class="admin-cms-actions">
+          <button type="submit" class="btn btn-primary"><i class="bi bi-key" aria-hidden="true"></i> Đổi mật khẩu</button>
+        </div>
+      </form>
+    </section>
+  </div>
 </div>

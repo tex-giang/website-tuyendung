@@ -66,14 +66,13 @@ final class BranchContact
     }
 
     /**
-     * Thay toàn bộ danh sách liên hệ của một chi nhánh (xoá cũ + thêm mới trong transaction).
+     * Thay danh sách liên hệ trong cùng transaction với thao tác lưu khu sản xuất.
      * @param array<int, array{full_name:string,title:string,phone:string,is_active:int}> $contacts
      */
     public static function replaceForBranch(int $branchId, array $contacts): void
     {
         $pdo = Database::connection();
-        $pdo->beginTransaction();
-        try {
+        $replace = static function () use ($pdo, $branchId, $contacts): void {
             $pdo->prepare('DELETE FROM branch_contacts WHERE branch_id = :id')->execute(['id' => $branchId]);
             $insert = $pdo->prepare(
                 'INSERT INTO branch_contacts (branch_id, full_name, title, phone, sort_order, is_active)
@@ -91,10 +90,11 @@ final class BranchContact
                     'is_active'  => (int) ($contact['is_active'] ?? 1),
                 ]);
             }
-            $pdo->commit();
-        } catch (\Throwable $e) {
-            $pdo->rollBack();
-            throw $e;
+        };
+        if ($pdo->inTransaction()) {
+            $replace();
+        } else {
+            Database::transaction($replace);
         }
     }
 

@@ -38,10 +38,12 @@ foreach (array_slice($words, 0, 2) as $word) {
 $initials = mb_strtoupper($initials !== '' ? $initials : 'TG', 'UTF-8');
 ?>
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" translate="no" class="notranslate">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google" content="notranslate">
+  <meta name="googlebot" content="notranslate">
   <meta name="robots" content="noindex, nofollow">
   <title><?= e($title) ?></title>
   <link rel="stylesheet" href="<?= asset('css/utilities.css') ?>">
@@ -50,6 +52,7 @@ $initials = mb_strtoupper($initials !== '' ? $initials : 'TG', 'UTF-8');
   <link rel="stylesheet" href="<?= asset('vendor/datatables/dataTables.bootstrap5.min.css') ?>">
   <link rel="stylesheet" href="<?= asset('vendor/sweetalert2/sweetalert2.min.css') ?>">
   <link rel="stylesheet" href="<?= asset('css/admin-app.css') ?>">
+  <link rel="stylesheet" href="<?= asset('css/admin-workspace.css') ?>">
   <link rel="icon" href="<?= asset('images/logo-tgi.png') ?>" type="image/png">
 </head>
 <body class="admin-body" data-admin-base="<?= e(url('admin')) ?>">
@@ -73,9 +76,12 @@ $initials = mb_strtoupper($initials !== '' ? $initials : 'TG', 'UTF-8');
               aria-controls="admin-sidebar" aria-expanded="false" aria-label="Mở menu quản trị">
         <i class="bi bi-list" aria-hidden="true"></i>
       </button>
-      <div class="admin-topbar__info">
-        <p class="admin-topbar__scope">Quản trị tuyển dụng</p>
-      </div>
+      <nav class="admin-topbar__breadcrumb" aria-label="Vị trí trong trang quản trị">
+        <span aria-hidden="true">/</span>
+        <span data-admin-crumb-group><?= e($activeNavGroup) ?></span>
+        <span aria-hidden="true">/</span>
+        <span class="admin-topbar__current" aria-current="page" data-admin-crumb-title><?= e(explode(' | ', $title, 2)[0]) ?></span>
+      </nav>
     </div>
 
     <div class="admin-topbar__actions">

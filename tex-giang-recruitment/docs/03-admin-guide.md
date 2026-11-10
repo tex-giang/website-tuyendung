@@ -198,20 +198,16 @@ công khai giờ chỉ lấy từ danh sách người liên hệ này.
   nếu chỉ nhập số điện thoại, hệ thống tự tạo link `https://zalo.me/<số>`.
 - Nút **FB** tròn nằm trong cụm nút cố định góc phải dưới (cùng nút gọi điện và Zalo), luôn hiển thị khi cuộn.
 
-## Soạn bài viết bằng CKEditor 4
+## Soạn bài viết bằng Quill
 
-- Trang **Tin tức & bài viết → Thêm/Sửa bài**: ô *Nội dung* dùng **CKEditor 4.22.1** (vendor cục bộ
-  `public/assets/vendor/ckeditor4/`, giao diện tiếng Việt) thay cho textarea thuần.
-- **Chèn ảnh**: bấm nút *Image* → tab *Upload* → chọn ảnh. Ảnh được tải lên **server**
-  (`POST /admin/posts/upload-image`, có CSRF token + kiểm tra quyền `posts`), lưu tại
-  `public/assets/uploads/posts/YYYY-MM/` với tên dạng `post-YYYYMMDD-HHMMSS-<random>.<ext>`.
-  Chỉ nhận JPG/PNG/WebP ≤ 5 MB. Endpoint tự trả **JSON** cho CKEditor 4.22 (filetools) và **JS callback** cho chế độ iframe cũ — không còn lỗi “phản hồi sai”.
+- Ô **Nội dung** dùng Quill 2.0.3. Nút **Mã HTML** mở phần mã nguồn để chỉnh trực tiếp. Bài có bảng hoặc cấu trúc HTML cần bảo toàn mở sẵn ở chế độ này.
+- **Chèn ảnh**: bấm biểu tượng ảnh trên thanh định dạng, rồi chọn tệp JPG, PNG hoặc WebP tối đa 5 MB. Ảnh được tải lên máy chủ qua `POST /admin/posts/upload-image` với kiểm tra quyền và CSRF.
 - **Xoá ảnh**: ảnh nằm trong nội dung bài được theo dõi bằng **đường dẫn** (`assets/uploads/...`).
   Khi **lưu bài** mà ảnh bị gỡ khỏi nội dung → file bị xoá; khi **xoá bài viết** → xoá toàn bộ ảnh
   trong nội dung + ảnh đại diện. Ảnh thay thế ảnh đại diện cũ cũng bị dọn.
 - Nội dung HTML được **lọc allowlist** ở server (`sanitize_html()`): bỏ `<script>`, `<iframe>`,
   thuộc tính `on*`, link `javascript:`; giữ các thẻ định dạng cơ bản + ảnh + liên kết.
-- Không có `required` trên textarea (CKEditor ẩn nó); server vẫn bắt buộc nội dung ≥ 20 ký tự.
+- Máy chủ yêu cầu nội dung bài viết dài ít nhất 20 ký tự.
 
 ## Nội dung trang Về chúng tôi & Phúc lợi (dạng repeater)
 

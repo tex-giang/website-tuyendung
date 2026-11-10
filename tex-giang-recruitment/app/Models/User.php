@@ -125,4 +125,21 @@ final class User
             'id'        => $id,
         ]);
     }
+
+    public static function setActive(int $id, bool $active): bool
+    {
+        $stmt = Database::connection()->prepare('UPDATE users SET is_active = :active WHERE id = :id');
+        $stmt->execute(['active' => (int) $active, 'id' => $id]);
+        return $stmt->rowCount() > 0;
+    }
+
+    /** Gọi trong transaction trước khi khóa hoặc hạ quyền tài khoản. */
+    public static function hasOtherActiveSuperAdmin(int $id): bool
+    {
+        $pdo = Database::connection();
+        $superRoleId = $pdo->query("SELECT id FROM roles WHERE name = 'super_admin' FOR UPDATE")->fetchColumn();
+        $stmt = $pdo->prepare('SELECT 1 FROM users WHERE role_id = :role AND is_active = 1 AND id <> :id LIMIT 1');
+        $stmt->execute(['role' => $superRoleId, 'id' => $id]);
+        return $stmt->fetchColumn() !== false;
+    }
 }

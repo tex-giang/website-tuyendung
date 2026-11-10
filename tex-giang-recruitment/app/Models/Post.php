@@ -233,8 +233,15 @@ final class Post
 
     public static function changeStatus(int $id, string $status): void
     {
-        $stmt = Database::connection()->prepare('UPDATE posts SET status = :status WHERE id = :id');
-        $stmt->execute(['status' => $status, 'id' => $id]);
+        $stmt = Database::connection()->prepare(
+            'UPDATE posts SET status = :status, published_at = COALESCE(published_at, :published_at)
+             WHERE id = :id AND deleted_at IS NULL'
+        );
+        $stmt->execute([
+            'status' => $status,
+            'published_at' => $status === 'published' ? date('Y-m-d H:i:s') : null,
+            'id' => $id,
+        ]);
     }
 
     public static function softDelete(int $id): void

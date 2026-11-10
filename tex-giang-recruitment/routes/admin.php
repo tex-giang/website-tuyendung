@@ -143,6 +143,7 @@ $router->post('/admin/users/create', [UserController::class, 'store'], $guard('u
 $router->get('/admin/users/{id}/edit', [UserController::class, 'edit'], $guard('users'));
 $router->post('/admin/users/{id}/edit', [UserController::class, 'update'], $guard('users', true));
 $router->post('/admin/users/{id}/password', [UserController::class, 'resetPassword'], $guard('users', true));
+$router->post('/admin/users/{id}/status', [UserController::class, 'changeStatus'], $guard('users', true));
 $router->get('/admin/profile', [ProfileController::class, 'index'], $guard('profile'));
 $router->post('/admin/profile/password', [ProfileController::class, 'updatePassword'], $guard('profile', true));
 

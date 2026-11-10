@@ -238,9 +238,9 @@ final class PageContentController extends Controller
         $errors = Session::pull('_errors', []);
 
         $this->view('admin/pages/about', [
-            'milestones'     => $old['milestones'] ?? ContentItem::all('about_milestones'),
-            'values'         => $old['values'] ?? ContentItem::all('about_values'),
-            'certifications' => $old['certifications'] ?? ContentItem::all('about_certifications'),
+            'milestones'     => $old === [] ? ContentItem::all('about_milestones') : array_values($old['milestones'] ?? []),
+            'values'         => $old === [] ? ContentItem::all('about_values') : array_values($old['values'] ?? []),
+            'certifications' => $old === [] ? ContentItem::all('about_certifications') : array_values($old['certifications'] ?? []),
             'errors'         => $errors,
             'page'           => ['title' => 'Trang Về chúng tôi | ' . settings('site_name'), 'nav' => 'pages-about'],
         ], 'layouts/admin');
@@ -256,7 +256,7 @@ final class PageContentController extends Controller
         [$values, $vErrors] = $this->collectRows($_POST['values'] ?? [], [
             'title' => ['Tiêu đề', 120, true],
             'body'  => ['Nội dung', 800, true],
-        ], 'tầm nhìn/sứ mệnh/giá trị');
+        ], 'tầm nhìn/sứ mệnh/giá trị', 'title');
         [$certs, $cErrors] = $this->collectRows($_POST['certifications'] ?? [], [
             'label' => ['Chứng nhận', 200, true],
         ], 'chứng nhận');
@@ -276,19 +276,16 @@ final class PageContentController extends Controller
             $pdo->exec('DELETE FROM about_milestones');
             foreach ($milestones as $index => $row) {
                 $row['sort_order'] = $index + 1;
-                $row['is_active'] = 1;
                 ContentItem::create('about_milestones', $row);
             }
             $pdo->exec('DELETE FROM about_values');
             foreach ($values as $index => $row) {
                 $row['sort_order'] = $index + 1;
-                $row['is_active'] = 1;
                 ContentItem::create('about_values', $row);
             }
             $pdo->exec('DELETE FROM about_certifications');
             foreach ($certs as $index => $row) {
                 $row['sort_order'] = $index + 1;
-                $row['is_active'] = 1;
                 ContentItem::create('about_certifications', $row);
             }
             $pdo->commit();
@@ -321,7 +318,7 @@ final class PageContentController extends Controller
 
         $this->view('admin/pages/benefits', [
             'groups'      => $groups,
-            'comparisons' => $old['comparisons'] ?? ContentItem::all('benefit_comparisons'),
+            'comparisons' => $old === [] ? ContentItem::all('benefit_comparisons') : ($old['comparisons'] ?? []),
             'icons'       => self::ICONS,
             'errors'      => $errors,
             'page'        => ['title' => 'Trang Phúc lợi | ' . settings('site_name'), 'nav' => 'pages-benefits'],
@@ -330,6 +327,9 @@ final class PageContentController extends Controller
 
     public function benefitsSave(): void
     {
+        if (($_POST['_benefits_complete'] ?? '') !== '1') {
+            $this->formError('Dữ liệu phúc lợi gửi lên chưa đầy đủ. Vui lòng tải lại trang trước khi lưu.', url('admin/pages/benefits'));
+        }
         $rawGroups = $_POST['groups'] ?? [];
         $groups = [];
         $errors = [];
@@ -361,7 +361,7 @@ final class PageContentController extends Controller
                         $errors[] = 'Nhóm ' . ($groupIndex + 1) . ': dòng phúc lợi tối đa 500 ký tự.';
                         continue;
                     }
-                    $items[] = $text;
+                    $items[] = ['text' => $text, 'is_active' => empty($item['is_active'] ?? 1) ? 0 : 1];
                 }
             }
 
@@ -380,7 +380,10 @@ final class PageContentController extends Controller
             if (count($items) > 30) {
                 $errors[] = 'Nhóm ' . ($groupIndex + 1) . ': tối đa 30 dòng.';
             }
-            $groups[] = ['title' => $title, 'icon' => $icon, 'intro' => $intro, 'items' => $items];
+            $groups[] = [
+                'title' => $title, 'icon' => $icon, 'intro' => $intro, 'items' => $items,
+                'is_active' => empty($rawGroup['is_active'] ?? 1) ? 0 : 1,
+            ];
         }
 
         [$comparisons, $cmpErrors] = $this->collectRows($_POST['comparisons'] ?? [], [
@@ -417,21 +420,20 @@ final class PageContentController extends Controller
                     'icon'       => $group['icon'],
                     'intro'      => $group['intro'],
                     'sort_order' => $index + 1,
-                    'is_active'  => 1,
+                    'is_active'  => $group['is_active'],
                 ]);
-                foreach ($group['items'] as $itemIndex => $text) {
+                foreach ($group['items'] as $itemIndex => $item) {
                     ContentItem::create('benefit_items', [
                         'group_id'   => $groupId,
-                        'text'       => $text,
+                        'text'       => $item['text'],
                         'sort_order' => $itemIndex + 1,
-                        'is_active'  => 1,
+                        'is_active'  => $item['is_active'],
                     ]);
                 }
             }
 
             foreach ($comparisons as $index => $row) {
                 $row['sort_order'] = $index + 1;
-                $row['is_active'] = 1;
                 ContentItem::create('benefit_comparisons', $row);
             }
             $pdo->commit();
@@ -452,7 +454,7 @@ final class PageContentController extends Controller
      * @param array<string, array{0:string,1:int,2:bool}> $fields name => [label, max, required]
      * @return array{0: array<int, array<string, mixed>>, 1: array<int, string>}
      */
-    private function collectRows($raw, array $fields, string $singular): array
+    private function collectRows($raw, array $fields, string $singular, ?string $ignoreForBlankRow = null): array
     {
         $rows = [];
         $errors = [];
@@ -464,7 +466,8 @@ final class PageContentController extends Controller
             if (!is_array($item)) {
                 continue;
             }
-            $row = [];
+            $row = ['is_active' => empty($item['is_active'] ?? 1) ? 0 : 1];
+            $rowErrors = [];
             $empty = true;
             foreach ($fields as $name => [$label, $max, $required]) {
                 if ($name === 'is_highlight') {
@@ -472,19 +475,20 @@ final class PageContentController extends Controller
                     continue;
                 }
                 $value = trim((string) ($item[$name] ?? ''));
-                if ($value !== '') {
+                if ($value !== '' && $name !== $ignoreForBlankRow) {
                     $empty = false;
                 }
                 if ($required && $value === '') {
-                    $errors[] = 'Dòng ' . (count($rows) + 1) . ' (' . $singular . '): ' . $label . ' không được để trống.';
+                    $rowErrors[] = 'Dòng ' . (count($rows) + 1) . ' (' . $singular . '): ' . $label . ' không được để trống.';
                 } elseif ($max > 0 && mb_strlen($value) > $max) {
-                    $errors[] = 'Dòng ' . (count($rows) + 1) . ' (' . $singular . '): ' . $label . ' tối đa ' . $max . ' ký tự.';
+                    $rowErrors[] = 'Dòng ' . (count($rows) + 1) . ' (' . $singular . '): ' . $label . ' tối đa ' . $max . ' ký tự.';
                 }
                 $row[$name] = $value;
             }
             if ($empty) {
                 continue;
             }
+            $errors = array_merge($errors, $rowErrors);
             $rows[] = $row;
         }
 

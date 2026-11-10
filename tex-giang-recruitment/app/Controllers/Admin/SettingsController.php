@@ -9,37 +9,41 @@ use App\Models\Setting;
 
 final class SettingsController extends Controller
 {
-    /** Các khoá cấu hình được phép sửa ở trang này (nhóm general/contact/social/seo). */
+    /** Các khoá cấu hình được phép sửa, theo thứ tự hiển thị trong form. */
     public const GROUPS = [
         'general' => [
             'label' => 'Thông tin chung',
+            'hint' => 'Tên hiển thị và pháp nhân của doanh nghiệp.',
             'fields' => [
                 'site_name'     => ['Tên website', 'text', 150],
                 'legal_name'    => ['Tên pháp nhân', 'text', 200],
-                'jobs_per_page' => ['Số tin mỗi trang (2–50)', 'number', 3],
+                'website'       => ['Website công ty', 'text', 500],
+            ],
+        ],
+        'recruitment' => [
+            'label' => 'Tuyển dụng',
+            'hint' => 'Giá trị mặc định cho tin tuyển dụng và địa chỉ nhận hồ sơ.',
+            'fields' => [
+                'jobs_per_page'      => ['Số tin mỗi trang', 'number', 3],
                 'jobs_deadline_days' => ['Số ngày nhận hồ sơ mặc định', 'number', 3],
+                'email'              => ['Email tuyển dụng', 'email', 190],
             ],
         ],
         'contact' => [
-            'label' => 'Liên hệ tuyển dụng',
+            'label' => 'Kênh liên hệ',
+            'hint' => 'Các kênh hiển thị ở chân trang và trang Liên hệ.',
             'fields' => [
-                'email'           => ['Email nhận hồ sơ', 'email', 190],
-                'zalo'            => ['Link Zalo OA (dán link https://zalo.me/... hoặc số Zalo)', 'text', 500],
-            ],
-        ],
-        'social' => [
-            'label' => 'Mạng xã hội',
-            'fields' => [
+                'zalo'     => ['Zalo', 'text', 500],
                 'facebook' => ['Facebook', 'text', 500],
                 'youtube'  => ['YouTube', 'text', 500],
-                'website'  => ['Website công ty', 'text', 500],
             ],
         ],
         'seo' => [
-            'label' => 'SEO',
+            'label' => 'SEO trang chủ',
+            'hint' => 'Nội dung có thể hiển thị trong kết quả tìm kiếm.',
             'fields' => [
-                'seo_title'       => ['Tiêu đề SEO trang chủ', 'text', 220],
-                'seo_description' => ['Mô tả SEO trang chủ', 'textarea', 320],
+                'seo_title'       => ['Tiêu đề SEO', 'text', 220],
+                'seo_description' => ['Mô tả SEO', 'textarea', 320],
             ],
         ],
     ];
@@ -55,12 +59,8 @@ final class SettingsController extends Controller
 
     public function update(): void
     {
-        $allowed = [];
-        foreach (self::GROUPS as $group) {
-            $allowed = array_merge($allowed, array_keys($group['fields']));
-        }
-
         $values = [];
+        $old = [];
         $errors = [];
 
         foreach (self::GROUPS as $group) {
@@ -69,6 +69,7 @@ final class SettingsController extends Controller
                     continue;
                 }
                 $value = trim((string) $_POST[$key]);
+                $old[$key] = $value;
 
                 if (mb_strlen($value) > $max) {
                     $errors[$key] = $label . ' tối đa ' . $max . ' ký tự.';
@@ -96,7 +97,7 @@ final class SettingsController extends Controller
         }
 
         if ($errors !== []) {
-            $this->formError('Vui lòng kiểm tra lại các trường được đánh dấu.', url('admin/settings'), $errors);
+            $this->formError('Vui lòng kiểm tra lại các trường được đánh dấu.', url('admin/settings'), $errors, $old);
         }
 
         Setting::setMany($values);

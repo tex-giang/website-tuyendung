@@ -98,6 +98,11 @@ final class Session
     public static function login(array $user): void
     {
         self::regenerate();
+        self::syncUser($user);
+    }
+
+    public static function syncUser(array $user): void
+    {
         self::put('auth_id', (int) $user['id']);
         self::put('auth_user', [
             'id'        => (int) $user['id'],

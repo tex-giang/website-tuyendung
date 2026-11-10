@@ -40,7 +40,7 @@ final class MenuController extends Controller
     {
         [$data, $errors] = $this->validate($_POST);
         if ($errors !== []) {
-            $this->fail($errors, url('admin/menus/create'));
+            $this->formError('Vui lòng kiểm tra lại các trường được đánh dấu.', url('admin/menus/create'), $errors, $data);
         }
 
         if ((int) ($data['sort_order'] ?? 0) === 0) {
@@ -61,7 +61,7 @@ final class MenuController extends Controller
 
         [$data, $errors] = $this->validate($_POST);
         if ($errors !== []) {
-            $this->fail($errors, url('admin/menus/' . $menuId . '/edit'));
+            $this->formError('Vui lòng kiểm tra lại các trường được đánh dấu.', url('admin/menus/' . $menuId . '/edit'), $errors, $data);
         }
 
         Menu::update($menuId, $data);

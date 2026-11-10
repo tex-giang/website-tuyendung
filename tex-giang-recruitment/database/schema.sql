@@ -179,6 +179,7 @@ CREATE TABLE applications (
   source          VARCHAR(60) NOT NULL DEFAULT 'Website',
   admin_note      TEXT NULL,
   appointment_at  DATETIME NULL,
+  appointment_location VARCHAR(255) NULL,
   handled_by      BIGINT UNSIGNED NULL,
   created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

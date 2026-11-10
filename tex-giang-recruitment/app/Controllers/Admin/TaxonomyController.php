@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controllers\Admin;
 
 use App\Core\Controller;
+use App\Core\Database;
 use App\Core\Session;
 use App\Models\AuditLog;
 use App\Models\Branch;
@@ -22,26 +23,41 @@ final class TaxonomyController extends Controller
             'label'    => 'Khu sản xuất',
             'singular' => 'khu sản xuất',
             'model'    => Branch::class,
+            'hint'     => 'Các khu sản xuất đang tuyển dụng, kèm địa chỉ, bản đồ và đầu mối liên hệ tuyển dụng.',
         ],
         'category' => [
             'label'    => 'Khối phòng ban',
             'singular' => 'khối phòng ban',
             'model'    => Category::class,
+            'hint'     => 'Khối phòng ban dùng để phân loại tin tuyển dụng.',
         ],
         'post-category' => [
             'label'    => 'Chuyên mục tin tức',
-            'singular' => 'chuyên mục',
+            'singular' => 'chuyên mục tin tức',
             'model'    => PostCategory::class,
+            'hint'     => 'Chuyên mục dùng để phân loại bài viết, tin tức trên website.',
         ],
     ];
 
     public function index(): void
     {
+        $type = (string) ($_GET['type'] ?? 'branch');
+        if (!isset(self::TYPES[$type])) {
+            $type = 'branch';
+        }
+        $model = self::TYPES[$type]['model'];
+        $rows = $model::all();
+        $usage = [];
+        foreach ($rows as $row) {
+            $id = (int) $row['id'];
+            $usage[$id] = $type === 'post-category' ? PostCategory::postCount($id) : $model::jobCount($id);
+        }
         $this->view('admin/categories/index', [
-            'branches'       => Branch::all(),
-            'categories'     => Category::all(),
-            'postCategories' => PostCategory::all(),
-            'branchContacts' => BranchContact::allGrouped(),
+            'type'           => $type,
+            'types'          => self::TYPES,
+            'rows'           => $rows,
+            'usage'          => $usage,
+            'branchContacts' => $type === 'branch' ? BranchContact::allGrouped() : [],
             'page'           => ['title' => 'Danh mục dùng chung | ' . settings('site_name'), 'nav' => 'categories'],
         ], 'layouts/admin');
     }
@@ -58,7 +74,7 @@ final class TaxonomyController extends Controller
         $record = $model::find((int) $id);
         if ($record === null) {
             Session::flash('_error', 'Không tìm thấy ' . $config['singular'] . '.');
-            $this->redirect(url('admin/categories'));
+            $this->redirect($this->listUrl($type));
         }
         $this->form($type, $record);
     }
@@ -67,7 +83,7 @@ final class TaxonomyController extends Controller
     {
         $config = $this->config($type);
         [$data, $errors] = $this->validate($type, $_POST, null);
-        [$contacts, $contactErrors] = $this->validateContacts($_POST);
+        [$contacts, $contactErrors] = $type === 'branch' ? $this->validateContacts($_POST) : [[], []];
         $errors = array_merge($errors, $contactErrors);
 
         if ($errors !== []) {
@@ -76,12 +92,15 @@ final class TaxonomyController extends Controller
         }
 
         $model = $config['model'];
-        $id = $model::create($data);
-        if ($type === 'branch') {
-            BranchContact::replaceForBranch($id, $contacts);
-        }
+        $id = Database::transaction(static function () use ($model, $type, $data, $contacts): int {
+            $id = $model::create($data);
+            if ($type === 'branch') {
+                BranchContact::replaceForBranch($id, $contacts);
+            }
+            return $id;
+        });
         AuditLog::record('taxonomy.create', $type, $id, ['name' => $data['name']]);
-        $this->formSuccess('Đã thêm ' . $config['singular'] . ' "' . $data['name'] . '".', url('admin/categories'));
+        $this->formSuccess('Đã thêm ' . $config['singular'] . ' "' . $data['name'] . '".', $this->listUrl($type));
     }
 
     public function update(string $type, string $id): void
@@ -90,23 +109,25 @@ final class TaxonomyController extends Controller
         $recordId = (int) $id;
         $model = $config['model'];
         if ($model::find($recordId) === null) {
-            $this->formError('Không tìm thấy ' . $config['singular'] . '.', url('admin/categories'), status: 404);
+            $this->formError('Không tìm thấy ' . $config['singular'] . '.', $this->listUrl($type), status: 404);
         }
 
         [$data, $errors] = $this->validate($type, $_POST, $recordId);
-        [$contacts, $contactErrors] = $this->validateContacts($_POST);
+        [$contacts, $contactErrors] = $type === 'branch' ? $this->validateContacts($_POST) : [[], []];
         $errors = array_merge($errors, $contactErrors);
         if ($errors !== []) {
             $data['contacts'] = $contacts;
             $this->formError('Vui lòng kiểm tra lại các trường được đánh dấu.', url('admin/categories/' . $type . '/' . $recordId . '/edit'), $errors, $data);
         }
 
-        $model::update($recordId, $data);
-        if ($type === 'branch') {
-            BranchContact::replaceForBranch($recordId, $contacts);
-        }
+        Database::transaction(static function () use ($model, $type, $recordId, $data, $contacts): void {
+            $model::update($recordId, $data);
+            if ($type === 'branch') {
+                BranchContact::replaceForBranch($recordId, $contacts);
+            }
+        });
         AuditLog::record('taxonomy.update', $type, $recordId, ['name' => $data['name']]);
-        $this->formSuccess('Đã cập nhật ' . $config['singular'] . '.', url('admin/categories'));
+        $this->formSuccess('Đã cập nhật ' . $config['singular'] . '.', $this->listUrl($type));
     }
 
     public function destroy(string $type, string $id): void
@@ -116,19 +137,19 @@ final class TaxonomyController extends Controller
         $model = $config['model'];
         $record = $model::find($recordId);
         if ($record === null) {
-            $this->formError('Không tìm thấy ' . $config['singular'] . '.', url('admin/categories'), status: 404);
+            $this->formError('Không tìm thấy ' . $config['singular'] . '.', $this->listUrl($type), status: 404);
         }
 
         if ($type === 'branch' && Branch::jobCount($recordId) > 0) {
-            $this->formError('Không xoá được: còn ' . Branch::jobCount($recordId) . ' tin tuyển dụng thuộc khu này. Hãy chuyển tin sang khu khác trước.', url('admin/categories'), status: 409);
+            $this->formError('Không xoá được: còn ' . Branch::jobCount($recordId) . ' tin tuyển dụng thuộc khu này. Hãy chuyển tin sang khu khác trước.', $this->listUrl($type), status: 409);
         }
         if ($type === 'post-category' && PostCategory::postCount($recordId) > 0) {
-            $this->formError('Không xoá được: còn ' . PostCategory::postCount($recordId) . ' bài viết thuộc chuyên mục này.', url('admin/categories'), status: 409);
+            $this->formError('Không xoá được: còn ' . PostCategory::postCount($recordId) . ' bài viết thuộc chuyên mục này.', $this->listUrl($type), status: 409);
         }
 
         $model::delete($recordId);
         AuditLog::record('taxonomy.delete', $type, $recordId, ['name' => $record['name']]);
-        $this->formSuccess('Đã xoá ' . $config['singular'] . ' "' . $record['name'] . '".', url('admin/categories'));
+        $this->formSuccess('Đã xoá ' . $config['singular'] . ' "' . $record['name'] . '".', $this->listUrl($type));
     }
 
     public function toggle(string $type, string $id): void
@@ -138,14 +159,19 @@ final class TaxonomyController extends Controller
         $model = $config['model'];
         $record = $model::find($recordId);
         if ($record === null) {
-            $this->formError('Không tìm thấy ' . $config['singular'] . '.', url('admin/categories'), status: 404);
+            $this->formError('Không tìm thấy ' . $config['singular'] . '.', $this->listUrl($type), status: 404);
         }
         $model::toggleActive($recordId);
         AuditLog::record('taxonomy.toggle', $type, $recordId, ['name' => $record['name']]);
-        $this->formSuccess(((int) $record['is_active'] === 1 ? 'Đã tắt' : 'Đã bật') . ' ' . $config['singular'] . ' "' . $record['name'] . '".', url('admin/categories'));
+        $this->formSuccess(((int) $record['is_active'] === 1 ? 'Đã tắt' : 'Đã bật') . ' ' . $config['singular'] . ' "' . $record['name'] . '".', $this->listUrl($type));
     }
 
-    /** @return array{label:string, singular:string, model:class-string} */
+    private function listUrl(string $type): string
+    {
+        return url('admin/categories') . '?' . http_build_query(['type' => $type]);
+    }
+
+    /** @return array{label:string, singular:string, model:class-string, hint:string} */
     private function config(string $type): array
     {
         if (!isset(self::TYPES[$type])) {
@@ -210,35 +236,34 @@ final class TaxonomyController extends Controller
                 continue;
             }
             $fullName = trim((string) ($item['full_name'] ?? ''));
+            $title    = trim((string) ($item['title'] ?? ''));
             $phone    = trim((string) ($item['phone'] ?? ''));
-            if ($fullName === '' && $phone === '') {
+            if ($fullName === '' && $title === '' && $phone === '') {
                 continue;
             }
             $row++;
+            $contacts[] = [
+                'full_name' => $fullName,
+                'title'     => $title,
+                'phone'     => $phone,
+                'is_active' => (int) ($item['is_active'] ?? 1) === 1 ? 1 : 0,
+            ];
 
             if (mb_strlen($fullName) < 2 || mb_strlen($fullName) > 120) {
                 $errors['contacts'] = 'Dòng liên hệ ' . $row . ': họ tên phải từ 2 đến 120 ký tự.';
                 continue;
             }
 
-            if ($phone === '' || !preg_match('/^[0-9+\s.\-()]{6,30}$/', $phone)) {
+            if (mb_strlen($title) > 80) {
+                $errors['contacts'] = 'Dòng liên hệ ' . $row . ': vai trò tối đa 80 ký tự.';
+                continue;
+            }
+            if (!preg_match('/^[0-9+\s.\-()]{6,30}$/', $phone)) {
                 $errors['contacts'] = 'Dòng liên hệ ' . $row . ': số điện thoại không hợp lệ (chỉ số, khoảng trắng, +, -, ., ngoặc).';
-                continue;
             }
-            if (mb_strlen($phone) > 30) {
-                $errors['contacts'] = 'Dòng liên hệ ' . $row . ': số điện thoại tối đa 30 ký tự.';
-                continue;
-            }
-            if (count($contacts) >= 20) {
-                $errors['contacts'] = 'Mỗi khu sản xuất tối đa 20 người liên hệ.';
-                break;
-            }
-
-            $contacts[] = [
-                'full_name' => $fullName,
-                'phone'     => $phone,
-                'is_active' => 1,
-            ];
+        }
+        if (count($contacts) > 20) {
+            $errors['contacts'] = 'Mỗi khu sản xuất tối đa 20 người liên hệ.';
         }
 
         return [$contacts, $errors];
@@ -254,7 +279,6 @@ final class TaxonomyController extends Controller
             'address'     => trim((string) ($post['address'] ?? '')),
             'phone'       => trim((string) ($post['phone'] ?? '')),
             'map_url'     => trim((string) ($post['map_url'] ?? '')),
-            'map_link'    => trim((string) ($post['map_link'] ?? '')),
             'map_link'    => trim((string) ($post['map_link'] ?? '')),
             'description' => trim((string) ($post['description'] ?? '')),
             'sort_order'  => (int) ($post['sort_order'] ?? 0),
@@ -273,6 +297,14 @@ final class TaxonomyController extends Controller
         }
         if (mb_strlen($data['map_url']) > 500) {
             $errors['map_url'] = 'Link bản đồ tối đa 500 ký tự.';
+        } elseif ($data['map_url'] !== '' && map_embed_src($data['map_url']) === '') {
+            $errors['map_url'] = 'Nhập liên kết nhúng bản đồ hợp lệ.';
+        }
+        if (mb_strlen($data['map_link']) > 500 || ($data['map_link'] !== '' && !preg_match('#^https?://[^\s]+$#i', $data['map_link']))) {
+            $errors['map_link'] = 'Nhập liên kết HTTP hoặc HTTPS, tối đa 500 ký tự.';
+        }
+        if ($data['sort_order'] < -32768 || $data['sort_order'] > 32767) {
+            $errors['sort_order'] = 'Thứ tự nằm trong khoảng -32768 đến 32767.';
         }
         if (mb_strlen($data['description']) > 255) {
             $errors['description'] = 'Mô tả tối đa 255 ký tự.';
@@ -286,10 +318,12 @@ final class TaxonomyController extends Controller
         if ($data['slug'] === '') {
             $data['slug'] = 'danh-muc';
         }
-        $base = $data['slug'];
+        $base = substr($data['slug'], 0, 80);
+        $data['slug'] = $base;
         $suffix = 2;
         while ($model::slugExists($data['slug'], $exceptId)) {
-            $data['slug'] = $base . '-' . $suffix;
+            $ending = '-' . $suffix;
+            $data['slug'] = substr($base, 0, 80 - strlen($ending)) . $ending;
             $suffix++;
             if ($suffix > 100) {
                 $errors['slug'] = 'Không tạo được slug duy nhất.';

@@ -78,6 +78,7 @@ final class BannerController extends Controller
             if ($uploadSmall['ok'] && $uploadSmall['path'] !== '') {
                 UploadService::deletePublicImage($uploadSmall['path']);
             }
+            $data['image_path'] = $data['image_path_small'] = '';
             $this->formError('Vui lòng kiểm tra lại các trường được đánh dấu.', url('admin/banners/create'), $errors, $data);
         }
 
@@ -94,7 +95,7 @@ final class BannerController extends Controller
             $this->formError('Banner không tồn tại.', url('admin/banners'), status: 404);
         }
 
-        [$data, $errors] = $this->validate($_POST);
+        [$data, $errors] = $this->validate($_POST, $existing);
 
         $upload = UploadService::storePublicImage($_FILES['image'] ?? null, 'banners');
         if (!$upload['ok']) {
@@ -121,6 +122,8 @@ final class BannerController extends Controller
             if ($uploadSmall['ok'] && $uploadSmall['path'] !== '') {
                 UploadService::deletePublicImage($uploadSmall['path']);
             }
+            $data['image_path'] = (string) ($existing['image_path'] ?? '');
+            $data['image_path_small'] = (string) ($existing['image_path_small'] ?? '');
             $this->formError('Vui lòng kiểm tra lại các trường được đánh dấu.', url('admin/banners/' . $bannerId . '/edit'), $errors, $data);
         }
 
@@ -200,7 +203,7 @@ final class BannerController extends Controller
     }
 
     /** @return array{0: array<string,mixed>, 1: array<string,string>} */
-    private function validate(array $post): array
+    private function validate(array $post, ?array $existing = null): array
     {
         $data = [
             'name'        => trim((string) ($post['name'] ?? '')),
@@ -208,8 +211,8 @@ final class BannerController extends Controller
             'title'       => trim((string) ($post['title'] ?? '')),
             'subtitle'    => trim((string) ($post['subtitle'] ?? '')),
             'description' => trim((string) ($post['description'] ?? '')),
-            'image_path'  => trim((string) ($post['image_path'] ?? '')),
-            'image_path_small' => trim((string) ($post['image_path_small'] ?? '')),
+            'image_path'  => (string) ($existing['image_path'] ?? ''),
+            'image_path_small' => (string) ($existing['image_path_small'] ?? ''),
             'image_alt'   => trim((string) ($post['image_alt'] ?? '')),
             'link_url'    => trim((string) ($post['link_url'] ?? '')),
             'link_label'  => trim((string) ($post['link_label'] ?? '')),
@@ -242,14 +245,6 @@ final class BannerController extends Controller
         if ($data['starts_at'] !== '' && $data['ends_at'] !== '' && strtotime((string) $data['ends_at']) < strtotime((string) $data['starts_at'])) {
             $errors['ends_at'] = 'Thời gian kết thúc phải sau thời gian bắt đầu.';
         }
-        if ($data['image_path'] !== '' && !str_starts_with($data['image_path'], 'assets/uploads/')) {
-            // Không cho nhập đường dẫn tuỳ ý; ảnh phải do upload tạo ra.
-            $data['image_path'] = '';
-        }
-        if ($data['image_path_small'] !== '' && !str_starts_with($data['image_path_small'], 'assets/uploads/')) {
-            $data['image_path_small'] = '';
-        }
-
         if (mb_strlen($data['description']) > 600) {
             $errors['description'] = 'Mô tả tối đa 600 ký tự.';
         }

@@ -7,6 +7,27 @@ use App\Core\Database;
 
 final class AuditLog
 {
+    public const ACTION_LABELS = [
+        'auth.login' => 'Đăng nhập', 'auth.login_failed' => 'Đăng nhập thất bại', 'auth.logout' => 'Đăng xuất',
+        'job.create' => 'Tạo tin', 'job.update' => 'Sửa tin', 'job.status' => 'Đổi trạng thái tin',
+        'job.duplicate' => 'Nhân bản tin', 'job.delete' => 'Xóa tin',
+        'application.status' => 'Đổi trạng thái hồ sơ', 'application.cv_download' => 'Tải CV',
+        'application.appointment' => 'Lưu lịch phỏng vấn', 'application.note' => 'Thêm ghi chú hồ sơ',
+        'post.create' => 'Tạo bài viết', 'post.update' => 'Sửa bài viết', 'post.status' => 'Đổi trạng thái bài',
+        'post.delete' => 'Xóa bài viết', 'post.upload_image' => 'Tải ảnh bài viết',
+        'banner.create' => 'Tạo banner', 'banner.update' => 'Sửa banner', 'banner.toggle' => 'Bật/tắt banner',
+        'banner.delete' => 'Xóa banner',
+        'settings.update' => 'Lưu cài đặt', 'content.update' => 'Lưu nội dung',
+        'pagecontent.about_save' => 'Lưu trang Về chúng tôi', 'pagecontent.benefits_save' => 'Lưu trang Phúc lợi',
+        'menu.create' => 'Thêm menu', 'menu.update' => 'Sửa menu', 'menu.delete' => 'Xóa menu',
+        'taxonomy.create' => 'Thêm danh mục', 'taxonomy.update' => 'Sửa danh mục',
+        'taxonomy.delete' => 'Xóa danh mục', 'taxonomy.toggle' => 'Bật/tắt danh mục',
+        'contact.status' => 'Xử lý tin nhắn', 'contact.delete' => 'Xóa tin nhắn',
+        'user.create' => 'Tạo tài khoản', 'user.update' => 'Sửa tài khoản',
+        'user.status' => 'Đổi trạng thái tài khoản',
+        'user.password_reset' => 'Đặt lại mật khẩu', 'user.password_change' => 'Đổi mật khẩu',
+    ];
+
     public static function record(string $action, ?string $entityType = null, ?int $entityId = null, array $meta = []): void
     {
         try {
@@ -36,11 +57,29 @@ final class AuditLog
         $params = [];
 
         if (($filters['q'] ?? '') !== '') {
-            $where[] = '(a.action LIKE :kw_action OR a.ip_address LIKE :kw_ip OR u.full_name LIKE :kw_user)';
             $keyword = '%' . $filters['q'] . '%';
-            $params['kw_action'] = $keyword;
-            $params['kw_ip'] = $keyword;
-            $params['kw_user'] = $keyword;
+            $matches = [];
+            foreach (['a.action', 'a.ip_address', 'u.full_name', 'a.entity_type', 'a.meta'] as $index => $column) {
+                $name = 'kw_' . $index;
+                $matches[] = $column . ' LIKE :' . $name;
+                $params[$name] = $keyword;
+            }
+            if (preg_match('/^#?(\d{1,19})$/D', $filters['q'], $entity)) {
+                $matches[] = 'a.entity_id = :kw_entity';
+                $params['kw_entity'] = $entity[1];
+            }
+            $actions = [];
+            foreach (self::ACTION_LABELS as $code => $label) {
+                if (mb_stripos($label, $filters['q']) !== false) {
+                    $name = 'action_' . count($actions);
+                    $actions[] = ':' . $name;
+                    $params[$name] = $code;
+                }
+            }
+            if ($actions !== []) {
+                $matches[] = 'a.action IN (' . implode(', ', $actions) . ')';
+            }
+            $where[] = '(' . implode(' OR ', $matches) . ')';
         }
         if (!empty($filters['user_id'])) {
             $where[] = 'a.user_id = :user_id';

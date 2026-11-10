@@ -113,7 +113,6 @@ final class Branch
             'phone'      => ($data['phone'] ?? '') !== '' ? $data['phone'] : null,
             'map_url'    => ($data['map_url'] ?? '') !== '' ? $data['map_url'] : null,
             'map_link'   => ($data['map_link'] ?? '') !== '' ? $data['map_link'] : null,
-            'map_link'   => ($data['map_link'] ?? '') !== '' ? $data['map_link'] : null,
             'sort_order' => (int) ($data['sort_order'] ?? 0),
             'is_active'  => !empty($data['is_active']) ? 1 : 0,
         ];

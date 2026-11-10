@@ -4,12 +4,15 @@ declare(strict_types=1);
 namespace App\Controllers\Admin;
 
 use App\Core\Controller;
+use App\Core\Database;
 use App\Core\Session;
 use App\Models\AuditLog;
 use App\Models\User;
 
 final class UserController extends Controller
 {
+    private const REQUIRE_ACTIVE_ADMIN = 'Phải còn ít nhất một quản trị viên cấp cao đang hoạt động.';
+
     public function index(): void
     {
         $this->guardSuperAdmin();
@@ -72,36 +75,57 @@ final class UserController extends Controller
             $errors['is_active'] = 'Không thể tự khoá tài khoản đang đăng nhập.';
         }
 
-        // Luôn phải còn ít nhất một super_admin đang hoạt động.
-        if (!isset($errors['role_id'])) {
-            $newRoleName = null;
-            foreach (User::roles() as $roleName => $_) {
-                if (User::roleIdByName($roleName) === $data['role_id']) {
-                    $newRoleName = $roleName;
-                    break;
-                }
-            }
-            $willRemainSuper = $newRoleName === 'super_admin' && (int) $data['is_active'] === 1;
-            if (!$willRemainSuper) {
-                $otherActiveSupers = 0;
-                foreach (User::all() as $row) {
-                    if ((int) $row['id'] !== $userId && $row['role_name'] === 'super_admin' && (int) $row['is_active'] === 1) {
-                        $otherActiveSupers++;
-                    }
-                }
-                if ($otherActiveSupers === 0) {
-                    $errors['role_id'] = 'Phải còn ít nhất một quản trị viên cấp cao đang hoạt động.';
-                }
-            }
-        }
-
+        $editUrl = url('admin/users/' . $userId . '/edit');
         if ($errors !== []) {
-            $this->formError('Vui lòng kiểm tra lại các trường được đánh dấu.', url('admin/users/' . $userId . '/edit'), $errors, $data);
+            $this->formError('Vui lòng kiểm tra lại các trường được đánh dấu.', $editUrl, $errors, $data);
         }
 
-        User::update($userId, $data);
+        $willRemainSuper = $data['role_id'] === User::roleIdByName('super_admin') && $data['is_active'] === 1;
+        $saved = Database::transaction(static function () use ($userId, $data, $willRemainSuper): bool {
+            if (!$willRemainSuper && !User::hasOtherActiveSuperAdmin($userId)) {
+                return false;
+            }
+            User::update($userId, $data);
+            return true;
+        });
+        if (!$saved) {
+            $this->formError(self::REQUIRE_ACTIVE_ADMIN, $editUrl, ['role_id' => self::REQUIRE_ACTIVE_ADMIN], $data);
+        }
         AuditLog::record('user.update', 'user', $userId, ['username' => $user['username']]);
-        $this->formSuccess('Đã cập nhật tài khoản.', url('admin/users'));
+        $destination = $userId === (int) Session::get('auth_id') && !$willRemainSuper ? 'admin/profile' : 'admin/users';
+        $this->formSuccess('Đã cập nhật tài khoản.', url($destination));
+    }
+
+    public function changeStatus(string $id): void
+    {
+        $this->guardSuperAdmin();
+        $userId = (int) $id;
+        $status = $_POST['is_active'] ?? '';
+        $listUrl = url('admin/users');
+        if (!in_array($status, ['0', '1'], true)) {
+            $this->formError('Trạng thái tài khoản không hợp lệ.', $listUrl);
+        }
+        if (User::find($userId) === null) {
+            $this->formError('Tài khoản không tồn tại.', $listUrl, status: 404);
+        }
+        $active = $status === '1';
+        if (!$active && $userId === (int) Session::get('auth_id')) {
+            $this->formError('Không thể tự khóa tài khoản đang đăng nhập.', $listUrl, status: 409);
+        }
+
+        $changed = Database::transaction(static function () use ($userId, $active): ?bool {
+            if (!$active && !User::hasOtherActiveSuperAdmin($userId)) {
+                return null;
+            }
+            return User::setActive($userId, $active);
+        });
+        if ($changed === null) {
+            $this->formError(self::REQUIRE_ACTIVE_ADMIN, $listUrl, status: 409);
+        }
+        if ($changed) {
+            AuditLog::record('user.status', 'user', $userId, ['is_active' => $active]);
+        }
+        $this->formSuccess($active ? 'Đã mở khóa tài khoản.' : 'Đã khóa tài khoản.', $listUrl);
     }
 
     public function resetPassword(string $id): void
@@ -158,8 +182,11 @@ final class UserController extends Controller
         if (mb_strlen($data['full_name']) < 2 || mb_strlen($data['full_name']) > 150) {
             $errors['full_name'] = 'Họ tên 2–150 ký tự.';
         }
-        if ($data['email'] !== '' && !filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+        if ($data['email'] !== '' && (mb_strlen($data['email']) > 190 || !filter_var($data['email'], FILTER_VALIDATE_EMAIL))) {
             $errors['email'] = 'Email chưa hợp lệ.';
+        }
+        if (mb_strlen($data['phone']) > 30) {
+            $errors['phone'] = 'Số điện thoại tối đa 30 ký tự.';
         }
         $validRoleIds = [];
         foreach (User::roles() as $roleName => $_) {

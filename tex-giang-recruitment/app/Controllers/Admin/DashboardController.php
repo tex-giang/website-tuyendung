@@ -7,7 +7,6 @@ use App\Core\Controller;
 use App\Models\Application;
 use App\Models\ContactMessage;
 use App\Models\Job;
-use App\Models\Post;
 
 final class DashboardController extends Controller
 {
@@ -25,7 +24,6 @@ final class DashboardController extends Controller
             'newApps'      => Application::newCount(),
             'latestApps'   => Application::latest(6),
             'publishedNow' => Job::countPublished(),
-            'postTotal'    => Post::totalPublished(),
             'contactNew'   => ContactMessage::newCount(),
             'page'         => [
                 'title' => 'Bảng điều khiển | ' . settings('site_name'),

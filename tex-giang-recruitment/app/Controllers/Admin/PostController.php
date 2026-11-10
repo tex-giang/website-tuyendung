@@ -320,6 +320,8 @@ final class PostController extends Controller
             } else {
                 $data['published_at'] = date('Y-m-d H:i:s', $timestamp);
             }
+        } elseif ($data['status'] === 'published') {
+            $data['published_at'] = date('Y-m-d H:i:s');
         }
         if ($data['remove_image']) {
             $data['image_path'] = '';

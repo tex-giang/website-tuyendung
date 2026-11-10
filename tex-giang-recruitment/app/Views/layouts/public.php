@@ -6,15 +6,18 @@ $mainClass = $page['main_class'] ?? '';
 $scripts = $page['scripts'] ?? [];
 ?>
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" translate="no" class="notranslate">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google" content="notranslate">
+  <meta name="googlebot" content="notranslate">
   <title><?= e($page['title'] ?? settings('seo_title', 'Tuyển dụng TEX-GIANG')) ?></title>
   <meta name="description" content="<?= e($page['description'] ?? settings('seo_description', '')) ?>">
   <meta property="og:title" content="<?= e($page['og_title'] ?? ($page['title'] ?? settings('seo_title', ''))) ?>">
   <meta property="og:description" content="<?= e($page['description'] ?? settings('seo_description', '')) ?>">
   <meta property="og:type" content="website">
+  <meta property="og:locale" content="vi_VN">
   <?php if (!empty($page['og_image'])): ?>
   <meta property="og:image" content="<?= e(asset($page['og_image'])) ?>">
   <?php endif; ?>

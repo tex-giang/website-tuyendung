@@ -415,7 +415,7 @@ function map_embed_src(string $value): string
         return '';
     }
     if (preg_match('/src=["\']([^"\']+)["\']/i', $value, $matches) === 1) {
-        return trim($matches[1]);
+        $value = trim($matches[1]);
     }
     return preg_match('#^https?://#i', $value) === 1 ? $value : '';
 }

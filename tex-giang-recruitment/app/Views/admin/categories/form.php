@@ -1,164 +1,123 @@
 <?php
-/** Form thêm/sửa một danh mục (khu sản xuất / khối phòng ban / chuyên mục tin tức). */
+$page['ajax_fragment'] = true;
 $isEdit = $record !== null;
-$action = $isEdit
-    ? url('admin/categories/' . $type . '/' . $record['id'] . '/edit')
-    : url('admin/categories/' . $type . '/create');
-$val = static fn(string $key, string $default = ''): string => (string) ($values[$key] ?? $default);
-$err = static fn(string $key): string => (string) ($errors[$key] ?? '');
-$backUrl = url('admin/categories');
-?>
-<div class="admin-page-head">
-  <div>
-    <p class="admin-breadcrumb"><a href="<?= $backUrl ?>">Danh mục</a> / <?= e($config['label']) ?></p>
-    <h1 class="admin-h1"><?= $isEdit ? 'Sửa ' : 'Thêm ' ?><?= e($config['singular']) ?></h1>
-    <?php if ($isEdit): ?><?php endif; ?>
-  </div>
-  <a href="<?= $backUrl ?>" class="btn btn-ghost"><i class="bi bi-arrow-left me-1" aria-hidden="true"></i> Danh sách</a>
-</div>
-
-<?php if ($errors !== []): ?>
-<div class="admin-alert admin-alert--error" role="alert">Có <?= count($errors) ?> trường cần kiểm tra lại.</div>
-<?php endif; ?>
-
-<form data-ajax method="POST" action="<?= $action ?>" class="admin-form">
-  <?= csrf_field() ?>
-  <section class="admin-card">
-    <h2 class="admin-h2">Thông tin <?= e($config['singular']) ?></h2>
-    <div class="field-grid">
-      <label class="field">
-        <span class="field__label">Tên <em>*</em></span>
-        <input class="field__input<?= $err('name') ? ' is-invalid' : '' ?>" type="text" name="name"
-               value="<?= e($val('name')) ?>" maxlength="120" required>
-        <?php if ($err('name')): ?><span class="field__error"><?= e($err('name')) ?></span><?php endif; ?>
-      </label>
-      <label class="field">
-        <span class="field__label">Đường dẫn (slug)</span>
-        <input class="field__input<?= $err('slug') ? ' is-invalid' : '' ?>" type="text" name="slug"
-               value="<?= e($val('slug')) ?>" maxlength="80">
-        <?php if ($err('slug')): ?><span class="field__error"><?= e($err('slug')) ?></span><?php endif; ?>
-      </label>
-
-      <?php if ($type === 'branch'): ?>
-      <label class="field field--span2">
-        <span class="field__label">Địa chỉ</span>
-        <input class="field__input<?= $err('address') ? ' is-invalid' : '' ?>" type="text" name="address"
-               value="<?= e($val('address')) ?>" maxlength="255" placeholder="Lô BII-8, đường D3, KCN Tân Hương…">
-        <?php if ($err('address')): ?><span class="field__error"><?= e($err('address')) ?></span><?php endif; ?>
-      </label>
-      <label class="field">
-        <span class="field__label">Điện thoại</span>
-        <input class="field__input<?= $err('phone') ? ' is-invalid' : '' ?>" type="tel" name="phone"
-               value="<?= e($val('phone')) ?>" maxlength="30">
-        <?php if ($err('phone')): ?><span class="field__error"><?= e($err('phone')) ?></span><?php endif; ?>
-      </label>
-      <label class="field field--span2">
-        <span class="field__label">Link nhúng bản đồ (iframe src)</span>
-        <textarea class="field__input<?= $err('map_url') ? ' is-invalid' : '' ?>" name="map_url" rows="2" maxlength="500" placeholder="https://www.google.com/maps/embed?pb=…"><?= e($val('map_url')) ?></textarea>
-        <?php if ($err('map_url')): ?><span class="field__error"><?= e($err('map_url')) ?></span><?php endif; ?>
-      </label>
-      <label class="field">
-        <span class="field__label">Link mở Google Maps</span>
-        <input class="field__input<?= $err('map_link') ? ' is-invalid' : '' ?>" type="text" name="map_link"
-               value="<?= e($val('map_link')) ?>" maxlength="500" placeholder="https://maps.app.goo.gl/…">
-        <?php if ($err('map_link')): ?><span class="field__error"><?= e($err('map_link')) ?></span><?php endif; ?>
-      </label>
-      <?php elseif ($type === 'category'): ?>
-      <label class="field field--span2">
-        <span class="field__label">Mô tả ngắn</span>
-        <input class="field__input<?= $err('description') ? ' is-invalid' : '' ?>" type="text" name="description"
-               value="<?= e($val('description')) ?>" maxlength="255" placeholder="Ví dụ: Công nhân may, tổ trưởng chuyền…">
-        <?php if ($err('description')): ?><span class="field__error"><?= e($err('description')) ?></span><?php endif; ?>
-      </label>
+$isBranch = $type === 'branch';
+$action = url('admin/categories/' . $type . ($isEdit ? '/' . (int) $record['id'] . '/edit' : '/create'));
+$backUrl = url('admin/categories') . '?' . http_build_query(['type' => $type]);
+$heading = ($isEdit ? 'Sửa ' : 'Thêm ') . $config['singular'];
+$val = static fn(string $key): string => (string) ($values[$key] ?? '');
+$renderField = static function (string $key, string $label, int $max, string $kind = 'text', bool $wide = false, string $hint = '') use ($val, $errors): void {
+    $error = (string) ($errors[$key] ?? '');
+    ?>
+    <label class="field<?= $wide ? ' field--span2' : '' ?>">
+      <span class="field__label"><?= e($label) ?><?= $key === 'name' ? ' <em>*</em>' : '' ?></span>
+      <?php if ($kind === 'textarea'): ?>
+      <textarea class="field__input<?= $error !== '' ? ' is-invalid' : '' ?>" name="<?= e($key) ?>" maxlength="<?= $max ?>" rows="2"><?= e($val($key)) ?></textarea>
+      <?php else: ?>
+      <input class="field__input<?= $error !== '' ? ' is-invalid' : '' ?>" type="<?= e($kind) ?>" name="<?= e($key) ?>" value="<?= e($val($key)) ?>"<?= $kind !== 'number' ? ' maxlength="' . $max . '"' : ' min="-32768" max="32767"' ?><?= $key === 'name' ? ' required' : '' ?>>
       <?php endif; ?>
-
-      <label class="field">
-        <span class="field__label">Thứ tự hiển thị</span>
-        <input class="field__input" type="number" name="sort_order" value="<?= e($val('sort_order', '0')) ?>">
-      </label>
-      <label class="field field--checkbox">
-        <input type="checkbox" name="is_active" value="1"<?= (int) $val('is_active', '1') === 1 ? ' checked' : '' ?>>
-        <span>Đang bật — hiển thị trong bộ lọc và các select ngoài website</span>
-      </label>
+      <?php if ($hint !== ''): ?><span class="admin-muted"><?= e($hint) ?></span><?php endif; ?>
+      <?php if ($error !== ''): ?><span class="field__error"><?= e($error) ?></span><?php endif; ?>
+    </label>
+    <?php
+};
+$contactRow = static function (int|string $index, array $contact = []): void { ?>
+  <div class="admin-editor-row admin-branch-contact-row" data-row>
+    <input type="hidden" name="contacts[<?= $index ?>][is_active]" value="<?= isset($contact['is_active']) ? (int) $contact['is_active'] : 1 ?>">
+    <label class="field">
+      <span class="field__label">Họ tên</span>
+      <input class="field__input" name="contacts[<?= $index ?>][full_name]" maxlength="120" placeholder="Ví dụ: Chị Trân" value="<?= e($contact['full_name'] ?? '') ?>">
+    </label>
+    <label class="field">
+      <span class="field__label">Vai trò</span>
+      <input class="field__input" name="contacts[<?= $index ?>][title]" maxlength="80" placeholder="Ví dụ: Nhân sự" value="<?= e($contact['title'] ?? '') ?>">
+    </label>
+    <label class="field">
+      <span class="field__label">Số điện thoại</span>
+      <input class="field__input" type="tel" name="contacts[<?= $index ?>][phone]" maxlength="30" placeholder="0900 000 000" value="<?= e($contact['phone'] ?? '') ?>">
+    </label>
+    <button class="btn btn-ghost btn-icon admin-editor-delete" type="button" data-remove aria-label="Xóa liên hệ" title="Xóa liên hệ"><?= admin_icon_svg('trash') ?></button>
+  </div>
+<?php };
+$mapLink = (string) ($values['map_link'] ?? '');
+if (!preg_match('#^https?://#i', $mapLink)) {
+    $mapLink = '';
+}
+if ($mapLink === '' && trim($val('address')) !== '') {
+    $mapLink = 'https://www.google.com/maps/search/?' . http_build_query(['api' => 1, 'query' => $val('address')]);
+}
+?>
+<div class="admin-content-editor admin-taxonomy-editor">
+  <div class="admin-page-head admin-cms-form-head">
+    <div>
+      <a href="<?= e($backUrl) ?>" class="admin-editor-back"><i class="bi bi-arrow-left" aria-hidden="true"></i> Danh mục dùng chung</a>
+      <h1 class="admin-h1"><?= e($heading) ?></h1>
+      <p class="admin-sub"><?= e($config['hint']) ?></p>
     </div>
-  </section>
+  </div>
 
-  <?php if ($type === 'branch'): ?>
-  <section class="admin-card" id="branch-contacts">
-    <div class="admin-card__head">
-      <h2 class="admin-h2">Người liên hệ tuyển dụng</h2>
-      <span class="admin-badge admin-badge--soft"><?= count($contacts) ?> người</span>
-    </div>
-    <?php if ($err('contacts')): ?>
-    <div class="admin-alert admin-alert--error" role="alert"><?= e($err('contacts')) ?></div>
-    <?php endif; ?>
-
-    <div class="admin-repeater" data-contact-repeater>
-      <div class="admin-repeater__head" aria-hidden="true">
-        <span>Họ tên</span>
-        <span>Số điện thoại</span>
-        <span></span>
-      </div>
-      <div class="admin-repeater__rows" data-contact-rows>
-        <?php foreach ($contacts as $index => $contact): ?>
-        <div class="admin-repeater__row" data-contact-row>
-          <input class="field__input" type="text" name="contacts[<?= (int) $index ?>][full_name]" aria-label="Họ tên người liên hệ"
-                 value="<?= e((string) ($contact['full_name'] ?? '')) ?>" maxlength="120" placeholder="VD: Chị Trân">
-
-          <input class="field__input" type="tel" name="contacts[<?= (int) $index ?>][phone]" aria-label="Số điện thoại người liên hệ"
-                 value="<?= e((string) ($contact['phone'] ?? '')) ?>" maxlength="30" placeholder="VD: 0913 131 090">
-          <button type="button" class="btn btn-ghost btn-icon" data-contact-remove title="Xoá" aria-label="Xoá"><?= admin_icon_svg('trash') ?></button>
-        </div>
-        <?php endforeach; ?>
-      </div>
-
-      <template id="contact-row-template">
-        <div class="admin-repeater__row" data-contact-row>
-          <input class="field__input" type="text" name="contacts[__INDEX__][full_name]" aria-label="Họ tên người liên hệ" maxlength="120" placeholder="VD: Chị Trân">
-
-          <input class="field__input" type="tel" name="contacts[__INDEX__][phone]" aria-label="Số điện thoại người liên hệ" maxlength="30" placeholder="VD: 0913 131 090">
-          <button type="button" class="btn btn-ghost btn-icon" data-contact-remove title="Xoá" aria-label="Xoá"><?= admin_icon_svg('trash') ?></button>
-        </div>
-      </template>
-
-      <button type="button" class="btn btn-outline btn-sm" data-contact-add><i class="bi bi-plus-lg me-1" aria-hidden="true"></i> Thêm người liên hệ</button>
-    </div>
-  </section>
+  <?php if ($errors !== []): ?>
+  <div class="admin-alert admin-alert--error" role="alert">Có <?= count($errors) ?> trường cần kiểm tra lại.</div>
   <?php endif; ?>
 
-  <div class="admin-form__actions">
-    <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1" aria-hidden="true"></i> <?= $isEdit ? 'Lưu thay đổi' : 'Thêm ' . e($config['singular']) ?></button>
-    <a href="<?= $backUrl ?>" class="btn btn-ghost">Huỷ</a>
-  </div>
-</form>
+  <form data-ajax method="POST" action="<?= $action ?>" class="admin-form admin-cms-form">
+    <?= csrf_field() ?>
+    <section class="admin-cms-card admin-cms-fields">
+      <h2>Thông tin chung</h2>
+      <div class="field-grid admin-cms-fields">
+        <?php
+        $renderField('name', 'Tên', 120);
+        $renderField('slug', 'Đường dẫn (slug)', 80, hint: 'Để trống để tự tạo từ tên.');
+        if ($type === 'category') {
+            $renderField('description', 'Thông tin mô tả', 255, 'textarea', true);
+        }
+        $renderField('sort_order', 'Thứ tự hiển thị', 0, 'number');
+        ?>
+      </div>
+      <label class="admin-cms-visibility admin-editor-visibility">
+        <span>Hiển thị<span class="admin-muted">Tắt để ẩn khỏi các lựa chọn trên website.</span></span>
+        <input class="admin-cms-switch" type="checkbox" role="switch" name="is_active" value="1"<?= !empty($values['is_active']) ? ' checked' : '' ?>>
+      </label>
+    </section>
 
-<?php if ($type === 'branch'): ?>
-<script>
-(function () {
-  var root = document.querySelector('[data-contact-repeater]');
-  if (!root) return;
-  var rows = root.querySelector('[data-contact-rows]');
-  var template = document.getElementById('contact-row-template');
-  var addButton = root.querySelector('[data-contact-add]');
-  var nextIndex = rows.querySelectorAll('[data-contact-row]').length + 1;
+    <?php if ($isBranch): ?>
+    <section class="admin-cms-card admin-cms-fields">
+      <h2>Địa điểm khu sản xuất</h2>
+      <div class="field-grid admin-cms-fields">
+        <?php
+        $renderField('address', 'Địa chỉ', 255, 'textarea', true);
+        $renderField('phone', 'Số điện thoại', 30, 'tel');
+        $renderField('map_url', 'Liên kết bản đồ nhúng', 500, hint: 'Dán liên kết nhúng từ Google Maps (Chia sẻ → Nhúng bản đồ).');
+        $renderField('map_link', 'Liên kết mở Google Maps', 500, wide: true, hint: 'Có thể để trống để tìm theo địa chỉ.');
+        ?>
+      </div>
+      <div>
+        <a class="btn btn-outline btn-sm admin-branch-map-link" data-branch-map<?= $mapLink !== '' ? ' href="' . e($mapLink) . '"' : ' aria-disabled="true"' ?> target="_blank" rel="noopener noreferrer"><i class="bi bi-geo-alt" aria-hidden="true"></i> Mở Google Maps <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i></a>
+      </div>
+    </section>
 
-  addButton.addEventListener('click', function () {
-    var html = template.innerHTML.replace(/__INDEX__/g, String(nextIndex++));
-    rows.insertAdjacentHTML('beforeend', html);
-    var last = rows.lastElementChild;
-    if (last) {
-      last.style.animation = 'none';
-      var input = last.querySelector('input');
-      if (input) input.focus();
-    }
-  });
+    <section class="admin-cms-card admin-cms-fields" data-repeater="branch-contacts">
+      <header class="admin-editor-heading">
+        <div class="admin-cms-section-intro">
+          <h2>Đầu mối liên hệ tuyển dụng</h2>
+          <p>Người ứng viên có thể liên hệ khi quan tâm đến khu sản xuất này.</p>
+        </div>
+        <button type="button" class="btn btn-outline btn-sm" data-add><i class="bi bi-plus-lg" aria-hidden="true"></i> Thêm liên hệ</button>
+      </header>
+      <?php if (!empty($errors['contacts'])): ?>
+      <p class="field__error" role="alert"><?= e($errors['contacts']) ?></p>
+      <?php endif; ?>
+      <div class="admin-editor-stack" data-rows>
+        <?php foreach (array_values($contacts) as $index => $contact) { $contactRow($index, $contact); } ?>
+      </div>
+      <p class="admin-muted admin-repeater-empty">Chưa có đầu mối liên hệ nào.</p>
+      <template data-template><?php $contactRow('__INDEX__'); ?></template>
+    </section>
+    <?php endif; ?>
 
-  rows.addEventListener('click', function (event) {
-    var removeButton = event.target.closest('[data-contact-remove]');
-    if (!removeButton) return;
-    var row = removeButton.closest('[data-contact-row]');
-    if (row) row.remove();
-  });
-})();
-</script>
-<?php endif; ?>
+    <div class="admin-cms-actions">
+      <a href="<?= e($backUrl) ?>" class="btn btn-outline">Hủy</a>
+      <button type="submit" class="btn btn-primary"><?= e($isEdit ? 'Lưu thay đổi' : $heading) ?></button>
+    </div>
+  </form>
+</div>

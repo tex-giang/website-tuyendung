@@ -1,18 +1,19 @@
 <?php
 /** Sidebar quản trị: nhóm theo nghiệp vụ, ẩn module ngoài quyền của vai trò hiện tại. */
 $nav = $page['nav'] ?? '';
+$activeNavGroup = $nav === 'profile' ? 'Hệ thống' : 'Quản trị';
 $can = static fn(string $module): bool => \App\Core\Permissions::currentCan($module);
 
 $groups = [
     'Tuyển dụng' => [
-        ['dashboard', 'Bảng điều khiển', url('admin/dashboard'), 0, 'dashboard', 'bi-speedometer2'],
+        ['dashboard', 'Bảng điều khiển', url('admin/dashboard'), 0, 'dashboard', 'bi-grid'],
         ['jobs', 'Tin tuyển dụng', url('admin/jobs'), 0, 'jobs', 'bi-briefcase'],
-        ['applications', 'Hồ sơ ứng tuyển', url('admin/applications'), $counts['applications'], 'applications', 'bi-file-earmark-person'],
+        ['applications', 'Hồ sơ ứng tuyển', url('admin/applications'), $counts['applications'], 'applications', 'bi-people'],
         ['visits', 'Thống kê truy cập', url('admin/visits'), 0, 'dashboard', 'bi-bar-chart-line'],
     ],
     'Nội dung' => [
-        ['posts', 'Tin tức & bài viết', url('admin/posts'), 0, 'posts', 'bi-newspaper'],
-        ['banners', 'Banner & thông báo', url('admin/banners'), 0, 'banners', 'bi-images'],
+        ['posts', 'Tin tức và bài viết', url('admin/posts'), 0, 'posts', 'bi-newspaper'],
+        ['banners', 'Banner và thông báo', url('admin/banners'), 0, 'banners', 'bi-images'],
         ['content', 'Nội dung website', url('admin/content'), 0, 'content', 'bi-file-earmark-text'],
         ['pages-about', 'Về chúng tôi', url('admin/pages/about'), 0, 'content', 'bi-info-circle'],
         ['pages-benefits', 'Phúc lợi', url('admin/pages/benefits'), 0, 'content', 'bi-gift'],
@@ -47,7 +48,8 @@ $groups = [
       ?>
       <p class="admin-nav__group"><?= e($groupLabel) ?></p>
       <?php foreach ($visible as [$key, $label, $href, $badge, $perm, $icon]): ?>
-      <a href="<?= $href ?>" data-admin-nav="<?= e($key) ?>" class="admin-nav__item<?= $nav === $key ? ' is-active' : '' ?>"<?= $nav === $key ? ' aria-current="page"' : '' ?>>
+      <?php if ($nav === $key) { $activeNavGroup = $groupLabel; } ?>
+      <a href="<?= $href ?>" data-admin-nav="<?= e($key) ?>" data-admin-nav-group="<?= e($groupLabel) ?>" class="admin-nav__item<?= $nav === $key ? ' is-active' : '' ?>"<?= $nav === $key ? ' aria-current="page"' : '' ?>>
         <i class="bi <?= e($icon) ?> admin-nav__icon" aria-hidden="true"></i>
         <span class="admin-nav__label"><?= e($label) ?></span>
         <?php if (array_key_exists($key, $counts)): ?><span class="admin-nav__count"<?= $badge > 0 ? '' : ' hidden' ?>><span data-admin-count><?= (int) $badge ?></span><span class="visually-hidden"> mới</span></span><?php endif; ?>

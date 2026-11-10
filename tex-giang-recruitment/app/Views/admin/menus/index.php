@@ -1,54 +1,41 @@
 <?php
 $page['ajax_fragment'] = true;
-/**
- * Danh sách menu website (header/footer). Menu bật mới hiện ngoài public.
- *
- * @var array<int, array<string, mixed>> $menus
- */
+$partials = BASE_PATH . '/app/Views/partials/admin/';
 ?>
-<div class="admin-page-head">
+<div class="admin-page-head admin-list-head">
   <div>
     <h1 class="admin-h1">Menu website</h1>
+    <p class="admin-sub">Menu điều hướng dùng chung cho đầu trang và chân trang, sắp xếp theo thứ tự hiển thị.</p>
   </div>
-  <a href="<?= url('admin/menus/create') ?>" class="btn btn-primary"><i class="bi bi-plus-lg me-1" aria-hidden="true"></i> Thêm menu</a>
+  <a href="<?= url('admin/menus/create') ?>" class="btn btn-primary"><i class="bi bi-plus-lg" aria-hidden="true"></i> Thêm menu</a>
 </div>
-
-<?php if ($menus === []): ?>
-<section class="admin-card"><p class="admin-empty">Chưa có menu nào. <a href="<?= url('admin/menus/create') ?>">Thêm ngay</a>.</p></section>
-<?php else: ?>
-<section class="admin-card">
+<section class="admin-list-panel">
+  <?php if ($menus === []): ?>
+  <p class="admin-list-empty">Chưa có menu nào.</p>
+  <?php else: ?>
   <div class="admin-table-wrap">
-    <table class="admin-table table table-hover align-middle js-datatable" data-dt-compact>
-      <thead><tr><th>Nhãn</th><th>Đường dẫn</th><th>Thứ tự</th><th>Trạng thái</th><th class="is-actions">Thao tác</th></tr></thead>
+    <table class="admin-table admin-directory-table admin-directory-table--menus" aria-label="Danh sách menu">
+      <thead><tr><th scope="col" class="admin-directory-order">Thứ tự</th><th scope="col">Tên hiển thị</th><th scope="col">Đường dẫn</th><th scope="col">Hiển thị</th><th scope="col" class="is-actions"><span class="visually-hidden">Thao tác</span></th></tr></thead>
       <tbody>
-        <?php foreach ($menus as $menu): ?>
+        <?php foreach ($menus as $menu):
+            $base = 'admin/menus/' . (int) $menu['id'];
+            $itemName = (string) $menu['label'];
+            $toggleUrl = url($base . '/toggle');
+            $editUrl = url($base . '/edit');
+            $deleteUrl = url($base . '/delete');
+            $deletePrompt = 'Xóa menu “' . $itemName . '”?';
+            $active = (int) $menu['is_active'] === 1;
+        ?>
         <tr>
-          <td><strong><?= e($menu['label']) ?></strong></td>
-          <td class="admin-mono"><?= e($menu['url'] !== '' ? $menu['url'] : '(trang chủ)') ?></td>
-          <td class="admin-muted"><?= (int) $menu['sort_order'] ?></td>
-          <td>
-            <span class="admin-badge <?= (int) $menu['is_active'] === 1 ? 'admin-badge--published' : 'admin-badge--draft' ?>">
-              <?= (int) $menu['is_active'] === 1 ? 'Đang hiện' : 'Đang ẩn' ?>
-            </span>
-          </td>
-          <td class="is-actions">
-            <div class="admin-actions">
-              <form method="POST" action="<?= url('admin/menus/' . $menu['id'] . '/toggle') ?>" data-ajax>
-                <?= csrf_field() ?>
-                <button class="btn btn-outline btn-icon" type="submit" title="<?= (int) $menu['is_active'] === 1 ? 'Ẩn' : 'Hiện' ?>" aria-label="Ẩn/Hiện"><?= (int) $menu['is_active'] === 1 ? admin_icon_svg('eye-off') : admin_icon_svg('eye') ?></button>
-              </form>
-              <a href="<?= url('admin/menus/' . $menu['id'] . '/edit') ?>" class="btn btn-outline btn-icon" title="Sửa" aria-label="Sửa"><?= admin_icon_svg('pencil') ?></a>
-              <form method="POST" action="<?= url('admin/menus/' . $menu['id'] . '/delete') ?>"
-                    data-ajax data-confirm="Xoá menu &quot;<?= e($menu['label']) ?>&quot;?">
-                <?= csrf_field() ?>
-                <button class="btn btn-danger btn-icon" type="submit" title="Xoá" aria-label="Xoá"><?= admin_icon_svg('trash') ?></button>
-              </form>
-            </div>
-          </td>
+          <td class="admin-directory-order admin-mono" data-label="Thứ tự"><?= (int) $menu['sort_order'] ?></td>
+          <td class="admin-directory-name"><a class="admin-link" href="<?= $editUrl ?>"><?= e($itemName) ?></a></td>
+          <td class="admin-mono" data-label="Đường dẫn"><?= e($menu['url'] !== '' ? $menu['url'] : '/') ?></td>
+          <td data-label="Hiển thị"><?php require $partials . 'list-switch.php'; ?></td>
+          <td class="is-actions"><?php require $partials . 'list-edit-delete.php'; ?></td>
         </tr>
         <?php endforeach; ?>
       </tbody>
     </table>
   </div>
+  <?php endif; ?>
 </section>
-<?php endif; ?>

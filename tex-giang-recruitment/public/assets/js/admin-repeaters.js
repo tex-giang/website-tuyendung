@@ -9,7 +9,7 @@
       input.name = input.name.replace(/__INDEX__|__G__|__I__/g, marker => indexes[marker]);
     });
     container.append(row);
-    row.querySelector('input[type="text"]')?.focus();
+    row.querySelector('input:not([type="hidden"]), textarea')?.focus();
   }
 
   function moveRow(row, direction) {
@@ -20,7 +20,7 @@
   function updateSimpleRows(repeater, rows) {
     Array.from(rows.children).forEach((row, index) => {
       row.querySelectorAll('[name]').forEach(input => {
-        input.name = input.name.replace(/\[\d+\]/, '[' + index + ']');
+        input.name = input.name.replace(/\[(\d+_)?\d+\]/, (_, prefix = '') => '[' + prefix + index + ']');
       });
     });
     const count = repeater.closest('.admin-card')?.querySelector('[data-count]');
@@ -28,7 +28,6 @@
   }
 
   function updateGroups(form, list) {
-    const checked = list.querySelectorAll('input[type="radio"]:checked');
     Array.from(list.children).forEach((group, groupIndex) => {
       group.querySelector('[data-group-number]').textContent = groupIndex + 1;
       group.querySelectorAll('[name]').forEach(input => {
@@ -40,9 +39,35 @@
         });
       });
     });
-    checked.forEach(input => { input.checked = true; });
-    form.querySelector('[data-group-count]').textContent = list.children.length;
+    const count = form.querySelector('[data-group-count]');
+    if (count) count.textContent = list.children.length;
   }
+
+  main.addEventListener('input', event => {
+    const field = event.target;
+    if (field.matches('[data-benefit-title]')) {
+      const title = field.value.trim();
+      field.closest('[data-group]').querySelector('[data-group-title]').textContent = title ? ' · ' + title : '';
+    }
+    if (field.matches('[data-benefit-icon]')) {
+      field.closest('[data-group]').querySelector('[data-benefit-icon-preview]').src = field.selectedOptions[0].dataset.preview;
+    }
+    if (field.matches('[name="address"], [name="map_link"]')) {
+      const link = field.form?.querySelector('[data-branch-map]');
+      if (!link) return;
+      const address = field.form.elements.address.value.trim();
+      const custom = field.form.elements.map_link.value.trim();
+      const href = /^https?:\/\/[^\s]+$/i.test(custom) ? custom
+        : address ? 'https://www.google.com/maps/search/?' + new URLSearchParams({ api: '1', query: address }) : '';
+      if (href) {
+        link.href = href;
+        link.removeAttribute('aria-disabled');
+      } else {
+        link.removeAttribute('href');
+        link.setAttribute('aria-disabled', 'true');
+      }
+    }
+  });
 
   // Uỷ quyền từ khung chính để các nút mới vẫn hoạt động sau khi cập nhật HTML.
   main.addEventListener('click', event => {
@@ -51,6 +76,7 @@
 
     const repeater = button.closest('[data-repeater]');
     if (repeater && button.matches('[data-add], [data-remove], [data-move]')) {
+      const form = button.form;
       const rows = repeater.querySelector('[data-rows]');
       const row = button.closest('[data-row]');
       if (button.hasAttribute('data-add')) {
@@ -62,6 +88,7 @@
         button.focus();
       }
       updateSimpleRows(repeater, rows);
+      form?.dispatchEvent(new Event('input', { bubbles: true }));
       return;
     }
 
@@ -86,5 +113,6 @@
       button.focus();
     }
     updateGroups(form, list);
+    form.dispatchEvent(new Event('input', { bubbles: true }));
   });
 })();

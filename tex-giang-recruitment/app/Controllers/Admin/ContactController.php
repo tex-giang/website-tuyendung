@@ -36,8 +36,11 @@ final class ContactController extends Controller
             $this->redirect(url('admin/contact'));
         }
         if ($message['status'] === 'new' && !Response::wantsAdminFragment()) {
-            ContactMessage::updateStatus((int) $message['id'], 'read', (int) Session::get('auth_id'));
-            $message['status'] = 'read';
+            if (ContactMessage::markReadIfNew((int) $message['id'], (int) Session::get('auth_id'))) {
+                $message['status'] = 'read';
+            } else {
+                $message = ContactMessage::find((int) $id) ?? $message;
+            }
         }
 
         $this->view('admin/contact/detail', [
@@ -72,6 +75,8 @@ final class ContactController extends Controller
         }
         ContactMessage::delete($messageId);
         AuditLog::record('contact.delete', 'contact_message', $messageId, ['name' => $message['full_name']]);
-        $this->formSuccess('Đã xoá tin nhắn của "' . $message['full_name'] . '".', url('admin/contact'));
+        $status = (string) ($_POST['return_status'] ?? '');
+        $listUrl = url('admin/contact') . (isset(ContactMessage::STATUSES[$status]) ? '?' . http_build_query(['status' => $status]) : '');
+        $this->formSuccess('Đã xoá tin nhắn của "' . $message['full_name'] . '".', $listUrl);
     }
 }

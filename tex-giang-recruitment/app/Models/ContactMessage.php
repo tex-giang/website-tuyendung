@@ -85,6 +85,15 @@ final class ContactMessage
         $stmt->execute(['status' => $status, 'user' => $userId, 'id' => $id]);
     }
 
+    public static function markReadIfNew(int $id, int $userId): bool
+    {
+        $stmt = Database::connection()->prepare(
+            "UPDATE contact_messages SET status = 'read', handled_by = :user WHERE id = :id AND status = 'new'"
+        );
+        $stmt->execute(['user' => $userId, 'id' => $id]);
+        return $stmt->rowCount() > 0;
+    }
+
     public static function delete(int $id): void
     {
         $stmt = Database::connection()->prepare('DELETE FROM contact_messages WHERE id = :id');

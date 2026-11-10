@@ -6,17 +6,17 @@ $val = static fn(string $key, string $default = ''): string => (string) ($values
 $err = static fn(string $key): string => (string) ($errors[$key] ?? '');
 $currentImage = $val('image_path');
 ?>
-<div class="admin-page-head">
+<div class="admin-page-head admin-cms-form-head">
   <div>
-    <p class="admin-breadcrumb"><a href="<?= url('admin/posts') ?>">Tin tức &amp; bài viết</a> / <?= $isEdit ? 'Sửa bài' : 'Thêm bài' ?></p>
-    <h1 class="admin-h1"><?= $isEdit ? 'Sửa bài viết' : 'Thêm bài viết' ?></h1>
-    <?php if ($isEdit): ?><?php endif; ?>
+    <a href="<?= url('admin/posts') ?>" class="admin-job-heading__back"><i class="bi bi-arrow-left" aria-hidden="true"></i> Danh sách bài viết</a>
+    <h1 class="admin-h1"><?= $isEdit ? 'Chỉnh sửa bài viết' : 'Thêm bài viết' ?></h1>
   </div>
   <div class="admin-head-actions">
     <?php if ($isEdit && $post['status'] === 'published'): ?>
-    <a href="<?= url('news/' . $post['slug']) ?>" target="_blank" rel="noopener" class="btn btn-outline"><i class="bi bi-box-arrow-up-right me-1" aria-hidden="true"></i> Xem trên website</a>
+    <a href="<?= url('news/' . $post['slug']) ?>" target="_blank" rel="noopener" class="btn btn-outline"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> Xem trên website</a>
     <?php endif; ?>
-    <a href="<?= url('admin/posts') ?>" class="btn btn-ghost"><i class="bi bi-arrow-left me-1" aria-hidden="true"></i> Danh sách</a>
+    <a href="<?= url('admin/posts') ?>" class="btn btn-outline">Hủy</a>
+    <button type="submit" form="post-editor-form" class="btn btn-primary"><?= $isEdit ? 'Lưu thay đổi' : 'Tạo bài viết' ?></button>
   </div>
 </div>
 
@@ -24,89 +24,55 @@ $currentImage = $val('image_path');
 <div class="admin-alert admin-alert--error" role="alert">Có <?= count($errors) ?> trường cần kiểm tra lại.</div>
 <?php endif; ?>
 
-<form method="POST" action="<?= $action ?>" enctype="multipart/form-data" class="admin-form" data-ajax="post">
+<form id="post-editor-form" method="POST" action="<?= $action ?>" enctype="multipart/form-data" class="admin-form admin-post-editor admin-cms-form" data-ajax="post">
   <?= csrf_field() ?>
-
-  <section class="admin-card">
-    <h2 class="admin-h2">Nội dung bài viết</h2>
-    <div class="field-grid">
-      <label class="field field--span2">
+  <section class="admin-cms-card admin-cms-fields" aria-label="Nội dung bài viết">
+      <label class="field">
         <span class="field__label">Tiêu đề <em>*</em></span>
         <input class="field__input<?= $err('title') ? ' is-invalid' : '' ?>" type="text" name="title"
                value="<?= e($val('title')) ?>" maxlength="220" required>
         <?php if ($err('title')): ?><span class="field__error"><?= e($err('title')) ?></span><?php endif; ?>
       </label>
-
       <label class="field">
         <span class="field__label">Đường dẫn (slug)</span>
         <input class="field__input<?= $err('slug') ? ' is-invalid' : '' ?>" type="text" name="slug"
                value="<?= e($val('slug')) ?>" maxlength="220">
+        <span class="admin-muted">Để trống để tạo đường dẫn từ tiêu đề.</span>
         <?php if ($err('slug')): ?><span class="field__error"><?= e($err('slug')) ?></span><?php endif; ?>
       </label>
+      <label class="field">
+        <span class="field__label">Mô tả ngắn</span>
+        <textarea class="field__input" name="excerpt" rows="2" maxlength="400"><?= e($val('excerpt')) ?></textarea>
+        <?php if ($err('excerpt')): ?><span class="field__error"><?= e($err('excerpt')) ?></span><?php endif; ?>
+      </label>
+      <div class="field">
+        <div class="admin-post-editor__body-head">
+          <label class="field__label" id="post-body-label" for="post-body">Nội dung <em>*</em></label>
+          <button type="button" class="btn btn-ghost btn-sm" data-post-source aria-pressed="false" hidden>Mã HTML</button>
+        </div>
+        <textarea class="field__input<?= $err('body') ? ' is-invalid' : '' ?>" id="post-body" name="body" rows="10" required><?= e($val('body')) ?></textarea>
+        <div data-post-rich hidden>
+          <div id="post-rich-editor" data-upload-url="<?= e(url('admin/posts/upload-image') . '?responseType=json') ?>"
+               data-upload-token="<?= e(csrf_token()) ?>"></div>
+        </div>
+        <input type="file" accept=".jpg,.jpeg,.png,.webp" data-post-inline-image hidden>
+        <p class="admin-muted" role="status" data-post-editor-status hidden></p>
+        <?php if ($err('body')): ?><span class="field__error"><?= e($err('body')) ?></span><?php endif; ?>
+      </div>
+  </section>
 
+  <div class="admin-post-editor__side">
+    <section class="admin-cms-card admin-cms-fields" aria-label="Xuất bản bài viết">
       <label class="field">
         <span class="field__label">Chuyên mục</span>
         <select class="field__input<?= $err('category_id') ? ' is-invalid' : '' ?>" name="category_id">
-          <option value="">— Không chọn —</option>
+          <option value="">Chọn chuyên mục</option>
           <?php foreach ($categories as $category): ?>
           <option value="<?= (int) $category['id'] ?>"<?= (string) $val('category_id') === (string) $category['id'] ? ' selected' : '' ?>><?= e($category['name']) ?></option>
           <?php endforeach; ?>
         </select>
         <?php if ($err('category_id')): ?><span class="field__error"><?= e($err('category_id')) ?></span><?php endif; ?>
       </label>
-
-      <label class="field field--span2">
-        <span class="field__label">Mô tả ngắn</span>
-        <textarea class="field__input" name="excerpt" rows="2" maxlength="400"><?= e($val('excerpt')) ?></textarea>
-        <?php if ($err('excerpt')): ?><span class="field__error"><?= e($err('excerpt')) ?></span><?php endif; ?>
-      </label>
-
-      <label class="field field--span2">
-        <span class="field__label">Nội dung <em>*</em></span>
-        <textarea class="field__input<?= $err('body') ? ' is-invalid' : '' ?>" name="body" rows="14" required><?= e($val('body')) ?></textarea>
-        <?php if ($err('body')): ?><span class="field__error"><?= e($err('body')) ?></span><?php endif; ?>
-      </label>
-    </div>
-  </section>
-
-  <section class="admin-card">
-    <h2 class="admin-h2">Ảnh đại diện</h2>
-    <div class="field-grid">
-      <div class="field">
-        <span class="field__label">Chọn ảnh</span>
-        <input class="field__input" type="file" name="image" accept=".jpg,.jpeg,.png,.webp">
-        <?php if ($err('image')): ?><span class="field__error"><?= e($err('image')) ?></span><?php endif; ?>
-      </div>
-      <div class="field">
-        <span class="field__label">Ảnh hiện tại</span>
-        <?php if ($currentImage !== '' && $currentImage !== null): ?>
-        <div class="admin-media">
-          <img class="admin-thumb admin-thumb--lg" src="<?= e(asset($currentImage)) ?>" alt="">
-          <label class="field--checkbox" style="grid-column:auto">
-            <input type="checkbox" name="remove_image" value="1">
-            <span>Gỡ ảnh này</span>
-          </label>
-        </div>
-        <?php else: ?>
-        <span class="admin-muted">Chưa có ảnh — bài viết dùng ảnh mặc định.</span>
-        <?php endif; ?>
-      </div>
-      <label class="field">
-        <span class="field__label">Mô tả ảnh (alt)</span>
-        <input class="field__input" type="text" name="image_alt" value="<?= e($val('image_alt')) ?>" maxlength="255"
-               placeholder="Ví dụ: Toàn cảnh Nhà máy Tân Hương 2">
-      </label>
-      <label class="field">
-        <span class="field__label">Chú thích ảnh</span>
-        <input class="field__input" type="text" name="image_caption" value="<?= e($val('image_caption')) ?>" maxlength="255"
-               placeholder="Ví dụ: Ảnh: TEX-GIANG">
-      </label>
-    </div>
-  </section>
-
-  <section class="admin-card">
-    <h2 class="admin-h2">Xuất bản</h2>
-    <div class="field-grid">
       <label class="field">
         <span class="field__label">Trạng thái</span>
         <select class="field__input" name="status">
@@ -119,14 +85,34 @@ $currentImage = $val('image_path');
         <span class="field__label">Ngày đăng</span>
         <input class="field__input<?= $err('published_at') ? ' is-invalid' : '' ?>" type="datetime-local" name="published_at"
                value="<?= e($publishedAt) ?>">
+        <span class="admin-muted">Để trống để dùng thời điểm đăng bài.</span>
         <?php if ($err('published_at')): ?><span class="field__error"><?= e($err('published_at')) ?></span><?php endif; ?>
       </label>
-    </div>
-  </section>
+    </section>
 
-  <div class="admin-form__actions">
-    <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1" aria-hidden="true"></i> <?= $isEdit ? 'Lưu thay đổi' : 'Tạo bài viết' ?></button>
-    <a href="<?= url('admin/posts') ?>" class="btn btn-ghost">Huỷ</a>
+    <section class="admin-cms-card admin-cms-fields" aria-labelledby="post-image-title">
+      <h2 id="post-image-title">Ảnh đại diện</h2>
+      <?php
+      $uploadName = 'image';
+      $uploadLabel = 'Chọn ảnh đại diện';
+      $uploadImage = $currentImage !== '' ? asset($currentImage) : '';
+      $uploadError = $err('image');
+      require BASE_PATH . '/app/Views/partials/admin/image-picker.php';
+      ?>
+      <?php if ($currentImage !== ''): ?>
+      <label class="admin-cms-inline-check"><input type="checkbox" name="remove_image" value="1"> Gỡ ảnh hiện tại</label>
+      <?php endif; ?>
+      <label class="field">
+        <span class="field__label">Văn bản thay thế (alt)</span>
+        <input class="field__input" type="text" name="image_alt" value="<?= e($val('image_alt')) ?>" maxlength="255"
+               placeholder="Ví dụ: Toàn cảnh Nhà máy Tân Hương 2">
+      </label>
+      <label class="field">
+        <span class="field__label">Chú thích ảnh</span>
+        <input class="field__input" type="text" name="image_caption" value="<?= e($val('image_caption')) ?>" maxlength="255"
+               placeholder="Ví dụ: Ảnh: TEX-GIANG">
+      </label>
+    </section>
   </div>
 </form>
 
@@ -139,35 +125,6 @@ $currentImage = $val('image_path');
 </form>
 <?php endif; ?>
 
-<?php if (is_file(BASE_PATH . '/public/assets/vendor/ckeditor4/ckeditor.js')): ?>
-<script src="<?= asset('vendor/ckeditor4/ckeditor.js') ?>"></script>
-<script>
-(function () {
-  if (typeof CKEDITOR === 'undefined') return;
-
-  // Ảnh upload qua server (lưu public/assets/uploads/posts/YYYY-MM/post-<thời-gian>-<random>.<ext>)
-  var uploadUrl = <?= json_encode(url('admin/posts/upload-image') . '?token=' . csrf_token()) ?>;
-
-  var editor = CKEDITOR.replace('body', {
-    language: 'vi',
-    height: 460,
-    versionCheck: false,
-    enterMode: CKEDITOR.ENTER_P,
-    shiftEnterMode: CKEDITOR.ENTER_BR,
-    filebrowserImageUploadUrl: uploadUrl,
-    filebrowserUploadUrl: uploadUrl,
-    removePlugins: 'flash',
-  });
-
-  // Textarea bị CKEditor ẩn đi — bỏ required để trình duyệt không chặn submit
-  // (server vẫn kiểm tra nội dung tối thiểu 20 ký tự).
-  if (editor) {
-    document.getElementById('body').form.addEventListener('submit', function () { editor.updateElement(); });
-    editor.on('instanceReady', function () {
-      var textarea = document.getElementById('body');
-      if (textarea) textarea.removeAttribute('required');
-    });
-  }
-})();
-</script>
-<?php endif; ?>
+<link rel="stylesheet" href="<?= asset('vendor/quill/dist/quill.snow.css') ?>">
+<script src="<?= asset('vendor/quill/dist/quill.js') ?>"></script>
+<script src="<?= asset('js/admin-post-editor.js') ?>"></script>

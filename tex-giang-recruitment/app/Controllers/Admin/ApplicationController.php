@@ -54,35 +54,95 @@ final class ApplicationController extends Controller
     public function updateStatus(string $id): void
     {
         $applicationId = (int) $id;
-        $application = Application::find($applicationId);
-        if ($application === null) {
+        $target = url('admin/applications/' . $applicationId);
+        // Yêu cầu từ form cũ có thể vẫn gửi cả ba trường.
+        $section = $_POST['section'] ?? 'all';
+        if (!in_array($section, ['all', 'status', 'appointment', 'note'], true)) {
+            $this->formError('Thao tác cập nhật không hợp lệ.', $target);
+        }
+
+        $value = static fn(string $key): string => is_string($_POST[$key] ?? null) ? trim($_POST[$key]) : '';
+        $changes = [];
+        $errors = [];
+        $historyNote = null;
+        $message = 'Đã cập nhật hồ sơ.';
+
+        if ($section === 'all' || $section === 'status') {
+            $status = $value('status');
+            if (!isset(Application::STATUSES[$status])) {
+                $errors['status'] = 'Trạng thái không hợp lệ.';
+            } else {
+                $changes['status'] = $status;
+                $message = 'Đã cập nhật hồ sơ sang “' . Application::STATUSES[$status] . '”.';
+            }
+        }
+
+        if ($section === 'all' || $section === 'appointment') {
+            $appointment = str_replace('T', ' ', $value('appointment_at'));
+            if (strlen($appointment) === 16) {
+                $appointment .= ':00';
+            }
+            $date = $appointment === '' ? null : false;
+            if (preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$/D', $appointment)) {
+                $date = \DateTimeImmutable::createFromFormat('!Y-m-d H:i:s', $appointment);
+            }
+            if ($date === false || ($date !== null && ($date->format('Y-m-d H:i:s') !== $appointment || (int) $date->format('Y') < 1000))) {
+                $errors['appointment_at'] = 'Lịch phỏng vấn không đúng định dạng.';
+            }
+            $changes['appointment_at'] = $date instanceof \DateTimeImmutable ? $date->format('Y-m-d H:i:s') : null;
+            if ($section === 'appointment') {
+                if (!is_string($_POST['appointment_at'] ?? null)) {
+                    $errors['appointment_at'] = 'Ngày giờ phỏng vấn không hợp lệ.';
+                }
+                if (!is_string($_POST['appointment_location'] ?? null)) {
+                    $errors['appointment_location'] = 'Địa điểm không hợp lệ.';
+                }
+                $location = $value('appointment_location');
+                if (mb_strlen($location) > 255) {
+                    $errors['appointment_location'] = 'Địa điểm tối đa 255 ký tự.';
+                }
+                if ($appointment === '' && $location !== '') {
+                    $errors['appointment_at'] = 'Chọn ngày giờ phỏng vấn hoặc để trống cả hai ô để hủy lịch.';
+                }
+                $changes['appointment_location'] = $location !== '' ? $location : null;
+                $message = $date instanceof \DateTimeImmutable ? 'Đã lưu lịch phỏng vấn.' : 'Đã hủy lịch phỏng vấn.';
+                $historyNote = $date instanceof \DateTimeImmutable
+                    ? 'Lịch phỏng vấn: ' . $date->format('H:i d/m/Y') . ($location !== '' ? ' · ' . $location : '')
+                    : $message;
+            } elseif ($appointment === '') {
+                $changes['appointment_location'] = null;
+            }
+        }
+
+        if ($section === 'all' || $section === 'note') {
+            $note = $value('admin_note');
+            if (mb_strlen($note) > 2000) {
+                $errors['admin_note'] = 'Ghi chú tối đa 2000 ký tự.';
+            } elseif ($section === 'note' && $note === '') {
+                $errors['admin_note'] = 'Nhập ghi chú nội bộ.';
+            }
+            $changes['admin_note'] = $note !== '' ? $note : null;
+            $historyNote = $changes['admin_note'];
+            if ($section === 'note') {
+                $message = 'Đã thêm ghi chú nội bộ.';
+            }
+        }
+
+        if ($errors !== []) {
+            $old = array_intersect_key($_POST, array_flip(['status', 'appointment_at', 'appointment_location', 'admin_note']));
+            $this->formError('Vui lòng kiểm tra lại các trường được đánh dấu.', $target, $errors, array_filter($old, 'is_string'));
+        }
+
+        if (!Application::updateReview($applicationId, $changes, $historyNote, (int) Session::get('auth_id'))) {
             $this->formError('Hồ sơ không tồn tại.', url('admin/applications'), status: 404);
         }
-
-        $status = (string) ($_POST['status'] ?? '');
-        $note = trim((string) ($_POST['admin_note'] ?? ''));
-        $appointment = trim((string) ($_POST['appointment_at'] ?? ''));
-
-        if (!isset(Application::STATUSES[$status])) {
-            $this->formError('Vui lòng kiểm tra lại các trường được đánh dấu.', url('admin/applications/' . $applicationId), ['status' => 'Trạng thái không hợp lệ.']);
-        }
-        if (mb_strlen($note) > 2000) {
-            $this->formError('Vui lòng kiểm tra lại các trường được đánh dấu.', url('admin/applications/' . $applicationId), ['admin_note' => 'Ghi chú tối đa 2000 ký tự.']);
-        }
-
-        $appointmentAt = null;
-        if ($appointment !== '') {
-            $appointment = str_replace('T', ' ', $appointment);
-            $timestamp = strtotime($appointment);
-            if ($timestamp === false) {
-                $this->formError('Vui lòng kiểm tra lại các trường được đánh dấu.', url('admin/applications/' . $applicationId), ['appointment_at' => 'Lịch phỏng vấn không đúng định dạng.']);
-            }
-            $appointmentAt = date('Y-m-d H:i:s', $timestamp);
-        }
-
-        Application::updateStatus($applicationId, $status, $note !== '' ? $note : null, (int) Session::get('auth_id'), $appointmentAt);
-        AuditLog::record('application.status', 'application', $applicationId, ['status' => $status]);
-        $this->formSuccess('Đã cập nhật hồ sơ sang "' . Application::STATUSES[$status] . '".', url('admin/applications/' . $applicationId));
+        $event = match ($section) {
+            'appointment' => 'application.appointment',
+            'note' => 'application.note',
+            default => 'application.status',
+        };
+        AuditLog::record($event, 'application', $applicationId, array_intersect_key($changes, ['status' => true]));
+        $this->formSuccess($message, $target);
     }
 
     /** Tải CV — chỉ người đã đăng nhập, file nằm ngoài public. */

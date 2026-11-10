@@ -1,85 +1,86 @@
 <?php
 $page['ajax_fragment'] = true;
-/** Danh sách tin tuyển dụng (admin). */
 $statusBadge = [
     'published' => 'admin-badge--published', 'draft' => 'admin-badge--draft',
     'paused' => 'admin-badge--paused', 'closed' => 'admin-badge--closed', 'expired' => 'admin-badge--expired',
 ];
+$statuses = array_replace($statuses, ['published' => 'Đang tuyển']);
+$listUrl = url('admin/jobs');
+$listPager = true;
 ?>
-<div class="admin-page-head">
+<div class="admin-page-head admin-list-head">
   <div>
     <h1 class="admin-h1" id="admin-list-title">Tin tuyển dụng</h1>
+    <p class="admin-sub">Quản lý các vị trí đang tuyển tại các khu sản xuất.</p>
   </div>
-  <a href="<?= url('admin/jobs/create') ?>" class="btn btn-primary"><i class="bi bi-plus-lg me-1" aria-hidden="true"></i> Thêm tin</a>
+  <a href="<?= url('admin/jobs/create') ?>" class="btn btn-primary"><i class="bi bi-plus-lg" aria-hidden="true"></i> Thêm tin tuyển dụng</a>
 </div>
 
-<form class="admin-filters" method="GET" role="search" aria-label="Bộ lọc danh sách" action="<?= url('admin/jobs') ?>">
-  <label class="field">
-    <span class="field__label">Từ khóa</span>
-    <input type="search" name="q" value="<?= e($filters['q']) ?>" class="field__input" placeholder="Tìm theo tiêu đề hoặc mã tin…">
-  </label>
-  <label class="field">
-    <span class="field__label">Trạng thái</span>
-    <select name="status" class="field__input">
-      <option value="">Tất cả trạng thái</option>
+<div class="admin-list-panel">
+  <form class="admin-filters admin-list-toolbar" data-admin-live-filter method="GET" role="search" aria-label="Lọc danh sách tin tuyển dụng" action="<?= $listUrl ?>">
+    <label class="admin-list-search">
+      <i class="bi bi-search" aria-hidden="true"></i>
+      <span class="visually-hidden">Tìm theo tiêu đề hoặc mã tin</span>
+      <input id="job-filter-q" type="search" name="q" value="<?= e($filters['q']) ?>" class="field__input" placeholder="Tìm theo tiêu đề hoặc mã tin…">
+    </label>
+    <select id="job-filter-status" name="status" class="field__input admin-list-select" data-submit-onchange aria-label="Lọc theo trạng thái">
+      <option value="">Tất cả trạng thái (<?= array_sum($counts) ?>)</option>
       <?php foreach ($statuses as $key => $label): ?>
       <option value="<?= e($key) ?>"<?= $filters['status'] === $key ? ' selected' : '' ?>><?= e($label) ?> (<?= (int) $counts[$key] ?>)</option>
       <?php endforeach; ?>
     </select>
-  </label>
-  <div class="admin-filter-actions">
-    <button type="submit" class="btn btn-outline"><i class="bi bi-funnel me-1" aria-hidden="true"></i> Áp dụng</button>
-    <a href="<?= url('admin/jobs') ?>" class="btn btn-ghost"><i class="bi bi-x-circle me-1" aria-hidden="true"></i> Xoá lọc</a>
-  </div>
-</form>
+    <noscript><button type="submit" class="btn btn-outline">Áp dụng</button></noscript>
+  </form>
 
-<div class="admin-card">
   <?php if ($result['items'] === []): ?>
-  <p class="admin-empty">Chưa có tin tuyển dụng nào khớp bộ lọc. <a href="<?= url('admin/jobs/create') ?>">Tạo tin đầu tiên</a>.</p>
+  <p class="admin-list-empty">Chưa có tin tuyển dụng nào khớp bộ lọc.</p>
   <?php else: ?>
   <div class="admin-table-wrap">
     <table class="admin-table admin-table--jobs table table-hover align-middle" aria-labelledby="admin-list-title">
-      <thead>
-        <tr>
-          <th>Mã</th><th>Tiêu đề</th><th>Khu</th><th>Lương</th><th>Hạn nộp</th>
-          <th>Trạng thái</th><th>Cập nhật</th><th class="is-actions">Thao tác</th>
-        </tr>
-      </thead>
+      <thead><tr>
+        <th scope="col">Mã tin</th><th scope="col">Tiêu đề</th><th scope="col">Khu sản xuất</th><th scope="col">Mức lương</th>
+        <th scope="col">Hạn nộp</th><th scope="col">Trạng thái</th><th scope="col">Cập nhật</th>
+        <th scope="col" class="is-actions" aria-label="Thao tác"></th>
+      </tr></thead>
       <tbody>
         <?php foreach ($result['items'] as $job): ?>
+        <?php $jobId = (int) $job['id']; $jobUrl = $listUrl . '/' . $jobId; ?>
         <tr>
-          <td class="admin-mono"><?= e($job['code'] ?: '—') ?></td>
-          <td>
-            <a class="admin-link" href="<?= url('admin/jobs/' . $job['id'] . '/edit') ?>"><?= e($job['title']) ?></a>
-            <span class="admin-muted"><?= e($job['category_name'] ?? '') ?> · <?= (int) $job['quantity'] ?> người</span>
+          <td class="admin-mono admin-nowrap"><?= e($job['code'] ?: '—') ?></td>
+          <td class="admin-job-cell-title">
+            <a class="admin-link" href="<?= $jobUrl ?>/edit" title="<?= e($job['title']) ?>"><?= e($job['title']) ?></a>
+            <span class="admin-muted"><?= e($job['category_name'] ?? 'Chưa phân bộ phận') ?><?= !empty($job['is_urgent']) ? ' · Tuyển gấp' : '' ?></span>
           </td>
           <td><?= e($job['branch_name'] ?? '—') ?></td>
           <td><?= e(salary_short((string) $job['salary_text']) ?: 'Thoả thuận') ?></td>
-          <td class="admin-muted admin-nowrap"><?= e(vn_date($job['deadline']) ?: '—') ?></td>
-          <td>
-            <form data-ajax-refresh method="POST" action="<?= url('admin/jobs/' . $job['id'] . '/status') ?>" class="admin-inline" data-ajax>
-              <?= csrf_field() ?>
-              <select name="status" class="admin-select-sm" data-submit-onchange aria-label="Đổi trạng thái">
-                <?php foreach ($statuses as $key => $label): ?>
-                <option value="<?= e($key) ?>"<?= $job['status'] === $key ? ' selected' : '' ?>><?= e($label) ?></option>
-                <?php endforeach; ?>
-              </select>
-              <noscript><button type="submit" class="btn btn-outline btn-sm">Lưu</button></noscript>
-            </form>
-            <span class="admin-badge <?= $statusBadge[$job['status']] ?? '' ?>"><?= e($statuses[$job['status']] ?? $job['status']) ?></span>
-          </td>
-          <td class="admin-muted"><?= e(vn_date($job['updated_at'], 'd/m/Y H:i')) ?></td>
+          <td class="admin-nowrap"><?= e(vn_date($job['deadline']) ?: '—') ?></td>
+          <td><span class="admin-badge <?= $statusBadge[$job['status']] ?? '' ?>"><?= e($statuses[$job['status']] ?? $job['status']) ?></span></td>
+          <td class="admin-nowrap admin-muted"><?= e(vn_date($job['updated_at'], 'H:i d/m/Y')) ?></td>
           <td class="is-actions">
             <div class="admin-actions">
-              <a href="<?= url('jobs/' . $job['slug']) ?>" target="_blank" rel="noopener" class="btn btn-icon" title="Xem trên website" aria-label="Xem trên website"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i></a>
-              <a href="<?= url('admin/jobs/' . $job['id'] . '/edit') ?>" class="btn btn-outline btn-icon" title="Sửa" aria-label="Sửa"><?= admin_icon_svg('pencil') ?></a>
-              <form method="POST" action="<?= url('admin/jobs/' . $job['id'] . '/duplicate') ?>" data-ajax>
-                <?= csrf_field() ?><button class="btn btn-outline btn-icon" type="submit" title="Nhân bản" aria-label="Nhân bản"><?= admin_icon_svg('copy') ?></button>
-              </form>
-              <form data-ajax-refresh method="POST" action="<?= url('admin/jobs/' . $job['id'] . '/delete') ?>" data-ajax
-                    data-confirm="Xoá tin &quot;<?= e($job['title']) ?>&quot;? Hồ sơ ứng tuyển liên quan vẫn được giữ lại.">
-                <?= csrf_field() ?><button class="btn btn-danger btn-icon" type="submit" title="Xoá" aria-label="Xoá"><?= admin_icon_svg('trash') ?></button>
-              </form>
+              <a href="<?= url('jobs/' . $job['slug']) ?>" target="_blank" rel="noopener" class="admin-row-icon" title="Xem trên website" aria-label="Xem trên website: <?= e($job['title']) ?>"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i></a>
+              <a href="<?= $jobUrl ?>/edit" class="admin-row-icon" title="Chỉnh sửa" aria-label="Chỉnh sửa: <?= e($job['title']) ?>"><i class="bi bi-pencil" aria-hidden="true"></i></a>
+              <button type="button" class="admin-row-icon admin-row-menu-trigger" popovertarget="job-status-<?= $jobId ?>" title="Đổi trạng thái" aria-label="Đổi trạng thái: <?= e($job['title']) ?>"><i class="bi bi-list-check" aria-hidden="true"></i></button>
+              <div class="admin-row-menu" id="job-status-<?= $jobId ?>" popover data-admin-row-menu>
+                <form method="POST" action="<?= $jobUrl ?>/status" data-ajax data-ajax-refresh>
+                  <?= csrf_field() ?>
+                  <?php foreach ($statuses as $key => $label): ?>
+                  <button type="submit" name="status" value="<?= e($key) ?>"<?= $job['status'] === $key ? ' disabled' : '' ?>>
+                    <?= e($label) ?><?php if ($job['status'] === $key): ?> <i class="bi bi-check2" aria-hidden="true"></i><?php endif; ?>
+                  </button>
+                  <?php endforeach; ?>
+                </form>
+              </div>
+              <button type="button" class="admin-row-icon admin-row-menu-trigger" popovertarget="job-actions-<?= $jobId ?>" title="Thao tác khác" aria-label="Thao tác khác: <?= e($job['title']) ?>"><i class="bi bi-three-dots" aria-hidden="true"></i></button>
+              <div class="admin-row-menu" id="job-actions-<?= $jobId ?>" popover data-admin-row-menu>
+                <form method="POST" action="<?= $jobUrl ?>/duplicate" data-ajax>
+                  <?= csrf_field() ?><button type="submit"><i class="bi bi-copy" aria-hidden="true"></i> Nhân bản</button>
+                </form>
+                <form method="POST" action="<?= $jobUrl ?>/delete" data-ajax data-ajax-refresh
+                      data-confirm="Xoá tin &quot;<?= e($job['title']) ?>&quot;? Hồ sơ ứng tuyển liên quan vẫn được giữ lại.">
+                  <?= csrf_field() ?><button class="admin-row-menu__danger" type="submit"><i class="bi bi-trash" aria-hidden="true"></i> Xóa tin</button>
+                </form>
+              </div>
             </div>
           </td>
         </tr>
@@ -87,7 +88,6 @@ $statusBadge = [
       </tbody>
     </table>
   </div>
-
-  <?php $listUrl = url('admin/jobs'); require BASE_PATH . '/app/Views/partials/admin/pager.php'; ?>
+  <?php require BASE_PATH . '/app/Views/partials/admin/pager.php'; ?>
   <?php endif; ?>
 </div>

@@ -55,6 +55,8 @@ if ($base === '' && ($path === '/public' || $path === '/public/index.php')) {
     $path = substr($path, strlen('/public')) ?: '/';
 }
 
+header('Content-Language: vi');
+
 if ($path === '/admin' || str_starts_with($path, '/admin/')) {
     header('Cache-Control: no-store');
 }

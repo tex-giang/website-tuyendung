@@ -99,8 +99,10 @@
   const base = document.body.dataset.adminBase;
   const ajaxHeaders = { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' };
   let reading = null;
+  let filterTimer;
   let writing = false;
   let renderedUrl = new URL(window.location.href);
+  const savedEditorValues = new WeakMap();
 
   function adminUrl(value) {
     if (typeof value !== 'string' || !value) return null;
@@ -114,7 +116,13 @@
   }
 
   function enhanceForms(root) {
-    root.querySelectorAll('form[data-ajax]').forEach(form => { form.noValidate = true; });
+    root.querySelectorAll('form[data-ajax]').forEach(form => {
+      form.noValidate = true;
+      const status = form.querySelector('[data-admin-content-status]');
+      if (status?.textContent.trim() === 'Mọi thay đổi đã được lưu.') {
+        savedEditorValues.set(form, new URLSearchParams(new FormData(form)).toString());
+      }
+    });
   }
 
   async function request(url, options = {}) {
@@ -146,9 +154,15 @@
         count.parentElement.hidden = value === 0;
       }
     });
+
+    const group = document.querySelector('[data-admin-crumb-group]');
+    const title = document.querySelector('[data-admin-crumb-title]');
+    const activeLink = document.querySelector('[data-admin-nav][aria-current=page]');
+    if (group) group.textContent = activeLink?.dataset.adminNavGroup || (data.nav === 'profile' ? 'Hệ thống' : 'Quản trị');
+    if (title) title.textContent = data.title.split(' | ', 1)[0];
   }
 
-  async function renderFragment(target, { signal, push = true, focus = true } = {}) {
+  async function renderFragment(target, { signal, push = true, focus = true, savedForm = null } = {}) {
     const { response, data } = await request(target, {
       signal,
       headers: { 'X-Admin-Fragment': '1' },
@@ -164,8 +178,34 @@
     const destination = adminUrl(response.url);
     if (!destination || typeof data.content !== 'string') throw new Error('Nội dung quản trị không hợp lệ.');
     destination.hash = target.hash;
+    const active = document.activeElement;
+    const activeFilter = active?.id && active.closest('form[data-admin-live-filter]');
+    const selection = activeFilter && active instanceof HTMLInputElement
+      ? [active.selectionStart, active.selectionEnd] : null;
+    const drafts = [];
+    if (savedForm?.hasAttribute('data-admin-draft')) {
+      main.querySelectorAll('form[data-admin-draft]').forEach(form => {
+        if (form === savedForm) return;
+        for (const field of form.querySelectorAll('.field__input[name]:not([type="password"]), .admin-cms-switch[name]')) {
+          if (field.type === 'checkbox') {
+            if (field.checked !== field.defaultChecked) drafts.push([form.id, field.name, field.checked]);
+            continue;
+          }
+          const original = field instanceof HTMLSelectElement
+            ? (Array.from(field.options).find(option => option.defaultSelected) || field.options[0])?.value
+            : field.defaultValue;
+          if (field.value !== original) drafts.push([form.id, field.name, field.value]);
+        }
+      });
+    }
+
     window.TGDataTable?.destroy(main);
     main.innerHTML = data.content;
+    for (const [formId, name, value] of drafts) {
+      const field = document.getElementById(formId)?.elements.namedItem(name);
+      if (field?.type === 'checkbox') field.checked = value;
+      else if (field) field.value = value;
+    }
     main.setAttribute('data-admin-fragment', '');
     document.title = data.title;
     updateNav(data);
@@ -177,7 +217,14 @@
     renderedUrl = destination;
     enhanceForms(main);
     window.TGDataTable?.init();
-    if (focus) {
+    const nextFilter = activeFilter && document.getElementById(active.id);
+    if (nextFilter) {
+      nextFilter.focus({ preventScroll: true });
+      if (selection && selection[0] !== null) {
+        if (destination.searchParams.get(active.name) === active.value) nextFilter.value = active.value;
+        nextFilter.setSelectionRange(...selection);
+      }
+    } else if (focus) {
       const heading = main.querySelector('h1') || main;
       heading.setAttribute('tabindex', '-1');
       heading.focus();
@@ -314,7 +361,7 @@
     const samePage = target.pathname === renderedUrl.pathname && target.search === renderedUrl.search;
     main.setAttribute('aria-busy', 'true');
     try {
-      if (await renderFragment(target, { focus: !samePage })) {
+      if (await renderFragment(target, { focus: !samePage, savedForm: samePage ? form : null })) {
         if (samePage && form.contains(active)) {
           // Form cũ đã được thay bằng dữ liệu mới. Giữ vị trí cuộn khi khôi phục focus.
           main.focus({ preventScroll: true });
@@ -343,7 +390,14 @@
     if (main?.hasAttribute('data-admin-fragment') && form.matches('.admin-filters, .admin-period-form')) {
       event.preventDefault();
       if (!writing) {
-        action.search = new URLSearchParams(new FormData(form)).toString();
+        clearTimeout(filterTimer);
+        const params = new URLSearchParams(new FormData(form));
+        if (form.hasAttribute('data-admin-live-filter')) {
+          for (const [key, value] of Array.from(params)) {
+            if (value === '') params.delete(key);
+          }
+        }
+        action.search = params.toString();
         void loadView(action);
       }
       return;
@@ -356,6 +410,8 @@
     if (writing) return;
     writing = true;
     reading?.abort();
+    const menu = form.closest('[data-admin-row-menu]');
+    if (menu?.hidePopover && menu.matches(':popover-open')) menu.hidePopover();
     try {
       if (confirmation && !await confirmDialog(confirmation)) return;
       if (ajax) await submitAjax(form, event.submitter, action);
@@ -365,8 +421,49 @@
     }
   });
 
+  main?.addEventListener('input', event => {
+    const field = event.target;
+    const form = field instanceof HTMLFormElement ? field : field.form;
+    const contentStatus = form?.querySelector('[data-admin-content-status]');
+    if (contentStatus) {
+      const dirty = savedEditorValues.get(form) !== new URLSearchParams(new FormData(form)).toString();
+      contentStatus.textContent = dirty ? 'Có thay đổi chưa lưu.' : 'Mọi thay đổi đã được lưu.';
+    }
+    const length = field.closest('.field')?.querySelector('[data-settings-length]');
+    if (length) length.textContent = String(Array.from(field.value).length);
+    if (!(field instanceof HTMLInputElement) || field.name !== 'q') return;
+    if (!form?.hasAttribute('data-admin-live-filter')) return;
+    clearTimeout(filterTimer);
+    reading?.abort();
+    if (event.isComposing) return;
+    filterTimer = setTimeout(() => {
+      if (form.isConnected) form.requestSubmit();
+    }, 280);
+  });
+
   document.addEventListener('change', event => {
     const select = event.target;
+    if (select instanceof HTMLInputElement && select.type === 'file' && select.matches('.admin-cms-upload__input')) {
+      const field = select.closest('[data-admin-upload]');
+      const preview = field.querySelector('[data-upload-preview]');
+      const placeholder = field.querySelector('[data-upload-placeholder]');
+      const filename = field.querySelector('[data-upload-filename]');
+      const file = select.files?.[0];
+      let src = preview.dataset.original;
+      if (file?.type.startsWith('image/')) {
+        const objectUrl = URL.createObjectURL(file);
+        const revoke = () => URL.revokeObjectURL(objectUrl);
+        preview.addEventListener('load', revoke, { once: true });
+        preview.addEventListener('error', revoke, { once: true });
+        src = objectUrl;
+      }
+      if (src) preview.src = src;
+      else preview.removeAttribute('src');
+      preview.hidden = !src;
+      placeholder.hidden = Boolean(src);
+      filename.hidden = !file;
+      filename.textContent = file?.name || '';
+    }
     if (select instanceof HTMLSelectElement && select.matches('[data-submit-onchange]')) {
       select.form?.requestSubmit();
     }
@@ -374,7 +471,7 @@
 
   main?.addEventListener('click', event => {
     if (event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) return;
-    const link = event.target.closest('.admin-pager a, .admin-filters a');
+    const link = event.target.closest('.admin-pager a, .admin-filters a, .admin-application-counts a, .admin-period-tabs a, .admin-contact-filters a');
     if (!link || link.target || link.hasAttribute('download')) return;
     const target = adminUrl(link.href);
     if (!target) return;

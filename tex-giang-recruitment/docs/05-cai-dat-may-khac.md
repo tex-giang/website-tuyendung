@@ -55,19 +55,7 @@ Những file **không có trong git** (phải tạo/copy riêng):
 Những thứ **đã có sẵn trong git**, không cần cài: `public/assets/vendor/` (Bootstrap, jQuery,
 DataTables, SweetAlert2), `public/assets/css/utilities.css` (Tailwind build sẵn).
 
-**Riêng CKEditor 4.22.1 KHÔNG nằm trong git** (2.637 file / 4,2 MB — để commit/push nhanh).
-Sau khi clone, tải một lần:
-
-```bash
-# Linux/macOS/cPanel
-bash tools/fetch-ckeditor.sh
-
-# Windows PowerShell
-powershell -ExecutionPolicy Bypass -File tools/fetch-ckeditor.ps1
-```
-
-Script tải package `ckeditor4@4.22.1` (bản open-source, không cần license) và giải nén vào
-`public/assets/vendor/ckeditor4/`. Hoặc copy thủ công thư mục này từ máy khác lên server.
+Quill dùng cho trình soạn thảo bài viết và được đóng gói trong `public/assets/vendor/quill/`.
 
 ---
 

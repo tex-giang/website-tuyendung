@@ -96,10 +96,18 @@
 
     <section class="tg-container pb-20 lg:pb-28">
       <div class="grid gap-10 md:grid-cols-3 md:gap-12" data-reveal>
-        <?php foreach ($values as $valueItem): ?>
+        <?php
+        $valueGroups = [];
+        foreach ($values as $valueItem) {
+            $valueGroups[$valueItem['title']][] = $valueItem['body'];
+        }
+        foreach ($valueGroups as $title => $paragraphs):
+        ?>
         <div>
-          <h2 class="text-[20px] font-medium text-ink"><?= e($valueItem['title']) ?></h2>
-          <p class="mt-3 max-w-[46ch] text-[16px] leading-[1.7] text-muted"><?= e($valueItem['body']) ?></p>
+          <h2 class="text-[20px] font-medium text-ink"><?= e($title) ?></h2>
+          <?php foreach ($paragraphs as $paragraph): ?>
+          <p class="mt-3 max-w-[46ch] text-[16px] leading-[1.7] text-muted"><?= e($paragraph) ?></p>
+          <?php endforeach; ?>
         </div>
         <?php endforeach; ?>
       </div>

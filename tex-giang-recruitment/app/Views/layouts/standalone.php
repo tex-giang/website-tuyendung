@@ -9,10 +9,12 @@ $bodyClass = $page['body_class'] ?? 'tg-public gf-page';
 $scripts = $page['scripts'] ?? [];
 ?>
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" translate="no" class="notranslate">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google" content="notranslate">
+  <meta name="googlebot" content="notranslate">
   <title><?= e($page['title'] ?? settings('seo_title', 'Tuyển dụng TEX-GIANG')) ?></title>
   <meta name="description" content="<?= e($page['description'] ?? settings('seo_description', '')) ?>">
   <meta name="robots" content="<?= e($page['robots'] ?? 'noindex') ?>">
