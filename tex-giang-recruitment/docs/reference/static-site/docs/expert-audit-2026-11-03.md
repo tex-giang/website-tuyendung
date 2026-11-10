@@ -40,7 +40,7 @@ Tái hiện cùng F01: form hiển thị `qc`, hàng chờ ghi `Giám sát QC �
 
 Nguồn: `assets/js/apply-form.js:348` gửi chữ của option thay vì ID tin; `assets/js/admin-data.js:310` so sánh chuỗi tiêu đề đúng tuyệt đối, rồi fallback sang tin đầu tiên tại dòng 320. Năm sinh mặc định tại dòng 318. Luồng này cũng cắt số điện thoại về 10 chữ số mà chưa chuẩn hóa tiền tố quốc gia.
 
-Đã tái hiện thêm: số hợp lệ `+84918123456` được form chấp nhận nhưng vào admin thành `8491812345`. Chọn Cái Lậy và nhập kinh nghiệm QC trên form chung thì cả khu mong muốn và lời nhắn đều rỗng trong queue/admin. Đây là mất/sai thông tin tiếp nhận, không chỉ là khác biệt trình bày.
+Đã tái hiện thêm: số hợp lệ `+84918123456` được form chấp nhận nhưng vào admin thành `8491812345`. Chọn Cai Lậy và nhập kinh nghiệm QC trên form chung thì cả khu mong muốn và lời nhắn đều rỗng trong queue/admin. Đây là mất/sai thông tin tiếp nhận, không chỉ là khác biệt trình bày.
 
 Đề xuất: chuyển `jobId` và mã khu sản xuất xuyên suốt danh sách/chi tiết/form/queue/admin; không suy quan hệ từ tiêu đề; thiếu năm sinh giữ null và hiển thị `—`; chuẩn hóa đầu số trước validation. Khi không khớp vị trí, giữ trạng thái chưa xác định để HR xử lý.
 

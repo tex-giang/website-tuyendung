@@ -221,7 +221,7 @@ function renderJobs() {
       activeEntries.forEach(([key, val]) => {
         let label = val;
         if (key === 'location') {
-          label = val === 'tan-huong' ? 'Khu Tân Hương' : val === 'cai-lay' ? 'Khu Cái Lậy' : 'Khu Chợ Gạo';
+          label = val === 'tan-huong' ? 'Khu Tân Hương' : val === 'cai-lay' ? 'Khu Cai Lậy' : 'Khu Chợ Gạo';
         }
         const select = document.getElementById(`filter-${key}`);
         if (select?.tagName === 'SELECT') label = select.selectedOptions[0]?.textContent || label;

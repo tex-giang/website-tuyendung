@@ -24,7 +24,7 @@ FROM roles WHERE name = 'super_admin';
 -- 3. KHU SẢN XUẤT ----------------------------------------------------------
 INSERT INTO branches (slug, name, address, phone, sort_order) VALUES
   ('tan-huong', 'Tân Hương', 'Lô BII-8, đường D3, KCN Tân Hương, Xã Tân Hương, Tỉnh Đồng Tháp', '02733937274', 1),
-  ('cai-lay',   'Cái Lậy',   'Ấp Bình Quới, Xã Bình Phú, Tỉnh Đồng Tháp', '02733937274', 2),
+  ('cai-lay',   'Cai Lậy',   'Ấp Bình Quới, Xã Bình Phú, Tỉnh Đồng Tháp', '02733937274', 2),
 ('cho-gao',   'Chợ Gạo',   'Ấp Hòa Lợi Tiểu, Xã Bình Ninh, Tỉnh Đồng Tháp', '02733937274', 3);
 
 -- 3b. NGƯỜI LIÊN HỆ TUYỂN DỤNG THEO KHU SẢN XUẤT ---------------------------
@@ -63,16 +63,16 @@ INSERT INTO settings (`key`, `value`, `group`) VALUES
   ('facebook',         'https://www.facebook.com/profile.php?id=100063719192197', 'social'),
   ('youtube',          'https://www.youtube.com/', 'social'),
   ('website',          'https://tex-giang.com.vn', 'social'),
-  ('seo_title',        'Tuyển dụng TEX-GIANG — Tân Hương, Cái Lậy, Chợ Gạo', 'seo'),
-  ('seo_description',  'Cổng tuyển dụng của Công ty Cổ phần TEX-GIANG (TGI) tại KCN Tân Hương, Đồng Tháp. Xe đưa rước, cơm ca, thưởng tháng 13, BHXH đầy đủ.', 'seo'),
+  ('seo_title',        'Tuyển dụng TEX-GIANG — Tân Hương, Cai Lậy, Chợ Gạo', 'seo'),
+  ('seo_description',  'Cổng tuyển dụng của Công ty Cổ phần TEX-GIANG (TGI) . Xe đưa rước, cơm ca, thưởng tháng 13, BHXH đầy đủ.', 'seo'),
   ('jobs_per_page',    '6', 'general'),
   ('jobs_deadline_days', '30', 'general'),
   ('content_hero_title_1',  'Một công việc ổn định.', 'content'),
   ('content_hero_title_2',  'Thu nhập xứng đáng.', 'content'),
-  ('content_hero_subtitle', 'Cổng tuyển dụng chính thức của TEX-GIANG — may mặc xuất khẩu tại 3 khu sản xuất Tân Hương, Cái Lậy, Chợ Gạo (Đồng Tháp).', 'content'),
-  ('content_about_1', 'Công ty Cổ phần TEX-GIANG (TGI) thành lập tháng 3/2007, vận hành 3 khu sản xuất tại Tân Hương, Cái Lậy, Chợ Gạo; xuất khẩu sang châu Âu, Mỹ, Úc và New Zealand.', 'content'),
+  ('content_hero_subtitle', 'Cổng tuyển dụng chính thức của TEX-GIANG — may mặc xuất khẩu tại 3 khu sản xuất Tân Hương, Cai Lậy, Chợ Gạo (Đồng Tháp).', 'content'),
+  ('content_about_1', 'Công ty Cổ phần TEX-GIANG (TGI) thành lập tháng 3/2007, vận hành 3 khu sản xuất tại Tân Hương, Cai Lậy, Chợ Gạo; xuất khẩu sang châu Âu, Mỹ, Úc và New Zealand.', 'content'),
   ('content_about_2', 'Triết lý “Vì con người — Vì chất lượng — Vì tương lai bền vững”: môi trường làm việc an toàn, nhà xưởng thoáng mát, thu nhập xứng đáng với người lao động.', 'content'),
-  ('content_footer_intro', 'Cổng tuyển dụng chính thức của Công ty Cổ phần TEX-GIANG tại KCN Tân Hương, Đồng Tháp.', 'content'),
+  ('content_footer_intro', 'Cổng tuyển dụng chính thức của Công ty Cổ phần TEX-GIANG.', 'content'),
   ('stat_1_value', '2007',    'content'), ('stat_1_label', 'Thành lập tại KCN Tân Hương', 'content'),
   ('stat_2_value', '3',       'content'), ('stat_2_label', 'Khu sản xuất tại Đồng Tháp', 'content'),
   ('stat_3_value', '3.500',   'content'), ('stat_3_label', 'Cán bộ công nhân viên', 'content'),
@@ -83,9 +83,9 @@ INSERT INTO banners (name, type, title, subtitle, description, image_path, image
   ('Slide 1 — Cổng nhà máy', 'hero', NULL, NULL, NULL,
    'assets/images/banner-texgiang.webp', 'assets/images/banner-texgiang-800.webp',
    'Cổng Nhà máy Tân Hương 2 — Công ty Cổ phần TEX-GIANG, KCN Tân Hương, Đồng Tháp', NULL, NULL, NULL, 1),
-  ('Slide 2 — Cái Lậy', 'hero', 'Một trong ba khu sản xuất của TEX-GIANG tại Đồng Tháp', 'Chi nhánh Cái Lậy', NULL,
+  ('Slide 2 — Cai Lậy', 'hero', 'Một trong ba khu sản xuất của TEX-GIANG tại Đồng Tháp', 'Chi nhánh Cai Lậy', NULL,
    'assets/images/company/cai-lay.webp', NULL,
-   'Chi nhánh TEX-GIANG tại Cái Lậy, tỉnh Đồng Tháp', NULL, NULL, NULL, 2),
+   'Chi nhánh TEX-GIANG tại Cai Lậy, tỉnh Đồng Tháp', NULL, NULL, NULL, 2),
   ('Slide 3 — Đào tạo nghề', 'hero', 'Học nghề may miễn phí, có trợ cấp lương học việc', 'Đào tạo nghề', NULL,
    'assets/images/company/training.webp', NULL,
    'Đào tạo nghề may cho người lao động mới tại TEX-GIANG', NULL, NULL, NULL, 3),
@@ -152,14 +152,14 @@ VALUES
   ('quan-ly-don-hang-merchandiser', 'TD26-0004',
    (SELECT id FROM branches WHERE slug='cai-lay'), (SELECT id FROM categories WHERE slug='office'),
    '03 Chuyên viên quản lý đơn hàng ngành may (Merchandiser)', 3,
-   'Khu Cái Lậy', 'Toàn thời gian, chính thức', 'Có kinh nghiệm merchandiser',
+   'Khu Cai Lậy', 'Toàn thời gian, chính thức', 'Có kinh nghiệm merchandiser',
    '13.000.000 - 20.000.000 VNĐ', 13000000, 20000000, '12-18',
    'Làm việc trực tiếp với khách hàng nước ngoài.\nTheo dõi tiến độ phát triển mẫu, cung ứng nguyên phụ liệu may.\nTheo dõi xuất hàng FOB/CMT đúng hạn.',
    'Tiếng Anh giao dịch tốt (đọc hiểu email, tài liệu kỹ thuật).\nCó kinh nghiệm merchandiser ngành may xuất khẩu.\nKỹ năng theo dõi tiến độ và phối hợp nhiều bộ phận.',
    'Thu nhập 13 – 20 triệu/tháng|Lương cứng + thưởng theo đơn hàng.\nMôi trường quốc tế|Làm việc trực tiếp với khách hàng châu Âu, Mỹ.\nBHXH, BHYT đầy đủ|Xe đưa rước, cơm ca theo chế độ công ty.',
    'published', 0, '2026-10-24 08:00:00', '2026-11-26',
    'Quản lý đơn hàng may | Tuyển dụng TEX-GIANG',
-   'Tuyển 03 chuyên viên quản lý đơn hàng ngành may tại chi nhánh Cái Lậy, TEX-GIANG.',
+   'Tuyển 03 chuyên viên quản lý đơn hàng ngành may tại chi nhánh Cai Lậy, TEX-GIANG.',
    (SELECT id FROM users WHERE username='admin')),
 
   ('nhan-vien-bao-tri-may-may', 'TD26-0005',
@@ -253,11 +253,11 @@ INSERT INTO about_milestones (year_label, text, is_highlight, sort_order) VALUES
   ('2007', 'Thành lập, khởi công nhà máy trong KCN Tân Hương.', 0, 1),
   ('2012', 'Đạt chứng nhận SA8000.', 0, 2),
   ('2014', 'Bổ sung công nghệ laser cut và dán (lamination).', 0, 3),
-  ('03/2015', 'Khai trương nhà máy Cái Lậy, cách trụ sở 40 km; đạt ISO 9001 do SGS cấp.', 0, 4),
+  ('03/2015', 'Khai trương nhà máy Cai Lậy, cách trụ sở 40 km; đạt ISO 9001 do SGS cấp.', 0, 4),
   ('2016', 'Đạt OEKO-TEX STEP.', 0, 5),
   ('2021–2022', 'Mở nhà máy Chợ Gạo; tham gia Higg FEM và FSLM.', 0, 6),
   ('08/2024', 'Nhận Nhà máy Tân Hương 2 rộng 4,8 ha trong KCN Tân Hương.', 0, 7),
-  ('Hiện tại', '3 khu sản xuất: Tân Hương, Cái Lậy và Chợ Gạo; khoảng 3.500 lao động.', 1, 8);
+  ('Hiện tại', '3 khu sản xuất: Tân Hương, Cai Lậy và Chợ Gạo; khoảng 3.500 lao động.', 1, 8);
 
 INSERT INTO about_values (title, body, sort_order) VALUES
   ('Tầm nhìn', 'Trở thành doanh nghiệp may mặc xuất khẩu dẫn đầu khu vực miền Nam, tiên phong sản xuất xanh và là nơi làm việc đáng gắn bó với người lao động.', 1),
@@ -274,7 +274,7 @@ INSERT INTO benefit_groups (title, icon, intro, sort_order) VALUES
   ('Môi trường làm việc an toàn, mát', 'shield-check', 'Nhà xưởng tại KCN Tân Hương có điều hòa, ánh sáng chuẩn bảo vệ mắt, hệ thống hút bụi vải và PCCC tự động.', 1),
   ('Thu nhập minh bạch, trả đúng hạn', 'check2', 'Lương tính theo sản phẩm và năng suất chuyền; mức cụ thể trao đổi khi phỏng vấn. Ngoài lương còn các khoản thưởng và phụ cấp đang áp dụng.', 2),
   ('Đào tạo nghề miễn phí, có lương', 'briefcase', 'Công ty tuyển cả người chưa có tay nghề may; người mới được kèm tại chuyền theo từng công đoạn (1 kim, 2 kim, vắt sổ) trước khi vào định mức chính thức.', 3),
-  ('Xe đưa rước và ăn ca miễn phí', 'bus-front', 'Công ty bố trí xe đưa đón công nhân ở xa miễn phí giữa các nhà máy Tân Hương, Cái Lậy và Chợ Gạo.', 4);
+  ('Xe đưa rước và ăn ca miễn phí', 'bus-front', 'Công ty bố trí xe đưa đón công nhân ở xa miễn phí giữa các nhà máy Tân Hương, Cai Lậy và Chợ Gạo.', 4);
 
 INSERT INTO benefit_items (group_id, text, sort_order) VALUES
   (1, 'Đạt SA8000 từ 2012 — trách nhiệm xã hội.', 1),
@@ -307,7 +307,7 @@ UPDATE branches SET map_url = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1
 -- 7d. TIÊU ĐỀ TRANG VỀ CHÚNG TÔI / PHÚC LỢI ---------------------------
 INSERT INTO settings (`key`, `value`, `group`) VALUES
   ('content_about_title', 'May xuất khẩu tại Tân Hương từ năm 2007', 'content'),
-  ('content_about_lead', 'Công ty Cổ phần TEX-GIANG (TGI) thành lập tháng 3/2007, vận hành 3 khu sản xuất tại Tân Hương, Cái Lậy và Chợ Gạo.', 'content'),
+  ('content_about_lead', 'Công ty Cổ phần TEX-GIANG (TGI) thành lập tháng 3/2007, vận hành 3 khu sản xuất tại Tân Hương, Cai Lậy và Chợ Gạo.', 'content'),
   ('content_why_title', 'Vì sao chọn TEX-GIANG', 'content'),
   ('content_why_lead', 'Bốn điều người lao động hỏi nhiều nhất khi đến nhà máy: môi trường có an toàn không, thu nhập bao nhiêu, có được dạy nghề không, và đi lại thế nào.', 'content')
 ON DUPLICATE KEY UPDATE `key` = `key`;

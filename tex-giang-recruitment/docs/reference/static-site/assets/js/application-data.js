@@ -3,7 +3,7 @@
   "use strict";
   const locations = {
     "tan-huong": "Khu Tân Hương",
-    "cai-lay": "Khu Cái Lậy",
+    "cai-lay": "Khu Cai Lậy",
     "cho-gao": "Khu Chợ Gạo",
     any: "Theo sắp xếp phù hợp",
   };

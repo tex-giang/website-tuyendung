@@ -9,7 +9,7 @@ File: `database/schema.sql` (DDL) + `database/seed.sql` (dữ liệu khởi tạ
 |---|---|---|
 | `roles` | 3 vai trò: super_admin, hr_admin, recruiter | 1-n `users` |
 | `users` | Tài khoản quản trị (session auth) | n-1 `roles` |
-| `branches` | Khu sản xuất: Tân Hương, Cái Lậy, Chợ Gạo | 1-n `jobs` |
+| `branches` | Khu sản xuất: Tân Hương, Cai Lậy, Chợ Gạo | 1-n `jobs` |
 | `about_milestones` | Mốc phát triển trang Về chúng tôi (năm + nội dung + nhãn “Đang vận hành”) | — |
 | `about_values` | Tầm nhìn / Sứ mệnh / Giá trị cốt lõi | — |
 | `about_certifications` | Chứng nhận đang áp dụng | — |

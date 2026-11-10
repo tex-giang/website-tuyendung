@@ -27,7 +27,7 @@ foreach (\App\Models\Branch::active() as $branchRow) {
         Liên hệ tuyển dụng
       </h1>
       <p class="mt-4 max-w-[62ch] text-[18px] leading-[1.6] text-muted">
-        Phòng Tuyển dụng TEX-GIANG tiếp nhận hồ sơ tại 3 khu vực: Tân Hương, Chợ Gạo và Cái Lậy. Gọi trực tiếp người phụ trách khu vực bạn muốn làm việc, hoặc nộp hồ sơ tại địa chỉ tương ứng bên dưới.
+        Phòng Tuyển dụng TEX-GIANG tiếp nhận hồ sơ tại 3 khu vực: Tân Hương, Chợ Gạo và Cai Lậy. Gọi trực tiếp người phụ trách khu vực bạn muốn làm việc, hoặc nộp hồ sơ tại địa chỉ tương ứng bên dưới.
       </p>
     </div><figure class="intro-photo"><img src="<?= asset('images/company/tan-huong-2.webp') ?>" width="360" height="300" alt="Toàn cảnh nhà máy Tân Hương 2 trong hệ thống TEX-GIANG" fetchpriority="high"></figure></div></section>
 
@@ -144,7 +144,7 @@ foreach (\App\Models\Branch::active() as $branchRow) {
           <?php endif; ?>
         </article>
 
-        <!-- 3. CÁI LẬY -->
+        <!-- 3. Cai Lậy -->
         <article id="khu-vuc-cai-lay" class="flex flex-col rounded-card border border-line bg-surface p-6 transition-shadow hover:shadow-float" data-reveal>
           <div class="flex items-center gap-3">
             <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-accent-soft text-[15px] font-semibold text-accent">3</span>
@@ -179,7 +179,7 @@ foreach (\App\Models\Branch::active() as $branchRow) {
           <div class="map-frame mb-4">
             <?php if (($mapBySlug['cai-lay'] ?? '') !== ''): ?>
                     <iframe src="<?= e($mapBySlug['cai-lay']) ?>"
-                            title="Bản đồ Khu vực Cái Lậy — TEX-GIANG"
+                            title="Bản đồ Khu vực Cai Lậy — TEX-GIANG"
                             style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
                     <?php else: ?>
                     <p class="grid h-[240px] place-items-center rounded-card bg-surface text-[14px] text-muted">Chưa cấu hình bản đồ cho khu vực này.</p>

@@ -94,8 +94,8 @@ $branchValue = $val('branch_slug');
             <div>
               <label class="form-label" for="apply-phone">Số điện thoại <span class="req">*</span></label>
               <input type="tel" id="apply-phone" name="phone" required autocomplete="tel" inputmode="tel"
-                     placeholder="0912 345 678" class="form-input<?= $err('phone') ? ' is-invalid' : '' ?>" data-phone-format>
-                     value="<?= e($val('phone')) ?>">
+                     placeholder="0912 345 678" class="form-input<?= $err('phone') ? ' is-invalid' : '' ?>"
+                     value="<?= e($val('phone')) ?>" data-phone-format>
               <?php if ($err('phone')): ?><p class="field-error"><?= e($err('phone')) ?></p><?php endif; ?>
             </div>
             <div>

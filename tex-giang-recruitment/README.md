@@ -1,6 +1,6 @@
 # TEX-GIANG RECRUITMENT — Website tuyển dụng động (PHP MVC)
 
-Website tuyển dụng của **Công ty Cổ phần TEX-GIANG (TGI)** — 3 khu sản xuất Tân Hương, Cái Lậy, Chợ Gạo (Đồng Tháp).
+Website tuyển dụng của **Công ty Cổ phần TEX-GIANG (TGI)** — 3 khu sản xuất Tân Hương, Cai Lậy, Chợ Gạo (Đồng Tháp).
 
 Dự án là bản chuyển từ site tĩnh sang **PHP thuần + PDO/MySQL**, giữ nguyên toàn bộ thiết kế (**Tailwind CSS build cục bộ**, Vanilla JS), thêm trang quản trị để **thêm/sửa/xoá** tin tuyển dụng và cấu hình website.
 

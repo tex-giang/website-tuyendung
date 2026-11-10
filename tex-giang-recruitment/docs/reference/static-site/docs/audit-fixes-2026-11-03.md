@@ -24,7 +24,7 @@ Không phục hồi được những hồ sơ đã bị bản cũ ghi mất trư
 - Mobile dưới 768 px: khung ảnh logo **60×60**, `object-fit: contain`, không thêm chữ thương hiệu rời; áp dụng public, trang form, topbar/sidebar/login admin. Desktop giữ bố cục nhận diện hiện có.
 - Mobile jobs: thu gọn heading/lead, bỏ ảnh dẫn nhập ở đầu danh sách để hiện tin đầu sớm; giữ drawer lọc và CTA của tin. Ẩn nút liên hệ nổi che nội dung danh sách.
 - Admin mobile: giá trị trạng thái không bị cắt; vị trí/khu sản xuất là bộ lọc mở rộng; Chi tiết/Cập nhật đủ vùng bấm. Form chỉnh sửa có nút lưu ở đáy màn hình; bước xử lý hồ sơ lên trước thông tin dài. Các panel vẫn giữ thứ tự DOM theo cách hoạt động hiện tại.
-- Trang chủ dùng ảnh tập thể ở chương trình Mindset Transformation có chú thích lưu trữ; bổ sung ảnh chi nhánh Cái Lậy/Chợ Gạo tại About. Phúc lợi dùng ảnh tập huấn đúng chú thích tháng 02/2020. Trang tin dùng ảnh có alt/chú thích theo nội dung thay cho nhiều crop của cùng poster cổng.
+- Trang chủ dùng ảnh tập thể ở chương trình Mindset Transformation có chú thích lưu trữ; bổ sung ảnh chi nhánh Cai Lậy/Chợ Gạo tại About. Phúc lợi dùng ảnh tập huấn đúng chú thích tháng 02/2020. Trang tin dùng ảnh có alt/chú thích theo nội dung thay cho nhiều crop của cùng poster cổng.
 - Giữ cột đọc bài ở khoảng 60ch, phân cấp tiêu đề/lead/body/meta, bài liên quan dạng list. Trang xác nhận tăng chữ phụ lên 16 px.
 - Chuyển bảng so sánh suy đoán về nơi tuyển khác thành bảng điều cần xác nhận trực tiếp với tuyển dụng.
 
@@ -36,7 +36,7 @@ Không phục hồi được những hồ sơ đã bị bản cũ ghi mất trư
 |---|---|---|
 | `company/team-event.webp` | [News & Events](https://tex-giang.com.vn/news-events.html), chương trình Mindset Transformation; nguồn không cung cấp ngày trong caption | Trang chủ, cẩm nang |
 | `company/training.webp` | [News & Events](https://tex-giang.com.vn/news-events.html), tập huấn phòng chống buôn bán người và xâm hại tình dục tháng 02/2020 | Phúc lợi, bài an toàn |
-| `company/cai-lay.webp` | [Website doanh nghiệp](https://tex-giang.com.vn/), chi nhánh Cái Lậy | About, cẩm nang sinh hoạt/đi lại |
+| `company/cai-lay.webp` | [Website doanh nghiệp](https://tex-giang.com.vn/), chi nhánh Cai Lậy | About, cẩm nang sinh hoạt/đi lại |
 | `company/cho-gao.webp` | [Website doanh nghiệp](https://tex-giang.com.vn/), chi nhánh Chợ Gạo | About |
 | `company/quality-system.webp` | [QA System](https://tex-giang.com.vn/qa-system.html), sơ đồ QA/QC | Bài nghề nghiệp QC/IE |
 

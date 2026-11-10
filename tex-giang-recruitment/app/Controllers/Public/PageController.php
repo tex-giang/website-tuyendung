@@ -24,7 +24,7 @@ final class PageController extends Controller
             'page'     => [
                 'title'       => 'Về TEX-GIANG | ' . settings('site_name'),
                 'description' => 'Công ty Cổ phần TEX-GIANG (TGI, thành lập 2007) — 3 khu sản xuất tại Tân Hương, '
-                    . 'Cái Lậy, Chợ Gạo (Đồng Tháp), khoảng 3.500 lao động, chứng nhận SA8000, ISO 9001, OEKO-TEX.',
+                    . 'Cai Lậy, Chợ Gạo (Đồng Tháp), khoảng 3.500 lao động, chứng nhận SA8000, ISO 9001, OEKO-TEX.',
                 'body_class'  => 'tg-public page-about',
                 'nav'         => 'about',
             ],

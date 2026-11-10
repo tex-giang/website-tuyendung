@@ -37,7 +37,26 @@ $branchContacts = \App\Models\BranchContact::activeGrouped();
             <a href="mailto:<?= e($email) ?>" class="transition-colors hover:text-accent"><?= e($email) ?></a>
           </li>
         </ul>
-        <p class="mt-4 max-w-[320px] text-[13px] leading-[1.6] text-muted">Gọi trực tiếp người phụ trách khu vực — bấm nút điện thoại cố định ở góc phải màn hình.</p>
+        <?php if ($branches !== []): ?>
+        <div class="mt-4 space-y-3 text-[13px] leading-[1.6] text-muted">
+          <?php foreach ($branches as $branch): ?>
+          <?php $branchPhoneList = $branchContacts[(int) $branch['id']] ?? []; ?>
+          <?php if ($branchPhoneList === []) continue; ?>
+          <div>
+            <p class="font-medium text-ink">Khu vực <?= e($branch['name']) ?></p>
+            <ul class="mt-0.5 flex flex-wrap items-baseline gap-x-4 gap-y-1">
+              <?php foreach ($branchPhoneList as $branchContact): ?>
+              <li class="flex items-baseline gap-1.5 whitespace-nowrap">
+                <img src="<?= asset('images/icons/telephone.svg') ?>" alt="" aria-hidden="true" width="14" height="14" class="tg-icon">
+                <span><?= e($branchContact['full_name']) ?></span>
+                <a href="tel:<?= e(\App\Models\BranchContact::telHref((string) $branchContact['phone'])) ?>" class="font-medium text-ink transition-colors hover:text-accent"><?= e($branchContact['phone']) ?></a>
+              </li>
+              <?php endforeach; ?>
+            </ul>
+          </div>
+          <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
       </div>
 
       <nav aria-label="Menu chân trang">
@@ -142,58 +161,36 @@ $branchContacts = \App\Models\BranchContact::activeGrouped();
 
 <?php if ($branches !== []): ?>
 <div id="contact-dialog" class="tg-modal hidden" role="dialog" aria-modal="true" aria-labelledby="contact-dialog-title" data-contact-dialog>
-  <div class="relative flex max-h-[min(90vh,760px)] w-full max-w-[760px] flex-col overflow-hidden rounded-2xl bg-white">
-    <div class="flex items-start justify-between gap-4 border-b border-line px-5 py-4 sm:px-7">
-      <div class="min-w-0">
-        <p class="text-[13px] font-medium uppercase tracking-[0.12em] text-accent">TEX-GIANG</p>
-        <h2 id="contact-dialog-title" class="mt-1 text-[20px] font-medium leading-tight text-ink sm:text-[23px]">Liên hệ chi nhánh tuyển dụng</h2>
-        <p class="mt-1 text-[14px] leading-[1.6] text-muted">Gọi trực tiếp người phụ trách khu vực bạn muốn làm việc.</p>
-      </div>
-      <button type="button" class="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-muted transition-colors hover:bg-surface hover:text-ink" data-close-contact-dialog aria-label="Đóng hộp thoại liên hệ">
-        <img src="<?= asset('images/icons/x-lg.svg') ?>" alt="" aria-hidden="true" width="20" height="20" class="tg-icon">
+  <div class="relative flex max-h-[min(90vh,640px)] w-full max-w-[420px] flex-col overflow-hidden rounded-2xl bg-white">
+    <div class="flex items-center justify-between gap-3 border-b border-line px-4 py-3">
+      <h2 id="contact-dialog-title" class="text-[17px] font-medium leading-tight text-ink">Liên hệ tuyển dụng</h2>
+      <button type="button" class="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-muted transition-colors hover:bg-surface hover:text-ink" data-close-contact-dialog aria-label="Đóng hộp thoại liên hệ">
+        <img src="<?= asset('images/icons/x-lg.svg') ?>" alt="" aria-hidden="true" width="18" height="18" class="tg-icon">
       </button>
     </div>
 
-    <div class="flex-1 space-y-3 overflow-y-auto px-4 py-4 sm:px-6">
+    <div class="flex-1 space-y-2 overflow-y-auto p-3">
       <?php foreach ($branches as $branch): ?>
       <?php $contacts = $branchContacts[(int) $branch['id']] ?? []; ?>
-      <section class="rounded-card border border-line p-4">
-        <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-          <h3 class="text-[16px] font-medium leading-snug text-ink">Khu vực <?= e($branch['name']) ?></h3>
-          <?php $branchMapHref = (string) ($branch['map_link'] ?? ''); ?>
-          <?php if ($branchMapHref !== '' || !empty($branch['map_url'])): ?>
-          <a href="<?= e($branchMapHref !== '' ? $branchMapHref : (string) $branch['map_url']) ?>" target="_blank" rel="noopener" class="text-[13px] text-muted transition-colors hover:text-accent">Bản đồ →</a>
-          <?php endif; ?>
-        </div>
-        <?php if (!empty($branch['address'])): ?>
-        <p class="mt-1 text-[13px] leading-[1.55] text-muted"><?= e($branch['address']) ?></p>
-        <?php endif; ?>
-
+      <section class="rounded-card border border-line px-3.5 py-2.5">
+        <p class="text-[13px] font-medium leading-snug text-ink">Khu vực <?= e($branch['name']) ?></p>
         <?php if ($contacts !== []): ?>
-        <ul class="mt-3 space-y-2 border-t border-line pt-3">
+        <ul class="mt-1.5 space-y-1">
           <?php foreach ($contacts as $contact): ?>
           <li class="flex items-baseline justify-between gap-3">
-            <span class="min-w-0 text-[15px] leading-[1.5] text-body">
-              <?= e($contact['full_name']) ?>
-              <?php if (!empty($contact['title'])): ?><span class="block text-[12px] text-muted"><?= e((string) $contact['title']) ?></span><?php endif; ?>
+            <span class="min-w-0 truncate text-[13px] text-muted">
+              <?= e($contact['full_name']) ?><?php if (!empty($contact['title'])): ?><span class="text-[12px] text-muted"> — <?= e((string) $contact['title']) ?></span><?php endif; ?>
             </span>
             <a href="tel:<?= e(\App\Models\BranchContact::telHref((string) $contact['phone'])) ?>"
-               class="shrink-0 whitespace-nowrap text-[15px] font-semibold text-accent transition-colors hover:text-accent-strong"><?= e($contact['phone']) ?></a>
+               class="shrink-0 whitespace-nowrap text-[14px] font-semibold text-accent transition-colors hover:text-accent-strong"><?= e($contact['phone']) ?></a>
           </li>
           <?php endforeach; ?>
         </ul>
         <?php else: ?>
-        <p class="mt-3 border-t border-line pt-3 text-[13px] text-muted">Đang cập nhật người phụ trách.</p>
+        <p class="mt-1 text-[13px] text-muted">Đang cập nhật</p>
         <?php endif; ?>
       </section>
       <?php endforeach; ?>
-    </div>
-
-    <div class="flex flex-wrap items-center justify-between gap-3 border-t border-line bg-surface px-5 py-3 sm:px-7">
-      <?php if (menu_link_visible('contact')): ?>
-      <a href="<?= url('contact') ?>" class="text-[14px] font-medium text-body transition-colors hover:text-accent">Xem bản đồ và giờ tiếp nhận hồ sơ →</a>
-      <?php endif; ?>
-      <button type="button" class="tg-btn tg-btn--ghost h-10 px-4 text-[14px]" data-close-contact-dialog>Đóng</button>
     </div>
   </div>
 </div>

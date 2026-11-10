@@ -59,7 +59,7 @@ const MOCK_JOBS = [
     title: '03 Chuyên Viên Quản Lý Đơn Hàng Ngành May (Merchandiser)',
     company: 'TEX-GIANG',
     companyCode: 'tex-giang',
-    location: 'Khu Cái Lậy',
+    location: 'Khu Cai Lậy',
     locationCode: 'cai-lay',
     department: 'Văn phòng & Kinh doanh',
     departmentCode: 'office',

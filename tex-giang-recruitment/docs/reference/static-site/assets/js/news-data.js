@@ -7,8 +7,8 @@
   };
   const caiLay = {
     src: "assets/images/company/cai-lay.webp",
-    alt: "Cổng chi nhánh TEX-GIANG tại Cái Lậy",
-    caption: "Chi nhánh Cái Lậy · Ảnh từ website TEX-GIANG.",
+    alt: "Cổng chi nhánh TEX-GIANG tại Cai Lậy",
+    caption: "Chi nhánh Cai Lậy · Ảnh từ website TEX-GIANG.",
   };
   const training = {
     src: "assets/images/company/training.webp",
@@ -100,7 +100,7 @@
       [
         "Khi tìm hiểu nơi làm việc, ngoài công việc chính, bạn có thể hỏi về giờ nghỉ, nơi ăn ca và khu vực để xe. Các thông tin nhỏ này ảnh hưởng trực tiếp đến việc đi làm mỗi ngày.",
         "Nếu có nhu cầu ăn theo chế độ riêng, hãy hỏi bộ phận tiếp nhận về cách đăng ký hoặc phương án phù hợp. Cơm ca, suất ăn thêm và ca làm cần xác nhận theo khu sản xuất.",
-        "Ảnh trong bài là chi nhánh Cái Lậy; thông tin bài viết là gợi ý trao đổi, không xác nhận một đợt cải tạo bếp ăn.",
+        "Ảnh trong bài là chi nhánh Cai Lậy; thông tin bài viết là gợi ý trao đổi, không xác nhận một đợt cải tạo bếp ăn.",
       ],
     ],
     [

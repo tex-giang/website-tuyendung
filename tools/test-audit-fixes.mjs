@@ -58,7 +58,7 @@ async function fill(name = "Ứng viên kiểm thử", position = "qc") {
   await page.locator("#apply-address").fill("Địa chỉ kiểm thử");
   await page
     .locator("#apply-note")
-    .fill("5 năm kinh nghiệm QC; mong muốn Cái Lậy.");
+    .fill("5 năm kinh nghiệm QC; mong muốn Cai Lậy.");
   await page.locator("#apply-terms").check();
 }
 async function submit() {
@@ -120,7 +120,7 @@ await check(
     assert.match(await page.locator("#candidate-detail").innerText(), /5 năm/);
     assert.match(
       await page.locator("#candidate-detail").innerText(),
-      /Khu Cái Lậy/,
+      /Khu Cai Lậy/,
     );
     assert.equal(
       await page

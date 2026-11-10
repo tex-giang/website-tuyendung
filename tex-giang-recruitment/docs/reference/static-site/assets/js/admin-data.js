@@ -129,9 +129,9 @@
     content: {
       slogan: "Một công việc ổn định. Thu nhập xứng đáng.",
       philosophy: "Vì con người — Vì chất lượng — Vì tương lai bền vững",
-      hero: "Cổng tuyển dụng Công ty Cổ phần TEX-GIANG (TGI) tại KCN Tân Hương, Đồng Tháp.",
+      hero: "Cổng tuyển dụng Công ty Cổ phần TEX-GIANG (TGI) .",
       about:
-        "Công ty Cổ phần TEX-GIANG (TGI) thành lập năm 2007, vận hành 3 khu sản xuất tại Tân Hương, Cái Lậy và Chợ Gạo với khoảng 3.500 lao động.",
+        "Công ty Cổ phần TEX-GIANG (TGI) thành lập năm 2007, vận hành 3 khu sản xuất tại Tân Hương, Cai Lậy và Chợ Gạo với khoảng 3.500 lao động.",
       benefits:
         "Môi trường làm việc đạt SA8000, ISO 9001; thưởng tháng 13 và các dịp lễ, phụ cấp nuôi con nhỏ, xe đưa rước và cơm ca.",
       hotline: "02733937274",

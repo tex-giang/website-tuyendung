@@ -16,7 +16,7 @@
         <?= e(settings('content_about_title', 'May xuất khẩu tại Tân Hương từ năm 2007')) ?>
       </h1>
       <p class="mt-4 max-w-[62ch] text-[18px] leading-[1.6] text-muted">
-        <?= e(settings('content_about_lead', 'Công ty Cổ phần TEX-GIANG (TGI) thành lập tháng 3/2007, vận hành 3 khu sản xuất tại Tân Hương, Cái Lậy và Chợ Gạo.')) ?>
+        <?= e(settings('content_about_lead', 'Công ty Cổ phần TEX-GIANG (TGI) thành lập tháng 3/2007, vận hành 3 khu sản xuất tại Tân Hương, Cai Lậy và Chợ Gạo.')) ?>
       </p>
 
       <figure class="mt-12 lg:mt-16">
@@ -44,7 +44,7 @@
             Chúng tôi làm gì
           </h2>
           <p class="mt-5 max-w-[62ch] text-[16px] leading-[1.7] text-muted">
-            Trụ sở và Nhà máy 1 đặt tại Lô BII-8, đường D3, KCN Tân Hương, xã Tân Hương, tỉnh Đồng Tháp. Tháng 8/2024 công ty nhận thêm <strong class="font-medium text-body">Nhà máy Tân Hương 2</strong> rộng 4,8 ha (lô BI-5,6,7,8) trong cùng khu công nghiệp; hai khu còn lại ở Cái Lậy và Chợ Gạo. Hiện công ty có 3 khu sản xuất và khoảng 3.500 lao động.
+            Trụ sở và Nhà máy 1 đặt tại Lô BII-8, đường D3, KCN Tân Hương, xã Tân Hương, tỉnh Đồng Tháp. Tháng 8/2024 công ty nhận thêm <strong class="font-medium text-body">Nhà máy Tân Hương 2</strong> rộng 4,8 ha (lô BI-5,6,7,8) trong cùng khu công nghiệp; hai khu còn lại ở Cai Lậy và Chợ Gạo. Hiện công ty có 3 khu sản xuất và khoảng 3.500 lao động.
           </p>
           <p class="mt-4 max-w-[62ch] text-[16px] leading-[1.7] text-muted">
             Sản phẩm chính là áo khoác down, insulated, workwear bảo hộ, đồ outdoor và denim. Khách hàng gồm Kathmandu, Dickies, Helly Hansen, Wilson, Haglofs, First Tactical, Didriksons… tại châu Âu, Mỹ, Úc và New Zealand. Công suất khoảng 8 triệu sản phẩm/năm (TGI).
@@ -67,7 +67,7 @@
             Vì con người — vì chất lượng — vì tương lai bền vững
           </p>
           <p class="mt-5 max-w-[62ch] text-[16px] leading-[1.7] text-muted">
-            Người lao động là tài sản của công ty. Nhà xưởng có điều hòa, ánh sáng chuẩn, hút bụi vải và PCCC tự động; bếp ăn tập thể phục vụ miễn phí, xe đưa rước nhiều tuyến mỗi ngày, lương trả đúng ngày mùng 10 qua tài khoản.
+            Người lao động là tài sản của công ty. Nhà xưởng có điều hòa, ánh sáng chuẩn, hút bụi vải và PCCC tự động; bếp ăn tập thể phục vụ miễn phí, xe đưa rước nhiều tuyến mỗi ngày.
           </p>
         </div>
 

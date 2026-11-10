@@ -165,10 +165,10 @@ không gắn DataTables. Phân trang do DataTables xử lý phía client; contro
 
 ## Người liên hệ tuyển dụng theo chi nhánh
 
-Mỗi khu sản xuất (Tân Hương / Cái Lậy / Chợ Gạo) có danh sách người phụ trách tuyển dụng:
+Mỗi khu sản xuất (Tân Hương / Cai Lậy / Chợ Gạo) có danh sách người phụ trách tuyển dụng:
 họ tên + số điện thoại. Danh sách này hiển thị tự động ở:
 - **Footer**: nút **“Liên hệ chi nhánh”** ở cột *Kết nối* — bấm vào mở hộp thoại danh sách 3 khu
-  (thứ tự Tân Hương → Cái Lậy → Chợ Gạo, mỗi người kèm số điện thoại bấm gọi được).
+  (thứ tự Tân Hương → Cai Lậy → Chợ Gạo, mỗi người kèm số điện thoại bấm gọi được).
 - **Nút nổi cố định** (góc phải dưới, luôn hiển thị khi cuộn): nút điện thoại màu xanh mở cùng
   hộp thoại liên hệ — nằm cạnh nút Lên đầu trang và Zalo.
 - Khối “Liên hệ ứng tuyển” ở **trang Liên hệ**.

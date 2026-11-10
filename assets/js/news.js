@@ -60,7 +60,7 @@
       id: 'bep-an-cai-lay',
       date: '2026-10-12',
       category: 'Đời sống',
-      title: 'Khu Cái Lậy cải tạo bếp ăn tập thể, thêm suất ăn ca tối',
+      title: 'Khu Cai Lậy cải tạo bếp ăn tập thể, thêm suất ăn ca tối',
       excerpt: 'Bếp mới rộng 420 m², công suất 1.200 suất/ngày; ca tối được phục vụ thêm cháo hoặc bún trước giờ vào chuyền.',
       img: IMG.cover5,
       pos: 'center 55%',

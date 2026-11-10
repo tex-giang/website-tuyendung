@@ -53,7 +53,14 @@ function asset(string $path = ''): string
     if (str_starts_with($path, 'assets/')) {
         $path = substr($path, strlen('assets/'));
     }
-    return url('assets/' . $path);
+    $url = url('assets/' . $path);
+
+    // Cache-busting: thêm ?v=<mtime> để trình duyệt tự tải lại khi file đổi.
+    $file = BASE_PATH . '/public/assets/' . $path;
+    if (is_file($file)) {
+        $url .= '?v=' . filemtime($file);
+    }
+    return $url;
 }
 
 function current_path(): string

@@ -49,7 +49,7 @@ $currentImage = $val('image_path');
       <label class="field">
         <span class="field__label">Dòng phụ (eyebrow)</span>
         <input class="field__input" type="text" name="subtitle" value="<?= e($val('subtitle')) ?>" maxlength="255"
-               placeholder="Ví dụ: Chi nhánh Cái Lậy">
+               placeholder="Ví dụ: Chi nhánh Cai Lậy">
       </label>
       <label class="field">
         <span class="field__label">Nhãn nút kêu gọi</span>

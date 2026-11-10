@@ -17,7 +17,7 @@
   // Nhãn khu để HR đọc trong hồ sơ.
   const locationLabels = {
     'tan-huong': 'Tân Hương',
-    'cai-lay': 'Cái Lậy',
+    'cai-lay': 'Cai Lậy',
     'cho-gao': 'Chợ Gạo',
     any: 'Theo sắp xếp',
   };

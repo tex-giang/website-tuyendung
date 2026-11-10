@@ -21,7 +21,7 @@
     '        <label class="form-label" for="apply-company">Khu sản xuất <span class="req">*</span></label>',
     '        <select id="apply-company" name="company" class="form-input" required>',
     '          <option value="tan-huong">Khu Tân Hương</option>',
-    '          <option value="cai-lay">Khu Cái Lậy</option>',
+    '          <option value="cai-lay">Khu Cai Lậy</option>',
     '          <option value="cho-gao">Khu Chợ Gạo</option>',
     '          <option value="any">Theo sắp xếp phù hợp</option>',
     '        </select>',

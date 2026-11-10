@@ -81,11 +81,11 @@ INSERT INTO about_milestones (year_label, text, is_highlight, sort_order) VALUES
   ('2007', 'Thành lập, khởi công nhà máy trong KCN Tân Hương.', 0, 1),
   ('2012', 'Đạt chứng nhận SA8000.', 0, 2),
   ('2014', 'Bổ sung công nghệ laser cut và dán (lamination).', 0, 3),
-  ('03/2015', 'Khai trương nhà máy Cái Lậy, cách trụ sở 40 km; đạt ISO 9001 do SGS cấp.', 0, 4),
+  ('03/2015', 'Khai trương nhà máy Cai Lậy, cách trụ sở 40 km; đạt ISO 9001 do SGS cấp.', 0, 4),
   ('2016', 'Đạt OEKO-TEX STEP.', 0, 5),
   ('2021–2022', 'Mở nhà máy Chợ Gạo; tham gia Higg FEM và FSLM.', 0, 6),
   ('08/2024', 'Nhận Nhà máy Tân Hương 2 rộng 4,8 ha trong KCN Tân Hương.', 0, 7),
-  ('Hiện tại', '3 khu sản xuất: Tân Hương, Cái Lậy và Chợ Gạo; khoảng 3.500 lao động.', 1, 8);
+  ('Hiện tại', '3 khu sản xuất: Tân Hương, Cai Lậy và Chợ Gạo; khoảng 3.500 lao động.', 1, 8);
 
 INSERT INTO about_values (title, body, sort_order) VALUES
   ('Tầm nhìn', 'Trở thành doanh nghiệp may mặc xuất khẩu dẫn đầu khu vực miền Nam, tiên phong sản xuất xanh và là nơi làm việc đáng gắn bó với người lao động.', 1),
@@ -102,7 +102,7 @@ INSERT INTO benefit_groups (title, icon, intro, sort_order) VALUES
   ('Môi trường làm việc an toàn, mát', 'shield-check', 'Nhà xưởng tại KCN Tân Hương có điều hòa, ánh sáng chuẩn bảo vệ mắt, hệ thống hút bụi vải và PCCC tự động.', 1),
   ('Thu nhập minh bạch, trả đúng hạn', 'check2', 'Lương tính theo sản phẩm và năng suất chuyền; mức cụ thể trao đổi khi phỏng vấn. Ngoài lương còn các khoản thưởng và phụ cấp đang áp dụng.', 2),
   ('Đào tạo nghề miễn phí, có lương', 'briefcase', 'Công ty tuyển cả người chưa có tay nghề may; người mới được kèm tại chuyền theo từng công đoạn (1 kim, 2 kim, vắt sổ) trước khi vào định mức chính thức.', 3),
-  ('Xe đưa rước và ăn ca miễn phí', 'bus-front', 'Công ty bố trí xe đưa đón công nhân ở xa miễn phí giữa các nhà máy Tân Hương, Cái Lậy và Chợ Gạo.', 4);
+  ('Xe đưa rước và ăn ca miễn phí', 'bus-front', 'Công ty bố trí xe đưa đón công nhân ở xa miễn phí giữa các nhà máy Tân Hương, Cai Lậy và Chợ Gạo.', 4);
 
 INSERT INTO benefit_items (group_id, text, sort_order) VALUES
   (1, 'Đạt SA8000 từ 2012 — trách nhiệm xã hội.', 1),
@@ -127,7 +127,7 @@ INSERT INTO benefit_comparisons (label, tex_giang, other_value, sort_order) VALU
 
 INSERT INTO settings (`key`, `value`, `group`) VALUES
   ('content_about_title', 'May xuất khẩu tại Tân Hương từ năm 2007', 'content'),
-  ('content_about_lead', 'Công ty Cổ phần TEX-GIANG (TGI) thành lập tháng 3/2007, vận hành 3 khu sản xuất tại Tân Hương, Cái Lậy và Chợ Gạo.', 'content'),
+  ('content_about_lead', 'Công ty Cổ phần TEX-GIANG (TGI) thành lập tháng 3/2007, vận hành 3 khu sản xuất tại Tân Hương, Cai Lậy và Chợ Gạo.', 'content'),
   ('content_why_title', 'Vì sao chọn TEX-GIANG', 'content'),
   ('content_why_lead', 'Bốn điều người lao động hỏi nhiều nhất khi đến nhà máy: môi trường có an toàn không, thu nhập bao nhiêu, có được dạy nghề không, và đi lại thế nào.', 'content')
 ON DUPLICATE KEY UPDATE `key` = `key`;

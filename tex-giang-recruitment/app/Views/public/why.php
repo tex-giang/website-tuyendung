@@ -16,7 +16,7 @@
         <?= e(settings('content_why_title', 'Vì sao chọn TEX-GIANG')) ?>
       </h1>
       <p class="mt-4 max-w-[62ch] text-[18px] leading-[1.6] text-muted">
-        <?= e(settings('content_why_lead', 'Bốn điều người lao động hỏi nhiều nhất khi đến nhà máy: môi trường có an toàn không, thu nhập bao nhiêu, có được dạy nghề không, và đi lại thế nào.')) ?>
+        <?= e(settings('content_why_lead', 'Bốn điều người lao động hỏi nhiều nhất khi đến nhà máy: môi trường có an toàn không, thu nhập bao nhiêu, có được dạy nghề không và đi lại thế nào.')) ?>
       </p>
     </div><figure class="intro-photo"><img src="<?= asset('images/company/tan-huong-2.webp') ?>" width="360" height="300" alt="Toàn cảnh nhà máy Tân Hương 2 trong hệ thống TEX-GIANG" fetchpriority="high"><figcaption>Nhà máy Tân Hương 2 · TEX-GIANG</figcaption></figure></div></section>
 

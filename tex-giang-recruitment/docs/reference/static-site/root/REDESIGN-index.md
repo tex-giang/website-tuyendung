@@ -157,7 +157,7 @@ Quy ước: **mỗi khối chỉ được 1 phần tử "nổi"** (hoặc 1 số
 - H1 56/500, 2 dòng. Phương án copy:
   - A. "Gia nhập TEX-GIANG. **Kiến tạo giá trị, cùng phát triển.**"
   - B. "Một công việc ổn định. **Một tương lai bền vững.**"
-- Lead 18: "May mặc xuất khẩu tại KCN Tân Hương, Đồng Tháp. Thu nhập 8–18 triệu/tháng, đào tạo nghề miễn phí có lương, xe đưa rước và ăn ca."
+- Lead 18: "May mặc xuất khẩu . Thu nhập 8–18 triệu/tháng, đào tạo nghề miễn phí có lương, xe đưa rước và ăn ca."
 - Hàng CTA: nút solid accent "Xem vị trí đang tuyển" + text-link "Nộp hồ sơ trong 2 phút →" (link chữ, không viền).
 - Ảnh: `banner-texgiang.png`, `aspect-ratio: 16/7`, `object-fit: cover`, radius 20, **không** gradient overlay, **không** chữ đè lên. Ảnh này đã có slogan in sẵn — để nó tự nói.
 - Bỏ teaser card "Việc làm gấp tuần này" (trùng khối 5) → đổi thành dòng 14 muted dưới ảnh: "Đang tuyển 24 vị trí · Cập nhật 30/10/2026".

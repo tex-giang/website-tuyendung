@@ -373,7 +373,7 @@ Tài liệu chi tiết thêm: `docs/01-ui-inventory.md`, `docs/02-database.md`,
 > `2026-11-08-page-content-maps.sql` (thêm bảng nội dung Về chúng tôi/Phúc lợi + cột bản đồ cho `branches`),
 > `2026-11-08-menus.sql` (bảng menu website), `2026-11-08-menus-single.sql` (gộp menu header/footer thành một danh sách),
 > `2026-11-08-visit-stats.sql` (bảng thống kê lượt truy cập theo ngày + thiết bị),
-> `2026-11-08-job-code-td26.sql` (chuyển mã tin tuyển dụng sang định dạng TD26-0001), `2026-11-08-job-expiry.sql` (trạng thái Hết hạn + số ngày nhận hồ sơ mặc định).
+> `2026-11-08-job-code-td26.sql` (chuyển mã tin tuyển dụng sang định dạng TD26-0001), `2026-11-08-job-expiry.sql` (trạng thái Hết hạn + số ngày nhận hồ sơ mặc định), `2026-11-10-fix-cai-lay-accent.sql` (sửa chính tả “Cai Lậy”).
 > Bản `schema.sql`/`seed.sql` mới đã gồm sẵn các bảng/cột này cho cài mới.
 
 ### Nếu hosting không đổi được DocumentRoot vào `public/`

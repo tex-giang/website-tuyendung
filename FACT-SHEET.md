@@ -1,6 +1,6 @@
 # XÁC MINH THÔNG TIN DOANH NGHIỆP — NGUỒN & ĐỐI CHIẾU
 
-> Cập nhật 02/11/2026. Website chỉ giới thiệu **một pháp nhân: Công ty Cổ phần TEX-GIANG (TGI)** với **3 khu sản xuất: Tân Hương, Cái Lậy, Chợ Gạo**.
+> Cập nhật 02/11/2026. Website chỉ giới thiệu **một pháp nhân: Công ty Cổ phần TEX-GIANG (TGI)** với **3 khu sản xuất: Tân Hương, Cai Lậy, Chợ Gạo**.
 > Nguồn chính thức đọc trực tiếp: [tex-giang.com.vn](https://tex-giang.com.vn/) (About Us → Fact & History, Contact) và tin tuyển dụng của công ty trên TopCV.
 
 ## 1. Pháp nhân
@@ -19,7 +19,7 @@
 | Khu | Địa chỉ | Ghi chú |
 |---|---|---|
 | **Tân Hương** | Lô BII-8 (Nhà máy 1) và lô BI-5,6,7,8 (Nhà máy 2), đường D3, KCN Tân Hương, xã Tân Hương | Trụ sở; Nhà máy 2 nhận thêm 8/2024, rộng 4,8 ha |
-| **Cái Lậy** | Ấp Bình Quới, xã Bình Phú | Khai trương 3/2015, cách trụ sở 40 km |
+| **Cai Lậy** | Ấp Bình Quới, xã Bình Phú | Khai trương 3/2015, cách trụ sở 40 km |
 | **Chợ Gạo** | Ấp Hòa Lợi Tiểu, xã Bình Ninh | Đưa vào vận hành 2021–2022 |
 
 ## 3. Quy mô & năng lực
@@ -42,7 +42,7 @@
 - **2012** SA8000
 - **2014** công nghệ laser cut & lamination
 - **01/2015** ISO 9001 (SGS)
-- **03/2015** khai trương khu Cái Lậy (cách trụ sở 40 km)
+- **03/2015** khai trương khu Cai Lậy (cách trụ sở 40 km)
 - **2016** OEKO-TEX STEP
 - **2021–2022** khu Chợ Gạo; Higg FEM & FSLM
 - **08/2024** nhận Nhà máy Tân Hương 2 (4,8 ha)
@@ -53,10 +53,10 @@
 |---|---|
 | Hotline / fax / email / domain | theo nguồn chính thức ở mục 1 |
 | Tên pháp nhân | chỉ còn Công ty Cổ phần TEX-GIANG (TGI) — đã bỏ toàn bộ tham chiếu đơn vị thứ hai |
-| Bộ lọc & dữ liệu việc làm | 3 khu: Tân Hương / Cái Lậy / Chợ Gạo (bỏ bộ lọc "đơn vị") |
+| Bộ lọc & dữ liệu việc làm | 3 khu: Tân Hương / Cai Lậy / Chợ Gạo (bỏ bộ lọc "đơn vị") |
 | Dải số trang chủ & About | 2007 · 3 khu · 3.500 CBCNV · 8 triệu sản phẩm/năm |
 | Timeline About | 8 mốc, mốc cuối là 3 khu + khoảng 3.500 lao động |
-| Liên hệ | trụ sở + Nhà máy Tân Hương 2 + khu Cái Lậy + khu Chợ Gạo |
+| Liên hệ | trụ sở + Nhà máy Tân Hương 2 + khu Cai Lậy + khu Chợ Gạo |
 | Quản trị | lọc theo khu sản xuất (dashboard, tin tuyển dụng, hồ sơ ứng viên) |
 | Email liên hệ trên site | `chung.doan@tex-giang.com.vn` → **`nhansu@tex-giang.com.vn`** (06/11/2026); email công bố ở mục 1 giữ nguyên để đối chiếu nguồn |
 
