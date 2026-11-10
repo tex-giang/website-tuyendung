@@ -5,7 +5,7 @@ $appUrl = url('admin/applications/' . $app['id']);
 $updateUrl = $appUrl . '/status';
 $appointmentValue = $app['appointment_at'] ? date('Y-m-d\TH:i', strtotime((string) $app['appointment_at'])) : '';
 $receivedAt = vn_date($app['created_at'], 'H:i d/m/Y');
-$gender = ['nu' => 'Nữ', 'nam' => 'Nam', 'khac' => 'Khác'][$app['gender']] ?? '';
+$gender = ['nu' => 'Nữ', 'nam' => 'Nam', 'khac' => 'Khác'][(string) ($app['gender'] ?? '')] ?? '';
 $hasCv = !empty($app['cv_stored_name']);
 $currentStatus = (string) old('status', $app['status']);
 ?>

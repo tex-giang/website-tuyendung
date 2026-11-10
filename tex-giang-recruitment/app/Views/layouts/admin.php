@@ -77,7 +77,6 @@ $initials = mb_strtoupper($initials !== '' ? $initials : 'TG', 'UTF-8');
         <i class="bi bi-list" aria-hidden="true"></i>
       </button>
       <nav class="admin-topbar__breadcrumb" aria-label="Vị trí trong trang quản trị">
-        <span aria-hidden="true">/</span>
         <span data-admin-crumb-group><?= e($activeNavGroup) ?></span>
         <span aria-hidden="true">/</span>
         <span class="admin-topbar__current" aria-current="page" data-admin-crumb-title><?= e(explode(' | ', $title, 2)[0]) ?></span>

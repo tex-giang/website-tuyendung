@@ -94,7 +94,11 @@ code { padding: 1px 6px; border-radius: 6px; background: #EBF3EE; color: #14523C
     linear-gradient(180deg, #073626 0%, #052E21 48%, #04241B 100%);
   box-shadow: inset -1px 0 0 rgba(255, 255, 255, .05), 30px 0 80px -60px rgba(2, 24, 17, .9);
   transition: width .22s ease, transform .22s ease;
+  /* Mobile offcanvas: ẩn thanh cuộn của cả sidebar */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
+.admin-sidebar::-webkit-scrollbar { width: 0; height: 0; display: none; }
 .admin-sidebar__head {
   display: flex;
   align-items: center;
@@ -149,12 +153,11 @@ code { padding: 1px 6px; border-radius: 6px; background: #EBF3EE; color: #14523C
   padding: 4px 2px 8px;
   overflow-y: auto;
   overscroll-behavior: contain;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, .18) transparent;
+  /* Ẩn thanh cuộn nhưng vẫn cuộn được */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
-.admin-nav::-webkit-scrollbar { width: 6px; }
-.admin-nav::-webkit-scrollbar-thumb { border-radius: 999px; background: rgba(255, 255, 255, .18); }
-.admin-nav::-webkit-scrollbar-track { background: transparent; }
+.admin-nav::-webkit-scrollbar { width: 0; height: 0; display: none; }
 .admin-nav__group {
   margin: 16px 10px 6px;
   color: rgba(167, 243, 208, .55);

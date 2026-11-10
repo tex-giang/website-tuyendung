@@ -232,9 +232,9 @@ foreach (\App\Models\Branch::active() as $branchRow) {
             </div>
             <div>
               <label class="form-label" for="contact-phone">Số điện thoại <span class="req">*</span></label>
-              <input type="tel" id="contact-phone" name="phone" required autocomplete="tel" inputmode="tel"
+              <input type="tel" id="contact-phone" name="phone" required autocomplete="tel" inputmode="tel" value="<?= e($val('phone')) ?>"
                      placeholder="09xx xxx xxx" class="form-input<?= $err('phone') ? ' is-invalid' : '' ?>" data-phone-format>
-                     value="<?= e($val('phone')) ?>">
+                     
               <?php if ($err('phone')): ?><p class="field-error"><?= e($err('phone')) ?></p><?php endif; ?>
             </div>
             <div class="sm:col-span-2">
