@@ -135,7 +135,7 @@ $summary = ($job['meta_description'] ?? '') !== '' ? (string) $job['meta_descrip
       <div class="rounded-card bg-surface p-6" data-reveal>
         <h2 class="text-[16px] font-medium text-ink">Liên hệ ban tuyển dụng</h2>
         <p class="mt-3 text-[14px] leading-[1.7] text-muted">
-          Phòng Nhân sự TEX-GIANG<?= ($job['branch_name'] ?? '') !== '' ? ' — Khu vực ' . e((string) $job['branch_name']) : '' ?><br>
+          Phòng Nhân sự TEX-GIANG<?= ($job['branch_name'] ?? '') !== '' ? ' — Nhà máy ' . e((string) $job['branch_name']) : '' ?><br>
           <?= e((string) ($job['branch_address'] ?? '')) ?>
         </p>
         <?php $branchContactsForJob = \App\Models\BranchContact::byBranch((int) ($job['branch_id'] ?? 0)); ?>

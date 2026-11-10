@@ -1,6 +1,6 @@
 /**
  * TEX-GIANG — Trang nộp hồ sơ nhanh (/tuyen-dung, layout độc lập)
- * Chọn khu vực trước → danh sách vị trí lọc theo đúng tin đang tuyển của khu đó.
+ * Chọn nhà máy trước → danh sách vị trí lọc theo đúng tin đang tuyển của khu đó.
  * Option vị trí do server render kèm data-branch; JS chỉ ẩn/hiện theo khu.
  */
 (function () {
@@ -15,7 +15,7 @@
 
   if (!select) return;
 
-  // Lưu toàn bộ option server render để dựng lại khi đổi khu vực.
+  // Lưu toàn bộ option server render để dựng lại khi đổi nhà máy.
   var allOptions = Array.prototype.slice.call(select.options).map(function (option) {
     return {
       value: option.value,
@@ -43,7 +43,7 @@
       if (item.isPlaceholder) {
         var placeholder = document.createElement('option');
         placeholder.value = '';
-        placeholder.textContent = branch ? '— Chọn vị trí —' : '— Chọn khu vực trước —';
+        placeholder.textContent = branch ? '— Chọn vị trí —' : '— Chọn nhà máy trước —';
         select.appendChild(placeholder);
         return;
       }
@@ -65,11 +65,11 @@
 
     if (hint) {
       if (!branch) {
-        hint.textContent = 'Chọn khu vực trước để xem vị trí đang tuyển tại khu đó.';
+        hint.textContent = 'Chọn nhà máy trước để xem vị trí đang tuyển tại khu đó.';
       } else if (matched === 0) {
-        hint.textContent = 'Khu vực này chưa có vị trí đang tuyển — chọn “Vị trí khác” hoặc khu vực khác.';
+        hint.textContent = 'Nhà máy này chưa có vị trí đang tuyển — chọn “Vị trí khác” hoặc nhà máy khác.';
       } else {
-        hint.textContent = matched + ' vị trí đang tuyển tại khu vực này.';
+        hint.textContent = matched + ' vị trí đang tuyển tại nhà máy này.';
       }
     }
   }

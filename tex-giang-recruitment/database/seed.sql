@@ -117,7 +117,7 @@ VALUES
    '8.000.000 - 16.000.000 VNĐ', 8000000, 16000000, '8-12',
    'Thực hiện các công đoạn may trên dây chuyền: ráp thân, may tay, may cổ, tra dây kéo, may lai, vắt sổ.\nVận hành máy may 1 kim điện tử, 2 kim, vắt sổ, kansai tại Nhà máy Tân Hương 2.\nĐảm bảo sản phẩm đạt tiêu chuẩn xuất khẩu US/EU theo checklist của tổ trưởng.\nChưa biết may sẽ được đào tạo nghề miễn phí 7–15 ngày, có lương học việc.',
    'Có sức khỏe tốt, tuổi 18–45, không yêu cầu kinh nghiệm.\nBiết may là lợi thế; người chưa biết may được đào tạo có lương.\nTrung thực, chăm chỉ, tuân thủ giờ giấc và an toàn lao động.',
-   'Thu nhập 8 – 16 triệu/tháng|Lương sản phẩm + thưởng năng suất + phụ cấp chuyên cần.\nThưởng nóng 2.000.000đ|Áp dụng cho công nhân may mới, đủ điều kiện sau 2 tháng.\nBHXH, BHYT, cơm ca|Đóng bảo hiểm đầy đủ, ăn ca miễn phí tại nhà máy.\nXe đưa rước tận nhà|Nhiều tuyến qua Châu Thành, Tân Hương và khu vực lân cận.',
+   'Thu nhập 8 – 16 triệu/tháng|Lương sản phẩm + thưởng năng suất + phụ cấp chuyên cần.\nThưởng nóng 2.000.000đ|Áp dụng cho công nhân may mới, đủ điều kiện sau 2 tháng.\nBHXH, BHYT, cơm ca|Đóng bảo hiểm đầy đủ, ăn ca miễn phí tại nhà máy.\nXe đưa rước tận nhà|Nhiều tuyến qua Châu Thành, Tân Hương và nhà máy lân cận.',
    'published', 1, '2026-10-28 08:00:00', '2026-11-30',
    'Công nhân may công nghiệp | Tuyển dụng TEX-GIANG',
    'Tuyển 300 công nhân may công nghiệp tại Nhà máy Tân Hương 2, Đồng Tháp. Thu nhập 8–16 triệu/tháng, đào tạo nghề miễn phí có lương.',
@@ -288,7 +288,7 @@ INSERT INTO benefit_items (group_id, text, sort_order) VALUES
   (3, 'Thời gian học và mức lương học việc trao đổi khi phỏng vấn.', 3),
   (4, 'Cơm trưa và cơm tăng ca tại nhà máy.', 1),
   (4, 'Đồng phục, bảo hộ lao động theo ca sản xuất.', 2),
-  (4, 'Điểm đón và giờ xe do nhân sự xác nhận theo từng khu vực.', 3);
+  (4, 'Điểm đón và giờ xe do nhân sự xác nhận theo từng nhà máy.', 3);
 
 INSERT INTO benefit_comparisons (label, tex_giang, other_value, sort_order) VALUES
   ('Thưởng tuyển mới', '2.000.000đ tiền mặt', 'Không có hoặc điều kiện khắt khe', 1),

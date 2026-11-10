@@ -30,7 +30,7 @@ $last = $last ?? [];
     </div>
 
     <p class="mt-6 max-w-[62ch] text-[14px] leading-[1.7] text-muted">
-      Cần hỏi gấp? Xem người phụ trách theo khu vực tại <a href="<?= url('contact') ?>" class="text-body underline underline-offset-2 hover:text-accent">trang Liên hệ</a>.
+      Cần hỏi gấp? Xem người phụ trách theo nhà máy tại <a href="<?= url('contact') ?>" class="text-body underline underline-offset-2 hover:text-accent">trang Liên hệ</a>.
     </p>
   </div>
   <img class="notice-art" src="<?= asset('images/application-success.svg') ?>" width="400" height="330" alt="" aria-hidden="true">

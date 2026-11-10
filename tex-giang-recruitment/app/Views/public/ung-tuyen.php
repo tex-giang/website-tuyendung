@@ -1,7 +1,7 @@
 <?php
 /**
  * Trang nộp hồ sơ nhanh (/tuyen-dung) — giao diện độc lập giống ung-tuyen.html tĩnh.
- * Chọn khu vực trước → danh sách vị trí lọc theo khu (quick-apply.js).
+ * Chọn nhà máy trước → danh sách vị trí lọc theo khu (quick-apply.js).
  *
  * @var array $branches  Danh sách khu đang hoạt động
  * @var array $jobData   Vị trí đang tuyển (slug, title, branch, salary)
@@ -47,7 +47,7 @@ $oldJob = $val('job_slug');
 
     <header class="gf-head">
       <h1 class="gf-title">Nộp hồ sơ ứng tuyển</h1>
-      <p class="gf-desc">Chọn khu vực bạn muốn làm việc, sau đó chọn vị trí đang tuyển tại khu đó. Bộ phận nhân sự TEX-GIANG sẽ gọi lại trong 24 giờ làm việc để xác nhận và hẹn lịch.</p>
+      <p class="gf-desc">Chọn nhà máy bạn muốn làm việc, sau đó chọn vị trí đang tuyển tại khu đó. Bộ phận nhân sự TEX-GIANG sẽ gọi lại trong 24 giờ làm việc để xác nhận và hẹn lịch.</p>
       <p class="gf-required">* Bắt buộc</p>
     </header>
 
@@ -76,7 +76,7 @@ $oldJob = $val('job_slug');
       </div>
 
       <fieldset class="<?= $fieldClass('branch_slug') ?>" data-field="branch_slug">
-        <legend class="gf-label">Khu vực muốn làm việc <span class="req">*</span></legend>
+        <legend class="gf-label">Nhà máy muốn làm việc <span class="req">*</span></legend>
         <div class="gf-radios">
           <?php foreach ($branches as $branch): ?>
           <label class="gf-radio">
@@ -86,14 +86,14 @@ $oldJob = $val('job_slug');
           </label>
           <?php endforeach; ?>
         </div>
-        <p class="gf-hint">Chọn khu vực trước — danh sách vị trí bên dưới sẽ lọc theo khu vực đó.</p>
-        <p class="gf-error"><?= e($err('branch_slug') !== '' ? $err('branch_slug') : 'Chọn một khu vực bạn muốn làm việc.') ?></p>
+        <p class="gf-hint">Chọn nhà máy trước — danh sách vị trí bên dưới sẽ lọc theo nhà máy đó.</p>
+        <p class="gf-error"><?= e($err('branch_slug') !== '' ? $err('branch_slug') : 'Chọn một nhà máy bạn muốn làm việc.') ?></p>
       </fieldset>
 
       <div class="<?= $fieldClass('job_slug') ?>" data-field="job_slug">
         <label class="gf-label" for="gf-position">Vị trí mong muốn <span class="req">*</span></label>
         <select class="form-input" id="gf-position" name="job_slug" required>
-          <option value="">— Chọn khu vực trước —</option>
+          <option value="">— Chọn nhà máy trước —</option>
           <?php foreach ($jobData as $job): ?>
           <option value="<?= e($job['slug']) ?>" data-branch="<?= e($job['branch']) ?>"
                   <?= $oldJob === $job['slug'] ? 'selected' : '' ?>>
@@ -102,7 +102,7 @@ $oldJob = $val('job_slug');
           <?php endforeach; ?>
           <option value="khac"<?= $oldJob === 'khac' ? ' selected' : '' ?>>Vị trí khác — ghi rõ khi nhân sự gọi</option>
         </select>
-        <p class="gf-hint" id="gf-position-hint">Chọn khu vực trước để xem vị trí đang tuyển tại khu đó.</p>
+        <p class="gf-hint" id="gf-position-hint">Chọn nhà máy trước để xem vị trí đang tuyển tại khu đó.</p>
         <p class="gf-error"><?= e($err('job_slug') !== '' ? $err('job_slug') : 'Chọn vị trí bạn muốn ứng tuyển.') ?></p>
       </div>
 

@@ -79,7 +79,7 @@
             <p class="mt-4 text-[16px] leading-[1.7] text-muted">
               <strong class="font-medium text-body">Công ty Cổ phần TEX-GIANG (TGI)</strong><br>
               Lô BII-8, đường D3, KCN Tân Hương, xã Tân Hương, tỉnh Đồng Tháp<br>
-              Liên hệ người phụ trách theo khu vực tại <a href="<?= url('contact') ?>" class="text-body hover:text-accent">trang Liên hệ</a>
+              Liên hệ người phụ trách theo nhà máy tại <a href="<?= url('contact') ?>" class="text-body hover:text-accent">trang Liên hệ</a>
             </p>
             <a href="<?= url('contact') ?>" class="tg-link mt-5">Xem bản đồ và liên hệ <img src="<?= asset('images/icons/arrow-right.svg') ?>" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[14px]"></a>
           </div>

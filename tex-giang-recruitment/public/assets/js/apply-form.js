@@ -166,9 +166,9 @@
           if (!branch) {
             positionHint.textContent = 'Chọn khu sản xuất trước để lọc vị trí đang tuyển.';
           } else if (matched === 0) {
-            positionHint.textContent = 'Khu vực này chưa có vị trí đang tuyển — chọn “Vị trí khác” hoặc khu khác.';
+            positionHint.textContent = 'Nhà máy này chưa có vị trí đang tuyển — chọn “Vị trí khác” hoặc khu khác.';
           } else {
-            positionHint.textContent = matched + ' vị trí đang tuyển tại khu vực này.';
+            positionHint.textContent = matched + ' vị trí đang tuyển tại nhà máy này.';
           }
         }
       };

@@ -101,7 +101,7 @@ final class ApplicationController extends Controller
             if ($this->isAjaxRequest()) {
                 $this->jsonResult(false, 'Không lưu được hồ sơ do lỗi hệ thống. Vui lòng thử lại hoặc dùng trang ứng tuyển đầy đủ.');
             }
-            Session::flash('_error', 'Không lưu được hồ sơ do lỗi hệ thống. Vui lòng liên hệ người phụ trách khu vực (trang Liên hệ) để được hỗ trợ.');
+            Session::flash('_error', 'Không lưu được hồ sơ do lỗi hệ thống. Vui lòng liên hệ người phụ trách nhà máy (trang Liên hệ) để được hỗ trợ.');
             $this->redirect(url('apply/error'));
         }
 
@@ -121,7 +121,7 @@ final class ApplicationController extends Controller
         $this->redirect(url('apply/success'));
     }
 
-    /** Trang nộp hồ sơ nhanh (/tuyen-dung): họ tên, SĐT, khu vực → vị trí. */
+    /** Trang nộp hồ sơ nhanh (/tuyen-dung): họ tên, SĐT, nhà máy → vị trí. */
     public function quickShow(): void
     {
         $done = (string) ($_GET['done'] ?? '') === '1';
@@ -156,7 +156,7 @@ final class ApplicationController extends Controller
             'last'     => $last,
             'page'     => [
                 'title'       => 'Nộp hồ sơ ứng tuyển | ' . settings('site_name'),
-                'description' => 'Nộp hồ sơ ứng tuyển TEX-GIANG trong 1 phút: họ tên, số điện thoại, khu vực và vị trí mong muốn.',
+                'description' => 'Nộp hồ sơ ứng tuyển TEX-GIANG trong 1 phút: họ tên, số điện thoại, nhà máy và vị trí mong muốn.',
                 'body_class'  => 'tg-public gf-page',
                 'robots'      => 'noindex',
                 'scripts'     => ['quick-apply.js'],
@@ -191,7 +191,7 @@ final class ApplicationController extends Controller
 
         $branch = $data['branch_slug'] !== '' ? Branch::findBySlug($data['branch_slug']) : null;
         if ($branch === null || (int) ($branch['is_active'] ?? 0) !== 1) {
-            $errors['branch_slug'] = 'Chọn khu vực bạn muốn làm việc.';
+            $errors['branch_slug'] = 'Chọn nhà máy bạn muốn làm việc.';
         }
 
         $job = null;
@@ -202,7 +202,7 @@ final class ApplicationController extends Controller
             if ($job === null) {
                 $errors['job_slug'] = 'Vị trí đã chọn không còn tuyển. Vui lòng chọn lại.';
             } elseif ($branch !== null && (string) ($job['branch_slug'] ?? '') !== $data['branch_slug']) {
-                $errors['job_slug'] = 'Vị trí đã chọn không thuộc khu vực bạn chọn.';
+                $errors['job_slug'] = 'Vị trí đã chọn không thuộc nhà máy bạn chọn.';
             }
         }
 
@@ -327,10 +327,10 @@ final class ApplicationController extends Controller
 
         if (count($times) >= self::RATE_LIMIT) {
             if ($this->isAjaxRequest()) {
-                $this->jsonResult(false, 'Bạn đã gửi ' . self::RATE_LIMIT . ' hồ sơ trong một giờ. Vui lòng liên hệ người phụ trách khu vực (xem trang Liên hệ) nếu cần gửi thêm.');
+                $this->jsonResult(false, 'Bạn đã gửi ' . self::RATE_LIMIT . ' hồ sơ trong một giờ. Vui lòng liên hệ người phụ trách nhà máy (xem trang Liên hệ) nếu cần gửi thêm.');
             }
             Session::flash('_error', 'Bạn đã gửi ' . self::RATE_LIMIT . ' hồ sơ trong một giờ. '
-                . 'Vui lòng liên hệ người phụ trách khu vực (xem trang Liên hệ) nếu cần gửi thêm.');
+                . 'Vui lòng liên hệ người phụ trách nhà máy (xem trang Liên hệ) nếu cần gửi thêm.');
             $this->redirect(url('apply/error'));
         }
     }
@@ -383,7 +383,7 @@ final class ApplicationController extends Controller
             && $data['job_slug'] !== '' && $data['job_slug'] !== 'khac' && $data['branch_slug'] !== '') {
             $jobForBranch = Job::findPublishedBySlug($data['job_slug']);
             if ($jobForBranch !== null && (string) ($jobForBranch['branch_slug'] ?? '') !== $data['branch_slug']) {
-                $errors['job_slug'] = 'Vị trí đã chọn không thuộc khu vực bạn chọn. Vui lòng chọn lại.';
+                $errors['job_slug'] = 'Vị trí đã chọn không thuộc nhà máy bạn chọn. Vui lòng chọn lại.';
             }
         }
 

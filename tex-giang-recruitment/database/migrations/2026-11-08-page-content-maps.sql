@@ -116,7 +116,7 @@ INSERT INTO benefit_items (group_id, text, sort_order) VALUES
   (3, 'Thời gian học và mức lương học việc trao đổi khi phỏng vấn.', 3),
   (4, 'Cơm trưa và cơm tăng ca tại nhà máy.', 1),
   (4, 'Đồng phục, bảo hộ lao động theo ca sản xuất.', 2),
-  (4, 'Điểm đón và giờ xe do nhân sự xác nhận theo từng khu vực.', 3);
+  (4, 'Điểm đón và giờ xe do nhân sự xác nhận theo từng nhà máy.', 3);
 
 INSERT INTO benefit_comparisons (label, tex_giang, other_value, sort_order) VALUES
   ('Thưởng tuyển mới', '2.000.000đ tiền mặt', 'Không có hoặc điều kiện khắt khe', 1),

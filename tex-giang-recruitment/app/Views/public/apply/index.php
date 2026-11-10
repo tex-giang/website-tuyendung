@@ -197,7 +197,7 @@ $branchValue = $val('branch_slug');
     <aside class="space-y-6 lg:sticky lg:top-24">
       <div class="rounded-card bg-surface p-6" data-reveal>
         <h2 class="text-[16px] font-medium text-ink">Cần hỗ trợ?</h2>
-        <p class="mt-3 text-[16px] leading-[1.7] text-muted">Xem người phụ trách theo khu vực nếu bạn không tiện điền form.</p>
+        <p class="mt-3 text-[16px] leading-[1.7] text-muted">Xem người phụ trách theo nhà máy nếu bạn không tiện điền form.</p>
         <?php if (menu_link_visible('contact')): ?><a href="<?= url('contact') ?>" class="tg-btn tg-btn--primary mt-4 w-full">Liên hệ người phụ trách</a><?php endif; ?>
         <?php if (settings('zalo') !== ''): ?>
         <a href="<?= e(zalo_url()) ?>" target="_blank" rel="noopener" class="tg-btn tg-btn--ghost mt-3 w-full">Chat Zalo</a>

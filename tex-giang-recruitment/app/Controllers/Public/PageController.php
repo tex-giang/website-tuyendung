@@ -161,9 +161,9 @@ final class PageController extends Controller
         ];
 
         $areas = [
-            'tan-huong' => 'Khu vực Tân Hương',
-            'cho-gao'   => 'Khu vực Chợ Gạo',
-            'cai-lay'   => 'Khu vực Cai Lậy',
+            'tan-huong' => 'Nhà máy Tân Hương',
+            'cho-gao'   => 'Nhà máy Chợ Gạo',
+            'cai-lay'   => 'Nhà máy Cai Lậy',
             'khac'      => 'Cần tư vấn thêm',
         ];
 
@@ -172,7 +172,7 @@ final class PageController extends Controller
             $errors['full_name'] = 'Nhập họ và tên (2–150 ký tự).';
         }
         if (!isset($areas[$data['area']])) {
-            $errors['area'] = 'Chọn khu vực muốn liên hệ.';
+            $errors['area'] = 'Chọn nhà máy muốn liên hệ.';
         }
         if (!preg_match('/^(?:0|\+?84)[35789]\d{8}$/', preg_replace('/[\s().-]/', '', $data['phone']) ?? '')) {
             $errors['phone'] = 'Nhập số di động Việt Nam hợp lệ, ví dụ 0918 123 456.';
@@ -196,7 +196,7 @@ final class PageController extends Controller
             'phone'     => $data['phone'],
             'email'     => $data['email'],
             'subject'   => 'Hỏi đáp từ trang liên hệ — ' . $areas[$data['area']],
-            'message'   => 'Khu vực: ' . $areas[$data['area']] . "\n\n" . $data['message'],
+            'message'   => 'Nhà máy: ' . $areas[$data['area']] . "\n\n" . $data['message'],
         ]);
 
         Session::flash('_success', 'Đã gửi câu hỏi. Phòng nhân sự sẽ phản hồi trong giờ làm việc.');

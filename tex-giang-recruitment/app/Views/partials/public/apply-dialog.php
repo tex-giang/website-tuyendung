@@ -2,7 +2,7 @@
 /**
  * Dialog ứng tuyển nhanh — hiển thị trên mọi trang công khai (trừ trang /apply).
  * Form POST thật về /apply, dùng cùng controller/validate với trang đầy đủ.
- * Có chọn khu vực trước (radio), sau đó vị trí chỉ hiện các tin thuộc khu đó.
+ * Có chọn nhà máy trước (radio), sau đó vị trí chỉ hiện các tin thuộc khu đó.
  */
 $dialogJobs = $dialogJobs ?? \App\Models\Job::latestPublished(50);
 $applyBranches = $applyBranches ?? \App\Models\Branch::active();
@@ -53,7 +53,7 @@ foreach ($dialogJobs as $dialogJob) {
         </div>
 
         <fieldset>
-          <legend class="form-label">Khu vực muốn làm việc <span class="req">*</span></legend>
+          <legend class="form-label">Nhà máy muốn làm việc <span class="req">*</span></legend>
           <div class="apply-branch-picker" data-apply-branches>
             <?php foreach ($applyBranches as $applyBranch): ?>
             <label class="apply-branch-option">
@@ -63,14 +63,14 @@ foreach ($dialogJobs as $dialogJob) {
             </label>
             <?php endforeach; ?>
           </div>
-          <p class="form-hint">Chọn khu vực bạn muốn làm việc — danh sách vị trí bên dưới sẽ lọc theo khu vực đó.</p>
+          <p class="form-hint">Chọn nhà máy bạn muốn làm việc — danh sách vị trí bên dưới sẽ lọc theo nhà máy đó.</p>
           <p class="field-error" data-error-for="branch_slug"></p>
         </fieldset>
 
         <div>
           <label class="form-label" for="apply-dialog-job">Vị trí mong muốn <span class="req">*</span></label>
           <select id="apply-dialog-job" name="job_slug" required class="form-input">
-            <option value="">— Chọn khu vực trước —</option>
+            <option value="">— Chọn nhà máy trước —</option>
             <?php foreach ($dialogJobData as $dialogJobOption): ?>
             <option value="<?= e($dialogJobOption['slug']) ?>" data-branch="<?= e($dialogJobOption['branch']) ?>">
               <?= e($dialogJobOption['title']) ?><?= $dialogJobOption['salary'] !== '' ? ' — ' . e($dialogJobOption['salary']) : '' ?>
@@ -78,7 +78,7 @@ foreach ($dialogJobs as $dialogJob) {
             <?php endforeach; ?>
             <option value="khac">Vị trí khác — ghi rõ ở ghi chú</option>
           </select>
-          <p class="form-hint" id="apply-dialog-job-hint">Chọn khu vực trước để xem vị trí đang tuyển tại khu đó.</p>
+          <p class="form-hint" id="apply-dialog-job-hint">Chọn nhà máy trước để xem vị trí đang tuyển tại khu đó.</p>
           <p class="field-error" data-error-for="job_slug"></p>
         </div>
 

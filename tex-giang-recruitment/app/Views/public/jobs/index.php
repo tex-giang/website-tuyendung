@@ -176,7 +176,7 @@ $end = min($result['page'] * $result['per_page'], $result['total']);
       <?php endif; ?>
 
       <p class="mt-8 text-[14px] leading-[1.6] text-muted">
-        Không thấy vị trí phù hợp? Xem <a href="<?= url('contact') ?>" class="text-body underline underline-offset-2 hover:text-accent">người phụ trách theo khu vực</a> để được tư vấn nhanh.
+        Không thấy vị trí phù hợp? Xem <a href="<?= url('contact') ?>" class="text-body underline underline-offset-2 hover:text-accent">người phụ trách theo nhà máy</a> để được tư vấn nhanh.
       </p>
     </div>
   </div>

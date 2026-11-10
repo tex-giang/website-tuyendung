@@ -4,8 +4,8 @@
  * Form là POST thật về /apply; nếu JS lỗi hoặc trình duyệt không hỗ trợ <dialog>,
  * người dùng vẫn mở được trang ứng tuyển đầy đủ như bình thường.
  *
- * Chọn khu vực (radio nhóm `branch_slug`) trước → danh sách vị trí `job_slug`
- * được lọc theo đúng các tin đang tuyển của khu vực đó.
+ * Chọn nhà máy (radio nhóm `branch_slug`) trước → danh sách vị trí `job_slug`
+ * được lọc theo đúng các tin đang tuyển của nhà máy đó.
  */
 (function () {
   'use strict';
@@ -50,7 +50,7 @@
 
     var placeholder = document.createElement('option');
     placeholder.value = '';
-    placeholder.textContent = branchSlug ? '— Chọn vị trí —' : '— Chọn khu vực trước —';
+    placeholder.textContent = branchSlug ? '— Chọn vị trí —' : '— Chọn nhà máy trước —';
     jobSelect.appendChild(placeholder);
 
     list.forEach(function (job) {
@@ -73,11 +73,11 @@
 
     if (jobHint) {
       if (!branchSlug) {
-        jobHint.textContent = 'Chọn khu vực trước để xem vị trí đang tuyển tại khu đó.';
+        jobHint.textContent = 'Chọn nhà máy trước để xem vị trí đang tuyển tại khu đó.';
       } else if (list.length === 0) {
-        jobHint.textContent = 'Khu vực này chưa có vị trí đang tuyển — chọn “Vị trí khác” hoặc chọn khu vực khác.';
+        jobHint.textContent = 'Nhà máy này chưa có vị trí đang tuyển — chọn “Vị trí khác” hoặc chọn nhà máy khác.';
       } else {
-        jobHint.textContent = list.length + ' vị trí đang tuyển tại khu vực này.';
+        jobHint.textContent = list.length + ' vị trí đang tuyển tại nhà máy này.';
       }
     }
   }
@@ -120,7 +120,7 @@
     if (close) close.focus();
   }
 
-  /** Mở dialog từ link ?job=...: tự chọn đúng khu vực rồi chọn vị trí đó. */
+  /** Mở dialog từ link ?job=...: tự chọn đúng nhà máy rồi chọn vị trí đó. */
   function prefillFromLink(data) {
     var jobSlug = data && data.job ? String(data.job) : '';
     if (!jobSlug) {
@@ -194,7 +194,7 @@
     open({ job: url.searchParams.get('job') || '' }, link);
   });
 
-  // Trạng thái ban đầu: chưa chọn khu vực → ô vị trí tạm khoá.
+  // Trạng thái ban đầu: chưa chọn nhà máy → ô vị trí tạm khoá.
   syncPositions();
 
   // ---- Gửi hồ sơ bằng AJAX: validate hiển thị NGAY trên dialog ----

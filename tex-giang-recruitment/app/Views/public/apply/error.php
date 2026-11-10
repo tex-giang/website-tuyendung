@@ -15,7 +15,7 @@ $message = $message ?? 'Có lỗi khi gửi hồ sơ. Vui lòng thử lại.';
       <ul class="mt-4 space-y-4 text-[16px] leading-[1.6] text-muted">
         <li><span class="block font-medium text-body">Kiểm tra tệp CV</span> Chỉ nhận PDF, DOC, DOCX, JPG, PNG và tối đa 10MB.</li>
         <li><span class="block font-medium text-body">Gửi lại</span> Bấm nút bên dưới, điền lại nhanh các trường bắt buộc.</li>
-        <li><span class="block font-medium text-body">Vẫn lỗi?</span> Liên hệ người phụ trách theo khu vực tại
+        <li><span class="block font-medium text-body">Vẫn lỗi?</span> Liên hệ người phụ trách theo nhà máy tại
           <a href="<?= url('contact') ?>" class="text-body underline underline-offset-2 hover:text-accent">trang Liên hệ</a>
           để nhân sự nhận hồ sơ trực tiếp.</li>
       </ul>

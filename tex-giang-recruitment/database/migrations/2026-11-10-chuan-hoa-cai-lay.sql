@@ -1,5 +1,5 @@
 -- ============================================================================
--- Chuẩn hoá tên khu vực: "Cái Lậy" → "Cai Lậy" (bỏ dấu sắc ở chữ "Cái")
+-- Chuẩn hoá tên nhà máy: "Cái Lậy" → "Cai Lậy" (bỏ dấu sắc ở chữ "Cái")
 --
 -- Bản an toàn: tự quét MỌI cột text đang có trong database rồi thay thế,
 -- nên chạy được cả khi database thiếu bảng/cột (không báo "Unknown column"

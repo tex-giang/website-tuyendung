@@ -27,18 +27,18 @@ foreach (\App\Models\Branch::active() as $branchRow) {
         Liên hệ tuyển dụng
       </h1>
       <p class="mt-4 max-w-[62ch] text-[18px] leading-[1.6] text-muted">
-        Phòng Tuyển dụng TEX-GIANG tiếp nhận hồ sơ tại 3 khu vực: Tân Hương, Chợ Gạo và Cai Lậy. Gọi trực tiếp người phụ trách khu vực bạn muốn làm việc, hoặc nộp hồ sơ tại địa chỉ tương ứng bên dưới.
+        Phòng Tuyển dụng TEX-GIANG tiếp nhận hồ sơ tại 3 nhà máy: Tân Hương, Chợ Gạo và Cai Lậy. Gọi trực tiếp người phụ trách nhà máy bạn muốn làm việc, hoặc nộp hồ sơ tại địa chỉ tương ứng bên dưới.
       </p>
     </div><figure class="intro-photo"><img src="<?= asset('images/company/tan-huong-2.webp') ?>" width="360" height="300" alt="Toàn cảnh nhà máy Tân Hương 2 trong hệ thống TEX-GIANG" fetchpriority="high"></figure></div></section>
 
-    <!-- 3 KHU VỰC TIẾP NHẬN HỒ SƠ -->
+    <!-- 3 NHÀ MÁY TIẾP NHẬN HỒ SƠ -->
     <section class="tg-container pb-8 pt-14 lg:pt-20" aria-labelledby="branches-title">
       <div class="max-w-[720px]" data-reveal>
         <h2 id="branches-title" class="text-[clamp(1.5rem,2.6vw,2rem)] font-medium leading-[1.25] text-ink">
-          3 khu vực tiếp nhận hồ sơ
+          3 nhà máy tiếp nhận hồ sơ
         </h2>
         <p class="mt-2 text-[16px] leading-[1.7] text-muted">
-          Mỗi khu vực có người phụ trách tuyển dụng riêng, kèm bản đồ vị trí. Chọn đúng khu vực để được tư vấn nhanh và xếp lịch phỏng vấn gần nhất.
+          Mỗi nhà máy có người phụ trách tuyển dụng riêng, kèm bản đồ vị trí. Chọn đúng nhà máy để được tư vấn nhanh và xếp lịch phỏng vấn gần nhất.
         </p>
       </div>
 
@@ -48,7 +48,7 @@ foreach (\App\Models\Branch::active() as $branchRow) {
         <article id="khu-vuc-tan-huong" class="flex flex-col rounded-card border border-line bg-surface p-6 transition-shadow hover:shadow-float" data-reveal>
           <div class="flex items-center gap-3">
             <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-accent-soft text-[15px] font-semibold text-accent">1</span>
-            <h3 class="text-[18px] font-medium leading-snug text-ink">Khu vực Tân Hương</h3>
+            <h3 class="text-[18px] font-medium leading-snug text-ink">Nhà máy Tân Hương</h3>
           </div>
 
           <dl class="mb-6 mt-5 space-y-4 text-[15px] leading-[1.65]">
@@ -79,10 +79,10 @@ foreach (\App\Models\Branch::active() as $branchRow) {
           <div class="map-frame mb-4">
             <?php if (($mapBySlug['tan-huong'] ?? '') !== ''): ?>
                     <iframe src="<?= e($mapBySlug['tan-huong']) ?>"
-                            title="Bản đồ Khu vực Tân Hương — TEX-GIANG"
+                            title="Bản đồ Nhà máy Tân Hương — TEX-GIANG"
                             style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
                     <?php else: ?>
-                    <p class="grid h-[240px] place-items-center rounded-card bg-surface text-[14px] text-muted">Chưa cấu hình bản đồ cho khu vực này.</p>
+                    <p class="grid h-[240px] place-items-center rounded-card bg-surface text-[14px] text-muted">Chưa cấu hình bản đồ cho nhà máy này.</p>
                     <?php endif; ?>
           </div>
 
@@ -98,7 +98,7 @@ foreach (\App\Models\Branch::active() as $branchRow) {
         <article id="khu-vuc-cho-gao" class="flex flex-col rounded-card border border-line bg-surface p-6 transition-shadow hover:shadow-float" data-reveal>
           <div class="flex items-center gap-3">
             <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-accent-soft text-[15px] font-semibold text-accent">2</span>
-            <h3 class="text-[18px] font-medium leading-snug text-ink">Khu vực Chợ Gạo</h3>
+            <h3 class="text-[18px] font-medium leading-snug text-ink">Nhà máy Chợ Gạo</h3>
           </div>
 
           <dl class="mb-6 mt-5 space-y-4 text-[15px] leading-[1.65]">
@@ -129,10 +129,10 @@ foreach (\App\Models\Branch::active() as $branchRow) {
           <div class="map-frame mb-4">
             <?php if (($mapBySlug['cho-gao'] ?? '') !== ''): ?>
                     <iframe src="<?= e($mapBySlug['cho-gao']) ?>"
-                            title="Bản đồ Khu vực Chợ Gạo — TEX-GIANG"
+                            title="Bản đồ Nhà máy Chợ Gạo — TEX-GIANG"
                             style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
                     <?php else: ?>
-                    <p class="grid h-[240px] place-items-center rounded-card bg-surface text-[14px] text-muted">Chưa cấu hình bản đồ cho khu vực này.</p>
+                    <p class="grid h-[240px] place-items-center rounded-card bg-surface text-[14px] text-muted">Chưa cấu hình bản đồ cho nhà máy này.</p>
                     <?php endif; ?>
           </div>
 
@@ -148,7 +148,7 @@ foreach (\App\Models\Branch::active() as $branchRow) {
         <article id="khu-vuc-cai-lay" class="flex flex-col rounded-card border border-line bg-surface p-6 transition-shadow hover:shadow-float" data-reveal>
           <div class="flex items-center gap-3">
             <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-accent-soft text-[15px] font-semibold text-accent">3</span>
-            <h3 class="text-[18px] font-medium leading-snug text-ink">Khu vực Cai Lậy</h3>
+            <h3 class="text-[18px] font-medium leading-snug text-ink">Nhà máy Cai Lậy</h3>
           </div>
 
           <dl class="mb-6 mt-5 space-y-4 text-[15px] leading-[1.65]">
@@ -179,10 +179,10 @@ foreach (\App\Models\Branch::active() as $branchRow) {
           <div class="map-frame mb-4">
             <?php if (($mapBySlug['cai-lay'] ?? '') !== ''): ?>
                     <iframe src="<?= e($mapBySlug['cai-lay']) ?>"
-                            title="Bản đồ Khu vực Cai Lậy — TEX-GIANG"
+                            title="Bản đồ Nhà máy Cai Lậy — TEX-GIANG"
                             style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
                     <?php else: ?>
-                    <p class="grid h-[240px] place-items-center rounded-card bg-surface text-[14px] text-muted">Chưa cấu hình bản đồ cho khu vực này.</p>
+                    <p class="grid h-[240px] place-items-center rounded-card bg-surface text-[14px] text-muted">Chưa cấu hình bản đồ cho nhà máy này.</p>
                     <?php endif; ?>
           </div>
 
@@ -202,10 +202,10 @@ foreach (\App\Models\Branch::active() as $branchRow) {
       <div class="mx-auto max-w-[860px]">
         <div class="rounded-media border border-line bg-surface p-6 lg:p-10" data-reveal>
           <h2 class="text-[clamp(1.375rem,2.4vw,1.75rem)] font-medium leading-[1.25] text-ink">
-            Gửi câu hỏi cho khu vực bạn muốn làm việc
+            Gửi câu hỏi cho nhà máy bạn muốn làm việc
           </h2>
           <p class="mt-2 max-w-[62ch] text-[16px] leading-[1.7] text-muted">
-            Chọn khu vực và để lại thông tin — người phụ trách tuyển dụng khu vực đó sẽ gọi lại trong giờ làm việc.
+            Chọn nhà máy và để lại thông tin — người phụ trách tuyển dụng nhà máy đó sẽ gọi lại trong giờ làm việc.
           </p>
 
           <?php
@@ -245,12 +245,12 @@ foreach (\App\Models\Branch::active() as $branchRow) {
               <?php if ($err('email')): ?><p class="field-error"><?= e($err('email')) ?></p><?php endif; ?>
             </div>
             <div class="sm:col-span-2">
-              <label class="form-label" for="contact-area">Khu vực muốn liên hệ <span class="req">*</span></label>
+              <label class="form-label" for="contact-area">Nhà máy muốn liên hệ <span class="req">*</span></label>
               <select id="contact-area" name="area" required class="form-input">
-                <option value="">— Chọn khu vực —</option>
-                <option value="tan-huong"<?= $val('area', (string) ($_GET['khu-vuc'] ?? '')) === 'tan-huong' ? ' selected' : '' ?>>Khu vực Tân Hương</option>
-                <option value="cho-gao"<?= $val('area', (string) ($_GET['khu-vuc'] ?? '')) === 'cho-gao' ? ' selected' : '' ?>>Khu vực Chợ Gạo</option>
-                <option value="cai-lay"<?= $val('area', (string) ($_GET['khu-vuc'] ?? '')) === 'cai-lay' ? ' selected' : '' ?>>Khu vực Cai Lậy</option>
+                <option value="">— Chọn nhà máy —</option>
+                <option value="tan-huong"<?= $val('area', (string) ($_GET['khu-vuc'] ?? '')) === 'tan-huong' ? ' selected' : '' ?>>Nhà máy Tân Hương</option>
+                <option value="cho-gao"<?= $val('area', (string) ($_GET['khu-vuc'] ?? '')) === 'cho-gao' ? ' selected' : '' ?>>Nhà máy Chợ Gạo</option>
+                <option value="cai-lay"<?= $val('area', (string) ($_GET['khu-vuc'] ?? '')) === 'cai-lay' ? ' selected' : '' ?>>Nhà máy Cai Lậy</option>
                 <option value="khac"<?= $val('area') === 'khac' ? ' selected' : '' ?>>Không chắc — cần tư vấn thêm</option>
               </select>
               <?php if ($err('area')): ?><p class="field-error"><?= e($err('area')) ?></p><?php endif; ?>

@@ -43,7 +43,7 @@ $branchContacts = \App\Models\BranchContact::activeGrouped();
           <?php $branchPhoneList = $branchContacts[(int) $branch['id']] ?? []; ?>
           <?php if ($branchPhoneList === []) continue; ?>
           <div>
-            <p class="font-medium text-ink">Khu vực <?= e($branch['name']) ?></p>
+            <p class="font-medium text-ink">Nhà máy <?= e($branch['name']) ?></p>
             <ul class="mt-0.5 flex flex-wrap items-baseline gap-x-4 gap-y-1">
               <?php foreach ($branchPhoneList as $branchContact): ?>
               <li class="flex items-baseline gap-1.5 whitespace-nowrap">
@@ -173,7 +173,7 @@ $branchContacts = \App\Models\BranchContact::activeGrouped();
       <?php foreach ($branches as $branch): ?>
       <?php $contacts = $branchContacts[(int) $branch['id']] ?? []; ?>
       <section class="rounded-card border border-line px-3.5 py-2.5">
-        <p class="text-[13px] font-medium leading-snug text-ink">Khu vực <?= e($branch['name']) ?></p>
+        <p class="text-[13px] font-medium leading-snug text-ink">Nhà máy <?= e($branch['name']) ?></p>
         <?php if ($contacts !== []): ?>
         <ul class="mt-1.5 space-y-1">
           <?php foreach ($contacts as $contact): ?>
