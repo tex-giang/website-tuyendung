@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controllers\Public;
 
 use App\Core\Controller;
+use App\Core\Seo;
 use App\Models\Branch;
 use App\Models\Category;
 use App\Models\Job;
@@ -47,6 +48,15 @@ final class JobController extends Controller
         $page = max(1, (int) ($_GET['page'] ?? 1));
         $result = Job::paginate($filters, $page, $perPage);
 
+        // ItemList giúp Google hiểu đây là danh sách tin, không phải trang chi tiết.
+        $listing = [];
+        foreach ($result['items'] as $item) {
+            $listing[] = [
+                'url'  => url('jobs/' . $item['slug']),
+                'name' => (string) preg_replace('/^\d+\s+/', '', (string) $item['title']),
+            ];
+        }
+
         $this->view('public/jobs/index', [
             'result'      => $result,
             'filters'     => $filters,
@@ -61,6 +71,10 @@ final class JobController extends Controller
                 'nav'         => 'jobs',
                 // Drawer bộ lọc mobile + tự submit khi đổi select/sort.
                 'scripts'     => ['jobs.js'],
+                'jsonld'      => [
+                    Seo::itemList($listing, 'Việc làm đang tuyển tại ' . settings('legal_name')),
+                    Seo::breadcrumbs([['Trang chủ', ''], ['Việc làm', 'jobs']]),
+                ],
             ],
         ]);
     }
@@ -76,6 +90,8 @@ final class JobController extends Controller
 
         Job::incrementViews((int) $job['id']);
 
+        $title = (string) preg_replace('/^\d+\s+/', '', (string) $job['title']);
+
         $this->view('public/jobs/detail', [
             'job'     => $job,
             'related' => Job::related($job, 3),
@@ -85,6 +101,16 @@ final class JobController extends Controller
                 'body_class'  => 'tg-public page-job-detail',
                 'nav'         => 'jobs',
                 'og_title'    => $job['title'],
+                // JobPosting là điều kiện duy nhất để tin lên Google Jobs.
+                'jsonld'      => [
+                    Seo::jobPosting($job),
+                    Seo::breadcrumbs([
+                        ['Trang chủ', ''],
+                        ['Việc làm', 'jobs'],
+                        [$title, 'jobs/' . $job['slug']],
+                    ]),
+                    Seo::organization(),
+                ],
             ],
         ]);
     }

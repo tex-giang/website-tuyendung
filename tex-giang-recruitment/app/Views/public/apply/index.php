@@ -8,6 +8,8 @@ $val = static fn(string $key, string $default = ''): string => (string) ($old[$k
 $err = static fn(string $key): string => (string) ($errors[$key] ?? '');
 $positionValue = $val('job_slug');
 $branchValue = $val('branch_slug');
+// Form ứng tuyển không có nội dung tìm kiếm: cho Google đọc link nhưng không lập chỉ mục.
+$page['robots'] = 'noindex, follow';
 ?>
 <section class="tg-container pt-14 lg:pt-20">
   <div class="page-intro">

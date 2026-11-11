@@ -22,7 +22,9 @@ $scripts = $page['scripts'] ?? [];
   <link rel="stylesheet" href="<?= asset('css/utilities.css') ?>">
   <link rel="stylesheet" href="<?= asset('css/custom.css') ?>">
   <link rel="stylesheet" href="<?= asset('css/public.css') ?>">
-  <link rel="icon" href="<?= asset('images/logo-tgi.png') ?>" type="image/png">
+  <link rel="icon" href="<?= url('favicon.ico') ?>" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="<?= asset('images/favicons/favicon-32x32.png') ?>">
+  <link rel="apple-touch-icon" sizes="180x180" href="<?= asset('images/favicons/apple-touch-icon.png') ?>">
 </head>
 <body class="<?= e($bodyClass) ?>">
 

@@ -1,6 +1,7 @@
 <?php
 /** Trang báo lỗi gửi hồ sơ. */
 $message = $message ?? 'Có lỗi khi gửi hồ sơ. Vui lòng thử lại.';
+$page['robots'] = 'noindex, nofollow';
 ?>
 <div class="tg-container">
   <div class="mx-auto max-w-[640px]">

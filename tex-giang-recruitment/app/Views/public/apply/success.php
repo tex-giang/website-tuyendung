@@ -1,6 +1,8 @@
 <?php
 /** Trang xác nhận đã gửi hồ sơ (thật, lưu DB). */
 $last = $last ?? [];
+// Trang xác nhận cá nhân hoá theo hồ sơ vừa gửi — không cho lập chỉ mục.
+$page['robots'] = 'noindex, nofollow';
 ?>
 <div class="tg-container">
   <div class="mx-auto max-w-[640px]">

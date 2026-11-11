@@ -5,6 +5,7 @@ use App\Controllers\Public\HomeController;
 use App\Controllers\Public\JobController;
 use App\Controllers\Public\ApplicationController;
 use App\Controllers\Public\PageController;
+use App\Controllers\Public\SeoController;
 use App\Middleware\CsrfMiddleware;
 
 $csrf = static fn(): array => [static fn(): mixed => CsrfMiddleware::handle()];
@@ -31,6 +32,10 @@ $router->get('/apply/error', [ApplicationController::class, 'error']);
 $router->get('/news', [PageController::class, 'news']);
 $router->get('/news/{slug}', [PageController::class, 'newsDetail']);
 $router->post('/news/subscribe', [PageController::class, 'subscribe'], $csrf());
+
+// SEO: robots.txt + sitemap.xml sinh từ database (tin/bài mới tự vào sitemap).
+$router->get('/robots.txt', [SeoController::class, 'robots']);
+$router->get('/sitemap.xml', [SeoController::class, 'sitemap']);
 
 $router->get('/about', [PageController::class, 'about']);
 $router->get('/why-tex-giang', [PageController::class, 'why']);

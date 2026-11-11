@@ -5,6 +5,7 @@ namespace App\Controllers\Public;
 
 use App\Core\Controller;
 use App\Core\Csrf;
+use App\Core\Seo;
 use App\Core\Session;
 use App\Models\ContactMessage;
 use App\Models\ContentItem;
@@ -27,6 +28,9 @@ final class PageController extends Controller
                     . 'Cai Lậy, Chợ Gạo (Đồng Tháp), khoảng 3.500 lao động, chứng nhận SA8000, ISO 9001, OEKO-TEX.',
                 'body_class'  => 'tg-public page-about',
                 'nav'         => 'about',
+                'jsonld'      => [
+                    Seo::breadcrumbs([['Trang chủ', ''], ['Về TEX-GIANG', 'about']]),
+                ],
             ],
         ]);
     }
@@ -54,6 +58,9 @@ final class PageController extends Controller
                     . 'phụ cấp nuôi con nhỏ, xe đưa rước và cơm ca tại TEX-GIANG.',
                 'body_class'  => 'tg-public page-why',
                 'nav'         => 'why-tex-giang',
+                'jsonld'      => [
+                    Seo::breadcrumbs([['Trang chủ', ''], ['Phúc lợi & vì sao chọn TEX-GIANG', 'why-tex-giang']]),
+                ],
             ],
         ]);
     }
@@ -71,6 +78,14 @@ final class PageController extends Controller
 
         $result = Post::paginate(max(1, (int) ($_GET['page'] ?? 1)), 6, $categorySlug !== '' ? $categorySlug : null);
 
+        $listing = [];
+        foreach ($result['items'] as $item) {
+            $listing[] = [
+                'url'  => url('news/' . $item['slug']),
+                'name' => (string) $item['title'],
+            ];
+        }
+
         $this->view('public/news/index', [
             'result'       => $result,
             'categories'   => $categories,
@@ -83,6 +98,10 @@ final class PageController extends Controller
                     . settings('legal_name') . ', KCN Tân Hương, Đồng Tháp.',
                 'body_class'  => 'tg-public page-news',
                 'nav'         => 'news',
+                'jsonld'      => [
+                    Seo::itemList($listing, 'Tin tức & tuyển dụng ' . settings('site_name')),
+                    Seo::breadcrumbs([['Trang chủ', ''], ['Tin tức', 'news']]),
+                ],
             ],
         ]);
     }
@@ -105,6 +124,15 @@ final class PageController extends Controller
                 'body_class'  => 'tg-public page-news-detail',
                 'nav'         => 'news',
                 'og_image'    => $post['image_path'] ?? null,
+                'jsonld'      => [
+                    Seo::article($post),
+                    Seo::organization(),
+                    Seo::breadcrumbs([
+                        ['Trang chủ', ''],
+                        ['Tin tức', 'news'],
+                        [(string) $post['title'], 'news/' . $post['slug']],
+                    ]),
+                ],
             ],
         ]);
     }
@@ -146,6 +174,9 @@ final class PageController extends Controller
                     . ': địa chỉ KCN Tân Hương, số điện thoại người phụ trách, email và lịch tiếp nhận hồ sơ.',
                 'body_class'  => 'tg-public page-contact',
                 'nav'         => 'contact',
+                'jsonld'      => [
+                    Seo::breadcrumbs([['Trang chủ', ''], ['Liên hệ', 'contact']]),
+                ],
             ],
         ]);
     }
