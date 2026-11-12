@@ -124,6 +124,7 @@ final class PageController extends Controller
                 'body_class'  => 'tg-public page-news-detail',
                 'nav'         => 'news',
                 'og_image'    => $post['image_path'] ?? null,
+                'scripts'     => ['news-lightbox.js'],
                 'jsonld'      => [
                     Seo::article($post),
                     Seo::organization(),

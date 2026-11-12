@@ -177,14 +177,77 @@ function slugify(string $text): string
     return trim($text, '-');
 }
 
-/** Định dạng ngày Việt Nam an toàn với null */
+/** Định dạng ngày Việt Nam an toàn với null. Nhận cả dd/mm/yyyy và yyyy-mm-dd. */
 function vn_date(?string $date, string $format = 'd/m/Y'): string
 {
     if ($date === null || $date === '') {
         return '';
     }
+    $date = trim($date);
+    // Chuỗi dạng dd/mm/yyyy: PHP hiểu nhầm thành m/d/Y nếu dùng strtotime.
+    if (preg_match('#^\d{1,2}/\d{1,2}/\d{4}#', $date) === 1) {
+        $parsed = \DateTimeImmutable::createFromFormat('!d/m/Y', substr($date, 0, 10));
+        if ($parsed instanceof \DateTimeImmutable) {
+            return $parsed->format($format);
+        }
+    }
     $ts = strtotime($date);
     return $ts === false ? '' : date($format, $ts);
+}
+
+/**
+ * Chuẩn hoá ngày nhập tay về Y-m-d; null nếu không hợp lệ.
+ * Nhận dd/mm/yyyy, dd-mm-yyyy, dd.mm.yyyy, yyyy-mm-dd.
+ */
+function vn_parse_date(?string $value): ?string
+{
+    $datetime = vn_parse_datetime($value);
+    if ($datetime === null) {
+        return null;
+    }
+
+    return substr($datetime, 0, 10);
+}
+
+/**
+ * Chuẩn hoá ngày + giờ nhập tay về Y-m-d H:i:s; null nếu không hợp lệ.
+ * Ngày không kèm giờ => 08:00:00.
+ */
+function vn_parse_datetime(?string $value): ?string
+{
+    if ($value === null) {
+        return null;
+    }
+    $value = trim($value);
+    if ($value === '') {
+        return null;
+    }
+    $value = str_replace('T', ' ', $value);
+
+    $dateFormats = ['d/m/Y', 'd-m-Y', 'd.m.Y', 'Y-m-d', 'Y/m/d', 'j/n/Y', 'j-n-Y'];
+    $timeFormats = ['H:i:s', 'H:i'];
+
+    $formats = [];
+    foreach ($dateFormats as $dateFormat) {
+        foreach ($timeFormats as $timeFormat) {
+            $formats[] = $dateFormat . ' ' . $timeFormat;
+        }
+    }
+    $formats = array_merge($formats, $dateFormats);
+
+    foreach ($formats as $format) {
+        $parsed = \DateTimeImmutable::createFromFormat('!' . $format, $value);
+        if ($parsed instanceof \DateTimeImmutable) {
+            $errors = \DateTimeImmutable::getLastErrors();
+            if ($errors === false || ($errors['warning_count'] === 0 && $errors['error_count'] === 0)) {
+                $hasTime = str_contains($format, 'H:i');
+
+                return $parsed->format($hasTime ? 'Y-m-d H:i:s' : 'Y-m-d') . ($hasTime ? '' : ' 08:00:00');
+            }
+        }
+    }
+
+    return null;
 }
 
 /** Tách văn bản nhiều dòng thành mảng dòng không rỗng */

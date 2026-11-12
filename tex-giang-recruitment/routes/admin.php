@@ -62,6 +62,8 @@ $router->get('/admin/visits', [VisitStatController::class, 'index'], $guard('das
 $router->get('/admin/jobs', [JobController::class, 'index'], $guard('jobs'));
 $router->get('/admin/jobs/create', [JobController::class, 'create'], $guard('jobs'));
 $router->post('/admin/jobs/create', [JobController::class, 'store'], $guard('jobs', true));
+$router->get('/admin/jobs/template', [JobController::class, 'template'], $guard('jobs'));
+$router->post('/admin/jobs/import', [JobController::class, 'import'], $guard('jobs', true));
 $router->get('/admin/jobs/{id}/edit', [JobController::class, 'edit'], $guard('jobs'));
 $router->post('/admin/jobs/{id}/edit', [JobController::class, 'update'], $guard('jobs', true));
 $router->post('/admin/jobs/{id}/status', [JobController::class, 'changeStatus'], $guard('jobs', true));

@@ -187,7 +187,7 @@ foreach (($urgentJobs ?? []) as $uJob) {
         'title'      => preg_replace('/^\d+\s+/', '', (string) $uJob['title']),
         'salary'     => salary_short((string) ($uJob['salary_text'] ?? '')) ?: 'Thỏa thuận',
         'location'   => (string) ($uJob['branch_name'] ?? ''),
-        'deadline'   => vn_date($uJob['deadline'] ?? null) ?: '—',
+        'deadline'   => vn_date($uJob['deadline'] ?? null) ?: 'Chưa xác định',
         'status'     => (int) ($uJob['is_urgent'] ?? 0) === 1 ? 'urgent' : 'expiring',
         'detail_url' => url('jobs/' . $uJob['slug']),
     ];

@@ -254,9 +254,11 @@ final class PostController extends Controller
             $values = array_merge($values, $old);
         }
 
+        // Hiển thị ngày giờ theo định dạng Việt Nam dd/mm/yyyy HH:MM cho ô nhập + date picker.
         $publishedAt = (string) ($values['published_at'] ?? '');
-        if ($publishedAt !== '' && !str_contains($publishedAt, 'T')) {
-            $publishedAt = date('Y-m-d\TH:i', strtotime($publishedAt));
+        if ($publishedAt !== '') {
+            $parsed = vn_parse_datetime($publishedAt);
+            $publishedAt = $parsed !== null ? date('d/m/Y H:i', strtotime($parsed)) : $publishedAt;
         }
 
         $this->view('admin/posts/form', [
@@ -313,12 +315,11 @@ final class PostController extends Controller
             }
         }
         if ($data['published_at'] !== '') {
-            $normalized = str_replace('T', ' ', $data['published_at']);
-            $timestamp = strtotime($normalized);
-            if ($timestamp === false) {
-                $errors['published_at'] = 'Ngày đăng không đúng định dạng.';
+            $parsed = vn_parse_datetime((string) $data['published_at']);
+            if ($parsed === null) {
+                $errors['published_at'] = 'Ngày đăng không đúng định dạng (dd/mm/yyyy HH:MM).';
             } else {
-                $data['published_at'] = date('Y-m-d H:i:s', $timestamp);
+                $data['published_at'] = $parsed;
             }
         } elseif ($data['status'] === 'published') {
             $data['published_at'] = date('Y-m-d H:i:s');

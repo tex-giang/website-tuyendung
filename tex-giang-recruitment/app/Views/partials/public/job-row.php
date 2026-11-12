@@ -21,7 +21,7 @@ $applyUrl = url('apply?job=' . urlencode((string) $job['slug']));
     <p class="mt-2 line-clamp-2 text-[16px] leading-[1.6] text-muted"><?= e(excerpt((string) $job['description'], 180)) ?></p>
 
     <p class="mt-3 text-[14px] text-muted"><?= e($job['branch_name'] ?? '') ?><?= $job['location'] ? ' — ' . e((string) $job['location']) : '' ?>
-      · Hạn nộp <?= e(vn_date($job['deadline'])) ?: '—' ?><?= $job['code'] ? ' · Mã ' . e((string) $job['code']) : '' ?></p>
+      · Hạn nộp <?= e(vn_date($job['deadline'] ?: '') ?: 'Chưa xác định') ?><?= $job['code'] ? ' · Mã ' . e((string) $job['code']) : '' ?></p>
   </div>
 
   <div class="job-row__side">

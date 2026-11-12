@@ -4,14 +4,16 @@ $page['ajax_fragment'] = true;
 $isEdit = $job !== null;
 $action = $isEdit ? url('admin/jobs/' . $job['id'] . '/edit') : url('admin/jobs/create');
 $val = static fn(string $key, string $default = ''): string => (string) ($values[$key] ?? $default);
-// datetime-local cần định dạng Y-m-d\TH:i
+// Hiển thị ngày theo định dạng Việt Nam dd/mm/yyyy (ô text, không dùng input date của trình duyệt).
 $postedAt = $val('posted_at');
-if ($postedAt !== '' && !str_contains($postedAt, 'T')) {
-    $postedAt = date('Y-m-d\TH:i', strtotime($postedAt));
+if ($postedAt !== '') {
+    $postedParsed = vn_parse_datetime($postedAt);
+    $postedAt = $postedParsed !== null ? date('d/m/Y H:i', strtotime($postedParsed)) : $postedAt;
 }
 $deadline = $val('deadline');
-if ($deadline !== '' && str_contains($deadline, ' ')) {
-    $deadline = substr($deadline, 0, 10);
+if ($deadline !== '') {
+    $deadlineParsed = vn_parse_date($deadline);
+    $deadline = $deadlineParsed !== null ? date('d/m/Y', strtotime($deadlineParsed)) : $deadline;
 }
 ?>
 <div class="admin-page-head admin-job-heading">
@@ -107,23 +109,9 @@ if ($deadline !== '' && str_contains($deadline, ' ')) {
   <section class="admin-job-form__section" aria-labelledby="job-section-pay">
     <div class="admin-job-form__intro">
       <h2 id="job-section-pay">Lương và yêu cầu</h2>
-      <p>Mức lương hiển thị, khoảng lương để lọc và hình thức làm việc.</p>
+      <p>Nhập lương tối thiểu/tối đa — phần hiển thị và khoảng lương tự sinh nếu để trống.</p>
     </div>
     <div class="field-grid admin-job-form__fields">
-      <label class="field">
-        <span class="field__label">Lương hiển thị</span>
-        <input class="field__input" type="text" name="salary_text" value="<?= e($val('salary_text')) ?>" maxlength="150"
-               placeholder="8.000.000 - 16.000.000 VNĐ">
-      </label>
-      <label class="field">
-        <span class="field__label">Khoảng lương</span>
-        <select class="field__input<?= isset($errors['salary_range']) ? ' is-invalid' : '' ?>" name="salary_range">
-          <?php foreach ($salaryRanges as $key => $label): ?>
-          <option value="<?= e($key) ?>"<?= (string) $val('salary_range') === (string) $key ? ' selected' : '' ?>><?= e($label) ?></option>
-          <?php endforeach; ?>
-        </select>
-        <?php if (isset($errors['salary_range'])): ?><span class="field__error"><?= e($errors['salary_range']) ?></span><?php endif; ?>
-      </label>
       <label class="field">
         <span class="field__label">Lương tối thiểu (VNĐ)</span>
         <input class="field__input<?= isset($errors['salary_min']) ? ' is-invalid' : '' ?>" type="number" name="salary_min"
@@ -135,6 +123,20 @@ if ($deadline !== '' && str_contains($deadline, ' ')) {
         <input class="field__input<?= isset($errors['salary_max']) ? ' is-invalid' : '' ?>" type="number" name="salary_max"
                min="0" step="100000" value="<?= e($val('salary_max')) ?>" placeholder="16000000">
         <?php if (isset($errors['salary_max'])): ?><span class="field__error"><?= e($errors['salary_max']) ?></span><?php endif; ?>
+      </label>
+      <label class="field">
+        <span class="field__label">Lương hiển thị <span class="admin-muted">(trống = tự sinh)</span></span>
+        <input class="field__input" type="text" name="salary_text" value="<?= e($val('salary_text')) ?>" maxlength="150"
+               placeholder="8.000.000 - 16.000.000 VNĐ">
+      </label>
+      <label class="field">
+        <span class="field__label">Khoảng lương <span class="admin-muted">(trống = tự sinh)</span></span>
+        <select class="field__input<?= isset($errors['salary_range']) ? ' is-invalid' : '' ?>" name="salary_range">
+          <?php foreach ($salaryRanges as $key => $label): ?>
+          <option value="<?= e($key) ?>"<?= (string) $val('salary_range') === (string) $key ? ' selected' : '' ?>><?= e($label) ?></option>
+          <?php endforeach; ?>
+        </select>
+        <?php if (isset($errors['salary_range'])): ?><span class="field__error"><?= e($errors['salary_range']) ?></span><?php endif; ?>
       </label>
       <label class="field">
         <span class="field__label">Kinh nghiệm</span>
@@ -190,15 +192,17 @@ if ($deadline !== '' && str_contains($deadline, ' ')) {
         <input class="field__input" type="number" name="sort_order" value="<?= e($val('sort_order', '0')) ?>">
       </label>
       <label class="field">
-        <span class="field__label">Ngày đăng</span>
-        <input class="field__input<?= isset($errors['posted_at']) ? ' is-invalid' : '' ?>" type="datetime-local" name="posted_at"
-               value="<?= e($postedAt) ?>">
+        <span class="field__label">Ngày đăng <span class="admin-muted">(dd/mm/yyyy HH:MM · trống = hôm nay)</span></span>
+        <input class="field__input<?= isset($errors['posted_at']) ? ' is-invalid' : '' ?>" type="text" name="posted_at"
+               value="<?= e($postedAt) ?>" placeholder="28/10/2026 08:00" autocomplete="off" maxlength="16"
+               data-datepicker="datetime">
         <?php if (isset($errors['posted_at'])): ?><span class="field__error"><?= e($errors['posted_at']) ?></span><?php endif; ?>
       </label>
       <label class="field">
-        <span class="field__label">Hạn nộp hồ sơ</span>
-        <input class="field__input<?= isset($errors['deadline']) ? ' is-invalid' : '' ?>" type="date" name="deadline"
-               value="<?= e($deadline) ?>">
+        <span class="field__label">Hạn nộp hồ sơ <span class="admin-muted">(dd/mm/yyyy · trống = chưa xác định)</span></span>
+        <input class="field__input<?= isset($errors['deadline']) ? ' is-invalid' : '' ?>" type="text" name="deadline"
+               value="<?= e($deadline) ?>" placeholder="30/11/2026" autocomplete="off" maxlength="10"
+               data-datepicker="date">
         <?php if (isset($errors['deadline'])): ?><span class="field__error"><?= e($errors['deadline']) ?></span><?php endif; ?>
       </label>
       <label class="field field--span2 admin-job-form__switch-row">

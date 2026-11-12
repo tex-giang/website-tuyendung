@@ -105,13 +105,15 @@ $currentImage = $val('image_path');
     </div>
     <div class="field-grid admin-cms-fields">
       <label class="field">
-        <span class="field__label">Bắt đầu</span>
-        <input class="field__input<?= $err('starts_at') ? ' is-invalid' : '' ?>" type="datetime-local" name="starts_at" value="<?= e($startsAt) ?>">
+        <span class="field__label">Bắt đầu <span class="admin-muted">(dd/mm/yyyy HH:MM)</span></span>
+        <input class="field__input<?= $err('starts_at') ? ' is-invalid' : '' ?>" type="text" name="starts_at" value="<?= e($startsAt) ?>"
+               placeholder="28/10/2026 08:00" autocomplete="off" data-datepicker="datetime">
         <?php if ($err('starts_at')): ?><span class="field__error"><?= e($err('starts_at')) ?></span><?php endif; ?>
       </label>
       <label class="field">
-        <span class="field__label">Kết thúc</span>
-        <input class="field__input<?= $err('ends_at') ? ' is-invalid' : '' ?>" type="datetime-local" name="ends_at" value="<?= e($endsAt) ?>">
+        <span class="field__label">Kết thúc <span class="admin-muted">(dd/mm/yyyy HH:MM)</span></span>
+        <input class="field__input<?= $err('ends_at') ? ' is-invalid' : '' ?>" type="text" name="ends_at" value="<?= e($endsAt) ?>"
+               placeholder="30/11/2026 23:59" autocomplete="off" data-datepicker="datetime">
         <?php if ($err('ends_at')): ?><span class="field__error"><?= e($err('ends_at')) ?></span><?php endif; ?>
       </label>
       <label class="field">

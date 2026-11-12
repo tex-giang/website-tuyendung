@@ -9,6 +9,7 @@ use App\Models\AuditLog;
 use App\Models\Branch;
 use App\Models\Category;
 use App\Models\Job;
+use App\Services\JobImport;
 
 final class JobController extends Controller
 {
@@ -164,6 +165,189 @@ final class JobController extends Controller
         $this->redirect(url('admin/jobs/create') . '?from=' . (int) $id);
     }
 
+    /** Tải file Excel mẫu (.xlsx) — hỗ trợ ?format=csv để lấy bản CSV. */
+    public function template(): void
+    {
+        $format = strtolower(trim((string) ($_GET['format'] ?? 'xlsx')));
+        if ($format === 'csv' || !class_exists(\ZipArchive::class)) {
+            $csv = JobImport::templateCsv();
+            header('Content-Type: text/csv; charset=utf-8');
+            header('Content-Disposition: attachment; filename="mau-tin-tuyen-dung-' . date('Ymd') . '.csv"');
+            header('Cache-Control: no-store, max-age=0');
+            echo "\xEF\xBB\xBF" . $csv;
+            exit;
+        }
+
+        try {
+            $xlsx = JobImport::templateXlsx();
+        } catch (\Throwable $exception) {
+            error_log('[JOB-TEMPLATE] ' . $exception->getMessage());
+            $csv = JobImport::templateCsv();
+            header('Content-Type: text/csv; charset=utf-8');
+            header('Content-Disposition: attachment; filename="mau-tin-tuyen-dung-' . date('Ymd') . '.csv"');
+            header('Cache-Control: no-store, max-age=0');
+            echo "\xEF\xBB\xBF" . $csv;
+            exit;
+        }
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="mau-tin-tuyen-dung-' . date('Ymd') . '.xlsx"');
+        header('Content-Length: ' . strlen($xlsx));
+        header('Cache-Control: no-store, max-age=0');
+        echo $xlsx;
+        exit;
+    }
+
+    /** Import danh sách tin từ file Excel (.xlsx) hoặc CSV (theo template). */
+    public function import(): void
+    {
+        $redirect = url('admin/jobs');
+        $file = $_FILES['template'] ?? null;
+
+        if (!is_array($file) || (int) ($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+            Session::flash('_error', 'Chưa chọn file template hoặc file tải lên bị lỗi.');
+            $this->redirect($redirect);
+        }
+        if ((int) $file['size'] <= 0 || (int) $file['size'] > JobImport::MAX_BYTES) {
+            Session::flash('_error', 'File rỗng hoặc vượt quá 3 MB.');
+            $this->redirect($redirect);
+        }
+        $extension = strtolower(pathinfo((string) $file['name'], PATHINFO_EXTENSION));
+        if (!in_array($extension, ['xlsx', 'csv', 'txt'], true)) {
+            Session::flash('_error', 'Chỉ nhận file Excel (.xlsx) hoặc CSV (.csv) đúng theo template.');
+            $this->redirect($redirect);
+        }
+
+        try {
+            $parsed = $extension === 'xlsx'
+                ? JobImport::parseXlsx((string) $file['tmp_name'])
+                : JobImport::parse((string) file_get_contents((string) $file['tmp_name']));
+        } catch (\Throwable $exception) {
+            error_log('[JOB-IMPORT] ' . $exception->getMessage());
+            Session::flash('_error', 'Không đọc được file tải lên. Hãy dùng đúng file template (.xlsx hoặc .csv) và thử lại.');
+            $this->redirect($redirect);
+        }
+        if ($parsed['missing'] !== []) {
+            $labels = [];
+            foreach ($parsed['missing'] as $key) {
+                $labels[] = JobImport::COLUMNS[$key][0] ?? $key;
+            }
+            Session::flash('_error', 'File thiếu cột bắt buộc: ' . implode(', ', $labels) . '. Hãy tải lại template mới nhất.');
+            $this->redirect($redirect);
+        }
+
+        $rows = $parsed['rows'];
+        if ($rows === []) {
+            Session::flash('_error', 'File không có dòng dữ liệu nào để import (dòng [MẪU] và dòng ghi chú được bỏ qua).');
+            $this->redirect($redirect);
+        }
+        if (count($rows) > JobImport::MAX_ROWS) {
+            Session::flash('_error', 'Tối đa ' . JobImport::MAX_ROWS . ' dòng mỗi lần import. File đang có ' . count($rows) . ' dòng.');
+            $this->redirect($redirect);
+        }
+
+        // Bảng tra tên/slug -> id cho khu sản xuất và bộ phận.
+        $branchLookup = [];
+        foreach (Branch::all() as $branch) {
+            $branchId = (int) $branch['id'];
+            $branchLookup[(string) $branchId] = $branchId;
+            $branchLookup[JobImport::norm((string) $branch['name'])] = $branchId;
+            $branchLookup[JobImport::branchKey((string) $branch['name'])] = $branchId;
+            $branchLookup[JobImport::norm((string) $branch['slug'])] = $branchId;
+        }
+        $categoryLookup = [];
+        foreach (Category::all() as $category) {
+            $categoryLookup[JobImport::norm((string) $category['name'])] = (int) $category['id'];
+            $categoryLookup[JobImport::norm((string) $category['slug'])] = (int) $category['id'];
+        }
+
+        $userId = (int) Session::get('auth_id');
+        $created = 0;
+        $errors = [];
+
+        foreach ($rows as $row) {
+            $line = (string) ($row['_line'] ?? '?');
+            $branchValue = trim((string) ($row['branch'] ?? ''));
+            $branchId = $branchLookup[JobImport::branchKey($branchValue)]
+                ?? $branchLookup[JobImport::norm($branchValue)]
+                ?? null;
+
+            if ($branchId === null) {
+                $errors[] = 'Dòng ' . $line . ': không nhận diện được khu sản xuất "' . $branchValue . '".';
+                continue;
+            }
+
+            $categoryId = '';
+            $categoryValue = trim((string) ($row['category'] ?? ''));
+            if ($categoryValue !== '') {
+                $categoryId = (string) ($categoryLookup[JobImport::norm($categoryValue)] ?? '');
+                if ($categoryId === '') {
+                    $errors[] = 'Dòng ' . $line . ': không nhận diện được bộ phận "' . $categoryValue . '".';
+                    continue;
+                }
+            }
+
+            $quantity = trim((string) ($row['quantity'] ?? ''));
+            $post = [
+                'title'            => trim((string) ($row['title'] ?? '')),
+                'slug'             => '',
+                'code'             => '',
+                'branch_id'        => (string) $branchId,
+                'category_id'      => $categoryId,
+                'quantity'         => $quantity !== '' ? $quantity : '1',
+                'location'         => trim((string) ($row['location'] ?? '')),
+                'employment_type'  => trim((string) ($row['employment_type'] ?? '')),
+                'experience'       => trim((string) ($row['experience'] ?? '')),
+                'salary_text'      => trim((string) ($row['salary_text'] ?? '')),
+                'salary_min'       => trim((string) ($row['salary_min'] ?? '')),
+                'salary_max'       => trim((string) ($row['salary_max'] ?? '')),
+                'salary_range'     => JobImport::salaryRange((string) ($row['salary_range'] ?? '')),
+                'description'      => trim((string) ($row['description'] ?? '')),
+                'requirements'     => trim((string) ($row['requirements'] ?? '')),
+                'benefits'         => trim((string) ($row['benefits'] ?? '')),
+                'status'           => JobImport::status((string) ($row['status'] ?? '')),
+                'is_urgent'        => JobImport::flag((string) ($row['is_urgent'] ?? '')),
+                'posted_at'        => JobImport::dateTime((string) ($row['posted_at'] ?? '')),
+                'deadline'         => JobImport::date((string) ($row['deadline'] ?? '')),
+                'meta_title'       => trim((string) ($row['meta_title'] ?? '')),
+                'meta_description' => trim((string) ($row['meta_description'] ?? '')),
+                'sort_order'       => '0',
+            ];
+
+            [$data, $rowErrors] = $this->validate($post, null);
+            if ($rowErrors !== []) {
+                $messages = array_slice(array_values($rowErrors), 0, 2);
+                $errors[] = 'Dòng ' . $line . ': ' . implode(' ', $messages);
+                continue;
+            }
+
+            try {
+                $jobId = Job::create($data, $userId);
+                AuditLog::record('job.import', 'job', $jobId, ['title' => $data['title']]);
+                $created++;
+            } catch (\Throwable $exception) {
+                error_log('[JOB-IMPORT] ' . $exception->getMessage());
+                $errors[] = 'Dòng ' . $line . ': lỗi lưu database.';
+            }
+        }
+
+        AuditLog::record('job.import.batch', 'job', null, ['created' => $created, 'failed' => count($errors)]);
+
+        if ($created > 0) {
+            Session::flash('_success', 'Đã import ' . $created . ' tin tuyển dụng từ template.');
+        }
+        if ($errors !== []) {
+            Session::flash(
+                '_error',
+                'Có ' . count($errors) . ' dòng chưa import được: '
+                . implode(' | ', array_slice($errors, 0, 5))
+                . (count($errors) > 5 ? ' …' : '')
+            );
+        }
+
+        $this->redirect($redirect);
+    }
+
     public function destroy(string $id): void
     {
         $jobId = (int) $id;
@@ -262,6 +446,15 @@ final class JobController extends Controller
             'sort_order'       => trim((string) ($post['sort_order'] ?? '0')),
         ];
 
+        // Tự sinh phần lương hiển thị + khoảng lương từ "Lương từ/đến" nếu để trống.
+        // (Template import chỉ có 2 cột lương từ/đến; form admin cũng có thể bỏ trống.)
+        if ($data['salary_text'] === '') {
+            $data['salary_text'] = JobImport::salaryText($data['salary_min'], $data['salary_max']);
+        }
+        if ($data['salary_range'] === '') {
+            $data['salary_range'] = JobImport::salaryRangeFromAmounts($data['salary_min'], $data['salary_max']);
+        }
+
         $errors = [];
 
         if (mb_strlen($data['title']) < 5) {
@@ -291,11 +484,16 @@ final class JobController extends Controller
         if ($data['salary_min'] !== '' && $data['salary_max'] !== '' && (int) $data['salary_max'] < (int) $data['salary_min']) {
             $errors['salary_max'] = 'Lương tối đa phải lớn hơn hoặc bằng lương tối thiểu.';
         }
-        if ($data['deadline'] !== '' && !$this->isDate($data['deadline'])) {
-            $errors['deadline'] = 'Hạn nộp không đúng định dạng ngày.';
+        // Ngày nhập tay dạng dd/mm/yyyy (hoặc dd/mm/yyyy HH:MM, yyyy-mm-dd…) → chuẩn hoá ISO.
+        $deadlineRaw = $data['deadline'];
+        $postedRaw = $data['posted_at'];
+        $parsedDeadline = $deadlineRaw !== '' ? vn_parse_date($deadlineRaw) : '';
+        if ($deadlineRaw !== '' && $parsedDeadline === null) {
+            $errors['deadline'] = 'Hạn nộp không đúng định dạng (dd/mm/yyyy).';
         }
-        if ($data['posted_at'] !== '' && !$this->isDateTime($data['posted_at'])) {
-            $errors['posted_at'] = 'Ngày đăng không đúng định dạng.';
+        $parsedPosted = $postedRaw !== '' ? vn_parse_datetime($postedRaw) : '';
+        if ($postedRaw !== '' && $parsedPosted === null) {
+            $errors['posted_at'] = 'Ngày đăng không đúng định dạng (dd/mm/yyyy HH:MM).';
         }
 
         // Slug: tự sinh nếu để trống, luôn đảm bảo duy nhất.
@@ -326,40 +524,17 @@ final class JobController extends Controller
             $errors['code'] = 'Mã tin đã tồn tại.';
         }
 
-        // Chuẩn hoá ngày để lưu DB.
-        $data['posted_at'] = $data['posted_at'] !== '' ? date('Y-m-d H:i:s', strtotime($data['posted_at'])) : '';
-        // Tin đã đăng mà không nhập ngày đăng => lấy thời điểm hiện tại (tránh tin "mất tích" khỏi danh sách).
-        if ($data['status'] === 'published' && $data['posted_at'] === '') {
+        // Ngày đăng: để trống => mặc định hôm nay (giờ hiện tại).
+        if ($postedRaw === '') {
             $data['posted_at'] = date('Y-m-d H:i:s');
+        } else {
+            $data['posted_at'] = $parsedPosted !== null ? $parsedPosted : date('Y-m-d H:i:s');
         }
-        // Tự tính hạn nộp khi để trống: ngày đăng + số ngày nhận hồ sơ mặc định.
-        if ($data['status'] === 'published' && $data['deadline'] === '') {
-            $days = max(1, min(365, setting_int('jobs_deadline_days', 30)));
-            $base = $data['posted_at'] !== '' ? strtotime($data['posted_at']) : time();
-            $data['deadline'] = date('Y-m-d', strtotime('+' . $days . ' day', $base));
-        }
-        $data['deadline'] = $data['deadline'] !== '' ? date('Y-m-d', strtotime($data['deadline'])) : '';
+        // Hạn nộp: để trống = không giới hạn (hiển thị “Chưa xác định”).
+        $data['deadline'] = $deadlineRaw !== '' && $parsedDeadline !== null ? $parsedDeadline : '';
         $data['sort_order'] = (int) $data['sort_order'];
 
         return [$data, $errors];
-    }
-
-    private function isDate(string $value): bool
-    {
-        $date = \DateTime::createFromFormat('Y-m-d', $value);
-        return $date !== false && $date->format('Y-m-d') === $value;
-    }
-
-    private function isDateTime(string $value): bool
-    {
-        $value = str_replace('T', ' ', $value);
-        foreach (['Y-m-d H:i:s', 'Y-m-d H:i'] as $format) {
-            $date = \DateTime::createFromFormat($format, $value);
-            if ($date !== false) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private function rememberForm(array $data, array $errors): void

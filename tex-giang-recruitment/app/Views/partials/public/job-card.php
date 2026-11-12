@@ -15,7 +15,7 @@ $title = preg_replace('/^\d+\s+/', '', (string) $job['title']) ?? (string) $job[
   </h3>
   <p class="mt-2 line-clamp-2 text-[16px] leading-[1.6] text-muted"><?= e(excerpt((string) $job['description'], 150)) ?></p>
   <p class="mt-4 text-[16px] font-semibold text-accent"><?= e(salary_short((string) $job['salary_text']) ?: 'Thỏa thuận') ?></p>
-  <p class="mt-3 text-[14px] text-muted"><?= e($job['branch_name'] ?? '') ?> · Hạn nộp <?= e(vn_date($job['deadline'])) ?: '—' ?></p>
+  <p class="mt-3 text-[14px] text-muted"><?= e($job['branch_name'] ?? '') ?> · Hạn nộp <?= e(vn_date($job['deadline'] ?: '') ?: 'Chưa xác định') ?></p>
   <div class="mt-auto flex items-center justify-between gap-3 pt-6">
     <a href="<?= $detailUrl ?>" class="text-[16px] text-muted transition-colors hover:text-accent">Xem chi tiết</a>
     <a href="<?= $applyUrl ?>" class="tg-btn tg-btn--ghost h-9 border-0 bg-white px-4 text-[16px]">Ứng tuyển</a>

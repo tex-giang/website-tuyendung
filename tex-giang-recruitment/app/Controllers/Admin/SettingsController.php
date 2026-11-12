@@ -25,7 +25,6 @@ final class SettingsController extends Controller
             'hint' => 'Giá trị mặc định cho tin tuyển dụng và địa chỉ nhận hồ sơ.',
             'fields' => [
                 'jobs_per_page'      => ['Số tin mỗi trang', 'number', 3],
-                'jobs_deadline_days' => ['Số ngày nhận hồ sơ mặc định', 'number', 3],
                 'email'              => ['Email tuyển dụng', 'email', 190],
             ],
         ],

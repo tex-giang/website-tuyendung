@@ -82,9 +82,9 @@ $currentImage = $val('image_path');
         </select>
       </label>
       <label class="field">
-        <span class="field__label">Ngày đăng</span>
-        <input class="field__input<?= $err('published_at') ? ' is-invalid' : '' ?>" type="datetime-local" name="published_at"
-               value="<?= e($publishedAt) ?>">
+        <span class="field__label">Ngày đăng <span class="admin-muted">(dd/mm/yyyy HH:MM)</span></span>
+        <input class="field__input<?= $err('published_at') ? ' is-invalid' : '' ?>" type="text" name="published_at"
+               value="<?= e($publishedAt) ?>" placeholder="28/10/2026 08:00" autocomplete="off" data-datepicker="datetime">
         <span class="admin-muted">Để trống để dùng thời điểm đăng bài.</span>
         <?php if ($err('published_at')): ?><span class="field__error"><?= e($err('published_at')) ?></span><?php endif; ?>
       </label>

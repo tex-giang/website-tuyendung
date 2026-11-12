@@ -179,13 +179,16 @@ final class BannerController extends Controller
             $values = array_merge($values, $old);
         }
 
+        // Hiển thị ngày giờ theo định dạng Việt Nam dd/mm/yyyy HH:MM cho ô nhập + date picker.
         $startsAt = (string) ($values['starts_at'] ?? '');
-        if ($startsAt !== '' && !str_contains($startsAt, 'T')) {
-            $startsAt = date('Y-m-d\TH:i', strtotime($startsAt));
+        if ($startsAt !== '') {
+            $parsed = vn_parse_datetime($startsAt);
+            $startsAt = $parsed !== null ? date('d/m/Y H:i', strtotime($parsed)) : $startsAt;
         }
         $endsAt = (string) ($values['ends_at'] ?? '');
-        if ($endsAt !== '' && !str_contains($endsAt, 'T')) {
-            $endsAt = date('Y-m-d\TH:i', strtotime($endsAt));
+        if ($endsAt !== '') {
+            $parsed = vn_parse_datetime($endsAt);
+            $endsAt = $parsed !== null ? date('d/m/Y H:i', strtotime($parsed)) : $endsAt;
         }
 
         $this->view('admin/banners/form', [
@@ -234,12 +237,11 @@ final class BannerController extends Controller
             if ($data[$field] === '') {
                 continue;
             }
-            $normalized = str_replace('T', ' ', $data[$field]);
-            $timestamp = strtotime($normalized);
-            if ($timestamp === false) {
-                $errors[$field] = 'Thời gian không đúng định dạng.';
+            $parsed = vn_parse_datetime((string) $data[$field]);
+            if ($parsed === null) {
+                $errors[$field] = 'Thời gian không đúng định dạng (dd/mm/yyyy HH:MM).';
             } else {
-                $data[$field] = date('Y-m-d H:i:s', $timestamp);
+                $data[$field] = $parsed;
             }
         }
         if ($data['starts_at'] !== '' && $data['ends_at'] !== '' && strtotime((string) $data['ends_at']) < strtotime((string) $data['starts_at'])) {

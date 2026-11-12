@@ -27,7 +27,7 @@ $summary = ($job['meta_description'] ?? '') !== '' ? (string) $job['meta_descrip
     <span class="tg-chip<?= $chip['muted'] ? ' tg-chip--muted' : '' ?>"><?= e($chip['label']) ?></span>
     <span class="text-[14px] text-muted">TEX-GIANG · <?= e($job['category_name'] ?? 'Tuyển dụng') ?>
       · Đăng ngày <?= e(vn_date($job['posted_at'] ?: $job['created_at'])) ?>
-      · Hạn nộp <?= e(vn_date($job['deadline']) ?: 'đến khi tuyển đủ') ?></span>
+      · Hạn nộp <?= e(vn_date($job['deadline'] ?: '') ?: 'Chưa xác định') ?></span>
   </div>
 
   <p class="mt-6 max-w-[60ch] text-[18px] leading-[1.6] text-muted"><?= e($summary) ?></p>
@@ -117,7 +117,7 @@ $summary = ($job['meta_description'] ?? '') !== '' ? (string) $job['meta_descrip
         <p class="text-[14px] text-muted">Thu nhập</p>
         <p class="mt-1 text-[24px] font-medium text-accent"><?= e(salary_short((string) $job['salary_text']) ?: 'Thỏa thuận') ?></p>
         <p class="mt-4 text-[14px] leading-[1.6] text-muted">Hạn nộp hồ sơ</p>
-        <p class="mt-1 text-[16px] font-medium text-ink"><?= e(vn_date($job['deadline']) ?: 'Đến khi tuyển đủ') ?></p>
+        <p class="mt-1 text-[16px] font-medium text-ink"><?= e(vn_date($job['deadline'] ?: '') ?: 'Chưa xác định') ?></p>
         <a href="<?= $applyUrl ?>" class="tg-btn tg-btn--primary mt-6 w-full">Ứng tuyển vị trí này</a>
         <?php if (menu_link_visible('contact')): ?>
         <?php $contactHref = url('contact') . (($job['branch_slug'] ?? '') !== '' ? '?khu-vuc=' . urlencode((string) $job['branch_slug']) . '#lien-he' : '#lien-he'); ?>
@@ -165,7 +165,7 @@ $summary = ($job['meta_description'] ?? '') !== '' ? (string) $job['meta_descrip
         <p class="text-[14px] text-muted">TEX-GIANG · <?= e($rel['category_name'] ?? 'Tuyển dụng') ?></p>
         <h3 class="mt-2 text-[16px] font-medium leading-[1.4] text-ink"><?= e($rel['title']) ?></h3>
         <p class="mt-3 text-[14px] font-semibold text-accent"><?= e(salary_short((string) $rel['salary_text']) ?: 'Thỏa thuận') ?></p>
-        <p class="mt-1 text-[13px] text-muted">Hạn nộp <?= e(vn_date($rel['deadline']) ?: '—') ?></p>
+        <p class="mt-1 text-[13px] text-muted">Hạn nộp <?= e(vn_date($rel['deadline'] ?: '') ?: 'Chưa xác định') ?></p>
       </a>
       <?php endforeach; ?>
     </div>

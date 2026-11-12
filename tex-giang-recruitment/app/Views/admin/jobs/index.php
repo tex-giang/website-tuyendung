@@ -13,8 +13,38 @@ $listPager = true;
     <h1 class="admin-h1" id="admin-list-title">Tin tuyển dụng</h1>
     <p class="admin-sub">Quản lý các vị trí đang tuyển tại các khu sản xuất.</p>
   </div>
-  <a href="<?= url('admin/jobs/create') ?>" class="btn btn-primary"><i class="bi bi-plus-lg" aria-hidden="true"></i> Thêm tin tuyển dụng</a>
+  <div class="admin-head-actions">
+    <a href="<?= url('admin/jobs/template') ?>" class="btn btn-outline"><i class="bi bi-file-earmark-excel" aria-hidden="true"></i> Tải template Excel</a>
+    <a href="<?= url('admin/jobs/create') ?>" class="btn btn-primary"><i class="bi bi-plus-lg" aria-hidden="true"></i> Thêm tin tuyển dụng</a>
+  </div>
 </div>
+
+<details class="admin-import-panel">
+  <summary class="admin-import-panel__summary">
+    <span class="admin-import-panel__icon" aria-hidden="true"><i class="bi bi-upload"></i></span>
+    <span>
+      <span class="admin-import-panel__title">Import tin tuyển dụng từ template Excel</span>
+      <span class="admin-import-panel__hint">Tải file .xlsx mẫu, điền thông tin rồi upload lại để tạo nhiều tin cùng lúc</span>
+    </span>
+    <span class="admin-import-panel__chevron" aria-hidden="true"><i class="bi bi-chevron-down"></i></span>
+  </summary>
+  <div class="admin-import-panel__body">
+    <ol class="admin-import-panel__steps">
+      <li>Tải <a href="<?= url('admin/jobs/template') ?>" class="admin-link">file template Excel (.xlsx)</a> và mở bằng Excel.</li>
+      <li>Điền sheet <strong>“Tin tuyển dụng”</strong> — mỗi dòng là một tin (giữ nguyên dòng tiêu đề; cột có (*) là bắt buộc).</li>
+      <li>Lưu file .xlsx rồi upload ở bên dưới — tin nhập vào mặc định là bản nháp nếu cột Trạng thái để trống.</li>
+    </ol>
+    <form method="POST" action="<?= url('admin/jobs/import') ?>" enctype="multipart/form-data" class="admin-import-form">
+      <?= csrf_field() ?>
+      <label class="admin-import-form__file">
+        <span class="field__label">File template (.xlsx hoặc .csv)</span>
+        <input class="field__input" type="file" name="template" accept=".xlsx,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv" required>
+      </label>
+      <button type="submit" class="btn btn-primary"><i class="bi bi-upload" aria-hidden="true"></i> Import</button>
+    </form>
+    <p class="admin-muted admin-import-panel__alt">Máy không có Excel? <a href="<?= url('admin/jobs/template') ?>?format=csv" class="admin-link">Tải bản CSV</a> (cùng nội dung, mở bằng Google Sheets/Notepad).</p>
+  </div>
+</details>
 
 <div class="admin-list-panel">
   <form class="admin-filters admin-list-toolbar" data-admin-live-filter method="GET" role="search" aria-label="Lọc danh sách tin tuyển dụng" action="<?= $listUrl ?>">
@@ -53,7 +83,7 @@ $listPager = true;
           </td>
           <td><?= e($job['branch_name'] ?? '—') ?></td>
           <td><?= e(salary_short((string) $job['salary_text']) ?: 'Thoả thuận') ?></td>
-          <td class="admin-nowrap"><?= e(vn_date($job['deadline']) ?: '—') ?></td>
+          <td class="admin-nowrap"><?= e(vn_date($job['deadline'] ?: '') ?: 'Chưa xác định') ?></td>
           <td><span class="admin-badge <?= $statusBadge[$job['status']] ?? '' ?>"><?= e($statuses[$job['status']] ?? $job['status']) ?></span></td>
           <td class="admin-nowrap admin-muted"><?= e(vn_date($job['updated_at'], 'H:i d/m/Y')) ?></td>
           <td class="is-actions">

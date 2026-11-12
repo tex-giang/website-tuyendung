@@ -3,7 +3,7 @@ $page['ajax_fragment'] = true;
 $app = $application;
 $appUrl = url('admin/applications/' . $app['id']);
 $updateUrl = $appUrl . '/status';
-$appointmentValue = $app['appointment_at'] ? date('Y-m-d\TH:i', strtotime((string) $app['appointment_at'])) : '';
+$appointmentValue = $app['appointment_at'] ? date('d/m/Y H:i', strtotime((string) $app['appointment_at'])) : '';
 $receivedAt = vn_date($app['created_at'], 'H:i d/m/Y');
 $gender = ['nu' => 'Nữ', 'nam' => 'Nam', 'khac' => 'Khác'][(string) ($app['gender'] ?? '')] ?? '';
 $hasCv = !empty($app['cv_stored_name']);
@@ -104,8 +104,18 @@ $currentStatus = (string) old('status', $app['status']);
         <?= csrf_field() ?>
         <input type="hidden" name="section" value="appointment">
         <label class="field">
-          <span class="field__label">Ngày giờ phỏng vấn</span>
-          <input class="field__input" type="datetime-local" name="appointment_at" value="<?= e(old('appointment_at', $appointmentValue)) ?>" aria-describedby="appointment-hint">
+          <span class="field__label">Ngày giờ phỏng vấn <span class="admin-muted">(dd/mm/yyyy HH:MM)</span></span>
+          <?php
+          $appointmentInput = (string) old('appointment_at', $appointmentValue);
+          if ($appointmentInput !== '') {
+              $parsedAppointment = vn_parse_datetime($appointmentInput);
+              if ($parsedAppointment !== null) {
+                  $appointmentInput = date('d/m/Y H:i', strtotime($parsedAppointment));
+              }
+          }
+          ?>
+          <input class="field__input" type="text" name="appointment_at" value="<?= e($appointmentInput) ?>"
+                 placeholder="28/10/2026 08:00" autocomplete="off" data-datepicker="datetime" aria-describedby="appointment-hint">
           <?php if ($error = errors('appointment_at')): ?><span class="field__error"><?= e($error) ?></span><?php endif; ?>
         </label>
         <label class="field">

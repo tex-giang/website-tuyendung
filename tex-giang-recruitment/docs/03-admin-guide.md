@@ -30,12 +30,13 @@ Hiện phân quyền theo **module**; chưa giới hạn theo từng bản ghi �
 ### Tin tuyển dụng (`/admin/jobs`)
 - Thêm/sửa/nhân bản/xoá mềm; đổi trạng thái nhanh ngay trên bảng.
 - Trạng thái: `draft` (nháp) → `published` (đăng) → `paused` (tạm dừng) / `closed` (đóng) / `expired` (hết hạn).
-- **Tự động tính hạn nộp**: đăng tin mà để trống *Hạn nộp* → hệ thống tự đặt = ngày đăng + **số ngày nhận hồ sơ mặc định**
-  (Cài đặt hệ thống → Thông tin chung, mặc định 30 ngày).
-- **Tự động chuyển trạng thái**: tin đang đăng mà quá `deadline` sẽ tự chuyển sang **Hết hạn** (chạy khi mở trang
-  tin/dashboard hoặc qua cron `tools/cron-expire-jobs.php`), và biến mất khỏi website công khai.
+- **Ngày đăng**: để trống → hệ thống tự lấy **hôm nay**.
+- **Hạn nộp**: để trống → **chưa xác định** (tin không bao giờ bị chuyển “Hết hạn”, hiển thị “Chưa xác định”
+  ở trang chi tiết và danh sách việc làm). Nhập ngày cụ thể nếu muốn giới hạn thời gian nhận hồ sơ.
+- **Tự động chuyển trạng thái**: chỉ áp dụng cho tin **có Hạn nộp** — quá `deadline` sẽ tự chuyển sang **Hết hạn**
+  (chạy khi mở trang tin/dashboard hoặc qua cron `tools/cron-expire-jobs.php`), và biến mất khỏi website công khai.
 - **Đăng lại tin hết hạn**: phải cập nhật *Hạn nộp* mới (không được để ngày đã qua) rồi mới chọn *Đang đăng*.
-- Tin chỉ hiển thị công khai khi `published`, chưa xoá và `deadline` chưa qua.
+- Tin chỉ hiển thị công khai khi `published`, chưa xoá và (`deadline` trống hoặc `deadline` chưa qua).
 - Xoá là **xoá mềm**: hồ sơ ứng tuyển liên quan vẫn giữ nguyên.
 
 ### Hồ sơ ứng tuyển (`/admin/applications`)
@@ -278,3 +279,19 @@ thêm Cron Job trong cPanel chạy mỗi giờ:
 ```
 /usr/local/bin/php /home/TAI_KHOAN/tex-giang-recruitment/tools/cron-expire-jobs.php
 ```
+
+## Import tin tuyển dụng từ Excel (hàng loạt)
+
+- Vào **Tuyển dụng → Tin tuyển dụng** → bấm **Tải template Excel** để lấy file `.xlsx`.
+- File gồm 2 sheet: **Tin tuyển dụng** (nhập liệu) và **Hướng dẫn**.
+- Mỗi dòng ở sheet dữ liệu là một tin; các cột có `(*)` là bắt buộc (Tiêu đề, Khu sản xuất, Mô tả công việc).
+- Ngày đăng / Hạn nộp nhập theo định dạng **DD/MM/YYYY** (vd `31/12/2026`); Ngày đăng để trống = hôm nay,
+  Hạn nộp để trống = “Chưa xác định” (không giới hạn).
+- Các cột có danh sách chọn sẵn: Khu sản xuất (Tân Hương / Cai Lậy / Chợ Gạo), Trạng thái, Tin ưu tiên.
+- **Chỉ cần nhập Lương từ / Lương đến**: cột *Lương hiển thị* và *Khoảng lương* được **tự sinh** khi lưu
+  (vd `9000000`, `12000000` → “9.000.000 - 12.000.000 VNĐ” và khoảng `8-12`). Nếu cần hiển thị khác thì nhập đè.
+- Mở panel **Import tin tuyển dụng từ template** → chọn file `.xlsx` (hoặc `.csv`) → **Import**.
+- Tin nhập vào mặc định **Bản nháp** nếu cột Trạng thái để trống; mã tin và slug tự sinh.
+- Dòng ví dụ `[MẪU]` tự bỏ qua. Giới hạn **300 dòng / 3 MB** mỗi lần.
+- Dòng lỗi được báo theo số dòng (sai khu, thiếu mô tả, sai ngày…); các dòng hợp lệ vẫn được tạo.
+- Nếu máy không có Excel, có thể tải bản CSV (`/admin/jobs/template?format=csv`) — nội dung tương đương.

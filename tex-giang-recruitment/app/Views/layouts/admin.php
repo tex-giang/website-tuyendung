@@ -51,6 +51,7 @@ $initials = mb_strtoupper($initials !== '' ? $initials : 'TG', 'UTF-8');
   <link rel="stylesheet" href="<?= asset('vendor/bootstrap-icons/bootstrap-icons.min.css') ?>">
   <link rel="stylesheet" href="<?= asset('vendor/datatables/dataTables.bootstrap5.min.css') ?>">
   <link rel="stylesheet" href="<?= asset('vendor/sweetalert2/sweetalert2.min.css') ?>">
+  <link rel="stylesheet" href="<?= asset('vendor/flatpickr/flatpickr.min.css') ?>">
   <link rel="stylesheet" href="<?= asset('css/admin-app.css') ?>">
   <link rel="stylesheet" href="<?= asset('css/admin-workspace.css') ?>">
   <link rel="icon" href="<?= url('favicon.ico') ?>" sizes="any">
@@ -128,8 +129,11 @@ $initials = mb_strtoupper($initials !== '' ? $initials : 'TG', 'UTF-8');
 <script src="<?= asset('vendor/datatables/dataTables.bootstrap5.min.js') ?>"></script>
 <script src="<?= asset('js/admin-tables.js') ?>"></script>
 <script src="<?= asset('vendor/sweetalert2/sweetalert2.all.min.js') ?>"></script>
+<script src="<?= asset('vendor/flatpickr/flatpickr.min.js') ?>"></script>
+<script src="<?= asset('vendor/flatpickr/locales/vn.js') ?>"></script>
 <script src="<?= asset('js/admin-ajax.js') ?>"></script>
 <script src="<?= asset('js/admin-shell.js') ?>"></script>
 <script src="<?= asset('js/admin-repeaters.js') ?>"></script>
+<script src="<?= asset('js/admin-datepicker.js') ?>"></script>
 </body>
 </html>

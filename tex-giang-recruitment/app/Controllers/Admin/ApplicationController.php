@@ -78,16 +78,16 @@ final class ApplicationController extends Controller
         }
 
         if ($section === 'all' || $section === 'appointment') {
-            $appointment = str_replace('T', ' ', $value('appointment_at'));
-            if (strlen($appointment) === 16) {
-                $appointment .= ':00';
-            }
+            $appointment = trim(str_replace('T', ' ', $value('appointment_at')));
             $date = $appointment === '' ? null : false;
-            if (preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$/D', $appointment)) {
-                $date = \DateTimeImmutable::createFromFormat('!Y-m-d H:i:s', $appointment);
+            if ($appointment !== '') {
+                $parsed = vn_parse_datetime($appointment);
+                if ($parsed !== null) {
+                    $date = \DateTimeImmutable::createFromFormat('!Y-m-d H:i:s', $parsed);
+                }
             }
-            if ($date === false || ($date !== null && ($date->format('Y-m-d H:i:s') !== $appointment || (int) $date->format('Y') < 1000))) {
-                $errors['appointment_at'] = 'Lịch phỏng vấn không đúng định dạng.';
+            if ($date === false) {
+                $errors['appointment_at'] = 'Lịch phỏng vấn không đúng định dạng (dd/mm/yyyy HH:MM).';
             }
             $changes['appointment_at'] = $date instanceof \DateTimeImmutable ? $date->format('Y-m-d H:i:s') : null;
             if ($section === 'appointment') {

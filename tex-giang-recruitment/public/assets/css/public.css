@@ -1385,3 +1385,154 @@ body.has-dialog { overflow: hidden; }
   .article-actions .tg-btn { flex: 1 1 100%; justify-content: center; }
   .tg-public .news-related > ul { grid-template-columns: 1fr; }
 }
+
+/* ==========================================================================
+   Lightbox xem ảnh — trang chi tiết tin tức
+   ========================================================================== */
+.tg-public .news-reading img {
+  cursor: zoom-in;
+}
+.tg-public .news-reading img:focus-visible {
+  outline: 3px solid var(--tg-accent, #087A55);
+  outline-offset: 3px;
+}
+
+/* html đang đặt scrollbar-gutter: stable both-edges (app.css) -> khi mở lightbox
+   phải trả về auto, nếu không overlay bị hụt 2 dải trắng hai bên. */
+html.tg-lightbox-open {
+  scrollbar-gutter: auto;
+  overflow: hidden;
+}
+html.tg-lightbox-open body {
+  overflow: hidden;
+}
+
+.tg-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(8, 14, 11, 0.94);
+  padding: 18px;
+  overscroll-behavior: contain;
+}
+.tg-lightbox[hidden] { display: none; }
+
+.tg-lightbox__bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px;
+  color: #F2F5F3;
+  font-size: 14px;
+  pointer-events: none;
+}
+.tg-lightbox__count {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+.tg-lightbox__count:empty { visibility: hidden; }
+.tg-lightbox__close {
+  pointer-events: auto;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+.tg-lightbox__close:hover { background: rgba(255, 255, 255, 0.26); }
+.tg-lightbox__close:focus-visible,
+.tg-lightbox__nav:focus-visible {
+  outline: 2px solid #7BE0B4;
+  outline-offset: 2px;
+}
+
+.tg-lightbox__stage {
+  margin: 0;
+  max-width: min(1180px, 100%);
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  pointer-events: none;
+}
+.tg-lightbox__image {
+  display: block;
+  max-width: 100%;
+  max-height: calc(100vh - 160px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  background: #0B120E;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
+  pointer-events: auto;
+}
+.tg-lightbox__caption {
+  margin: 0;
+  max-width: 860px;
+  color: #D6DED9;
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: center;
+}
+.tg-lightbox__caption[hidden] { display: none; }
+
+.tg-lightbox__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  font-size: 30px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.15s ease, opacity 0.15s ease;
+}
+.tg-lightbox__nav:hover { background: rgba(255, 255, 255, 0.28); }
+.tg-lightbox__nav--prev { left: 14px; }
+.tg-lightbox__nav--next { right: 14px; }
+.tg-lightbox__nav[hidden] { display: none; }
+
+@media (max-width: 640px) {
+  .tg-lightbox { padding: 10px; }
+  .tg-lightbox__bar { padding: 10px 12px; }
+  .tg-lightbox__close { width: 38px; height: 38px; font-size: 22px; }
+  .tg-lightbox__nav {
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    top: auto;
+    bottom: 18px;
+    transform: none;
+  }
+  .tg-lightbox__nav--prev { left: 14px; }
+  .tg-lightbox__nav--next { right: 14px; }
+  .tg-lightbox__image { max-height: calc(100vh - 210px); }
+  .tg-lightbox__caption { font-size: 13px; padding: 0 10px; }
+}

@@ -4,7 +4,6 @@ $errors = \App\Core\Session::pull('_errors', []);
 $values = array_merge($settings, \App\Core\Session::pull('_old', []));
 $hints = [
     'jobs_per_page' => 'Từ 2 đến 50 tin.',
-    'jobs_deadline_days' => 'Số ngày tính từ ngày đăng tin.',
     'zalo' => 'Nhập đường dẫn Zalo OA hoặc số Zalo.',
 ];
 $seoLimits = ['seo_title' => 70, 'seo_description' => 160];

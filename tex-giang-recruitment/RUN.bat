@@ -84,8 +84,9 @@ if not "%NO_BROWSER%"=="1" (
 
 rem ---------------------------------------------------------------------------
 rem 5. Chạy server (giữ nguyên cửa sổ này)
+rem    Dùng public/router.php để /robots.txt và /sitemap.xml không bị 404
 rem ---------------------------------------------------------------------------
-"%PHP_EXE%" -d extension=pdo_mysql -d extension=mbstring -S 127.0.0.1:%PORT% -t public
+"%PHP_EXE%" -d extension=pdo_mysql -d extension=mbstring -S 127.0.0.1:%PORT% -t public public\router.php
 
 echo.
 echo [Server da dung]

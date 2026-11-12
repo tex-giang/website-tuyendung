@@ -64,7 +64,8 @@ File: `database/schema.sql` (DDL) + `database/seed.sql` (dữ liệu khởi tạ
 
 ### `settings`
 - Key-value để admin sửa không cần sửa code. Nhóm:
-  - `general`: site_name, legal_name, jobs_per_page, jobs_deadline_days (địa chỉ trụ sở đã bỏ — địa chỉ quản lý theo từng chi nhánh)
+  - `general`: site_name, legal_name, jobs_per_page (địa chỉ trụ sở đã bỏ — địa chỉ quản lý theo từng chi nhánh).
+    `jobs_deadline_days` không còn dùng: để trống Hạn nộp = tin **không giới hạn** (hiển thị “Chưa xác định”).
   - `contact`: email, zalo (link Zalo OA đầy đủ hoặc số Zalo)
   - `social`: facebook, youtube, website
   - `seo`: seo_title, seo_description
