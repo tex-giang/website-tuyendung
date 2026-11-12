@@ -110,8 +110,7 @@ $page['robots'] = 'noindex, follow';
             <div class="grid grid-cols-2 gap-3">
               <div>
                 <label class="form-label" for="apply-birth">Năm sinh</label>
-                <input type="number" id="apply-birth" name="birth_year" min="<?= (int) date('Y') - 60 ?>"
-                       max="<?= (int) date('Y') - 18 ?>" placeholder="1996"
+                <input type="number" id="apply-birth" name="birth_year" placeholder="1996"
                        class="form-input<?= $err('birth_year') ? ' is-invalid' : '' ?>" value="<?= e($val('birth_year')) ?>">
                 <?php if ($err('birth_year')): ?><p class="field-error"><?= e($err('birth_year')) ?></p><?php endif; ?>
               </div>
