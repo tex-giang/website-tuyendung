@@ -45,6 +45,7 @@ CREATE TABLE roles (
 CREATE TABLE users (
   id            BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   role_id       TINYINT UNSIGNED NOT NULL,
+  all_branches  TINYINT(1)   NOT NULL DEFAULT 1,
   username      VARCHAR(100) NOT NULL,
   password_hash VARCHAR(255) NOT NULL,
   full_name     VARCHAR(150) NOT NULL,
@@ -58,6 +59,18 @@ CREATE TABLE users (
   UNIQUE KEY uq_users_username (username),
   KEY idx_users_role (role_id),
   CONSTRAINT fk_users_role FOREIGN KEY (role_id) REFERENCES roles (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Ma trận phân quyền: mỗi vai trò × module có 4 cờ xem / thêm / sửa / xoá.
+CREATE TABLE role_permissions (
+  role_id    TINYINT UNSIGNED NOT NULL,
+  module     VARCHAR(50)      NOT NULL,
+  can_view   TINYINT(1)       NOT NULL DEFAULT 0,
+  can_create TINYINT(1)       NOT NULL DEFAULT 0,
+  can_update TINYINT(1)       NOT NULL DEFAULT 0,
+  can_delete TINYINT(1)       NOT NULL DEFAULT 0,
+  PRIMARY KEY (role_id, module),
+  CONSTRAINT fk_role_permissions_role FOREIGN KEY (role_id) REFERENCES roles (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ---------------------------------------------------------------------------
@@ -77,6 +90,16 @@ CREATE TABLE branches (
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   UNIQUE KEY uq_branches_slug (slug)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Phạm vi nhà máy của từng tài khoản (khi users.all_branches = 0).
+CREATE TABLE user_branches (
+  user_id   BIGINT UNSIGNED   NOT NULL,
+  branch_id SMALLINT UNSIGNED NOT NULL,
+  PRIMARY KEY (user_id, branch_id),
+  KEY idx_user_branches_branch (branch_id),
+  CONSTRAINT fk_user_branches_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+  CONSTRAINT fk_user_branches_branch FOREIGN KEY (branch_id) REFERENCES branches (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE branch_contacts (

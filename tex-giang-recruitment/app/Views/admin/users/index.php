@@ -5,7 +5,7 @@ $me = (int) \App\Core\Session::get('auth_id');
 <div class="admin-page-head admin-list-head">
   <div>
     <h1 class="admin-h1" id="users-title">Người dùng quản trị</h1>
-    <p class="admin-sub">Quản lý tài khoản và quyền truy cập hệ thống tuyển dụng.</p>
+    <p class="admin-sub">Quản lý tài khoản, vai trò và phạm vi nhà máy được xem.</p>
   </div>
   <a href="<?= url('admin/users/create') ?>" class="btn btn-primary"><i class="bi bi-plus-lg" aria-hidden="true"></i> Thêm người dùng</a>
 </div>
@@ -13,13 +13,21 @@ $me = (int) \App\Core\Session::get('auth_id');
 <section class="admin-list-panel">
   <div class="admin-table-wrap">
     <table class="admin-table admin-directory-table admin-directory-table--users" aria-labelledby="users-title">
-      <thead><tr><th scope="col">Tên đăng nhập</th><th scope="col">Họ và tên</th><th scope="col">Vai trò</th><th scope="col">Trạng thái</th><th scope="col">Đăng nhập gần nhất</th><th scope="col" class="is-actions">Thao tác</th></tr></thead>
+      <thead><tr><th scope="col">Tên đăng nhập</th><th scope="col">Họ và tên</th><th scope="col">Vai trò</th><th scope="col">Nhà máy</th><th scope="col">Trạng thái</th><th scope="col">Đăng nhập gần nhất</th><th scope="col" class="is-actions">Thao tác</th></tr></thead>
       <tbody>
         <?php foreach ($users as $user):
             $id = (int) $user['id'];
             $active = (int) $user['is_active'] === 1;
             $action = $active ? 'Khóa tài khoản' : 'Mở khóa tài khoản';
             $editUrl = url('admin/users/' . $id . '/edit');
+            $allBranches = (int) ($user['all_branches'] ?? 1) === 1;
+            $userBranchIds = $allBranches ? [] : \App\Models\User::branchIdsForUser($id);
+            $branchNames = [];
+            foreach ($userBranchIds as $branchId) {
+                if (isset($branches[(int) $branchId])) {
+                    $branchNames[] = $branches[(int) $branchId];
+                }
+            }
         ?>
         <tr>
           <td class="admin-mono" data-label="Tên đăng nhập"><?= e($user['username']) ?><?= $id === $me ? ' · Bạn' : '' ?></td>
@@ -28,6 +36,15 @@ $me = (int) \App\Core\Session::get('auth_id');
             <?php if (!empty($user['email'])): ?><span class="admin-muted"><?= e($user['email']) ?></span><?php endif; ?>
           </td>
           <td data-label="Vai trò"><span class="admin-badge admin-badge--soft"><?= e($roles[$user['role_name']] ?? $user['role_name']) ?></span></td>
+          <td data-label="Nhà máy">
+            <?php if ($allBranches): ?>
+            <span class="admin-badge admin-badge--soft">Tất cả</span>
+            <?php elseif ($branchNames === []): ?>
+            <span class="admin-badge admin-badge--draft">Chưa gán</span>
+            <?php else: ?>
+            <span class="admin-muted"><?= e(implode(', ', $branchNames)) ?></span>
+            <?php endif; ?>
+          </td>
           <td data-label="Trạng thái"><span class="admin-badge <?= $active ? 'admin-badge--published' : 'admin-badge--draft' ?>"><?= $active ? 'Đang hoạt động' : 'Đã khóa' ?></span></td>
           <td class="admin-mono admin-audit-date" data-label="Đăng nhập gần nhất"><?= e(vn_date($user['last_login_at'], 'H:i d/m/Y') ?: '—') ?></td>
           <td class="is-actions">

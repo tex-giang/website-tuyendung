@@ -62,6 +62,15 @@ File: `database/schema.sql` (DDL) + `database/seed.sql` (dữ liệu khởi tạ
 - `type`: `hero` (slider đầu trang), `notice` (dải trên cùng), `popup` (thẻ nổi), `ad` (dải CTA).
 - `starts_at` / `ends_at` cho phép hẹn lịch chiến dịch.
 
+### `role_permissions`
+- Ma trận quyền: `role_id`, `module`, `can_view`, `can_create`, `can_update`, `can_delete`.
+- `super_admin` bypass trong code (`app/Core/Permissions.php`), không cần bản ghi.
+- Module + nhãn khai báo ở `app/Config/permissions.php`; quyền chỉnh ở `/admin/roles`.
+
+### `user_branches`
+- Phạm vi nhà máy: `user_id`, `branch_id`.
+- `users.all_branches = 1` → xem toàn bộ (bỏ qua bảng này); `= 0` → chỉ các nhà máy liệt kê.
+
 ### `settings`
 - Key-value để admin sửa không cần sửa code. Nhóm:
   - `general`: site_name, legal_name, jobs_per_page (địa chỉ trụ sở đã bỏ — địa chỉ quản lý theo từng chi nhánh).

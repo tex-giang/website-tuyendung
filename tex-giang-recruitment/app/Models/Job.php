@@ -193,6 +193,12 @@ final class Job
             $where[] = 'j.status = :status';
             $params['status'] = $filters['status'];
         }
+        // Phạm vi nhà máy của tài khoản đang đăng nhập.
+        [$branchWhere, $branchParams] = \App\Core\Permissions::branchSql('j.branch_id');
+        if ($branchWhere !== '') {
+            $where[] = $branchWhere;
+            $params = array_merge($params, $branchParams);
+        }
         $whereSql = ' WHERE ' . implode(' AND ', $where);
 
         $countStmt = Database::connection()->prepare('SELECT COUNT(*) FROM jobs j' . $whereSql);
@@ -348,11 +354,15 @@ final class Job
     /** @return array<int, string> id => title, dùng cho select lọc hồ sơ theo vị trí. */
     public static function optionsAll(): array
     {
-        $rows = Database::connection()->query(
-            'SELECT id, title FROM jobs WHERE deleted_at IS NULL ORDER BY title'
-        )->fetchAll();
+        [$branchWhere, $params] = \App\Core\Permissions::branchSql('branch_id');
+        $stmt = Database::connection()->prepare(
+            'SELECT id, title FROM jobs WHERE deleted_at IS NULL'
+            . ($branchWhere !== '' ? ' AND ' . $branchWhere : '')
+            . ' ORDER BY title'
+        );
+        $stmt->execute($params);
         $options = [];
-        foreach ($rows as $row) {
+        foreach ($stmt->fetchAll() as $row) {
             $options[(int) $row['id']] = $row['title'];
         }
         return $options;
@@ -360,11 +370,14 @@ final class Job
     /** @return array<string, int> */
     public static function countsByStatus(): array
     {
-        $rows = Database::connection()->query(
-            'SELECT status, COUNT(*) AS total FROM jobs WHERE deleted_at IS NULL GROUP BY status'
-        )->fetchAll();
+        [$branchWhere, $params] = \App\Core\Permissions::branchSql('branch_id');
+        $sql = 'SELECT status, COUNT(*) AS total FROM jobs WHERE deleted_at IS NULL'
+            . ($branchWhere !== '' ? ' AND ' . $branchWhere : '')
+            . ' GROUP BY status';
+        $stmt = Database::connection()->prepare($sql);
+        $stmt->execute($params);
         $counts = ['draft' => 0, 'published' => 0, 'paused' => 0, 'closed' => 0, 'expired' => 0];
-        foreach ($rows as $row) {
+        foreach ($stmt->fetchAll() as $row) {
             $counts[$row['status']] = (int) $row['total'];
         }
         return $counts;

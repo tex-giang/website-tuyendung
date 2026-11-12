@@ -46,11 +46,11 @@ $listUrl = url('admin/contact');
           <td class="is-actions">
             <div class="admin-actions admin-editor-row-actions">
               <a href="<?= $detail ?>" class="btn btn-ghost btn-icon" title="Xem tin nhắn" aria-label="<?= e('Xem tin nhắn của ' . $item['full_name']) ?>"><i class="bi bi-chevron-right" aria-hidden="true"></i></a>
-              <form data-ajax-refresh data-ajax method="POST" action="<?= $detail ?>/delete" data-confirm="<?= e('Xóa tin nhắn của “' . $item['full_name'] . '”?') ?>">
+              <?php if (can('contact', 'delete')): ?><form data-ajax-refresh data-ajax method="POST" action="<?= $detail ?>/delete" data-confirm="<?= e('Xóa tin nhắn của “' . $item['full_name'] . '”?') ?>">
                 <?= csrf_field() ?>
                 <input type="hidden" name="return_status" value="<?= e($filters['status']) ?>">
                 <button class="btn btn-ghost btn-icon admin-editor-delete" type="submit" title="Xóa" aria-label="<?= e('Xóa tin nhắn của ' . $item['full_name']) ?>"><?= admin_icon_svg('trash') ?></button>
-              </form>
+              </form><?php endif; ?>
             </div>
           </td>
         </tr>

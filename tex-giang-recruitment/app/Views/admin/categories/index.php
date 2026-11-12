@@ -8,7 +8,7 @@ $section = $types[$type];
     <h1 class="admin-h1">Danh mục dùng chung</h1>
     <p class="admin-sub"><?= e($section['hint']) ?></p>
   </div>
-  <a href="<?= url('admin/categories/' . $type . '/create') ?>" class="btn btn-primary"><i class="bi bi-plus-lg" aria-hidden="true"></i> Thêm <?= e($section['singular']) ?></a>
+  <a href="<?= url('admin/categories/' . $type . '/create') ?>" class="btn btn-primary"<?= can('categories', 'create') ? '' : ' hidden' ?>><i class="bi bi-plus-lg" aria-hidden="true"></i> Thêm <?= e($section['singular']) ?></a>
 </div>
 
 <nav class="admin-period-tabs admin-taxonomy-tabs" aria-label="Loại danh mục">
@@ -49,7 +49,7 @@ $section = $types[$type];
           </td>
           <td class="admin-mono" data-label="Đang sử dụng"><?= (int) $usage[$id] ?></td>
           <td data-label="Hiển thị"><?php require $partials . 'list-switch.php'; ?></td>
-          <td class="is-actions"><?php require $partials . 'list-edit-delete.php'; ?></td>
+          <?php $permModule = 'categories'; ?><td class="is-actions"><?php require $partials . 'list-edit-delete.php'; ?></td>
         </tr>
         <?php endforeach; ?>
       </tbody>

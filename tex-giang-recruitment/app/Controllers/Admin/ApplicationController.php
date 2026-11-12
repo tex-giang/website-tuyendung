@@ -55,6 +55,10 @@ final class ApplicationController extends Controller
     {
         $applicationId = (int) $id;
         $target = url('admin/applications/' . $applicationId);
+        // Application::find đã lọc theo phạm vi nhà máy của tài khoản.
+        if (Application::find($applicationId) === null) {
+            $this->formError('Hồ sơ không tồn tại.', url('admin/applications'), status: 404);
+        }
         // Yêu cầu từ form cũ có thể vẫn gửi cả ba trường.
         $section = $_POST['section'] ?? 'all';
         if (!in_array($section, ['all', 'status', 'appointment', 'note'], true)) {

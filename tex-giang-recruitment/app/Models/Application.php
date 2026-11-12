@@ -41,9 +41,17 @@ final class Application
             $where[] = 'a.job_id = :job_id';
             $params['job_id'] = (int) $filters['job_id'];
         }
+        // Phạm vi nhà máy: lọc theo nhà máy của tin tuyển dụng.
+        [$branchWhere, $branchParams] = \App\Core\Permissions::branchSql('j.branch_id');
+        if ($branchWhere !== '') {
+            $where[] = $branchWhere;
+            $params = array_merge($params, $branchParams);
+        }
 
         $whereSql = ' WHERE ' . implode(' AND ', $where);
-        $countStmt = Database::connection()->prepare('SELECT COUNT(*) FROM applications a' . $whereSql);
+        $countStmt = Database::connection()->prepare(
+            'SELECT COUNT(*) FROM applications a LEFT JOIN jobs j ON j.id = a.job_id' . $whereSql
+        );
         $countStmt->execute($params);
         $total = (int) $countStmt->fetchColumn();
 
@@ -65,17 +73,26 @@ final class Application
 
     public static function find(int $id): ?array
     {
-        $stmt = Database::connection()->prepare(self::SELECT . ' WHERE a.id = :id LIMIT 1');
-        $stmt->execute(['id' => $id]);
+        [$branchWhere, $params] = \App\Core\Permissions::branchSql('j.branch_id');
+        $sql = self::SELECT . ' WHERE a.id = :id'
+            . ($branchWhere !== '' ? ' AND ' . $branchWhere : '')
+            . ' LIMIT 1';
+        $stmt = Database::connection()->prepare($sql);
+        $stmt->execute(array_merge(['id' => $id], $params));
         return $stmt->fetch() ?: null;
     }
 
     /** @return array<int, array<string, mixed>> */
     public static function latest(int $limit = 5): array
     {
+        [$branchWhere, $params] = \App\Core\Permissions::branchSql('j.branch_id');
         $stmt = Database::connection()->prepare(
-            self::SELECT . ' ORDER BY a.created_at DESC, a.id DESC LIMIT :limit'
+            self::SELECT . ($branchWhere !== '' ? ' WHERE ' . $branchWhere : '')
+            . ' ORDER BY a.created_at DESC, a.id DESC LIMIT :limit'
         );
+        foreach ($params as $key => $value) {
+            $stmt->bindValue(':' . $key, $value, PDO::PARAM_INT);
+        }
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll();
@@ -172,11 +189,14 @@ final class Application
     /** @return array<string, int> */
     public static function countsByStatus(): array
     {
-        $rows = Database::connection()->query(
-            'SELECT status, COUNT(*) AS total FROM applications GROUP BY status'
-        )->fetchAll();
+        [$branchWhere, $params] = \App\Core\Permissions::branchSql('j.branch_id');
+        $sql = 'SELECT a.status, COUNT(*) AS total FROM applications a LEFT JOIN jobs j ON j.id = a.job_id'
+            . ($branchWhere !== '' ? ' WHERE ' . $branchWhere : '')
+            . ' GROUP BY a.status';
+        $stmt = Database::connection()->prepare($sql);
+        $stmt->execute($params);
         $counts = array_fill_keys(array_keys(self::STATUSES), 0);
-        foreach ($rows as $row) {
+        foreach ($stmt->fetchAll() as $row) {
             $counts[$row['status']] = (int) $row['total'];
         }
         return $counts;
@@ -184,11 +204,23 @@ final class Application
 
     public static function total(): int
     {
-        return (int) Database::connection()->query('SELECT COUNT(*) FROM applications')->fetchColumn();
+        [$branchWhere, $params] = \App\Core\Permissions::branchSql('j.branch_id');
+        $stmt = Database::connection()->prepare(
+            'SELECT COUNT(*) FROM applications a LEFT JOIN jobs j ON j.id = a.job_id'
+            . ($branchWhere !== '' ? ' WHERE ' . $branchWhere : '')
+        );
+        $stmt->execute($params);
+        return (int) $stmt->fetchColumn();
     }
 
     public static function newCount(): int
     {
-        return (int) Database::connection()->query("SELECT COUNT(*) FROM applications WHERE status = 'new'")->fetchColumn();
+        [$branchWhere, $params] = \App\Core\Permissions::branchSql('j.branch_id');
+        $stmt = Database::connection()->prepare(
+            "SELECT COUNT(*) FROM applications a LEFT JOIN jobs j ON j.id = a.job_id WHERE a.status = 'new'"
+            . ($branchWhere !== '' ? ' AND ' . $branchWhere : '')
+        );
+        $stmt->execute($params);
+        return (int) $stmt->fetchColumn();
     }
 }

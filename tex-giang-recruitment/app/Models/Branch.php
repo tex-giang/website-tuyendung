@@ -38,6 +38,16 @@ final class Branch
         return $options;
     }
 
+    /** @return array<int, string> id => name, dùng cho chọn nhà máy của tài khoản */
+    public static function idOptions(): array
+    {
+        $options = [];
+        foreach (self::all() as $branch) {
+            $options[(int) $branch['id']] = (string) $branch['name'];
+        }
+        return $options;
+    }
+
     // ------------------------------------------------------------------ ADMIN
 
     public static function find(int $id): ?array

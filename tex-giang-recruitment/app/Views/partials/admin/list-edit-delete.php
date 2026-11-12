@@ -1,7 +1,16 @@
+<?php
+$permModule = $permModule ?? null;
+$permCanUpdate = $permModule === null || can($permModule, 'update');
+$permCanDelete = $permModule === null || can($permModule, 'delete');
+?>
 <div class="admin-actions admin-editor-row-actions">
+  <?php if ($permCanUpdate): ?>
   <a href="<?= $editUrl ?>" class="btn btn-ghost btn-icon" title="Sửa" aria-label="<?= e('Sửa ' . $itemName) ?>"><?= admin_icon_svg('pencil') ?></a>
+  <?php endif; ?>
+  <?php if ($permCanDelete): ?>
   <form method="POST" action="<?= $deleteUrl ?>" data-ajax data-confirm="<?= e($deletePrompt) ?>">
     <?= csrf_field() ?>
     <button class="btn btn-ghost btn-icon admin-editor-delete" type="submit" title="Xóa" aria-label="<?= e('Xóa ' . $itemName) ?>"><?= admin_icon_svg('trash') ?></button>
   </form>
+  <?php endif; ?>
 </div>

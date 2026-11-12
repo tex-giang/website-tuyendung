@@ -280,6 +280,24 @@ thêm Cron Job trong cPanel chạy mỗi giờ:
 /usr/local/bin/php /home/TAI_KHOAN/tex-giang-recruitment/tools/cron-expire-jobs.php
 ```
 
+## Phân quyền & phạm vi nhà máy
+
+- Vào **Hệ thống → Phân quyền** để chỉnh quyền cho từng vai trò.
+- Mỗi vai trò có bảng **menu × 4 thao tác**: Xem · Thêm · Sửa · Xoá.
+  - Không có quyền **Xem** → menu bị ẩn và mọi đường dẫn của mục đó trả về 403.
+  - Bật **Thêm/Sửa/Xoá** sẽ tự bật **Xem**.
+  - **Quản trị hệ thống (super_admin)** luôn toàn quyền, không chỉnh được.
+- Quyền có hiệu lực ngay ở cả 3 lớp: menu trái, nút thao tác trên bảng, và route xử lý
+  (gọi thẳng URL cũng bị chặn 403).
+- **Phạm vi nhà máy**: khi sửa tài khoản (Hệ thống → Người dùng quản trị)
+  - Bật **Tất cả nhà máy** → xem dữ liệu mọi nhà máy.
+  - Tắt và tick các nhà máy cụ thể → chỉ thấy tin tuyển dụng và hồ sơ ứng tuyển
+    thuộc các nhà máy đó; danh sách, bộ lọc, số đếm, trang chi tiết đều giới hạn theo.
+  - Tạo/sửa tin chỉ chọn được nhà máy trong phạm vi; sửa tin nhà máy khác trả về 403.
+  - Tài khoản **super_admin** luôn xem toàn bộ.
+- Bảng phân quyền chỉ hiện các module khai báo trong `app/Config/permissions.php`
+  (thêm menu mới thì thêm module vào file đó để màn hình phân quyền biết).
+
 ## Import tin tuyển dụng từ Excel (hàng loạt)
 
 - Vào **Tuyển dụng → Tin tuyển dụng** → bấm **Tải template Excel** để lấy file `.xlsx`.

@@ -14,6 +14,37 @@ INSERT INTO roles (name, description) VALUES
   ('hr_admin',    'Quản trị nhân sự, tin tuyển dụng và hồ sơ'),
   ('recruiter',   'Nhân viên tuyển dụng: xem và xử lý hồ sơ');
 
+-- Ma trận quyền mặc định (xem / thêm / sửa / xoá). super_admin luôn toàn quyền.
+INSERT INTO role_permissions (role_id, module, can_view, can_create, can_update, can_delete)
+SELECT r.id, m.module, m.can_view, m.can_create, m.can_update, m.can_delete
+FROM roles r
+JOIN (
+  SELECT 'dashboard' AS module, 1 AS can_view, 0 AS can_create, 0 AS can_update, 0 AS can_delete UNION ALL
+  SELECT 'jobs', 1, 1, 1, 1 UNION ALL
+  SELECT 'applications', 1, 0, 1, 0 UNION ALL
+  SELECT 'posts', 1, 1, 1, 1 UNION ALL
+  SELECT 'banners', 1, 1, 1, 1 UNION ALL
+  SELECT 'content', 1, 0, 1, 0 UNION ALL
+  SELECT 'categories', 1, 1, 1, 1 UNION ALL
+  SELECT 'contact', 1, 0, 1, 1 UNION ALL
+  SELECT 'settings', 1, 0, 1, 0 UNION ALL
+  SELECT 'users', 1, 1, 1, 1 UNION ALL
+  SELECT 'audit', 1, 0, 0, 0 UNION ALL
+  SELECT 'profile', 1, 0, 1, 0
+) m
+WHERE r.name IN ('super_admin', 'hr_admin');
+
+INSERT INTO role_permissions (role_id, module, can_view, can_create, can_update, can_delete)
+SELECT r.id, m.module, m.can_view, m.can_create, m.can_update, m.can_delete
+FROM roles r
+JOIN (
+  SELECT 'dashboard' AS module, 1 AS can_view, 0 AS can_create, 0 AS can_update, 0 AS can_delete UNION ALL
+  SELECT 'jobs', 1, 1, 1, 0 UNION ALL
+  SELECT 'applications', 1, 0, 1, 0 UNION ALL
+  SELECT 'profile', 1, 0, 1, 0
+) m
+WHERE r.name = 'recruiter';
+
 -- 2. TÀI KHOẢN QUẢN TRỊ ĐẦU TIÊN -------------------------------------------
 INSERT INTO users (role_id, username, password_hash, full_name, email, phone)
 SELECT id, 'admin',

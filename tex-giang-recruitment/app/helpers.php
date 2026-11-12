@@ -539,3 +539,15 @@ function bi(string $name, string $extraClass = ''): string
     $cls = 'bi ' . $icon . ($extraClass !== '' ? ' ' . $extraClass : '');
     return '<i class="' . e($cls) . '" aria-hidden="true"></i>';
 }
+
+/** Kiểm tra quyền của tài khoản đang đăng nhập: can('jobs','delete'). */
+function can(string $module, string $action = 'view'): bool
+{
+    return \App\Core\Permissions::currentCan($module, $action);
+}
+
+/** Có được xem dữ liệu của nhà máy này không (phạm vi tài khoản). */
+function can_branch(int $branchId): bool
+{
+    return \App\Core\Permissions::canAccessBranch($branchId);
+}

@@ -8,7 +8,7 @@ $listPager = true;
     <h1 class="admin-h1" id="admin-list-title">Tin tức và bài viết</h1>
     <p class="admin-sub">Quản lý bài viết hiển thị trên website.</p>
   </div>
-  <a href="<?= $listUrl ?>/create" class="btn btn-primary"><i class="bi bi-plus-lg" aria-hidden="true"></i> Thêm bài viết</a>
+  <?php if (can('posts', 'create')): ?><a href="<?= $listUrl ?>/create" class="btn btn-primary"><i class="bi bi-plus-lg" aria-hidden="true"></i> Thêm bài viết</a><?php endif; ?>
 </div>
 
 <div class="admin-list-panel">
@@ -65,15 +65,19 @@ $listPager = true;
               <?php if ($published): ?>
               <a href="<?= url('news/' . $item['slug']) ?>" target="_blank" rel="noopener" class="admin-row-icon" title="Xem trên website" aria-label="Xem trên website"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i></a>
               <?php endif; ?>
+              <?php if (can('posts', 'update')): ?>
               <a href="<?= $postUrl ?>/edit" class="admin-row-icon" title="Chỉnh sửa" aria-label="Chỉnh sửa"><i class="bi bi-pencil" aria-hidden="true"></i></a>
               <form method="POST" action="<?= $postUrl ?>/status" data-ajax data-ajax-refresh>
                 <?= csrf_field() ?>
                 <button type="submit" name="status" value="<?= $published ? 'draft' : 'published' ?>" class="admin-row-icon"
                         title="<?= $published ? 'Chuyển về bản nháp' : 'Đăng bài viết' ?>" aria-label="<?= $published ? 'Chuyển về bản nháp' : 'Đăng bài viết' ?>"><i class="bi <?= $published ? 'bi-eye-slash' : 'bi-globe' ?>" aria-hidden="true"></i></button>
               </form>
+              <?php endif; ?>
+              <?php if (can('posts', 'delete')): ?>
               <form method="POST" action="<?= $postUrl ?>/delete" data-ajax data-ajax-refresh data-confirm="Xóa bài &quot;<?= e($item['title']) ?>&quot;? Bài sẽ gỡ khỏi website.">
                 <?= csrf_field() ?><button type="submit" class="admin-row-icon admin-row-icon--danger" title="Xóa bài viết" aria-label="Xóa bài viết"><i class="bi bi-trash" aria-hidden="true"></i></button>
               </form>
+              <?php endif; ?>
             </div>
           </td>
         </tr>

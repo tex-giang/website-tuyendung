@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controllers\Admin;
 
 use App\Core\Controller;
+use App\Core\Permissions;
 use App\Core\Session;
 use App\Models\AuditLog;
 use App\Models\Branch;
@@ -56,6 +57,7 @@ final class JobController extends Controller
         // Nhân bản: chỉ NẠP dữ liệu tin gốc vào form, chưa lưu DB.
         $sourceId = (int) ($_GET['from'] ?? 0);
         $source = $sourceId > 0 ? Job::adminFind($sourceId) : null;
+        $this->guardJobBranch($source);
         $this->form(null, $source);
     }
 
@@ -66,6 +68,7 @@ final class JobController extends Controller
             Session::flash('_error', 'Tin tuyển dụng không tồn tại.');
             $this->redirect(url('admin/jobs'));
         }
+        $this->guardJobBranch($job);
         $this->form($job);
     }
 
@@ -93,6 +96,7 @@ final class JobController extends Controller
     {
         $jobId = (int) $id;
         $existing = Job::adminFind($jobId);
+        $this->guardJobBranch($existing);
         if ($existing === null) {
             Session::flash('_error', 'Tin tuyển dụng không tồn tại.');
             $this->redirect(url('admin/jobs'));
@@ -121,6 +125,7 @@ final class JobController extends Controller
         $jobId = (int) $id;
         $status = (string) ($_POST['status'] ?? '');
         $jobRow = Job::adminFind($jobId);
+        $this->guardJobBranch($jobRow);
         if (!isset(self::STATUSES[$status]) || $jobRow === null) {
             if ($this->isAjaxRequest()) {
                 $this->jsonResult(false, 'Trạng thái không hợp lệ.');
@@ -157,6 +162,7 @@ final class JobController extends Controller
             $this->redirect(url('admin/jobs'));
         }
 
+        $this->guardJobBranch($job);
         $message = 'Đã nạp dữ liệu tin "' . $job['title'] . '" vào form tạo mới. Bấm Lưu để lưu bản sao vào DB.';
         if ($this->isAjaxRequest()) {
             $this->jsonResult(true, $message, url('admin/jobs/create') . '?from=' . (int) $id);
@@ -276,6 +282,10 @@ final class JobController extends Controller
                 $errors[] = 'Dòng ' . $line . ': không nhận diện được khu sản xuất "' . $branchValue . '".';
                 continue;
             }
+            if (!Permissions::canAccessBranch($branchId)) {
+                $errors[] = 'Dòng ' . $line . ': bạn không có quyền với khu sản xuất "' . $branchValue . '".';
+                continue;
+            }
 
             $categoryId = '';
             $categoryValue = trim((string) ($row['category'] ?? ''));
@@ -359,6 +369,7 @@ final class JobController extends Controller
             Session::flash('_error', 'Tin tuyển dụng không tồn tại.');
             $this->redirect(url('admin/jobs'));
         }
+        $this->guardJobBranch($job);
         Job::softDelete($jobId);
         AuditLog::record('job.delete', 'job', $jobId, ['title' => $job['title']]);
         if ($this->isAjaxRequest()) {
@@ -403,7 +414,7 @@ final class JobController extends Controller
             'job'        => $job,
             'values'     => $values,
             'errors'     => $errors,
-            'branches'   => Branch::all(),
+            'branches'   => $this->branchOptionsForUser(),
             'categories' => Category::all(),
             'statuses'   => self::STATUSES,
             'salaryRanges' => self::SALARY_RANGES,
@@ -462,6 +473,8 @@ final class JobController extends Controller
         }
         if ($data['branch_id'] === '' || !array_key_exists((int) $data['branch_id'], array_column(Branch::all(), 'name', 'id'))) {
             $errors['branch_id'] = 'Chọn khu sản xuất.';
+        } elseif (!Permissions::canAccessBranch((int) $data['branch_id'])) {
+            $errors['branch_id'] = 'Bạn không có quyền chọn khu sản xuất này.';
         }
         if ((int) $data['quantity'] < 1) {
             $errors['quantity'] = 'Số lượng phải lớn hơn 0.';
@@ -535,6 +548,28 @@ final class JobController extends Controller
         $data['sort_order'] = (int) $data['sort_order'];
 
         return [$data, $errors];
+    }
+
+    /** Chặn thao tác trên tin thuộc nhà máy ngoài phạm vi tài khoản. */
+    private function guardJobBranch(?array $job): void
+    {
+        if ($job === null) {
+            return;
+        }
+        Permissions::requireBranch((int) ($job['branch_id'] ?? 0));
+    }
+
+    /** @return array<int, array<string, mixed>> danh sách nhà máy tài khoản được phép chọn */
+    private function branchOptionsForUser(): array
+    {
+        $branches = Branch::all();
+        if (Permissions::allBranches()) {
+            return $branches;
+        }
+        return array_values(array_filter(
+            $branches,
+            static fn(array $branch): bool => Permissions::canAccessBranch((int) $branch['id'])
+        ));
     }
 
     private function rememberForm(array $data, array $errors): void
