@@ -244,17 +244,49 @@ final class Permissions
             return self::$branchIds = [];
         }
 
+        $roleIds = self::roleBranchIds($role);
+        $userIds = self::userBranchIds($userId);
+
+        // Kết hợp: toàn bộ + danh sách = danh sách; hai danh sách = giao nhau.
+        if ($roleIds === null) {
+            return self::$branchIds = $userIds;
+        }
+        if ($userIds === null) {
+            return self::$branchIds = $roleIds;
+        }
+        return self::$branchIds = array_values(array_intersect($roleIds, $userIds));
+    }
+
+    /** @return int[]|null Phạm vi nhà máy của vai trò; null = tất cả */
+    public static function roleBranchIds(string $roleName): ?array
+    {
+        $stmt = Database::connection()->prepare(
+            'SELECT id, all_branches FROM roles WHERE name = :name LIMIT 1'
+        );
+        $stmt->execute(['name' => $roleName]);
+        $role = $stmt->fetch();
+        if ($role === false) {
+            return [];
+        }
+        if ((int) $role['all_branches'] === 1) {
+            return null;
+        }
+        $stmt = Database::connection()->prepare('SELECT branch_id FROM role_branches WHERE role_id = :id');
+        $stmt->execute(['id' => (int) $role['id']]);
+        return array_values(array_unique(array_map('intval', $stmt->fetchAll(\PDO::FETCH_COLUMN))));
+    }
+
+    /** @return int[]|null Phạm vi nhà máy riêng của tài khoản; null = tất cả */
+    public static function userBranchIds(int $userId): ?array
+    {
         $stmt = Database::connection()->prepare('SELECT all_branches FROM users WHERE id = :id LIMIT 1');
         $stmt->execute(['id' => $userId]);
-        $all = (int) $stmt->fetchColumn();
-        if ($all === 1) {
-            return self::$branchIds = null;
+        if ((int) $stmt->fetchColumn() === 1) {
+            return null;
         }
-
         $stmt = Database::connection()->prepare('SELECT branch_id FROM user_branches WHERE user_id = :id');
         $stmt->execute(['id' => $userId]);
-        $ids = array_map('intval', $stmt->fetchAll(\PDO::FETCH_COLUMN));
-        return self::$branchIds = array_values(array_unique($ids));
+        return array_values(array_unique(array_map('intval', $stmt->fetchAll(\PDO::FETCH_COLUMN))));
     }
 
     public static function allBranches(): bool

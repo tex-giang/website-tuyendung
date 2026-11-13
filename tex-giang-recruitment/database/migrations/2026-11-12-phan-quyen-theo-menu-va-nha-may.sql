@@ -43,8 +43,8 @@ JOIN (
   SELECT 'content', 1, 0, 1, 0 UNION ALL
   SELECT 'categories', 1, 1, 1, 1 UNION ALL
   SELECT 'contact', 1, 0, 1, 1 UNION ALL
-  SELECT 'settings', 1, 0, 1, 0 UNION ALL
-  SELECT 'users', 1, 1, 1, 1 UNION ALL
+  SELECT 'settings', 0, 0, 0, 0 UNION ALL
+  SELECT 'users', 0, 0, 0, 0 UNION ALL
   SELECT 'audit', 1, 0, 0, 0 UNION ALL
   SELECT 'profile', 1, 0, 1, 0
 ) m

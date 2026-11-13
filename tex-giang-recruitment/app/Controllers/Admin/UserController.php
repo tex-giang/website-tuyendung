@@ -248,12 +248,31 @@ final class UserController extends Controller
         $values['branch_ids'] = $selectedBranches;
         $values['all_branches'] = (int) ($values['all_branches'] ?? 1);
 
+        // Phạm vi nhà máy của vai trò đang chọn (để hiển thị gợi ý trong form).
+        $roleNameById = [];
+        foreach (User::roles() as $name => $label) {
+            $roleId = User::roleIdByName($name);
+            if ($roleId !== null) {
+                $roleNameById[$roleId] = $name;
+            }
+        }
+        $selectedRoleId = (int) $values['role_id'];
+        $selectedRoleName = $roleNameById[$selectedRoleId] ?? null;
+        $roleScope = ['label' => '', 'branch_ids' => null];
+        if ($selectedRoleName !== null) {
+            $roleScope = [
+                'label'      => User::roles()[$selectedRoleName] ?? $selectedRoleName,
+                'branch_ids' => Permissions::roleBranchIds($selectedRoleName),
+            ];
+        }
+
         $this->view('admin/users/form', [
-            'user'     => $user,
-            'values'   => $values,
-            'errors'   => $errors,
-            'roles'    => User::roles(),
-            'branches' => Branch::idOptions(),
+            'user'      => $user,
+            'values'    => $values,
+            'errors'    => $errors,
+            'roles'     => User::roles(),
+            'branches'  => Branch::idOptions(),
+            'roleScope' => $roleScope,
             'page'   => [
                 'title' => ($user === null ? 'Thêm tài khoản' : 'Sửa tài khoản') . ' | ' . settings('site_name'),
                 'nav'   => 'users',

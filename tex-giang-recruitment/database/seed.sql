@@ -12,7 +12,10 @@ SET NAMES utf8mb4;
 INSERT INTO roles (name, description) VALUES
   ('super_admin', 'Quản trị toàn hệ thống'),
   ('hr_admin',    'Quản trị nhân sự, tin tuyển dụng và hồ sơ'),
-  ('recruiter',   'Nhân viên tuyển dụng: xem và xử lý hồ sơ');
+  ('recruiter',   'Nhân viên tuyển dụng: xem và xử lý hồ sơ'),
+  ('quan_tri_nha_may_tan_huong', 'Quản trị nhà máy Tân Hương'),
+  ('quan_tri_nha_may_cai_lay',   'Quản trị nhà máy Cai Lậy'),
+  ('quan_tri_nha_may_cho_gao',   'Quản trị nhà máy Chợ Gạo');
 
 -- Ma trận quyền mặc định (xem / thêm / sửa / xoá). super_admin luôn toàn quyền.
 INSERT INTO role_permissions (role_id, module, can_view, can_create, can_update, can_delete)
@@ -27,8 +30,8 @@ JOIN (
   SELECT 'content', 1, 0, 1, 0 UNION ALL
   SELECT 'categories', 1, 1, 1, 1 UNION ALL
   SELECT 'contact', 1, 0, 1, 1 UNION ALL
-  SELECT 'settings', 1, 0, 1, 0 UNION ALL
-  SELECT 'users', 1, 1, 1, 1 UNION ALL
+  SELECT 'settings', 0, 0, 0, 0 UNION ALL
+  SELECT 'users', 0, 0, 0, 0 UNION ALL
   SELECT 'audit', 1, 0, 0, 0 UNION ALL
   SELECT 'profile', 1, 0, 1, 0
 ) m
@@ -44,6 +47,28 @@ JOIN (
   SELECT 'profile', 1, 0, 1, 0
 ) m
 WHERE r.name = 'recruiter';
+
+-- Vai trò theo nhà máy: chỉ xem dữ liệu của nhà máy tương ứng.
+INSERT INTO role_permissions (role_id, module, can_view, can_create, can_update, can_delete)
+SELECT r.id, m.module, m.can_view, m.can_create, m.can_update, m.can_delete
+FROM roles r
+JOIN (
+  SELECT 'dashboard' AS module, 1 AS can_view, 0 AS can_create, 0 AS can_update, 0 AS can_delete UNION ALL
+  SELECT 'jobs', 1, 1, 1, 0 UNION ALL
+  SELECT 'applications', 1, 0, 1, 0 UNION ALL
+  SELECT 'profile', 1, 0, 1, 0
+) m
+WHERE r.name IN ('quan_tri_nha_may_tan_huong', 'quan_tri_nha_may_cai_lay', 'quan_tri_nha_may_cho_gao');
+
+-- Giới hạn nhà máy cho 3 vai trò trên.
+UPDATE roles SET all_branches = 0
+WHERE name IN ('quan_tri_nha_may_tan_huong', 'quan_tri_nha_may_cai_lay', 'quan_tri_nha_may_cho_gao');
+
+INSERT INTO role_branches (role_id, branch_id)
+SELECT r.id, b.id FROM roles r JOIN branches b
+WHERE (r.name = 'quan_tri_nha_may_tan_huong' AND b.slug = 'tan-huong')
+   OR (r.name = 'quan_tri_nha_may_cai_lay'   AND b.slug = 'cai-lay')
+   OR (r.name = 'quan_tri_nha_may_cho_gao'   AND b.slug = 'cho-gao');
 
 -- 2. TÀI KHOẢN QUẢN TRỊ ĐẦU TIÊN -------------------------------------------
 INSERT INTO users (role_id, username, password_hash, full_name, email, phone)

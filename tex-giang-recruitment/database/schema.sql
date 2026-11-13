@@ -62,6 +62,16 @@ CREATE TABLE users (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Ma trận phân quyền: mỗi vai trò × module có 4 cờ xem / thêm / sửa / xoá.
+-- Phạm vi nhà máy theo vai trò (khi roles.all_branches = 0).
+CREATE TABLE role_branches (
+  role_id   TINYINT UNSIGNED  NOT NULL,
+  branch_id SMALLINT UNSIGNED NOT NULL,
+  PRIMARY KEY (role_id, branch_id),
+  KEY idx_role_branches_branch (branch_id),
+  CONSTRAINT fk_role_branches_role FOREIGN KEY (role_id) REFERENCES roles (id) ON DELETE CASCADE,
+  CONSTRAINT fk_role_branches_branch FOREIGN KEY (branch_id) REFERENCES branches (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE role_permissions (
   role_id    TINYINT UNSIGNED NOT NULL,
   module     VARCHAR(50)      NOT NULL,

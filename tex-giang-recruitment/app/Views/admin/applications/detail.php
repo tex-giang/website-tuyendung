@@ -80,6 +80,7 @@ $currentStatus = (string) old('status', $app['status']);
   </div>
 
   <div class="admin-application-detail__column">
+    <?php if (can('applications', 'update')): ?>
     <section class="admin-card" aria-labelledby="candidate-status">
       <h2 class="admin-h2" id="candidate-status">Cập nhật trạng thái</h2>
       <form id="application-status" class="admin-application-editor" data-ajax data-admin-draft method="POST" action="<?= $updateUrl ?>">
@@ -97,7 +98,9 @@ $currentStatus = (string) old('status', $app['status']);
         <button type="submit" class="btn btn-primary">Lưu trạng thái</button>
       </form>
     </section>
+    <?php endif; ?>
 
+    <?php if (can('applications', 'update')): ?>
     <section class="admin-card" aria-labelledby="candidate-appointment">
       <h2 class="admin-h2" id="candidate-appointment">Lịch phỏng vấn</h2>
       <form id="application-appointment" class="admin-application-editor" data-ajax data-admin-draft method="POST" action="<?= $updateUrl ?>">
@@ -128,7 +131,9 @@ $currentStatus = (string) old('status', $app['status']);
         <button type="submit" class="btn btn-primary">Lưu lịch phỏng vấn</button>
       </form>
     </section>
+    <?php endif; ?>
 
+    <?php if (can('applications', 'update')): ?>
     <section class="admin-card" aria-labelledby="candidate-note">
       <h2 class="admin-h2" id="candidate-note">Ghi chú nội bộ</h2>
       <form id="application-note" class="admin-application-editor" data-ajax data-admin-draft method="POST" action="<?= $updateUrl ?>">
@@ -144,5 +149,6 @@ $currentStatus = (string) old('status', $app['status']);
         <button type="submit" class="btn btn-primary">Thêm ghi chú</button>
       </form>
     </section>
+    <?php endif; ?>
   </div>
 </div>

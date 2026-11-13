@@ -52,10 +52,23 @@ $renderField = static function (string $name, string $label, string $type, bool 
     </div>
 
     <section class="admin-user-scope" aria-labelledby="user-scope-title">
-      <h2 class="admin-user-scope__title" id="user-scope-title">Phạm vi nhà máy</h2>
-      <p class="admin-user-scope__hint">Giới hạn dữ liệu tin tuyển dụng và hồ sơ ứng tuyển mà tài khoản này được xem.</p>
+      <h2 class="admin-user-scope__title" id="user-scope-title">Phạm vi nhà máy (tuỳ chọn)</h2>
+      <?php
+      $roleScopeIds = $roleScope['branch_ids'] ?? null;
+      $roleScopeLabel = (string) ($roleScope['label'] ?? '');
+      $roleAllBranches = $roleScopeIds === null;
+      ?>
+      <p class="admin-user-scope__hint">
+        <?php if ($roleAllBranches): ?>
+        Vai trò <strong><?= e($roleScopeLabel !== '' ? $roleScopeLabel : 'hiện tại') ?></strong> không giới hạn nhà máy.
+        Bật "Tất cả nhà máy" để xem mọi nhà máy, hoặc chọn nhà máy cụ thể để giới hạn riêng tài khoản này.
+        <?php else: ?>
+        Vai trò <strong><?= e($roleScopeLabel) ?></strong> đã giới hạn dữ liệu theo nhà máy của vai trò.
+        Tài khoản có thể thu hẹp thêm, nhưng không mở rộng quá phạm vi của vai trò.
+        <?php endif; ?>
+      </p>
       <label class="admin-cms-visibility admin-editor-visibility">
-        <span>Tất cả nhà máy<span class="admin-muted">Bật để xem dữ liệu của mọi nhà máy.</span></span>
+        <span>Theo phạm vi của vai trò<span class="admin-muted">Tắt để chọn nhà máy riêng cho tài khoản này.</span></span>
         <input class="admin-cms-switch" type="checkbox" role="switch" name="all_branches" value="1"
                data-branch-all<?= $allBranches ? ' checked' : '' ?>>
       </label>

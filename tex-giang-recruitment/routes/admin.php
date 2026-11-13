@@ -142,10 +142,13 @@ $router->get('/admin/contact/{id}', [ContactController::class, 'show'], $guard('
 $router->post('/admin/contact/{id}/status', [ContactController::class, 'updateStatus'], $guard('contact', 'update'));
 $router->post('/admin/contact/{id}/delete', [ContactController::class, 'destroy'], $guard('contact', 'delete'));
 
-// Phân quyền theo vai trò (ma trận menu × thao tác)
+// Phân quyền theo vai trò (ma trận menu × thao tác + phạm vi nhà máy)
 $router->get('/admin/roles', [RoleController::class, 'index'], $guard('roles'));
+$router->get('/admin/roles/create', [RoleController::class, 'create'], $guard('roles', 'create'));
+$router->post('/admin/roles/create', [RoleController::class, 'store'], $guard('roles', 'create'));
 $router->get('/admin/roles/{id}/edit', [RoleController::class, 'edit'], $guard('roles', 'update'));
 $router->post('/admin/roles/{id}/edit', [RoleController::class, 'update'], $guard('roles', 'update'));
+$router->post('/admin/roles/{id}/delete', [RoleController::class, 'destroy'], $guard('roles', 'delete'));
 
 // Người dùng quản trị & hồ sơ cá nhân
 $router->get('/admin/users', [UserController::class, 'index'], $guard('users'));

@@ -67,6 +67,11 @@ File: `database/schema.sql` (DDL) + `database/seed.sql` (dữ liệu khởi tạ
 - `super_admin` bypass trong code (`app/Core/Permissions.php`), không cần bản ghi.
 - Module + nhãn khai báo ở `app/Config/permissions.php`; quyền chỉnh ở `/admin/roles`.
 
+### `role_branches`
+- Phạm vi nhà máy theo **vai trò**: `role_id`, `branch_id`.
+- `roles.all_branches = 1` → vai trò xem toàn bộ; `= 0` → chỉ các nhà máy liệt kê.
+- Phạm vi hiệu lực của tài khoản = giao giữa `roles`/`role_branches` và `users`/`user_branches`.
+
 ### `user_branches`
 - Phạm vi nhà máy: `user_id`, `branch_id`.
 - `users.all_branches = 1` → xem toàn bộ (bỏ qua bảng này); `= 0` → chỉ các nhà máy liệt kê.
