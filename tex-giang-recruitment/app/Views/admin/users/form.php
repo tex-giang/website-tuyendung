@@ -5,6 +5,8 @@ $action = $isEdit ? url('admin/users/' . (int) $user['id'] . '/edit') : url('adm
 $back = url('admin/users');
 $heading = $isEdit ? 'Chỉnh sửa người dùng' : 'Thêm người dùng';
 $val = static fn(string $key): string => (string) ($values[$key] ?? '');
+$selectedBranches = is_array($values['branch_ids'] ?? null) ? array_map('intval', $values['branch_ids']) : [];
+$allBranches = (int) ($values['all_branches'] ?? 1) === 1;
 $renderField = static function (string $name, string $label, string $type, bool $required, string $attributes = '') use ($val, $errors): void {
     $error = $errors[$name] ?? '';
     ?>
@@ -22,7 +24,7 @@ $renderField = static function (string $name, string $label, string $type, bool 
     <div>
       <a href="<?= $back ?>" class="admin-editor-back"><i class="bi bi-arrow-left" aria-hidden="true"></i> Danh sách người dùng</a>
       <h1 class="admin-h1"><?= e($heading) ?></h1>
-      <p class="admin-sub"><?= $isEdit ? 'Cập nhật thông tin và quyền truy cập của tài khoản.' : 'Tạo tài khoản và gán vai trò truy cập hệ thống quản trị.' ?></p>
+      <p class="admin-sub"><?= $isEdit ? 'Cập nhật thông tin, quyền truy cập và phạm vi nhà máy của tài khoản.' : 'Tạo tài khoản, gán vai trò và phạm vi nhà máy được phép xem.' ?></p>
     </div>
   </div>
   <form id="user-information" data-ajax data-admin-draft method="POST" action="<?= $action ?>" class="admin-form admin-cms-card admin-cms-fields admin-compact-card">
@@ -48,6 +50,40 @@ $renderField = static function (string $name, string $label, string $type, bool 
       <?php $renderField('password', 'Mật khẩu', 'password', true); $renderField('password_confirm', 'Nhập lại mật khẩu', 'password', true); ?>
       <?php endif; ?>
     </div>
+
+    <section class="admin-user-scope" aria-labelledby="user-scope-title">
+      <h2 class="admin-user-scope__title" id="user-scope-title">Phạm vi nhà máy (tuỳ chọn)</h2>
+      <?php
+      $roleScopeIds = $roleScope['branch_ids'] ?? null;
+      $roleScopeLabel = (string) ($roleScope['label'] ?? '');
+      $roleAllBranches = $roleScopeIds === null;
+      ?>
+      <p class="admin-user-scope__hint">
+        <?php if ($roleAllBranches): ?>
+        Vai trò <strong><?= e($roleScopeLabel !== '' ? $roleScopeLabel : 'hiện tại') ?></strong> không giới hạn nhà máy.
+        Bật "Tất cả nhà máy" để xem mọi nhà máy, hoặc chọn nhà máy cụ thể để giới hạn riêng tài khoản này.
+        <?php else: ?>
+        Vai trò <strong><?= e($roleScopeLabel) ?></strong> đã giới hạn dữ liệu theo nhà máy của vai trò.
+        Tài khoản có thể thu hẹp thêm, nhưng không mở rộng quá phạm vi của vai trò.
+        <?php endif; ?>
+      </p>
+      <label class="admin-cms-visibility admin-editor-visibility">
+        <span>Theo phạm vi của vai trò<span class="admin-muted">Tắt để chọn nhà máy riêng cho tài khoản này.</span></span>
+        <input class="admin-cms-switch" type="checkbox" role="switch" name="all_branches" value="1"
+               data-branch-all<?= $allBranches ? ' checked' : '' ?>>
+      </label>
+      <div class="admin-user-branches" data-branch-list<?= $allBranches ? ' hidden' : '' ?>>
+        <?php foreach ($branches as $branchId => $branchName): ?>
+        <label class="admin-user-branch">
+          <input type="checkbox" name="branch_ids[]" value="<?= (int) $branchId ?>"
+                 <?= in_array((int) $branchId, $selectedBranches, true) ? 'checked' : '' ?>>
+          <span><?= e($branchName) ?></span>
+        </label>
+        <?php endforeach; ?>
+      </div>
+      <?php if (!empty($errors['branch_ids'])): ?><span class="field__error"><?= e($errors['branch_ids']) ?></span><?php endif; ?>
+    </section>
+
     <div class="field">
       <label class="admin-cms-visibility admin-editor-visibility">
         <span>Tài khoản đang hoạt động<span class="admin-muted">Tài khoản được phép đăng nhập khi bật.</span></span>
@@ -77,3 +113,15 @@ $renderField = static function (string $name, string $label, string $type, bool 
   </form>
   <?php endif; ?>
 </div>
+
+<script>
+(function () {
+  'use strict';
+  var toggle = document.querySelector('[data-branch-all]');
+  var list = document.querySelector('[data-branch-list]');
+  if (!toggle || !list) return;
+  function sync() { list.hidden = toggle.checked; }
+  toggle.addEventListener('change', sync);
+  sync();
+})();
+</script>

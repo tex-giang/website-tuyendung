@@ -94,36 +94,64 @@ final class User
     {
         $pdo = Database::connection();
         $stmt = $pdo->prepare(
-            'INSERT INTO users (role_id, username, password_hash, full_name, email, phone, is_active)
-             VALUES (:role_id, :username, :hash, :full_name, :email, :phone, :is_active)'
+            'INSERT INTO users (role_id, all_branches, username, password_hash, full_name, email, phone, is_active)
+             VALUES (:role_id, :all_branches, :username, :hash, :full_name, :email, :phone, :is_active)'
         );
         $stmt->execute([
-            'role_id'   => $data['role_id'],
-            'username'  => $data['username'],
-            'hash'      => $data['password_hash'],
-            'full_name' => $data['full_name'],
-            'email'     => ($data['email'] ?? '') !== '' ? $data['email'] : null,
-            'phone'     => ($data['phone'] ?? '') !== '' ? $data['phone'] : null,
-            'is_active' => !empty($data['is_active']) ? 1 : 0,
+            'role_id'      => $data['role_id'],
+            'all_branches' => !empty($data['all_branches']) ? 1 : 0,
+            'username'     => $data['username'],
+            'hash'         => $data['password_hash'],
+            'full_name'    => $data['full_name'],
+            'email'        => ($data['email'] ?? '') !== '' ? $data['email'] : null,
+            'phone'        => ($data['phone'] ?? '') !== '' ? $data['phone'] : null,
+            'is_active'    => !empty($data['is_active']) ? 1 : 0,
         ]);
-        return (int) $pdo->lastInsertId();
+        $id = (int) $pdo->lastInsertId();
+        self::syncBranches($id, $data['branch_ids'] ?? []);
+        return $id;
     }
 
     public static function update(int $id, array $data): void
     {
         $stmt = Database::connection()->prepare(
-            'UPDATE users SET role_id = :role_id, full_name = :full_name, email = :email,
-                    phone = :phone, is_active = :is_active
+            'UPDATE users SET role_id = :role_id, all_branches = :all_branches, full_name = :full_name,
+                    email = :email, phone = :phone, is_active = :is_active
              WHERE id = :id'
         );
         $stmt->execute([
-            'role_id'   => $data['role_id'],
-            'full_name' => $data['full_name'],
-            'email'     => ($data['email'] ?? '') !== '' ? $data['email'] : null,
-            'phone'     => ($data['phone'] ?? '') !== '' ? $data['phone'] : null,
-            'is_active' => !empty($data['is_active']) ? 1 : 0,
-            'id'        => $id,
+            'role_id'      => $data['role_id'],
+            'all_branches' => !empty($data['all_branches']) ? 1 : 0,
+            'full_name'    => $data['full_name'],
+            'email'        => ($data['email'] ?? '') !== '' ? $data['email'] : null,
+            'phone'        => ($data['phone'] ?? '') !== '' ? $data['phone'] : null,
+            'is_active'    => !empty($data['is_active']) ? 1 : 0,
+            'id'           => $id,
         ]);
+        self::syncBranches($id, $data['branch_ids'] ?? []);
+    }
+
+    /** @return int[] */
+    public static function branchIdsForUser(int $userId): array
+    {
+        $stmt = Database::connection()->prepare('SELECT branch_id FROM user_branches WHERE user_id = :id');
+        $stmt->execute(['id' => $userId]);
+        return array_map('intval', $stmt->fetchAll(\PDO::FETCH_COLUMN));
+    }
+
+    /** @param int[] $branchIds */
+    public static function syncBranches(int $userId, array $branchIds): void
+    {
+        $pdo = Database::connection();
+        $pdo->prepare('DELETE FROM user_branches WHERE user_id = :id')->execute(['id' => $userId]);
+        $ids = array_values(array_unique(array_map('intval', $branchIds)));
+        if ($ids === []) {
+            return;
+        }
+        $stmt = $pdo->prepare('INSERT INTO user_branches (user_id, branch_id) VALUES (:user_id, :branch_id)');
+        foreach ($ids as $branchId) {
+            $stmt->execute(['user_id' => $userId, 'branch_id' => $branchId]);
+        }
     }
 
     public static function setActive(int $id, bool $active): bool

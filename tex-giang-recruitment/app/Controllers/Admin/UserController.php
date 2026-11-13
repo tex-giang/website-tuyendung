@@ -5,8 +5,10 @@ namespace App\Controllers\Admin;
 
 use App\Core\Controller;
 use App\Core\Database;
+use App\Core\Permissions;
 use App\Core\Session;
 use App\Models\AuditLog;
+use App\Models\Branch;
 use App\Models\User;
 
 final class UserController extends Controller
@@ -18,9 +20,10 @@ final class UserController extends Controller
         $this->guardSuperAdmin();
 
         $this->view('admin/users/index', [
-            'users' => User::all(),
-            'roles' => User::roles(),
-            'page'  => ['title' => 'Người dùng quản trị | ' . settings('site_name'), 'nav' => 'users'],
+            'users'   => User::all(),
+            'roles'   => User::roles(),
+            'branches' => Branch::idOptions(),
+            'page'    => ['title' => 'Người dùng quản trị | ' . settings('site_name'), 'nav' => 'users'],
         ], 'layouts/admin');
     }
 
@@ -161,13 +164,18 @@ final class UserController extends Controller
 
     private function collect(array $post): array
     {
+        $branchIds = $post['branch_ids'] ?? [];
+        $branchIds = is_array($branchIds) ? array_map('intval', $branchIds) : [];
+
         return [
-            'username'  => trim((string) ($post['username'] ?? '')),
-            'full_name' => trim((string) ($post['full_name'] ?? '')),
-            'email'     => trim((string) ($post['email'] ?? '')),
-            'phone'     => trim((string) ($post['phone'] ?? '')),
-            'role_id'   => (int) ($post['role_id'] ?? 0),
-            'is_active' => !empty($post['is_active']) ? 1 : 0,
+            'username'     => trim((string) ($post['username'] ?? '')),
+            'full_name'    => trim((string) ($post['full_name'] ?? '')),
+            'email'        => trim((string) ($post['email'] ?? '')),
+            'phone'        => trim((string) ($post['phone'] ?? '')),
+            'role_id'      => (int) ($post['role_id'] ?? 0),
+            'all_branches' => !empty($post['all_branches']) ? 1 : 0,
+            'branch_ids'   => $branchIds,
+            'is_active'    => !empty($post['is_active']) ? 1 : 0,
         ];
     }
 
@@ -198,6 +206,15 @@ final class UserController extends Controller
         if (!in_array($data['role_id'], $validRoleIds, true)) {
             $errors['role_id'] = 'Vai trò không hợp lệ.';
         }
+        $validBranchIds = array_map('intval', array_keys(Branch::idOptions()));
+        if (!empty($data['all_branches'])) {
+            $data['branch_ids'] = [];
+        } else {
+            $data['branch_ids'] = array_values(array_intersect($data['branch_ids'], $validBranchIds));
+            if ($data['branch_ids'] === []) {
+                $errors['branch_ids'] = 'Chọn ít nhất một nhà máy hoặc bật "Tất cả nhà máy".';
+            }
+        }
         if ($exceptId === null) {
             $password = (string) ($_POST['password'] ?? '');
             $confirm = (string) ($_POST['password_confirm'] ?? '');
@@ -219,16 +236,43 @@ final class UserController extends Controller
         $values = $user ?? [
             'id' => null, 'username' => '', 'full_name' => '', 'email' => '', 'phone' => '',
             'role_id' => User::roleIdByName('recruiter') ?? 0, 'is_active' => 1,
+            'all_branches' => 1, 'branch_ids' => [],
         ];
         if ($old !== []) {
             $values = array_merge($values, $old);
         }
+        $selectedBranches = $user !== null ? User::branchIdsForUser((int) $user['id']) : [];
+        if (isset($values['branch_ids']) && is_array($values['branch_ids'])) {
+            $selectedBranches = array_map('intval', $values['branch_ids']);
+        }
+        $values['branch_ids'] = $selectedBranches;
+        $values['all_branches'] = (int) ($values['all_branches'] ?? 1);
+
+        // Phạm vi nhà máy của vai trò đang chọn (để hiển thị gợi ý trong form).
+        $roleNameById = [];
+        foreach (User::roles() as $name => $label) {
+            $roleId = User::roleIdByName($name);
+            if ($roleId !== null) {
+                $roleNameById[$roleId] = $name;
+            }
+        }
+        $selectedRoleId = (int) $values['role_id'];
+        $selectedRoleName = $roleNameById[$selectedRoleId] ?? null;
+        $roleScope = ['label' => '', 'branch_ids' => null];
+        if ($selectedRoleName !== null) {
+            $roleScope = [
+                'label'      => User::roles()[$selectedRoleName] ?? $selectedRoleName,
+                'branch_ids' => Permissions::roleBranchIds($selectedRoleName),
+            ];
+        }
 
         $this->view('admin/users/form', [
-            'user'   => $user,
-            'values' => $values,
-            'errors' => $errors,
-            'roles'  => User::roles(),
+            'user'      => $user,
+            'values'    => $values,
+            'errors'    => $errors,
+            'roles'     => User::roles(),
+            'branches'  => Branch::idOptions(),
+            'roleScope' => $roleScope,
             'page'   => [
                 'title' => ($user === null ? 'Thêm tài khoản' : 'Sửa tài khoản') . ' | ' . settings('site_name'),
                 'nav'   => 'users',

@@ -23,7 +23,7 @@ $typeHints = [
         <h2 id="banner-group-<?= e($type) ?>"><?= e($typeLabel) ?> <span><?= count($grouped[$type]) ?></span></h2>
         <p><?= e($typeHints[$type]) ?></p>
       </div>
-      <a href="<?= $listUrl ?>/create?type=<?= e($type) ?>" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg" aria-hidden="true"></i> Thêm banner</a>
+      <a href="<?= $listUrl ?>/create?type=<?= e($type) ?>" class="btn btn-primary btn-sm"<?= can('banners', 'create') ? '' : ' hidden' ?>><i class="bi bi-plus-lg" aria-hidden="true"></i> Thêm banner</a>
     </header>
     <?php if ($grouped[$type] === []): ?>
     <p class="admin-list-empty">Chưa có banner trong nhóm này.</p>
@@ -66,10 +66,14 @@ $typeHints = [
             </td>
             <td class="is-actions">
               <div class="admin-actions">
-                <a href="<?= $bannerUrl ?>/edit" class="admin-row-icon" title="Chỉnh sửa" aria-label="Chỉnh sửa banner"><i class="bi bi-pencil" aria-hidden="true"></i></a>
-                <form data-ajax data-ajax-refresh method="POST" action="<?= $bannerUrl ?>/delete" data-confirm="Xóa banner &quot;<?= e($banner['name']) ?>&quot;?">
+                <?php if (can('banners', 'update')): ?>
+              <a href="<?= $bannerUrl ?>/edit" class="admin-row-icon" title="Chỉnh sửa" aria-label="Chỉnh sửa banner"><i class="bi bi-pencil" aria-hidden="true"></i></a>
+                <?php endif; ?>
+              <?php if (can('banners', 'delete')): ?>
+              <form data-ajax data-ajax-refresh method="POST" action="<?= $bannerUrl ?>/delete" data-confirm="Xóa banner &quot;<?= e($banner['name']) ?>&quot;?">
                   <?= csrf_field() ?><button class="admin-row-icon admin-row-icon--danger" type="submit" title="Xóa banner" aria-label="Xóa banner"><i class="bi bi-trash" aria-hidden="true"></i></button>
                 </form>
+              <?php endif; ?>
               </div>
             </td>
           </tr>

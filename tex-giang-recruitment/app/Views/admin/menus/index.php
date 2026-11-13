@@ -7,7 +7,7 @@ $partials = BASE_PATH . '/app/Views/partials/admin/';
     <h1 class="admin-h1">Menu website</h1>
     <p class="admin-sub">Menu điều hướng dùng chung cho đầu trang và chân trang, sắp xếp theo thứ tự hiển thị.</p>
   </div>
-  <a href="<?= url('admin/menus/create') ?>" class="btn btn-primary"><i class="bi bi-plus-lg" aria-hidden="true"></i> Thêm menu</a>
+  <?php if (can('content', 'create')): ?><a href="<?= url('admin/menus/create') ?>" class="btn btn-primary"><i class="bi bi-plus-lg" aria-hidden="true"></i> Thêm menu</a><?php endif; ?>
 </div>
 <section class="admin-list-panel">
   <?php if ($menus === []): ?>
@@ -31,7 +31,7 @@ $partials = BASE_PATH . '/app/Views/partials/admin/';
           <td class="admin-directory-name"><a class="admin-link" href="<?= $editUrl ?>"><?= e($itemName) ?></a></td>
           <td class="admin-mono" data-label="Đường dẫn"><?= e($menu['url'] !== '' ? $menu['url'] : '/') ?></td>
           <td data-label="Hiển thị"><?php require $partials . 'list-switch.php'; ?></td>
-          <td class="is-actions"><?php require $partials . 'list-edit-delete.php'; ?></td>
+          <?php $permModule = 'content'; ?><td class="is-actions"><?php require $partials . 'list-edit-delete.php'; ?></td>
         </tr>
         <?php endforeach; ?>
       </tbody>

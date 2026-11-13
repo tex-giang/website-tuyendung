@@ -23,6 +23,7 @@ $groups = [
     ],
     'Hệ thống' => [
         ['settings', 'Cài đặt hệ thống', url('admin/settings'), 0, 'settings', 'bi-gear'],
+        ['roles', 'Phân quyền', url('admin/roles'), 0, 'roles', 'bi-shield-lock'],
         ['users', 'Người dùng quản trị', url('admin/users'), 0, 'users', 'bi-people'],
         ['audit', 'Nhật ký thao tác', url('admin/audit'), 0, 'audit', 'bi-clock-history'],
     ],

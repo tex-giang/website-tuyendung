@@ -14,11 +14,14 @@ $listPager = true;
     <p class="admin-sub">Quản lý các vị trí đang tuyển tại các khu sản xuất.</p>
   </div>
   <div class="admin-head-actions">
+    <?php if (can('jobs', 'create')): ?>
     <a href="<?= url('admin/jobs/template') ?>" class="btn btn-outline"><i class="bi bi-file-earmark-excel" aria-hidden="true"></i> Tải template Excel</a>
     <a href="<?= url('admin/jobs/create') ?>" class="btn btn-primary"><i class="bi bi-plus-lg" aria-hidden="true"></i> Thêm tin tuyển dụng</a>
+    <?php endif; ?>
   </div>
 </div>
 
+<?php if (can('jobs', 'create')): ?>
 <details class="admin-import-panel">
   <summary class="admin-import-panel__summary">
     <span class="admin-import-panel__icon" aria-hidden="true"><i class="bi bi-upload"></i></span>
@@ -45,6 +48,7 @@ $listPager = true;
     <p class="admin-muted admin-import-panel__alt">Máy không có Excel? <a href="<?= url('admin/jobs/template') ?>?format=csv" class="admin-link">Tải bản CSV</a> (cùng nội dung, mở bằng Google Sheets/Notepad).</p>
   </div>
 </details>
+<?php endif; ?>
 
 <div class="admin-list-panel">
   <form class="admin-filters admin-list-toolbar" data-admin-live-filter method="GET" role="search" aria-label="Lọc danh sách tin tuyển dụng" action="<?= $listUrl ?>">
@@ -89,6 +93,7 @@ $listPager = true;
           <td class="is-actions">
             <div class="admin-actions">
               <a href="<?= url('jobs/' . $job['slug']) ?>" target="_blank" rel="noopener" class="admin-row-icon" title="Xem trên website" aria-label="Xem trên website: <?= e($job['title']) ?>"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i></a>
+              <?php if (can('jobs', 'update')): ?>
               <a href="<?= $jobUrl ?>/edit" class="admin-row-icon" title="Chỉnh sửa" aria-label="Chỉnh sửa: <?= e($job['title']) ?>"><i class="bi bi-pencil" aria-hidden="true"></i></a>
               <button type="button" class="admin-row-icon admin-row-menu-trigger" popovertarget="job-status-<?= $jobId ?>" title="Đổi trạng thái" aria-label="Đổi trạng thái: <?= e($job['title']) ?>"><i class="bi bi-list-check" aria-hidden="true"></i></button>
               <div class="admin-row-menu" id="job-status-<?= $jobId ?>" popover data-admin-row-menu>
@@ -101,16 +106,23 @@ $listPager = true;
                   <?php endforeach; ?>
                 </form>
               </div>
+              <?php endif; ?>
+              <?php if (can('jobs', 'create') || can('jobs', 'delete')): ?>
               <button type="button" class="admin-row-icon admin-row-menu-trigger" popovertarget="job-actions-<?= $jobId ?>" title="Thao tác khác" aria-label="Thao tác khác: <?= e($job['title']) ?>"><i class="bi bi-three-dots" aria-hidden="true"></i></button>
               <div class="admin-row-menu" id="job-actions-<?= $jobId ?>" popover data-admin-row-menu>
+                <?php if (can('jobs', 'create')): ?>
                 <form method="POST" action="<?= $jobUrl ?>/duplicate" data-ajax>
                   <?= csrf_field() ?><button type="submit"><i class="bi bi-copy" aria-hidden="true"></i> Nhân bản</button>
                 </form>
+                <?php endif; ?>
+                <?php if (can('jobs', 'delete')): ?>
                 <form method="POST" action="<?= $jobUrl ?>/delete" data-ajax data-ajax-refresh
                       data-confirm="Xoá tin &quot;<?= e($job['title']) ?>&quot;? Hồ sơ ứng tuyển liên quan vẫn được giữ lại.">
                   <?= csrf_field() ?><button class="admin-row-menu__danger" type="submit"><i class="bi bi-trash" aria-hidden="true"></i> Xóa tin</button>
                 </form>
+                <?php endif; ?>
               </div>
+              <?php endif; ?>
             </div>
           </td>
         </tr>

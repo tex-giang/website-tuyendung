@@ -280,6 +280,102 @@ thêm Cron Job trong cPanel chạy mỗi giờ:
 /usr/local/bin/php /home/TAI_KHOAN/tex-giang-recruitment/tools/cron-expire-jobs.php
 ```
 
+## Phân quyền & phạm vi nhà máy
+
+### Tạo vai trò mới
+
+- Vào **Hệ thống → Phân quyền** → **Tạo vai trò**.
+- Đặt **Tên vai trò** (vd: *Quản trị nhà máy Tân Hương*) — mã vai trò tự sinh từ tên,
+  duy nhất, không trùng.
+- Chọn **quyền theo menu** (bảng 13 dòng × Xem / Thêm / Sửa / Xoá). Cột **Tất cả** ở
+  cuối mỗi dòng tick nhanh cả 4 quyền. Bật Thêm/Sửa/Xoá tự bật Xem.
+- Chọn **phạm vi nhà máy**:
+  - **Tất cả nhà máy** → vai trò xem dữ liệu mọi nhà máy.
+  - Tắt và tick các nhà máy → vai trò chỉ xem tin tuyển dụng và hồ sơ ứng tuyển
+    thuộc các nhà máy đó.
+- Bấm **Tạo vai trò** → vai trò xuất hiện trong bảng phân quyền và trong ô
+  **Vai trò** của form Người dùng.
+- Chỉ xoá được vai trò chưa gán cho tài khoản nào. `super_admin` và các vai trò đang
+  dùng phải chuyển tài khoản sang vai trò khác trước.
+
+### Ví dụ: 3 vai trò cho 3 nhà máy
+
+Tạo 3 vai trò, mỗi vai trò chọn 1 nhà máy và bật quyền như nhau
+(Bảng điều khiển, Tin tuyển dụng, Hồ sơ ứng tuyển, Hồ sơ cá nhân):
+
+| Vai trò | Nhà máy | Kết quả |
+|---|---|---|
+| Quản trị nhà máy Tân Hương | Tân Hương | chỉ thấy 9 tin của Tân Hương |
+| Quản trị nhà máy Cai Lậy | Cai Lậy | chỉ thấy 1 tin của Cai Lậy |
+| Quản trị nhà máy Chợ Gạo | Chợ Gạo | chỉ thấy 1 tin của Chợ Gạo |
+
+Mỗi tài khoản gán vào vai trò tương ứng sẽ chỉ thấy tin và hồ sơ của nhà máy đó,
+khi tạo tin chỉ chọn được nhà máy đó, sửa tin nhà máy khác trả về 403.
+
+### Gán tài khoản ngay trong form vai trò
+
+Ở cả form **Tạo vai trò** và **Sửa vai trò** có mục **Gán tài khoản vào vai trò**:
+
+- Tick tài khoản → khi lưu, tài khoản được chuyển sang vai trò này.
+- Bỏ tick tài khoản đang thuộc vai trò → tài khoản tự chuyển về vai trò mặc định
+  **Nhân viên tuyển dụng** (không bị xoá).
+- Tài khoản **Quản trị hệ thống** không hiện trong danh sách gán (tránh tự khoá quyền).
+- Danh sách vai trò hiển thị số tài khoản đang thuộc vai trò ở cột **Tài khoản**.
+- Vẫn có thể đổi vai trò theo cách cũ: **Hệ thống → Người dùng quản trị → Sửa tài khoản**.
+
+### Kết hợp vai trò và tài khoản
+
+Phạm vi hiệu lực = **giao** giữa phạm vi vai trò và phạm vi tài khoản:
+
+- Vai trò = Tất cả, tài khoản = Tất cả → xem mọi nhà máy.
+- Vai trò = nhà máy A, tài khoản = Theo vai trò → chỉ nhà máy A.
+- Vai trò = nhà máy A + B, tài khoản chọn B → chỉ nhà máy B.
+- Vai trò = nhà máy A, tài khoản chọn B → **không thấy gì** (giao rỗng) — tránh cấu hình này.
+
+### Quyền theo menu
+
+- Mỗi vai trò có bảng **menu × 4 thao tác**: Xem · Thêm · Sửa · Xoá.
+  - Không có quyền **Xem** → menu bị ẩn và mọi đường dẫn của mục đó trả về 403.
+  - Bật **Thêm/Sửa/Xoá** sẽ tự bật **Xem**.
+  - **Quản trị hệ thống (super_admin)** luôn toàn quyền, không sửa được.
+- Quyền có hiệu lực ở cả 3 lớp: menu trái, nút thao tác trên bảng, và route xử lý
+  (gọi thẳng URL cũng bị chặn 403).
+- Module khai báo trong `app/Config/permissions.php`; thêm menu mới thì thêm module
+  vào file đó để màn hình phân quyền biết.
+
+### Phạm vi nhà máy theo tài khoản
+
+Khi sửa tài khoản (Hệ thống → Người dùng quản trị):
+
+- **Theo phạm vi của vai trò** (bật) → dùng đúng phạm vi của vai trò đang gán.
+- Tắt và tick các nhà máy cụ thể → thu hẹp thêm cho riêng tài khoản (không mở rộng
+  quá phạm vi vai trò).
+- Tài khoản **super_admin** luôn xem toàn bộ.
+
+### Hành vi áp dụng phạm vi nhà máy
+
+Danh sách, bộ lọc, số đếm, trang chi tiết, dropdown chọn nhà máy khi tạo tin, và
+import Excel đều giới hạn theo phạm vi hiệu lực. Sửa/xoá bản ghi ngoài phạm vi
+trả về 403.
+
+## Phân quyền cũ (đã gộp vào mục trên)
+
+- Vào **Hệ thống → Phân quyền** để chỉnh quyền cho từng vai trò.
+- Mỗi vai trò có bảng **menu × 4 thao tác**: Xem · Thêm · Sửa · Xoá.
+  - Không có quyền **Xem** → menu bị ẩn và mọi đường dẫn của mục đó trả về 403.
+  - Bật **Thêm/Sửa/Xoá** sẽ tự bật **Xem**.
+  - **Quản trị hệ thống (super_admin)** luôn toàn quyền, không chỉnh được.
+- Quyền có hiệu lực ngay ở cả 3 lớp: menu trái, nút thao tác trên bảng, và route xử lý
+  (gọi thẳng URL cũng bị chặn 403).
+- **Phạm vi nhà máy**: khi sửa tài khoản (Hệ thống → Người dùng quản trị)
+  - Bật **Tất cả nhà máy** → xem dữ liệu mọi nhà máy.
+  - Tắt và tick các nhà máy cụ thể → chỉ thấy tin tuyển dụng và hồ sơ ứng tuyển
+    thuộc các nhà máy đó; danh sách, bộ lọc, số đếm, trang chi tiết đều giới hạn theo.
+  - Tạo/sửa tin chỉ chọn được nhà máy trong phạm vi; sửa tin nhà máy khác trả về 403.
+  - Tài khoản **super_admin** luôn xem toàn bộ.
+- Bảng phân quyền chỉ hiện các module khai báo trong `app/Config/permissions.php`
+  (thêm menu mới thì thêm module vào file đó để màn hình phân quyền biết).
+
 ## Import tin tuyển dụng từ Excel (hàng loạt)
 
 - Vào **Tuyển dụng → Tin tuyển dụng** → bấm **Tải template Excel** để lấy file `.xlsx`.
