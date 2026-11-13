@@ -316,7 +316,12 @@ khi tạo tin chỉ chọn được nhà máy đó, sửa tin nhà máy khác tr
 
 Ở cả form **Tạo vai trò** và **Sửa vai trò** có mục **Gán tài khoản vào vai trò**:
 
-- Tick tài khoản → khi lưu, tài khoản được chuyển sang vai trò này.
+- Danh sách hiển thị **các tài khoản đã tạo** ở mục *Người dùng quản trị*.
+  Tick tài khoản → bấm Lưu là tài khoản được gán/chuyển sang vai trò này.
+- Muốn có thêm tài khoản: tạo ở **Người dùng quản trị → Thêm người dùng**, rồi quay lại
+  form vai trò để tick gán.
+- Tài khoản **Quản trị hệ thống** hiển thị mờ, không tick được (không bao giờ bị đổi vai trò).
+  Nếu vai trò chưa có tài khoản nào để gán, form hiện link tắt tới trang tạo tài khoản.
 - Bỏ tick tài khoản đang thuộc vai trò → tài khoản tự chuyển về vai trò mặc định
   **Nhân viên tuyển dụng** (không bị xoá).
 - Tài khoản **Quản trị hệ thống** không hiện trong danh sách gán (tránh tự khoá quyền).

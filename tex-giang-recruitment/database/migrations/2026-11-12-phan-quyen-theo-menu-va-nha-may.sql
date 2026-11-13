@@ -1,6 +1,6 @@
 -- ============================================================================
--- Phân quyền theo menu (xem / thêm / sửa / xoá) + phạm vi nhà máy
--- Chạy 1 lần trên database đã cài đặt. Idempotent ở mức có thể.
+-- Phân quyền theo menu (xem / thêm / sửa / xoá) + phạm vi nhà máy theo tài khoản
+-- Chạy được nhiều lần (idempotent): không lỗi nếu đã chạy trước đó.
 -- ============================================================================
 
 -- 1) Ma trận quyền theo vai trò × module -------------------------------------
@@ -16,10 +16,19 @@ CREATE TABLE IF NOT EXISTS role_permissions (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 2) Phạm vi nhà máy của từng tài khoản --------------------------------------
--- all_branches = 1: xem toàn bộ nhà máy (không giới hạn)
--- all_branches = 0: chỉ xem các nhà máy liệt kê trong user_branches
-ALTER TABLE users
-  ADD COLUMN all_branches TINYINT(1) NOT NULL DEFAULT 1 AFTER role_id;
+-- all_branches = 1: xem toàn bộ nhà máy; = 0: chỉ các nhà máy trong user_branches
+SET @has_col := (
+  SELECT COUNT(*) FROM information_schema.COLUMNS
+  WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'all_branches'
+);
+SET @sql := IF(
+  @has_col = 0,
+  'ALTER TABLE users ADD COLUMN all_branches TINYINT(1) NOT NULL DEFAULT 1 AFTER role_id',
+  'DO 0'
+);
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
 
 CREATE TABLE IF NOT EXISTS user_branches (
   user_id   BIGINT UNSIGNED   NOT NULL,
@@ -30,7 +39,8 @@ CREATE TABLE IF NOT EXISTS user_branches (
   CONSTRAINT fk_user_branches_branch FOREIGN KEY (branch_id) REFERENCES branches (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 3) Dữ liệu mặc định: giữ đúng hành vi cũ -----------------------------------
+-- 3) Quyền mặc định cho các vai trò có sẵn -----------------------------------
+-- INSERT IGNORE: không ghi đè quyền đã chỉnh trong màn hình Phân quyền.
 INSERT IGNORE INTO role_permissions (role_id, module, can_view, can_create, can_update, can_delete)
 SELECT r.id, m.module, m.can_view, m.can_create, m.can_update, m.can_delete
 FROM roles r
@@ -62,5 +72,5 @@ JOIN (
 ) m
 WHERE r.name = 'recruiter';
 
--- 4) Tài khoản cũ: mặc định xem toàn bộ nhà máy
+-- 4) Tài khoản cũ: mặc định xem toàn bộ nhà máy ------------------------------
 UPDATE users SET all_branches = 1 WHERE all_branches IS NULL;

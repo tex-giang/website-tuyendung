@@ -35,9 +35,10 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- 1. PHÂN QUYỀN & NGƯỜI DÙNG QUẢN TRỊ
 -- ---------------------------------------------------------------------------
 CREATE TABLE roles (
-  id          TINYINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  name        VARCHAR(50)  NOT NULL,
-  description VARCHAR(255) NULL,
+  id           TINYINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  name         VARCHAR(50)  NOT NULL,
+  description  VARCHAR(255) NULL,
+  all_branches TINYINT(1)   NOT NULL DEFAULT 1,
   PRIMARY KEY (id),
   UNIQUE KEY uq_roles_name (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -62,16 +63,6 @@ CREATE TABLE users (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Ma trận phân quyền: mỗi vai trò × module có 4 cờ xem / thêm / sửa / xoá.
--- Phạm vi nhà máy theo vai trò (khi roles.all_branches = 0).
-CREATE TABLE role_branches (
-  role_id   TINYINT UNSIGNED  NOT NULL,
-  branch_id SMALLINT UNSIGNED NOT NULL,
-  PRIMARY KEY (role_id, branch_id),
-  KEY idx_role_branches_branch (branch_id),
-  CONSTRAINT fk_role_branches_role FOREIGN KEY (role_id) REFERENCES roles (id) ON DELETE CASCADE,
-  CONSTRAINT fk_role_branches_branch FOREIGN KEY (branch_id) REFERENCES branches (id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 CREATE TABLE role_permissions (
   role_id    TINYINT UNSIGNED NOT NULL,
   module     VARCHAR(50)      NOT NULL,
@@ -110,6 +101,16 @@ CREATE TABLE user_branches (
   KEY idx_user_branches_branch (branch_id),
   CONSTRAINT fk_user_branches_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
   CONSTRAINT fk_user_branches_branch FOREIGN KEY (branch_id) REFERENCES branches (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Phạm vi nhà máy theo vai trò (khi roles.all_branches = 0).
+CREATE TABLE role_branches (
+  role_id   TINYINT UNSIGNED  NOT NULL,
+  branch_id SMALLINT UNSIGNED NOT NULL,
+  PRIMARY KEY (role_id, branch_id),
+  KEY idx_role_branches_branch (branch_id),
+  CONSTRAINT fk_role_branches_role FOREIGN KEY (role_id) REFERENCES roles (id) ON DELETE CASCADE,
+  CONSTRAINT fk_role_branches_branch FOREIGN KEY (branch_id) REFERENCES branches (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE branch_contacts (

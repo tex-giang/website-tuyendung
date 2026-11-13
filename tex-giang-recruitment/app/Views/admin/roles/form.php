@@ -94,27 +94,40 @@ $allBranches = (int) ($values['all_branches'] ?? 1) === 1;
       <?php endforeach; ?>
     </section>
 
-    <?php if ($assignableUsers !== []): ?>
     <section class="admin-role-section" aria-labelledby="role-users-title">
       <h2 class="admin-cms-section-intro" id="role-users-title">Gán tài khoản vào vai trò</h2>
       <p class="admin-muted admin-role-section__hint">
         Tick tài khoản để gán vào vai trò này. Bỏ tick tài khoản đang thuộc vai trò sẽ chuyển tài khoản đó về
         vai trò mặc định <strong>Nhân viên tuyển dụng</strong>. Tài khoản Quản trị hệ thống không gán được.
       </p>
+      <?php if ($assignableUsers === []): ?>
+      <p class="admin-muted">
+        Chưa có tài khoản nào trong hệ thống.
+        <a href="<?= url('admin/users/create') ?>" class="admin-link">Tạo tài khoản ở Người dùng quản trị</a> rồi quay lại đây để gán.
+      </p>
+      <?php else: ?>
       <div class="admin-role-users">
         <?php foreach ($assignableUsers as $account):
             $accountId = (int) $account['id'];
-            $checked = in_array($accountId, $selectedUsers, true);
+            $isSuperAccount = ($account['role_name'] ?? '') === 'super_admin';
+            $checked = !$isSuperAccount && in_array($accountId, $selectedUsers, true);
         ?>
-        <label class="admin-role-user<?= (int) $account['is_active'] === 1 ? '' : ' is-inactive' ?>">
-          <input type="checkbox" name="user_ids[]" value="<?= $accountId ?>"<?= $checked ? ' checked' : '' ?>>
+        <label class="admin-role-user<?= (int) $account['is_active'] === 1 ? '' : ' is-inactive' ?><?= $isSuperAccount ? ' is-disabled' : '' ?>">
+          <input type="checkbox" name="user_ids[]" value="<?= $accountId ?>"<?= $checked ? ' checked' : '' ?><?= $isSuperAccount ? ' disabled' : '' ?>>
           <span class="admin-role-user__name"><?= e($account['full_name']) ?><?= (int) $account['is_active'] === 1 ? '' : ' (đã khoá)' ?></span>
-          <span class="admin-role-user__meta"><?= e($account['username']) ?> · <?= e($account['role_label'] ?: $account['role_name']) ?></span>
+          <span class="admin-role-user__meta">
+            <?= e($account['username']) ?> · <?= e($account['role_label'] ?: $account['role_name']) ?>
+            <?php if ($isSuperAccount): ?><em> · không gán được</em><?php endif; ?>
+          </span>
         </label>
         <?php endforeach; ?>
       </div>
+      <p class="admin-muted admin-role-section__hint">
+        Danh sách là các tài khoản đã tạo ở mục <strong>Người dùng quản trị</strong>.
+        Tài khoản <strong>Quản trị hệ thống</strong> hiển thị mờ và không gán được.
+      </p>
+      <?php endif; ?>
     </section>
-    <?php endif; ?>
 
     <div class="admin-cms-actions admin-compact-actions">
       <a href="<?= $back ?>" class="btn btn-outline">Hủy</a>

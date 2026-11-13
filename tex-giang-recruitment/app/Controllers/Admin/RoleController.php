@@ -330,6 +330,7 @@ final class RoleController extends Controller
     {
         $pdo = Database::connection();
         $userIds = array_values(array_unique(array_map('intval', $userIds)));
+        // Bảo vệ: không bao giờ đổi vai trò của tài khoản Quản trị hệ thống.
         if ($userIds !== []) {
             $placeholders = [];
             $params = ['role_id' => $roleId];
@@ -338,7 +339,9 @@ final class RoleController extends Controller
                 $placeholders[] = ':' . $key;
                 $params[$key] = $id;
             }
-            $stmt = $pdo->prepare('UPDATE users SET role_id = :role_id WHERE id IN (' . implode(', ', $placeholders) . ')');
+            $sql = 'UPDATE users u JOIN roles r ON r.id = u.role_id SET u.role_id = :role_id'
+                 . ' WHERE u.id IN (' . implode(', ', $placeholders) . ') AND r.name <> \'super_admin\'';
+            $stmt = $pdo->prepare($sql);
             $stmt->execute($params);
         }
 
@@ -366,13 +369,13 @@ final class RoleController extends Controller
         return $id === false ? null : (int) $id;
     }
 
-    /** @return array<int, array<string, mixed>> tài khoản có thể gán (trừ super_admin) */
+    /** @return array<int, array<string, mixed>> tất cả tài khoản đã tạo (super_admin chỉ để hiển thị) */
     private function assignableUsers(): array
     {
         return Database::connection()->query(
             "SELECT u.id, u.username, u.full_name, u.is_active, r.name AS role_name, r.description AS role_label
              FROM users u JOIN roles r ON r.id = u.role_id
-             WHERE r.name <> 'super_admin' ORDER BY u.full_name, u.username"
+             ORDER BY (r.name = 'super_admin'), u.full_name, u.username"
         )->fetchAll();
     }
 

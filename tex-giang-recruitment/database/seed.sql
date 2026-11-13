@@ -64,11 +64,6 @@ WHERE r.name IN ('quan_tri_nha_may_tan_huong', 'quan_tri_nha_may_cai_lay', 'quan
 UPDATE roles SET all_branches = 0
 WHERE name IN ('quan_tri_nha_may_tan_huong', 'quan_tri_nha_may_cai_lay', 'quan_tri_nha_may_cho_gao');
 
-INSERT INTO role_branches (role_id, branch_id)
-SELECT r.id, b.id FROM roles r JOIN branches b
-WHERE (r.name = 'quan_tri_nha_may_tan_huong' AND b.slug = 'tan-huong')
-   OR (r.name = 'quan_tri_nha_may_cai_lay'   AND b.slug = 'cai-lay')
-   OR (r.name = 'quan_tri_nha_may_cho_gao'   AND b.slug = 'cho-gao');
 
 -- 2. TÀI KHOẢN QUẢN TRỊ ĐẦU TIÊN -------------------------------------------
 INSERT INTO users (role_id, username, password_hash, full_name, email, phone)
@@ -82,6 +77,13 @@ INSERT INTO branches (slug, name, address, phone, sort_order) VALUES
   ('tan-huong', 'Tân Hương', 'Lô BII-8, đường D3, KCN Tân Hương, Xã Tân Hương, Tỉnh Đồng Tháp', '02733937274', 1),
   ('cai-lay',   'Cai Lậy',   'Ấp Bình Quới, Xã Bình Phú, Tỉnh Đồng Tháp', '02733937274', 2),
 ('cho-gao',   'Chợ Gạo',   'Ấp Hòa Lợi Tiểu, Xã Bình Ninh, Tỉnh Đồng Tháp', '02733937274', 3);
+
+-- Giới hạn nhà máy cho 3 vai trò (sau khi branches đã seed)
+INSERT INTO role_branches (role_id, branch_id)
+SELECT r.id, b.id FROM roles r JOIN branches b
+WHERE (r.name = 'quan_tri_nha_may_tan_huong' AND b.slug = 'tan-huong')
+   OR (r.name = 'quan_tri_nha_may_cai_lay'   AND b.slug = 'cai-lay')
+   OR (r.name = 'quan_tri_nha_may_cho_gao'   AND b.slug = 'cho-gao');
 
 -- 3b. NGƯỜI LIÊN HỆ TUYỂN DỤNG THEO KHU SẢN XUẤT ---------------------------
 INSERT INTO branch_contacts (branch_id, full_name, title, phone, sort_order) VALUES
