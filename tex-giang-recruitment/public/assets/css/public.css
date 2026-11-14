@@ -136,7 +136,6 @@ body.has-dialog { overflow: hidden; }
   .tg-public .news-list-item h2 { font-size: 18px; }
   .tg-public .float-stack { bottom: 16px; }
   .page-jobs .intro-photo img, .page-apply .intro-photo img { height: 130px; object-position: center 45%; }
-  .tg-public .float-stack a[aria-label*="Zalo"] { display: none; }
   .tg-public .tg-btn { white-space: normal; line-height: 1.35; text-align: center; }
   .tg-public header > .tg-container { gap: 8px; }
   .tg-public header > .tg-container > a > span { font-size: 14px; }
@@ -566,6 +565,79 @@ body.has-dialog { overflow: hidden; }
   .apply-dialog__footer { padding: 12px 18px calc(13px + env(safe-area-inset-bottom)); }
   .apply-dialog__actions { width: 100%; }
   .apply-dialog__actions .tg-btn { flex: 1; }
+
+  /* Cỡ chữ gọn cho mobile: chỉ giảm chữ phụ.
+     Input/select/textarea GIỮ 16px để iOS không tự zoom khi focus. */
+  .apply-dialog__eyebrow { font-size: 11.5px; }
+  .apply-dialog__title { font-size: 19px; line-height: 1.3; }
+  .apply-dialog__subtitle { font-size: 14px; line-height: 1.5; }
+  .apply-dialog__body .form-label { font-size: 15px; line-height: 1.4; }
+  .apply-dialog__body .form-hint { font-size: 14px; line-height: 1.5; }
+  .apply-dialog__body .field-error { font-size: 13px; }
+  .apply-dialog__page-link { font-size: 13.5px; }
+  .apply-dialog__body h3 { font-size: 16px; }
+  .apply-dialog__body legend { font-size: 15px; }
+  .apply-dialog__body fieldset { margin: 0; }
+  .apply-dialog input[type="checkbox"] + span,
+  .apply-dialog .checkbox-label { font-size: 14px; line-height: 1.5; }
+
+  /* Dialog liên hệ: số điện thoại + tên gọn hơn */
+  #contact-dialog .text-\[13px\] { font-size: 12.5px; }
+  #contact-dialog .text-\[14px\] { font-size: 13.5px; }
+}
+
+/* Màn hình thấp (landscape điện thoại, máy nhỏ): thu header/footer lại để form còn chỗ */
+@media (max-height: 560px) {
+  .apply-dialog__eyebrow { display: none; }
+  .apply-dialog__header { padding: 12px 16px 10px; }
+  .apply-dialog__title { margin-top: 0; font-size: 18px; }
+  .apply-dialog__subtitle { margin-top: 4px; font-size: 13.5px; line-height: 1.45; }
+  .apply-dialog__body { padding: 14px 16px 6px; }
+  .apply-dialog__footer { padding: 10px 16px calc(11px + env(safe-area-inset-bottom)); gap: 8px 14px; }
+  .apply-dialog__close { width: 36px; height: 36px; }
+}
+
+/* ---------- Dialog QR: không tràn viewport ở mọi kích thước ---------- */
+#qr-modal { padding: 12px; }
+#qr-modal > div {
+  max-width: min(380px, calc(100vw - 24px));
+  max-height: calc(100dvh - 24px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+@media (max-width: 640px) {
+  .tg-public .tg-modal { padding: 12px; }
+  #contact-dialog > div {
+    max-width: calc(100vw - 24px);
+    max-height: calc(100dvh - 24px);
+  }
+  #qr-modal > div { padding: 20px 18px; }
+  #qr-modal .my-5 { margin-block: 14px; }
+  #qr-modal #qr-code-img { width: 160px; height: 160px; }
+  #qr-modal p#qr-target-url { font-size: 12.5px; }
+}
+@media (max-height: 560px) {
+  #qr-modal > div { padding: 16px 18px; }
+  #qr-modal #qr-code-img { width: 130px; height: 130px; }
+  #qr-modal .my-5 { margin-block: 10px; }
+  #qr-modal h3 { font-size: 16px; }
+  #qr-modal p { font-size: 13px; }
+}
+
+/* ---------- Popup tuyển gấp: không tràn viewport (mọi kích thước) ---------- */
+dialog.urgent-dialog {
+  max-height: calc(100dvh - 24px);
+  margin: 12px auto;
+  padding: 0;
+  overflow: hidden;
+}
+dialog.urgent-dialog > div {
+  max-height: calc(100dvh - 24px);
+}
+@media (max-height: 620px) {
+  dialog.urgent-dialog header { padding: 14px 16px; }
+  dialog.urgent-dialog h2 { font-size: 19px; }
+  dialog.urgent-dialog p { font-size: 13px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1548,3 +1620,33 @@ html.tg-lightbox-open body {
   background: linear-gradient(180deg, #009FE6 0%, #0757D8 55%, #8B2BE2 140%);
 }
 .float-btn--messenger .float-btn__icon { width: 26px; height: 26px; }
+
+/* ---------- Mobile: cụm nút nổi gọn, đủ 4 kênh (Messenger, Zalo, FB, gọi) ---------- */
+@media (max-width: 639px) {
+  .tg-public .float-stack {
+    bottom: calc(16px + env(safe-area-inset-bottom));
+    gap: 6px;
+    right: max(10px, env(safe-area-inset-right));
+  }
+  .tg-public .float-stack .float-btn {
+    width: 42px;
+    height: 42px;
+  }
+  .tg-public .float-stack .float-btn__icon {
+    width: 22px;
+    height: 22px;
+  }
+  .tg-public .float-stack .float-btn--zalo .float-btn__icon,
+  .tg-public .float-stack .float-btn--messenger .float-btn__icon {
+    width: 23px;
+    height: 23px;
+  }
+  /* Trang chi tiết tin có thanh CTA đáy → đẩy cụm nút lên trên thanh đó */
+  .tg-public.page-job-detail .float-stack {
+    bottom: calc(84px + env(safe-area-inset-bottom));
+  }
+  /* Ẩn nút "lên đầu trang" trên mobile cho gọn (vuốt lên nhanh hơn) */
+  .tg-public .float-stack #back-to-top {
+    display: none;
+  }
+}

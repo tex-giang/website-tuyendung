@@ -280,6 +280,35 @@ thêm Cron Job trong cPanel chạy mỗi giờ:
 /usr/local/bin/php /home/TAI_KHOAN/tex-giang-recruitment/tools/cron-expire-jobs.php
 ```
 
+## Cài web ra màn hình chính điện thoại (PWA)
+
+Website đã có **manifest** + **service worker** nên cài ra màn hình chính sẽ mở dạng
+ứng dụng, **không còn thanh địa chỉ (URL)**.
+
+**Cách cài trên điện thoại**
+
+- **Android (Chrome):** mở website → menu ⋮ → **Thêm vào màn hình chính / Cài đặt ứng dụng**.
+  Biểu tượng TEX-GIANG xuất hiện ở màn hình chính; mở lên chạy toàn màn hình.
+- **iPhone (Safari):** mở website → nút **Chia sẻ** → **Thêm vào màn hình chính**.
+  Nhờ `apple-mobile-web-app-capable` nên mở lên cũng không còn thanh URL.
+
+**Yêu cầu kỹ thuật**
+
+- Website phải chạy **HTTPS** (bắt buộc để trình duyệt cho cài PWA). `localhost` cũng được.
+- Phải có đủ: `/manifest.webmanifest` (200, `application/manifest+json`), `/sw.js`,
+  icon 192×192 và 512×512 (đã có trong `public/assets/images/favicons/`).
+- Sau khi deploy, mở web bằng điện thoại → cài lại. Nếu trước đó đã "Thêm vào màn hình chính"
+  bản cũ, xoá biểu tượng cũ rồi thêm lại để nhận manifest mới.
+
+**File liên quan**
+
+| Thành phần | Vị trí |
+|---|---|
+| Manifest động (name, icon, start_url, display standalone) | `app/Controllers/Public/SeoController.php` → `manifest()` |
+| Route | `routes/web.php` → `/manifest.webmanifest`, `/manifest.json` |
+| Thẻ `<link rel="manifest">` + meta iOS | `app/Views/layouts/public.php` |
+| Service worker | `public/sw.js` (đăng ký trong layout, HTML luôn lấy mạng nên không bị nội dung cũ) |
+
 ## Nút chat Messenger fanpage
 
 Website có **nút tròn Messenger** trong cụm nút nổi góc phải dưới (cạnh Facebook, Zalo).

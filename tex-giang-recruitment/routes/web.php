@@ -34,6 +34,8 @@ $router->get('/news/{slug}', [PageController::class, 'newsDetail']);
 $router->post('/news/subscribe', [PageController::class, 'subscribe'], $csrf());
 
 // SEO: robots.txt + sitemap.xml sinh từ database (tin/bài mới tự vào sitemap).
+$router->get('/manifest.webmanifest', [SeoController::class, 'manifest']);
+$router->get('/manifest.json', [SeoController::class, 'manifest']);
 $router->get('/robots.txt', [SeoController::class, 'robots']);
 $router->get('/sitemap.xml', [SeoController::class, 'sitemap']);
 

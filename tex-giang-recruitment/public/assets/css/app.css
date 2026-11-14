@@ -401,14 +401,17 @@ html {
   color: var(--tg-muted);
 }
 
-.form-input:focus {
+.form-input:focus,
+.form-input:focus-visible {
   border-color: var(--tg-accent);
   outline: none;
+  box-shadow: 0 0 0 3px rgba(8, 122, 85, .12);
 }
 
-.form-input:focus-visible {
-  outline: 2px solid var(--tg-accent);
-  outline-offset: 1px;
+.form-input.is-invalid:focus,
+.form-input[aria-invalid="true"]:focus {
+  border-color: #B42318;
+  box-shadow: 0 0 0 3px rgba(180, 35, 24, .12);
 }
 
 select.form-input {

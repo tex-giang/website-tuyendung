@@ -16,6 +16,67 @@ use App\Models\Post;
  */
 final class SeoController extends Controller
 {
+    /**
+     * manifest.webmanifest — cần cho "Thêm vào màn hình chính" (PWA).
+     * display: standalone để mở app không còn thanh địa chỉ.
+     */
+    public function manifest(): void
+    {
+        $name = trim(settings('site_name', 'Tuyển dụng TEX-GIANG'));
+        $short = 'TEX-GIANG';
+
+        $icon = static fn(string $file, string $sizes, string $purpose = 'any'): array => [
+            'src'     => Seo::absolute(asset('images/favicons/' . $file)),
+            'sizes'   => $sizes,
+            'type'    => 'image/png',
+            'purpose' => $purpose,
+        ];
+
+        $manifest = [
+            'name'             => $name,
+            'short_name'       => $short,
+            'description'      => trim(settings('seo_description', 'Cổng tuyển dụng TEX-GIANG')),
+            'lang'             => 'vi',
+            'dir'              => 'ltr',
+            'start_url'        => Seo::absolute(url('')),
+            'scope'            => Seo::absolute(url('')),
+            'display'          => 'standalone',
+            'display_override' => ['standalone', 'minimal-ui'],
+            'orientation'      => 'portrait',
+            'background_color' => '#ffffff',
+            'theme_color'      => '#087A55',
+            'categories'       => ['business', 'jobs'],
+            'icons'            => [
+                $icon('icon-192.png', '192x192'),
+                $icon('icon-512.png', '512x512'),
+                $icon('apple-touch-icon.png', '180x180'),
+            ],
+            'shortcuts'        => [
+                [
+                    'name'       => 'Việc làm đang tuyển',
+                    'short_name' => 'Việc làm',
+                    'url'        => Seo::absolute(url('jobs')),
+                    'icons'      => [$icon('icon-192.png', '192x192')],
+                ],
+                [
+                    'name'       => 'Ứng tuyển trực tuyến',
+                    'short_name' => 'Ứng tuyển',
+                    'url'        => Seo::absolute(url('apply')),
+                    'icons'      => [$icon('icon-192.png', '192x192')],
+                ],
+                [
+                    'name'       => 'Tin tức',
+                    'short_name' => 'Tin tức',
+                    'url'        => Seo::absolute(url('news')),
+                    'icons'      => [$icon('icon-192.png', '192x192')],
+                ],
+            ],
+        ];
+
+        header('Content-Type: application/manifest+json; charset=utf-8');
+        echo json_encode($manifest, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+    }
+
     public function robots(): void
     {
         header('Content-Type: text/plain; charset=utf-8');

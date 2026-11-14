@@ -1425,3 +1425,15 @@ select.field__input {
   .btn:active { transform: none; }
 }
 
+/* Ô nhập liệu admin: không dùng outline (tránh viền kép), chỉ đổi viền + bóng */
+.admin-body input:not([type="checkbox"]):not([type="radio"]):focus,
+.admin-body input:not([type="checkbox"]):not([type="radio"]):focus-visible,
+.admin-body select:focus,
+.admin-body select:focus-visible,
+.admin-body textarea:focus,
+.admin-body textarea:focus-visible,
+.admin-body .field__input:focus-visible,
+.admin-body .admin-select-sm:focus-visible {
+  outline: none !important;
+  outline-offset: 0 !important;
+}

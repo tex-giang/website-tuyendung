@@ -45,6 +45,14 @@ $scripts = $page['scripts'] ?? [];
   <meta name="twitter:image" content="<?= e($ogImageUrl) ?>">
   <meta name="theme-color" content="#087A55">
 
+  <!-- PWA: thêm vào màn hình chính mở dạng app, không thanh địa chỉ -->
+  <link rel="manifest" href="<?= url('manifest.webmanifest') ?>">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="TEX-GIANG">
+  <meta name="application-name" content="TEX-GIANG">
+
   <link rel="icon" href="<?= url('favicon.ico') ?>" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="<?= asset('images/favicons/favicon-32x32.png') ?>">
   <link rel="icon" type="image/png" sizes="16x16" href="<?= asset('images/favicons/favicon-16x16.png') ?>">
@@ -83,5 +91,12 @@ $scripts = $page['scripts'] ?? [];
 <?php foreach ($scripts as $script): ?>
 <script src="<?= e(asset('js/' . $script)) ?>"></script>
 <?php endforeach; ?>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register(<?= json_encode(url('sw.js')) ?>, { scope: <?= json_encode(url('')) ?> }).catch(function () {});
+  });
+}
+</script>
 </body>
 </html>
