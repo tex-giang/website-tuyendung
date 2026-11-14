@@ -112,6 +112,23 @@ function zalo_url(): string
     return preg_match('#^https?://#i', $value) === 1 ? $value : 'https://zalo.me/' . $value;
 }
 
+/**
+ * Link chat Messenger của fanpage (nút nổi mở thẳng cuộc trò chuyện).
+ * Nhận link đầy đủ (https://m.me/...) hoặc chỉ ID/tên fanpage.
+ */
+function messenger_url(): string
+{
+    $value = trim(settings('messenger', ''));
+    if ($value === '') {
+        // Mặc định fanpage TEX-GIANG.
+        return 'https://m.me/107200507519091';
+    }
+    if (preg_match('#^https?://#i', $value) === 1) {
+        return $value;
+    }
+
+    return 'https://m.me/' . ltrim($value, '@/');
+}
 function setting_int(string $key, int $default = 0): int
 {
     $value = settings($key, '');

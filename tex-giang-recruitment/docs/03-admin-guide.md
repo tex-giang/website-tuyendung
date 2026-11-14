@@ -280,6 +280,28 @@ thêm Cron Job trong cPanel chạy mỗi giờ:
 /usr/local/bin/php /home/TAI_KHOAN/tex-giang-recruitment/tools/cron-expire-jobs.php
 ```
 
+## Nút chat Messenger fanpage
+
+Website có **nút tròn Messenger** trong cụm nút nổi góc phải dưới (cạnh Facebook, Zalo).
+Bấm vào mở thẳng cuộc trò chuyện Messenger với fanpage (`https://m.me/...`) — khách nhắn
+tin rơi vào hộp thư Fanpage.
+
+**Cấu hình** — Hệ thống → Cài đặt hệ thống → nhóm **Kênh liên hệ**:
+
+| Trường | Ý nghĩa |
+|---|---|
+| Facebook | Link fanpage |
+| **Messenger (m.me/…)** | Link chat Messenger. Nhập link đầy đủ `https://m.me/107200507519091` hoặc chỉ ID fanpage `107200507519091`. Để trống → dùng mặc định fanpage TEX-GIANG |
+
+- Mặc định đã gắn: `https://m.me/107200507519091`.
+- Nút hiển thị trên mọi trang công khai, ẩn khi in.
+- Muốn đổi fanpage: thay link trong Cài đặt → Lưu (Ctrl+F5 ngoài web).
+- Code: `messenger_url()` trong `app/helpers.php`, nút ở
+  `app/Views/partials/public/footer.php`, style `.float-btn--messenger` trong `public/assets/css/public.css`.
+
+Ghi chú: khung chat nhúng của Facebook (Customer Chat Plugin) đã ngừng hỗ trợ, nên dùng
+nút mở Messenger là cách ổn định hiện tại.
+
 ## Phân quyền & phạm vi nhà máy
 
 ### Tạo vai trò mới

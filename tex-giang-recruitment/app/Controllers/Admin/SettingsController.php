@@ -33,7 +33,8 @@ final class SettingsController extends Controller
             'hint' => 'Các kênh hiển thị ở chân trang và trang Liên hệ.',
             'fields' => [
                 'zalo'     => ['Zalo', 'text', 500],
-                'facebook' => ['Facebook', 'text', 500],
+                'facebook'  => ['Facebook', 'text', 500],
+                'messenger' => ['Messenger (m.me/…)', 'text', 500],
                 'youtube'  => ['YouTube', 'text', 500],
             ],
         ],

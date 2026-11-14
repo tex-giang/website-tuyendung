@@ -1536,3 +1536,15 @@ html.tg-lightbox-open body {
   .tg-lightbox__image { max-height: calc(100vh - 210px); }
   .tg-lightbox__caption { font-size: 13px; padding: 0 10px; }
 }
+
+/* Nút Messenger fanpage: nền gradient thương hiệu, logo trắng */
+.float-btn--messenger {
+  border-color: #0866FF;
+  background: linear-gradient(180deg, #00B2FF 0%, #0866FF 55%, #A033FF 140%);
+  color: #fff;
+}
+.float-btn--messenger:hover {
+  border-color: #0757D8;
+  background: linear-gradient(180deg, #009FE6 0%, #0757D8 55%, #8B2BE2 140%);
+}
+.float-btn--messenger .float-btn__icon { width: 26px; height: 26px; }

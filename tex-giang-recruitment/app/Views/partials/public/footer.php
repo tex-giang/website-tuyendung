@@ -117,6 +117,12 @@ $branchContacts = \App\Models\BranchContact::activeGrouped();
      class="float-btn float-btn--facebook" aria-label="Fanpage Facebook TEX-GIANG" title="Fanpage Facebook">
     <img src="<?= asset('images/icons/facebook.svg') ?>" alt="" aria-hidden="true" width="24" height="24" class="tg-icon float-btn__icon">
   </a>
+  <?php $messengerUrl = messenger_url(); ?>
+  <?php if ($messengerUrl !== ''): ?>
+  <a href="<?= e($messengerUrl) ?>" target="_blank" rel="noopener" class="float-btn float-btn--messenger" aria-label="Chat Messenger fanpage TEX-GIANG" title="Chat Messenger">
+    <svg class="float-btn__icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="26" height="26"><path d="M12 0C5.373 0 0 4.974 0 11.111c0 3.498 1.744 6.614 4.469 8.654V24l4.088-2.242c1.092.3 2.246.464 3.443.464 6.627 0 12-4.974 12-11.111S18.627 0 12 0zm1.191 14.963l-3.055-3.26-5.963 3.26L10.732 8.6l3.131 3.26L19.752 8.6l-6.561 6.363z"/></svg>
+  </a>
+  <?php endif; ?>
   <?php if ($zalo !== ''): ?>
   <a href="<?= e(zalo_url()) ?>" target="_blank" rel="noopener" class="float-btn float-btn--zalo" aria-label="Chat Zalo tuyển dụng" title="Chat Zalo">
     <img src="<?= asset('images/icons/zalo.svg') ?>" alt="" aria-hidden="true" width="24" height="24" class="tg-icon float-btn__icon">

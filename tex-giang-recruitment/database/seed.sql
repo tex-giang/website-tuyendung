@@ -119,6 +119,7 @@ INSERT INTO settings (`key`, `value`, `group`) VALUES
   ('email',            'nhansu@tex-giang.com.vn', 'contact'),
   ('zalo',             '02733937274', 'contact'),
   ('facebook',         'https://www.facebook.com/profile.php?id=100063719192197', 'social'),
+  ('messenger',        'https://m.me/107200507519091', 'social'),
   ('youtube',          'https://www.youtube.com/', 'social'),
   ('website',          'https://tex-giang.com.vn', 'social'),
   ('seo_title',        'Tuyển dụng TEX-GIANG — Tân Hương, Cai Lậy, Chợ Gạo', 'seo'),
