@@ -39,9 +39,9 @@ $seoLimits = ['seo_title' => 70, 'seo_description' => 160];
         <label class="field<?= $wide ? ' field--span2' : '' ?>">
           <span class="field__label"><?= e($label) ?><?= $required ? ' <em>*</em>' : '' ?></span>
           <?php if ($type === 'textarea'): ?>
-          <textarea class="<?= $inputClass ?>" name="<?= e($key) ?>" rows="3" maxlength="<?= (int) $max ?>"><?= e($value) ?></textarea>
+          <textarea class="<?= $inputClass ?>" placeholder="<?= e('Nhập ' . mb_strtolower($label)) ?>" name="<?= e($key) ?>" rows="3" maxlength="<?= (int) $max ?>"><?= e($value) ?></textarea>
           <?php else: ?>
-          <input class="<?= $inputClass ?>" type="<?= e($type) ?>" name="<?= e($key) ?>" value="<?= e($value) ?>"
+          <input class="<?= $inputClass ?>" type="<?= e($type) ?>" placeholder="<?= e('Nhập ' . mb_strtolower($label)) ?>" name="<?= e($key) ?>" value="<?= e($value) ?>"
                  <?= $type === 'number' ? 'step="1"' : 'maxlength="' . (int) $max . '"' ?><?= $key === 'jobs_per_page' ? ' min="2" max="50"' : '' ?><?= $required ? ' required' : '' ?>>
           <?php endif; ?>
           <?php if (isset($hints[$key])): ?><span class="admin-muted"><?= e($hints[$key]) ?></span><?php endif; ?>

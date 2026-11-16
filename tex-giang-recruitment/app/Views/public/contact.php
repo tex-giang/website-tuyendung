@@ -226,21 +226,21 @@ foreach (\App\Models\Branch::active() as $branchRow) {
             <div>
               <label class="form-label" for="contact-name">Họ và tên <span class="req">*</span></label>
               <input type="text" id="contact-name" name="full_name" required autocomplete="name" maxlength="150"
-                     placeholder="Ví dụ: Nguyễn Văn C" class="form-input<?= $err('full_name') ? ' is-invalid' : '' ?>"
+                     placeholder="Nhập họ và tên" class="form-input<?= $err('full_name') ? ' is-invalid' : '' ?>"
                      value="<?= e($val('full_name')) ?>">
               <?php if ($err('full_name')): ?><p class="field-error"><?= e($err('full_name')) ?></p><?php endif; ?>
             </div>
             <div>
               <label class="form-label" for="contact-phone">Số điện thoại <span class="req">*</span></label>
               <input type="tel" id="contact-phone" name="phone" required autocomplete="tel" inputmode="tel" value="<?= e($val('phone')) ?>"
-                     placeholder="09xx xxx xxx" class="form-input<?= $err('phone') ? ' is-invalid' : '' ?>" data-phone-format>
+                     placeholder="Nhập số điện thoại" class="form-input<?= $err('phone') ? ' is-invalid' : '' ?>" data-phone-format>
                      
               <?php if ($err('phone')): ?><p class="field-error"><?= e($err('phone')) ?></p><?php endif; ?>
             </div>
             <div class="sm:col-span-2">
               <label class="form-label" for="contact-email">Email (nếu muốn nhận phản hồi qua email)</label>
               <input type="email" id="contact-email" name="email" autocomplete="email" maxlength="190"
-                     placeholder="email@gmail.com" class="form-input<?= $err('email') ? ' is-invalid' : '' ?>"
+                     placeholder="Nhập địa chỉ email" class="form-input<?= $err('email') ? ' is-invalid' : '' ?>"
                      value="<?= e($val('email')) ?>">
               <?php if ($err('email')): ?><p class="field-error"><?= e($err('email')) ?></p><?php endif; ?>
             </div>
@@ -258,7 +258,7 @@ foreach (\App\Models\Branch::active() as $branchRow) {
             <div class="sm:col-span-2">
               <label class="form-label" for="contact-message">Nội dung cần hỗ trợ <span class="req">*</span></label>
               <textarea id="contact-message" name="message" rows="4" required class="form-input<?= $err('message') ? ' is-invalid' : '' ?>"
-                        placeholder="Ví dụ: Em muốn hỏi tuyến xe tại xã An Nhơn và ngày nhận việc của công nhân may."><?= e($val('message')) ?></textarea>
+                        placeholder="Nhập nội dung cần tư vấn"><?= e($val('message')) ?></textarea>
               <?php if ($err('message')): ?><p class="field-error"><?= e($err('message')) ?></p><?php endif; ?>
             </div>
             <div class="sm:col-span-2 flex flex-col gap-3 sm:flex-row sm:items-center">

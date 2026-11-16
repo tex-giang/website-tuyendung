@@ -42,7 +42,7 @@ $groupCard = static function (int|string $gi, array $group = []) use ($partials,
         </label>
         <label class="field admin-benefit-intro">
           <span class="field__label">Mô tả</span>
-          <textarea class="field__input" name="groups[<?= $gi ?>][intro]" rows="2" maxlength="500"><?= e($group['intro'] ?? '') ?></textarea>
+          <textarea class="field__input" placeholder="Giới thiệu ngắn về nhóm phúc lợi" name="groups[<?= $gi ?>][intro]" rows="2" maxlength="500"><?= e($group['intro'] ?? '') ?></textarea>
         </label>
       </div>
       <div class="admin-editor-stack">

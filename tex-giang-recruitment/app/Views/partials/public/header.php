@@ -31,6 +31,7 @@ $isMenuActive = static function (string $href) use ($currentPath): bool {
     return $currentPath === $target || str_starts_with($currentPath, rtrim($target, '/') . '/');
 };
 ?>
+<div class="site-header">
 <?php if ($notice !== null): ?>
 <div id="announce-strip" class="bg-accent-soft no-print">
   <div class="tg-container flex min-h-[44px] items-center justify-between gap-4 py-2.5">
@@ -77,3 +78,4 @@ $isMenuActive = static function (string $href) use ($currentPath): bool {
     <a href="<?= url('admin/login') ?>" class="block border-b border-line py-3 text-[16px] text-body">Cổng quản trị HR</a>
   </div>
 </header>
+</div>

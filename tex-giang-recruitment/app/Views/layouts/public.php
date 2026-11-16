@@ -58,6 +58,7 @@ $scripts = $page['scripts'] ?? [];
   <link rel="icon" type="image/png" sizes="16x16" href="<?= asset('images/favicons/favicon-16x16.png') ?>">
   <link rel="apple-touch-icon" sizes="180x180" href="<?= asset('images/favicons/apple-touch-icon.png') ?>">
 
+  <script src="<?= asset('js/header-loading.js') ?>"></script>
   <link rel="stylesheet" href="<?= asset('css/app.css') ?>">
   <link rel="stylesheet" href="<?= asset('css/utilities.css') ?>">
   <link rel="stylesheet" href="<?= asset('css/custom.css') ?>">
@@ -69,6 +70,7 @@ $scripts = $page['scripts'] ?? [];
 </head>
 <body class="<?= e($bodyClass) ?> bg-white font-sans text-body antialiased selection:bg-accent selection:text-white">
 
+<div class="header-loading no-print" aria-hidden="true"></div>
 <?php require BASE_PATH . '/app/Views/partials/public/header.php'; ?>
 
 <a class="skip-link" href="#main-content">Đến nội dung chính</a>

@@ -12,7 +12,7 @@ $renderField = static function (string $name, string $label, string $type, bool 
     ?>
     <label class="field">
       <span class="field__label"><?= e($label) ?><?= $required ? ' <em>*</em>' : '' ?></span>
-      <input class="field__input<?= $error ? ' is-invalid' : '' ?>" type="<?= e($type) ?>" name="<?= e($name) ?>"
+      <input class="field__input<?= $error ? ' is-invalid' : '' ?>" type="<?= e($type) ?>" placeholder="<?= e($name === 'password_confirm' ? $label : 'Nhập ' . mb_strtolower($label)) ?>" name="<?= e($name) ?>"
         <?= $type !== 'password' ? 'value="' . e($val($name)) . '"' : 'autocomplete="new-password" minlength="8"' ?> <?= $attributes ?><?= $required ? ' required' : '' ?>>
       <?php if ($error): ?><span class="field__error"><?= e($error) ?></span><?php endif; ?>
     </label>

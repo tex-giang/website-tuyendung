@@ -1,6 +1,48 @@
 /* Public recruitment pages. Kept separate from the HR admin interface. */
 .tg-public { --tg-surface: #f3f6f4; background: #fff; color: #263a32; }
+.site-header { display: contents; }
 .tg-public #site-nav { background: #fff; backdrop-filter: none; }
+.header-loading {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 100;
+  height: 3px;
+  overflow: hidden;
+  pointer-events: none;
+  background: #e0f2eb;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 180ms ease-out, visibility 0s linear 180ms;
+}
+
+.is-page-loading .header-loading {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 140ms ease-out 100ms, visibility 0s linear 100ms;
+}
+
+.header-loading::after {
+  content: "";
+  display: block;
+  width: 25%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, #087a55 30%, #39bd87 70%, transparent);
+  border-radius: 999px;
+  animation: header-loading 1.25s cubic-bezier(.45, 0, .55, 1) infinite alternate paused;
+}
+
+.is-page-loading .header-loading::after { animation-play-state: running; }
+
+@keyframes header-loading {
+  from { transform: translateX(0); }
+  to { transform: translateX(300%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header-loading, .is-page-loading .header-loading { transition: none; }
+  .header-loading::after { width: 100%; background: #087a55; animation: none; }
+}
+
 .tg-public h1, .tg-public h2 { text-wrap: balance; }
 .page-why-tex-giang h1 { font-size: clamp(32px,5vw,72px); }
 .tg-public main > section:first-child { padding-top: clamp(32px, 5vw, 72px); }
@@ -92,6 +134,9 @@
 .tg-public footer { background: #edf3ef; }
 .tg-public footer > .tg-container > div:first-child { gap: 36px; }
 .tg-public footer a { overflow-wrap: anywhere; }
+.footer-menu-list, .footer-visit-stats > ul { display: grid; row-gap: 10px; }
+.footer-visit-stats > h2 { font-size: 12px; color: var(--tg-muted); }
+.footer-visit-stats > ul { margin-top: 8px; row-gap: 4px; font-size: 13px; }
 .tg-public .tg-modal { z-index: 80; }
 body.has-dialog { overflow: hidden; }
 @media (max-width:767px) {
@@ -118,6 +163,8 @@ body.has-dialog { overflow: hidden; }
 }
 @media (max-width:639px) {
   html { scrollbar-gutter: auto; }
+  .site-header { display: block; position: sticky; top: 0; z-index: 40; }
+  .tg-public #site-nav { position: relative; }
   .tg-public .tg-container { padding-inline: 20px; }
   .tg-public .job-row { padding: 20px; grid-template-columns: 1fr; gap: 12px; }
   .job-row__side { grid-column: 1; flex-direction: row; }
@@ -134,7 +181,6 @@ body.has-dialog { overflow: hidden; }
   .tg-public .news-list-item { grid-template-columns: 88px 1fr; column-gap: 16px; }
   .news-list-item > .news-thumbnail { width: 88px; height: 104px; }
   .tg-public .news-list-item h2 { font-size: 18px; }
-  .tg-public .float-stack { bottom: 16px; }
   .page-jobs .intro-photo img, .page-apply .intro-photo img { height: 130px; object-position: center 45%; }
   .tg-public .tg-btn { white-space: normal; line-height: 1.35; text-align: center; }
   .tg-public header > .tg-container { gap: 8px; }
@@ -169,14 +215,14 @@ body.has-dialog { overflow: hidden; }
 /* Logo dấu TGI: giữ đúng tỉ lệ, đủ lớn để nhận diện */
 .site-logo {
   display: block;
-  height: 40px;
+  height: 48px;
   width: auto;
   object-fit: contain;
 }
 
 .footer-logo {
   display: block;
-  height: 34px;
+  height: 43px;
   width: auto;
   object-fit: contain;
 }
@@ -187,13 +233,13 @@ body.has-dialog { overflow: hidden; }
 }
 
 @media (min-width: 640px) {
-  .site-logo { height: 46px; }
-  .footer-logo { height: 38px; }
+  .site-logo { height: 54px; }
+  .footer-logo { height: 48px; }
 }
 
 @media (min-width: 1024px) {
   #site-nav > .tg-container { height: 84px; }
-  .site-logo { height: 52px; }
+  .site-logo { height: 60px; }
 }
 
 /* Ảnh minh hoạ trong bài viết: phủ hết chiều ngang container nhưng giữ chiều cao
@@ -559,31 +605,12 @@ body.has-dialog { overflow: hidden; }
     border-radius: 0;
   }
   .apply-dialog__header { padding: 16px 18px 14px; gap: 12px; }
-  .apply-dialog__title { font-size: 20px; }
-  .apply-dialog__subtitle { font-size: 15px; }
   .apply-dialog__body { padding: 18px 18px 8px; }
   .apply-dialog__footer { padding: 12px 18px calc(13px + env(safe-area-inset-bottom)); }
   .apply-dialog__actions { width: 100%; }
   .apply-dialog__actions .tg-btn { flex: 1; }
 
-  /* Cỡ chữ gọn cho mobile: chỉ giảm chữ phụ.
-     Input/select/textarea GIỮ 16px để iOS không tự zoom khi focus. */
-  .apply-dialog__eyebrow { font-size: 11.5px; }
-  .apply-dialog__title { font-size: 19px; line-height: 1.3; }
-  .apply-dialog__subtitle { font-size: 14px; line-height: 1.5; }
-  .apply-dialog__body .form-label { font-size: 15px; line-height: 1.4; }
-  .apply-dialog__body .form-hint { font-size: 14px; line-height: 1.5; }
-  .apply-dialog__body .field-error { font-size: 13px; }
-  .apply-dialog__page-link { font-size: 13.5px; }
-  .apply-dialog__body h3 { font-size: 16px; }
-  .apply-dialog__body legend { font-size: 15px; }
   .apply-dialog__body fieldset { margin: 0; }
-  .apply-dialog input[type="checkbox"] + span,
-  .apply-dialog .checkbox-label { font-size: 14px; line-height: 1.5; }
-
-  /* Dialog liên hệ: số điện thoại + tên gọn hơn */
-  #contact-dialog .text-\[13px\] { font-size: 12.5px; }
-  #contact-dialog .text-\[14px\] { font-size: 13.5px; }
 }
 
 /* Màn hình thấp (landscape điện thoại, máy nhỏ): thu header/footer lại để form còn chỗ */
@@ -640,6 +667,40 @@ dialog.urgent-dialog > div {
   dialog.urgent-dialog p { font-size: 13px; }
 }
 
+/* Giữ chữ trong ô nhập ở 16px để iOS không tự phóng to khi nhập liệu. */
+@media (max-width: 640px) {
+  .apply-dialog__title,
+  dialog.urgent-dialog h2,
+  #popup-title { font-size: 17px; line-height: 1.3; }
+
+  .apply-dialog__eyebrow { font-size: 11px; }
+  .apply-dialog__subtitle,
+  .apply-dialog input[type="checkbox"] + span,
+  .apply-dialog .checkbox-label { font-size: 13px; line-height: 1.5; }
+  .apply-dialog__body .form-label { font-size: 14px; }
+  .apply-dialog__body .form-hint { font-size: 13px; line-height: 1.5; }
+  .apply-dialog__body .field-error { font-size: 12px; }
+  .apply-dialog .apply-dialog__page-link { font-size: 13px; }
+  .apply-dialog .apply-success__title { font-size: 18px; }
+  .apply-dialog :is(.apply-dialog__alert, .apply-success__text, .apply-success__detail, .apply-success__hint) { font-size: 13px; }
+
+  dialog.urgent-dialog h3 { font-size: 15px; }
+  dialog.urgent-dialog p,
+  dialog.urgent-dialog footer a { font-size: 13px; }
+
+  #contact-dialog-title,
+  #qr-title { font-size: 16px; }
+  #contact-dialog .text-\[13px\] { font-size: 12px; }
+  #contact-dialog .text-\[14px\] { font-size: 13px; }
+  #qr-modal p,
+  #recruitment-popup p { font-size: 13px; }
+  #popup-dont-show-again { font-size: 12px; }
+
+  .tg-public :is(.apply-dialog, .urgent-dialog, #contact-dialog, #qr-modal, #recruitment-popup) .tg-btn {
+    font-size: 14px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .apply-dialog[open],
   .apply-dialog[open]::backdrop { animation: none; }
@@ -664,6 +725,14 @@ dialog.urgent-dialog > div {
     display: inline-flex;
     align-items: center;
     min-height: 38px;
+  }
+  .footer-menu-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 16px;
+  }
+  .tg-public .footer-menu-list a {
+    display: flex;
+    min-height: 44px;
   }
 }
 
@@ -926,7 +995,7 @@ dialog.urgent-dialog > div {
   color: var(--tg-muted);
   font-size: 14px;
 }
-.gf-brand img { height: 32px; width: auto; }
+.gf-brand img { height: 42px; width: auto; }
 
 .gf-card {
   padding: 22px 18px 20px;
@@ -1624,7 +1693,8 @@ html.tg-lightbox-open body {
 /* ---------- Mobile: cụm nút nổi gọn, đủ 4 kênh (Messenger, Zalo, FB, gọi) ---------- */
 @media (max-width: 639px) {
   .tg-public .float-stack {
-    bottom: calc(16px + env(safe-area-inset-bottom));
+    --contact-bottom-offset: 16px;
+    bottom: calc(var(--contact-bottom-offset) + env(safe-area-max-inset-bottom, env(safe-area-inset-bottom)));
     gap: 6px;
     right: max(10px, env(safe-area-inset-right));
   }
@@ -1643,10 +1713,39 @@ html.tg-lightbox-open body {
   }
   /* Trang chi tiết tin có thanh CTA đáy → đẩy cụm nút lên trên thanh đó */
   .tg-public.page-job-detail .float-stack {
-    bottom: calc(84px + env(safe-area-inset-bottom));
+    --contact-bottom-offset: 84px;
   }
   /* Ẩn nút "lên đầu trang" trên mobile cho gọn (vuốt lên nhanh hơn) */
   .tg-public .float-stack #back-to-top {
     display: none;
+  }
+}
+
+.tg-public .float-stack .mobile-contact-trigger,
+.mobile-contact-links {
+  display: none;
+}
+
+@media (max-width: 639px) {
+  .tg-public .float-stack .desktop-contact-trigger {
+    display: none;
+  }
+
+  .tg-public .float-stack .mobile-contact-trigger {
+    display: inline-flex;
+    width: auto;
+    min-height: 44px;
+    gap: 7px;
+    padding-inline: 12px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .mobile-contact-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 8px;
   }
 }

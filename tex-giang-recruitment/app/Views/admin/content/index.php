@@ -11,10 +11,10 @@ $renderField = static function (string $key, bool $wide = true) use ($fields, $e
     <label class="field<?= $wide ? ' field--span2' : '' ?>">
       <span class="field__label"><?= e($label) ?><?= $required ? ' <em>*</em>' : '' ?></span>
       <?php if ($type === 'textarea'): ?>
-      <textarea class="field__input<?= $error !== '' ? ' is-invalid' : '' ?>" name="<?= e($key) ?>" rows="3"
+      <textarea class="field__input<?= $error !== '' ? ' is-invalid' : '' ?>" placeholder="<?= e('Nhập ' . mb_strtolower($label)) ?>" name="<?= e($key) ?>" rows="3"
                 maxlength="<?= (int) $max ?>"<?= $required ? ' required' : '' ?>><?= e($value) ?></textarea>
       <?php else: ?>
-      <input class="field__input<?= $error !== '' ? ' is-invalid' : '' ?>" type="text" name="<?= e($key) ?>"
+      <input class="field__input<?= $error !== '' ? ' is-invalid' : '' ?>" type="text" placeholder="<?= e('Nhập ' . mb_strtolower($label)) ?>" name="<?= e($key) ?>"
              value="<?= e($value) ?>" maxlength="<?= (int) $max ?>"<?= $required ? ' required' : '' ?>>
       <?php endif; ?>
       <?php if ($error !== ''): ?><span class="field__error"><?= e($error) ?></span><?php endif; ?>

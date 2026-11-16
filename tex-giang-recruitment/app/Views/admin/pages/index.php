@@ -51,12 +51,12 @@ foreach ($groupNames as $group) {
         <?php elseif (in_array($name, ['body', 'intro'], true)): ?>
         <label class="field field--span2">
           <span class="field__label"><?= e($label) ?></span>
-          <textarea class="field__input" name="<?= e($name) ?>" rows="1" maxlength="800"></textarea>
+          <textarea class="field__input" placeholder="<?= e('Nhập ' . mb_strtolower($label)) ?>" name="<?= e($name) ?>" rows="1" maxlength="800"></textarea>
         </label>
         <?php else: ?>
         <label class="field">
           <span class="field__label"><?= e($label) ?> <em>*</em></span>
-          <input class="field__input" type="text" name="<?= e($name) ?>" maxlength="500" required>
+          <input class="field__input" type="text" placeholder="<?= e('Nhập ' . mb_strtolower($label)) ?>" name="<?= e($name) ?>" maxlength="500" required>
         </label>
         <?php endif; ?>
       <?php endforeach; ?>

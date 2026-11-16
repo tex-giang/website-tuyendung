@@ -12,9 +12,9 @@ $renderField = static function (string $key, string $label, int $max, string $ki
     <label class="field<?= $wide ? ' field--span2' : '' ?>">
       <span class="field__label"><?= e($label) ?><?= $key === 'name' ? ' <em>*</em>' : '' ?></span>
       <?php if ($kind === 'textarea'): ?>
-      <textarea class="field__input<?= $error !== '' ? ' is-invalid' : '' ?>" name="<?= e($key) ?>" maxlength="<?= $max ?>" rows="2"><?= e($val($key)) ?></textarea>
+      <textarea class="field__input<?= $error !== '' ? ' is-invalid' : '' ?>" placeholder="<?= e('Nhập ' . mb_strtolower($label)) ?>" name="<?= e($key) ?>" maxlength="<?= $max ?>" rows="2"><?= e($val($key)) ?></textarea>
       <?php else: ?>
-      <input class="field__input<?= $error !== '' ? ' is-invalid' : '' ?>" type="<?= e($kind) ?>" name="<?= e($key) ?>" value="<?= e($val($key)) ?>"<?= $kind !== 'number' ? ' maxlength="' . $max . '"' : ' min="-32768" max="32767"' ?><?= $key === 'name' ? ' required' : '' ?>>
+      <input class="field__input<?= $error !== '' ? ' is-invalid' : '' ?>" type="<?= e($kind) ?>" placeholder="<?= e('Nhập ' . mb_strtolower($label)) ?>" name="<?= e($key) ?>" value="<?= e($val($key)) ?>"<?= $kind !== 'number' ? ' maxlength="' . $max . '"' : ' min="-32768" max="32767"' ?><?= $key === 'name' ? ' required' : '' ?>>
       <?php endif; ?>
       <?php if ($hint !== ''): ?><span class="admin-muted"><?= e($hint) ?></span><?php endif; ?>
       <?php if ($error !== ''): ?><span class="field__error"><?= e($error) ?></span><?php endif; ?>
@@ -26,15 +26,15 @@ $contactRow = static function (int|string $index, array $contact = []): void { ?
     <input type="hidden" name="contacts[<?= $index ?>][is_active]" value="<?= isset($contact['is_active']) ? (int) $contact['is_active'] : 1 ?>">
     <label class="field">
       <span class="field__label">Họ tên</span>
-      <input class="field__input" name="contacts[<?= $index ?>][full_name]" maxlength="120" placeholder="Ví dụ: Chị Trân" value="<?= e($contact['full_name'] ?? '') ?>">
+      <input class="field__input" name="contacts[<?= $index ?>][full_name]" maxlength="120" placeholder="Nhập họ tên người liên hệ" value="<?= e($contact['full_name'] ?? '') ?>">
     </label>
     <label class="field">
       <span class="field__label">Vai trò</span>
-      <input class="field__input" name="contacts[<?= $index ?>][title]" maxlength="80" placeholder="Ví dụ: Nhân sự" value="<?= e($contact['title'] ?? '') ?>">
+      <input class="field__input" name="contacts[<?= $index ?>][title]" maxlength="80" placeholder="Nhập vai trò của người liên hệ" value="<?= e($contact['title'] ?? '') ?>">
     </label>
     <label class="field">
       <span class="field__label">Số điện thoại</span>
-      <input class="field__input" type="tel" name="contacts[<?= $index ?>][phone]" maxlength="30" placeholder="0900 000 000" value="<?= e($contact['phone'] ?? '') ?>">
+      <input class="field__input" type="tel" name="contacts[<?= $index ?>][phone]" maxlength="30" placeholder="Nhập số điện thoại liên hệ" value="<?= e($contact['phone'] ?? '') ?>">
     </label>
     <button class="btn btn-ghost btn-icon admin-editor-delete" type="button" data-remove aria-label="Xóa liên hệ" title="Xóa liên hệ"><?= admin_icon_svg('trash') ?></button>
   </div>

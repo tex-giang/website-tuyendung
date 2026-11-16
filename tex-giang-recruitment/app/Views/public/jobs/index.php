@@ -60,7 +60,7 @@ $end = min($result['page'] * $result['per_page'], $result['total']);
 
         <div>
           <label class="form-label" for="filter-q">Từ khoá</label>
-          <input type="search" id="filter-q" name="q" value="<?= e($filters['q']) ?>" placeholder="May mặc, QC, IE, kế toán…" class="form-input">
+          <input type="search" id="filter-q" name="q" value="<?= e($filters['q']) ?>" placeholder="Nhập tên vị trí hoặc từ khóa" class="form-input">
         </div>
 
         <div>

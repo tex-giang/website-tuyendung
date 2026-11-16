@@ -45,7 +45,7 @@ $backUrl = url('admin/pages/' . $type);
         <?php elseif ($kind === 'textarea'): ?>
           <label class="field field--span2">
             <span class="field__label"><?= e($label) ?> <?php if ($required): ?><em>*</em><?php endif; ?></span>
-            <textarea class="field__input<?= $err($name) ? ' is-invalid' : '' ?>" name="<?= e($name) ?>" rows="3"<?= $max > 0 ? ' maxlength="' . (int) $max . '"' : '' ?>><?= e($val($name)) ?></textarea>
+            <textarea class="field__input<?= $err($name) ? ' is-invalid' : '' ?>" placeholder="<?= e('Nhập ' . mb_strtolower($label)) ?>" name="<?= e($name) ?>" rows="3"<?= $max > 0 ? ' maxlength="' . (int) $max . '"' : '' ?>><?= e($val($name)) ?></textarea>
             <?php if ($err($name)): ?><span class="field__error"><?= e($err($name)) ?></span><?php endif; ?>
           </label>
         <?php elseif ($kind === 'select'): ?>
@@ -72,7 +72,7 @@ $backUrl = url('admin/pages/' . $type);
         <?php else: ?>
           <label class="field<?= $kind === 'number' ? '' : '' ?>">
             <span class="field__label"><?= e($label) ?> <?php if ($required): ?><em>*</em><?php endif; ?></span>
-            <input class="field__input<?= $err($name) ? ' is-invalid' : '' ?>" type="<?= $kind === 'number' ? 'number' : 'text' ?>" name="<?= e($name) ?>"
+            <input class="field__input<?= $err($name) ? ' is-invalid' : '' ?>" type="<?= $kind === 'number' ? 'number' : 'text' ?>" placeholder="<?= e('Nhập ' . mb_strtolower($label)) ?>" name="<?= e($name) ?>"
                    value="<?= e($val($name, $kind === 'number' ? '0' : '')) ?>"<?= $max > 0 && $kind !== 'number' ? ' maxlength="' . (int) $max . '"' : '' ?><?= $required ? ' required' : '' ?>>
             <?php if ($err($name)): ?><span class="field__error"><?= e($err($name)) ?></span><?php endif; ?>
           </label>
@@ -93,7 +93,7 @@ $backUrl = url('admin/pages/' . $type);
         <div class="admin-repeater__row" data-item-row>
           <input type="hidden" name="items[<?= (int) $index ?>][id]" value="<?= (int) $item['id'] ?>">
           <input class="field__input" type="text" name="items[<?= (int) $index ?>][text]"
-                 value="<?= e((string) $item['text']) ?>" maxlength="500" placeholder="VD: Cơm trưa và cơm tăng ca tại nhà máy.">
+                 value="<?= e((string) $item['text']) ?>" maxlength="500" placeholder="Nhập nội dung phúc lợi">
           <button type="button" class="btn btn-ghost btn-icon" data-item-remove title="Xoá" aria-label="Xoá"><?= admin_icon_svg('trash') ?></button>
         </div>
         <?php endforeach; ?>
@@ -101,7 +101,7 @@ $backUrl = url('admin/pages/' . $type);
       <template id="item-row-template">
         <div class="admin-repeater__row" data-item-row>
           <input type="hidden" name="items[__INDEX__][id]" value="">
-          <input class="field__input" type="text" name="items[__INDEX__][text]" maxlength="500" placeholder="Nội dung dòng phúc lợi…">
+          <input class="field__input" type="text" name="items[__INDEX__][text]" maxlength="500" placeholder="Nhập nội dung phúc lợi">
           <button type="button" class="btn btn-ghost btn-icon" data-item-remove title="Xoá" aria-label="Xoá"><?= admin_icon_svg('trash') ?></button>
         </div>
       </template>

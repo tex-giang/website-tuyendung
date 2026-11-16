@@ -29,20 +29,20 @@ $currentImage = $val('image_path');
   <section class="admin-cms-card admin-cms-fields" aria-label="Nội dung bài viết">
       <label class="field">
         <span class="field__label">Tiêu đề <em>*</em></span>
-        <input class="field__input<?= $err('title') ? ' is-invalid' : '' ?>" type="text" name="title"
+        <input class="field__input<?= $err('title') ? ' is-invalid' : '' ?>" type="text" placeholder="Nhập tiêu đề bài viết" name="title"
                value="<?= e($val('title')) ?>" maxlength="220" required>
         <?php if ($err('title')): ?><span class="field__error"><?= e($err('title')) ?></span><?php endif; ?>
       </label>
       <label class="field">
         <span class="field__label">Đường dẫn (slug)</span>
-        <input class="field__input<?= $err('slug') ? ' is-invalid' : '' ?>" type="text" name="slug"
+        <input class="field__input<?= $err('slug') ? ' is-invalid' : '' ?>" type="text" placeholder="Nhập đường dẫn riêng của bài viết" name="slug"
                value="<?= e($val('slug')) ?>" maxlength="220">
         <span class="admin-muted">Để trống để tạo đường dẫn từ tiêu đề.</span>
         <?php if ($err('slug')): ?><span class="field__error"><?= e($err('slug')) ?></span><?php endif; ?>
       </label>
       <label class="field">
         <span class="field__label">Mô tả ngắn</span>
-        <textarea class="field__input" name="excerpt" rows="2" maxlength="400"><?= e($val('excerpt')) ?></textarea>
+        <textarea class="field__input" placeholder="Tóm tắt nội dung bài viết" name="excerpt" rows="2" maxlength="400"><?= e($val('excerpt')) ?></textarea>
         <?php if ($err('excerpt')): ?><span class="field__error"><?= e($err('excerpt')) ?></span><?php endif; ?>
       </label>
       <div class="field">
@@ -50,7 +50,7 @@ $currentImage = $val('image_path');
           <label class="field__label" id="post-body-label" for="post-body">Nội dung <em>*</em></label>
           <button type="button" class="btn btn-ghost btn-sm" data-post-source aria-pressed="false" hidden>Mã HTML</button>
         </div>
-        <textarea class="field__input<?= $err('body') ? ' is-invalid' : '' ?>" id="post-body" name="body" rows="10" required><?= e($val('body')) ?></textarea>
+        <textarea class="field__input<?= $err('body') ? ' is-invalid' : '' ?>" id="post-body" placeholder="Nhập nội dung bài viết" name="body" rows="10" required><?= e($val('body')) ?></textarea>
         <div data-post-rich hidden>
           <div id="post-rich-editor" data-upload-url="<?= e(url('admin/posts/upload-image') . '?responseType=json') ?>"
                data-upload-token="<?= e(csrf_token()) ?>"></div>
@@ -84,7 +84,7 @@ $currentImage = $val('image_path');
       <label class="field">
         <span class="field__label">Ngày đăng <span class="admin-muted">(dd/mm/yyyy HH:MM)</span></span>
         <input class="field__input<?= $err('published_at') ? ' is-invalid' : '' ?>" type="text" name="published_at"
-               value="<?= e($publishedAt) ?>" placeholder="28/10/2026 08:00" autocomplete="off" data-datepicker="datetime">
+               value="<?= e($publishedAt) ?>" placeholder="Nhập ngày giờ đăng (dd/mm/yyyy HH:MM)" autocomplete="off" data-datepicker="datetime">
         <span class="admin-muted">Để trống để dùng thời điểm đăng bài.</span>
         <?php if ($err('published_at')): ?><span class="field__error"><?= e($err('published_at')) ?></span><?php endif; ?>
       </label>
@@ -105,12 +105,12 @@ $currentImage = $val('image_path');
       <label class="field">
         <span class="field__label">Văn bản thay thế (alt)</span>
         <input class="field__input" type="text" name="image_alt" value="<?= e($val('image_alt')) ?>" maxlength="255"
-               placeholder="Ví dụ: Toàn cảnh Nhà máy Tân Hương 2">
+               placeholder="Mô tả nội dung ảnh bìa">
       </label>
       <label class="field">
         <span class="field__label">Chú thích ảnh</span>
         <input class="field__input" type="text" name="image_caption" value="<?= e($val('image_caption')) ?>" maxlength="255"
-               placeholder="Ví dụ: Ảnh: TEX-GIANG">
+               placeholder="Nhập chú thích hoặc nguồn ảnh">
       </label>
     </section>
   </div>

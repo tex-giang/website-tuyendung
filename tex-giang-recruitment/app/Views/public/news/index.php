@@ -95,7 +95,7 @@ $queryBase = $categorySlug !== '' ? ['chuyen-muc' => $categorySlug] : [];
     <form id="news-subscribe" class="flex w-full flex-wrap gap-3 sm:w-auto" method="POST" action="<?= url('news/subscribe') ?>">
       <?= csrf_field() ?>
       <label class="sr-only" for="news-email">Email nhận tin</label>
-      <input id="news-email" name="email" type="email" required placeholder="email@gmail.com" class="form-input sm:w-[260px]"
+      <input id="news-email" name="email" type="email" required placeholder="Nhập địa chỉ email" class="form-input sm:w-[260px]"
              value="<?= e(\App\Core\Session::pull('_subscribed_email', '')) ?>">
       <button type="submit" class="tg-btn tg-btn--primary">Đăng ký</button>
     </form>

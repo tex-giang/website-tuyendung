@@ -42,7 +42,7 @@ $profileFields = [
           <?php foreach (['current_password' => 'Mật khẩu hiện tại', 'password' => 'Mật khẩu mới', 'password_confirm' => 'Nhập lại mật khẩu mới'] as $name => $label): ?>
           <label class="field<?= $name === 'current_password' ? ' field--span2' : '' ?>">
             <span class="field__label"><?= e($label) ?> <em>*</em></span>
-            <input class="field__input<?= !empty($errors[$name]) ? ' is-invalid' : '' ?>" type="password" name="<?= e($name) ?>"
+            <input class="field__input<?= !empty($errors[$name]) ? ' is-invalid' : '' ?>" type="password" placeholder="<?= e($name === 'password_confirm' ? $label : 'Nhập ' . mb_strtolower($label)) ?>" name="<?= e($name) ?>"
                    autocomplete="<?= $name === 'current_password' ? 'current-password' : 'new-password' ?>"<?= $name !== 'current_password' ? ' minlength="8"' : '' ?> required>
             <?php if (!empty($errors[$name])): ?><span class="field__error"><?= e($errors[$name]) ?></span><?php endif; ?>
           </label>

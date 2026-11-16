@@ -41,13 +41,13 @@ foreach ($dialogJobs as $dialogJob) {
           <div>
             <label class="form-label" for="apply-dialog-fullname">Họ và tên <span class="req">*</span></label>
             <input type="text" id="apply-dialog-fullname" name="full_name" required autocomplete="name" maxlength="150"
-                   placeholder="Ví dụ: Lê Thị Mai" class="form-input">
+                   placeholder="Nhập họ và tên" class="form-input">
             <p class="field-error" data-error-for="full_name"></p>
           </div>
           <div>
             <label class="form-label" for="apply-dialog-phone">Số điện thoại <span class="req">*</span></label>
             <input type="tel" id="apply-dialog-phone" name="phone" required autocomplete="tel" inputmode="tel"
-                   placeholder="0912 345 678" class="form-input" data-phone-format>
+                   placeholder="Nhập số điện thoại" class="form-input" data-phone-format>
             <p class="field-error" data-error-for="phone"></p>
           </div>
         </div>
@@ -85,7 +85,7 @@ foreach ($dialogJobs as $dialogJob) {
         <div>
           <label class="form-label" for="apply-dialog-address">Địa chỉ hiện tại <span class="req">*</span></label>
           <input type="text" id="apply-dialog-address" name="address" required autocomplete="address-line1" maxlength="255"
-                 placeholder="Ấp/Xã, Huyện Châu Thành, Tỉnh Đồng Tháp" class="form-input">
+                 placeholder="Nhập địa chỉ hiện tại" class="form-input">
           <p class="form-hint">Giúp ban tuyển dụng xếp bạn vào tuyến xe đưa rước gần nhất.</p>
           <p class="field-error" data-error-for="address"></p>
         </div>
@@ -100,7 +100,7 @@ foreach ($dialogJobs as $dialogJob) {
         <div>
           <label class="form-label" for="apply-dialog-message">Giới thiệu ngắn (không bắt buộc)</label>
           <textarea id="apply-dialog-message" name="message" rows="2" maxlength="2000" class="form-input"
-                    placeholder="Kinh nghiệm may, vị trí từng làm, tuyến xe…"></textarea>
+                    placeholder="Mô tả kinh nghiệm và mong muốn công việc"></textarea>
           <p class="field-error" data-error-for="message"></p>
         </div>
 

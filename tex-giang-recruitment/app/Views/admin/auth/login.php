@@ -25,7 +25,7 @@ $notice = \App\Core\Session::pull('_error');
 
     <div class="field">
       <label class="field__label" for="login-username">Tên đăng nhập</label>
-      <input class="field__input" id="login-username" type="text" name="username"
+      <input class="field__input" id="login-username" type="text" placeholder="Nhập tên đăng nhập" name="username"
              value="<?= e(old('username')) ?>" autocomplete="username" autocapitalize="none" spellcheck="false"
              <?= $usernameError ? 'aria-invalid="true" aria-describedby="login-username-error"' : '' ?> required>
       <?php if ($usernameError): ?><span class="field__error" id="login-username-error"><?= e($usernameError) ?></span><?php endif; ?>
@@ -34,7 +34,7 @@ $notice = \App\Core\Session::pull('_error');
     <div class="field">
       <label class="field__label" for="login-password">Mật khẩu</label>
       <div class="auth-password">
-        <input class="field__input" id="login-password" type="password" name="password"
+        <input class="field__input" id="login-password" type="password" placeholder="Nhập mật khẩu" name="password"
                autocomplete="current-password" <?= $passwordError ? 'aria-invalid="true" aria-describedby="login-password-error"' : '' ?> required>
         <button type="button" class="btn btn-ghost" id="login-password-toggle" aria-label="Hiện mật khẩu" aria-controls="login-password" hidden>
           <i class="bi bi-eye" aria-hidden="true"></i>

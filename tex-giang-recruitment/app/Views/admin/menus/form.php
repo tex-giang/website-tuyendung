@@ -21,18 +21,18 @@ $err = static fn(string $key): string => (string) ($errors[$key] ?? '');
     <?= csrf_field() ?>
     <label class="field">
       <span class="field__label">Tên hiển thị <em>*</em></span>
-      <input class="field__input<?= $err('label') ? ' is-invalid' : '' ?>" name="label" value="<?= e($val('label')) ?>" maxlength="120" required placeholder="Ví dụ: Tuyển dụng">
+      <input class="field__input<?= $err('label') ? ' is-invalid' : '' ?>" name="label" value="<?= e($val('label')) ?>" maxlength="120" required placeholder="Nhập tên mục menu">
       <?php if ($err('label')): ?><span class="field__error"><?= e($err('label')) ?></span><?php endif; ?>
     </label>
     <label class="field">
       <span class="field__label">Đường dẫn</span>
-      <input class="field__input<?= $err('url') ? ' is-invalid' : '' ?>" name="url" value="<?= e($val('url')) ?>" maxlength="255" placeholder="/jobs">
+      <input class="field__input<?= $err('url') ? ' is-invalid' : '' ?>" name="url" value="<?= e($val('url')) ?>" maxlength="255" placeholder="Nhập đường dẫn đích của mục menu">
       <span class="admin-muted">Ví dụ: /jobs hoặc https://texgiang.vn. Để trống để trỏ về trang chủ.</span>
       <?php if ($err('url')): ?><span class="field__error"><?= e($err('url')) ?></span><?php endif; ?>
     </label>
     <label class="field">
       <span class="field__label">Thứ tự hiển thị</span>
-      <input class="field__input admin-editor-order" type="number" name="sort_order" value="<?= e($val('sort_order', '0')) ?>">
+      <input class="field__input admin-editor-order" type="number" placeholder="Nhập thứ tự hiển thị" name="sort_order" value="<?= e($val('sort_order', '0')) ?>">
       <span class="admin-muted">Số nhỏ hiển thị trước. Khi thêm mới, giá trị 0 đặt mục này cuối danh sách.</span>
     </label>
     <label class="admin-cms-visibility admin-editor-visibility">

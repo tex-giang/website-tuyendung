@@ -43,20 +43,20 @@ if ($deadline !== '') {
       <label class="field field--span2">
         <span class="field__label">Tiêu đề tin <em>*</em></span>
         <input class="field__input<?= isset($errors['title']) ? ' is-invalid' : '' ?>" type="text" name="title"
-               value="<?= e($val('title')) ?>" maxlength="220" placeholder="Ví dụ: Công nhân may công nghiệp" required>
+               value="<?= e($val('title')) ?>" maxlength="220" placeholder="Nhập tên vị trí cần tuyển" required>
         <?php if (isset($errors['title'])): ?><span class="field__error"><?= e($errors['title']) ?></span><?php endif; ?>
       </label>
 
       <label class="field">
         <span class="field__label">Mã tin</span>
         <input class="field__input<?= isset($errors['code']) ? ' is-invalid' : '' ?>" type="text" name="code"
-               value="<?= e($val('code')) ?>" maxlength="20" placeholder="TD26-0001">
+               value="<?= e($val('code')) ?>" maxlength="20" placeholder="Nhập mã tin tuyển dụng">
         <?php if (isset($errors['code'])): ?><span class="field__error"><?= e($errors['code']) ?></span><?php endif; ?>
       </label>
 
       <label class="field">
         <span class="field__label">Đường dẫn (slug)</span>
-        <input class="field__input<?= isset($errors['slug']) ? ' is-invalid' : '' ?>" type="text" name="slug"
+        <input class="field__input<?= isset($errors['slug']) ? ' is-invalid' : '' ?>" type="text" placeholder="Nhập đường dẫn riêng của tin" name="slug"
                value="<?= e($val('slug')) ?>" maxlength="220" aria-describedby="job-slug-hint">
         <span class="admin-job-form__hint" id="job-slug-hint">Để trống để tạo đường dẫn từ tiêu đề.</span>
         <?php if (isset($errors['slug'])): ?><span class="field__error"><?= e($errors['slug']) ?></span><?php endif; ?>
@@ -93,7 +93,7 @@ if ($deadline !== '') {
 
       <label class="field">
         <span class="field__label">Số lượng cần tuyển <em>*</em></span>
-        <input class="field__input<?= isset($errors['quantity']) ? ' is-invalid' : '' ?>" type="number" name="quantity"
+        <input class="field__input<?= isset($errors['quantity']) ? ' is-invalid' : '' ?>" type="number" placeholder="Nhập số người cần tuyển" name="quantity"
                min="1" max="10000" value="<?= e($val('quantity', '1')) ?>" required>
         <?php if (isset($errors['quantity'])): ?><span class="field__error"><?= e($errors['quantity']) ?></span><?php endif; ?>
       </label>
@@ -101,7 +101,7 @@ if ($deadline !== '') {
       <label class="field">
         <span class="field__label">Địa điểm làm việc</span>
         <input class="field__input" type="text" name="location" value="<?= e($val('location')) ?>" maxlength="255"
-               placeholder="Khu Tân Hương — Nhà máy 2">
+               placeholder="Nhập địa điểm làm việc cụ thể">
       </label>
     </div>
   </section>
@@ -115,19 +115,19 @@ if ($deadline !== '') {
       <label class="field">
         <span class="field__label">Lương tối thiểu (VNĐ)</span>
         <input class="field__input<?= isset($errors['salary_min']) ? ' is-invalid' : '' ?>" type="number" name="salary_min"
-               min="0" step="100000" value="<?= e($val('salary_min')) ?>" placeholder="8000000">
+               min="0" step="100000" value="<?= e($val('salary_min')) ?>" placeholder="Nhập mức lương thấp nhất (VNĐ)">
         <?php if (isset($errors['salary_min'])): ?><span class="field__error"><?= e($errors['salary_min']) ?></span><?php endif; ?>
       </label>
       <label class="field">
         <span class="field__label">Lương tối đa (VNĐ)</span>
         <input class="field__input<?= isset($errors['salary_max']) ? ' is-invalid' : '' ?>" type="number" name="salary_max"
-               min="0" step="100000" value="<?= e($val('salary_max')) ?>" placeholder="16000000">
+               min="0" step="100000" value="<?= e($val('salary_max')) ?>" placeholder="Nhập mức lương cao nhất (VNĐ)">
         <?php if (isset($errors['salary_max'])): ?><span class="field__error"><?= e($errors['salary_max']) ?></span><?php endif; ?>
       </label>
       <label class="field">
         <span class="field__label">Lương hiển thị <span class="admin-muted">(trống = tự sinh)</span></span>
         <input class="field__input" type="text" name="salary_text" value="<?= e($val('salary_text')) ?>" maxlength="150"
-               placeholder="8.000.000 - 16.000.000 VNĐ">
+               placeholder="Nhập mức lương hiển thị cho ứng viên">
       </label>
       <label class="field">
         <span class="field__label">Khoảng lương <span class="admin-muted">(trống = tự sinh)</span></span>
@@ -141,12 +141,12 @@ if ($deadline !== '') {
       <label class="field">
         <span class="field__label">Kinh nghiệm</span>
         <input class="field__input" type="text" name="experience" value="<?= e($val('experience')) ?>" maxlength="150"
-               placeholder="Không yêu cầu, có đào tạo">
+               placeholder="Nhập yêu cầu về kinh nghiệm">
       </label>
       <label class="field">
         <span class="field__label">Hình thức làm việc</span>
         <input class="field__input" type="text" name="employment_type" value="<?= e($val('employment_type')) ?>" maxlength="100"
-               placeholder="Toàn thời gian, chính thức">
+               placeholder="Nhập hình thức làm việc">
       </label>
     </div>
   </section>
@@ -159,16 +159,16 @@ if ($deadline !== '') {
     <div class="field-grid admin-job-form__fields">
       <label class="field field--span2">
         <span class="field__label">Mô tả công việc <em>*</em></span>
-        <textarea class="field__input<?= isset($errors['description']) ? ' is-invalid' : '' ?>" name="description" rows="5" required><?= e($val('description')) ?></textarea>
+        <textarea class="field__input<?= isset($errors['description']) ? ' is-invalid' : '' ?>" placeholder="Mô tả nhiệm vụ của vị trí tuyển dụng" name="description" rows="5" required><?= e($val('description')) ?></textarea>
         <?php if (isset($errors['description'])): ?><span class="field__error"><?= e($errors['description']) ?></span><?php endif; ?>
       </label>
       <label class="field field--span2">
         <span class="field__label">Yêu cầu ứng viên</span>
-        <textarea class="field__input" name="requirements" rows="4"><?= e($val('requirements')) ?></textarea>
+        <textarea class="field__input" placeholder="Nhập các yêu cầu đối với ứng viên" name="requirements" rows="4"><?= e($val('requirements')) ?></textarea>
       </label>
       <label class="field field--span2">
         <span class="field__label">Quyền lợi</span>
-        <textarea class="field__input" name="benefits" rows="4"><?= e($val('benefits')) ?></textarea>
+        <textarea class="field__input" placeholder="Nhập các phúc lợi của vị trí" name="benefits" rows="4"><?= e($val('benefits')) ?></textarea>
       </label>
     </div>
   </section>
@@ -189,19 +189,19 @@ if ($deadline !== '') {
       </label>
       <label class="field">
         <span class="field__label">Thứ tự ưu tiên</span>
-        <input class="field__input" type="number" name="sort_order" value="<?= e($val('sort_order', '0')) ?>">
+        <input class="field__input" type="number" placeholder="Nhập thứ tự hiển thị" name="sort_order" value="<?= e($val('sort_order', '0')) ?>">
       </label>
       <label class="field">
         <span class="field__label">Ngày đăng <span class="admin-muted">(dd/mm/yyyy HH:MM · trống = hôm nay)</span></span>
         <input class="field__input<?= isset($errors['posted_at']) ? ' is-invalid' : '' ?>" type="text" name="posted_at"
-               value="<?= e($postedAt) ?>" placeholder="28/10/2026 08:00" autocomplete="off" maxlength="16"
+               value="<?= e($postedAt) ?>" placeholder="Nhập ngày giờ đăng (dd/mm/yyyy HH:MM)" autocomplete="off" maxlength="16"
                data-datepicker="datetime">
         <?php if (isset($errors['posted_at'])): ?><span class="field__error"><?= e($errors['posted_at']) ?></span><?php endif; ?>
       </label>
       <label class="field">
         <span class="field__label">Hạn nộp hồ sơ <span class="admin-muted">(dd/mm/yyyy · trống = chưa xác định)</span></span>
         <input class="field__input<?= isset($errors['deadline']) ? ' is-invalid' : '' ?>" type="text" name="deadline"
-               value="<?= e($deadline) ?>" placeholder="30/11/2026" autocomplete="off" maxlength="10"
+               value="<?= e($deadline) ?>" placeholder="Nhập hạn nộp hồ sơ (dd/mm/yyyy)" autocomplete="off" maxlength="10"
                data-datepicker="date">
         <?php if (isset($errors['deadline'])): ?><span class="field__error"><?= e($errors['deadline']) ?></span><?php endif; ?>
       </label>
@@ -224,11 +224,11 @@ if ($deadline !== '') {
     <div class="field-grid admin-job-form__fields">
       <label class="field field--span2">
         <span class="field__label">Tiêu đề SEO</span>
-        <input class="field__input" type="text" name="meta_title" value="<?= e($val('meta_title')) ?>" maxlength="220">
+        <input class="field__input" type="text" placeholder="Nhập tiêu đề tin trên công cụ tìm kiếm" name="meta_title" value="<?= e($val('meta_title')) ?>" maxlength="220">
       </label>
       <label class="field field--span2">
         <span class="field__label">Mô tả SEO</span>
-        <textarea class="field__input" name="meta_description" rows="2" maxlength="320"><?= e($val('meta_description')) ?></textarea>
+        <textarea class="field__input" placeholder="Nhập mô tả ngắn cho công cụ tìm kiếm" name="meta_description" rows="2" maxlength="320"><?= e($val('meta_description')) ?></textarea>
       </label>
     </div>
   </section>

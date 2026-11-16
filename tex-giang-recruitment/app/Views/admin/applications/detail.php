@@ -118,12 +118,12 @@ $currentStatus = (string) old('status', $app['status']);
           }
           ?>
           <input class="field__input" type="text" name="appointment_at" value="<?= e($appointmentInput) ?>"
-                 placeholder="28/10/2026 08:00" autocomplete="off" data-datepicker="datetime" aria-describedby="appointment-hint">
+                 placeholder="Nhập ngày giờ hẹn (dd/mm/yyyy HH:MM)" autocomplete="off" data-datepicker="datetime" aria-describedby="appointment-hint">
           <?php if ($error = errors('appointment_at')): ?><span class="field__error"><?= e($error) ?></span><?php endif; ?>
         </label>
         <label class="field">
           <span class="field__label">Địa điểm</span>
-          <input class="field__input" type="text" name="appointment_location" maxlength="255" placeholder="Ví dụ: Phòng họp tầng 2"
+          <input class="field__input" type="text" name="appointment_location" maxlength="255" placeholder="Nhập địa điểm hẹn phỏng vấn"
                  value="<?= e(old('appointment_location', $app['appointment_location'] ?? '')) ?>" aria-describedby="appointment-hint">
           <?php if ($error = errors('appointment_location')): ?><span class="field__error"><?= e($error) ?></span><?php endif; ?>
         </label>
@@ -142,7 +142,7 @@ $currentStatus = (string) old('status', $app['status']);
         <label class="field">
           <span class="field__label">Nội dung ghi chú</span>
           <textarea class="field__input" name="admin_note" rows="3" maxlength="2000" required
-                    placeholder="Ví dụ: Ứng viên có kinh nghiệm may, hẹn gọi lại chiều mai." aria-describedby="note-hint"><?= e(old('admin_note', '')) ?></textarea>
+                    placeholder="Nhập ghi chú nội bộ về hồ sơ" aria-describedby="note-hint"><?= e(old('admin_note', '')) ?></textarea>
           <?php if ($error = errors('admin_note')): ?><span class="field__error"><?= e($error) ?></span><?php endif; ?>
         </label>
         <p class="admin-muted" id="note-hint">Chỉ nhân sự quản trị nhìn thấy.</p>

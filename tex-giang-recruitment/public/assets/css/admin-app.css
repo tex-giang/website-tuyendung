@@ -1257,10 +1257,19 @@ select.field__input {
 }
 .auth-note:hover { color: var(--brand-700); }
 .auth-notice { margin: 0; padding: 10px 13px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-2); color: var(--muted); font-size: 13px; }
-.auth-password { display: flex; align-items: stretch; gap: 7px; }
-.auth-password .field__input { min-width: 0; }
-.auth-password button { flex: none; min-width: 44px; }
-.auth-password button[hidden] { display: none; }
+.auth-password { position: relative; }
+.auth-password .field__input { display: block; padding-inline-end: 50px; }
+.auth-password .field__input::-ms-reveal { display: none; }
+#login-password-toggle {
+  position: absolute;
+  inset-block: 1px;
+  inset-inline-end: 1px;
+  width: 44px;
+  min-height: 0;
+  padding: 0;
+}
+#login-password-toggle:focus-visible { outline-offset: -3px; }
+#login-password-toggle[hidden] { display: none; }
 .auth-card .btn-primary { min-height: 44px; font-size: 14px; }
 
 /* 20. Menu tài khoản ------------------------------------------------------ */

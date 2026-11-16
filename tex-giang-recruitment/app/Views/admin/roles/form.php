@@ -34,7 +34,7 @@ $allBranches = (int) ($values['all_branches'] ?? 1) === 1;
           <span class="field__label">Tên vai trò <em>*</em></span>
           <input class="field__input<?= !empty($errors['description']) ? ' is-invalid' : '' ?>" type="text" name="description"
                  value="<?= e($val('description')) ?>" maxlength="255" required
-                 placeholder="Ví dụ: Nhà máy Tân Hương">
+                 placeholder="Nhập tên hiển thị của vai trò">
           <?php if (!empty($errors['description'])): ?><span class="field__error"><?= e($errors['description']) ?></span><?php endif; ?>
         </label>
         <?php if ($isEdit): ?>

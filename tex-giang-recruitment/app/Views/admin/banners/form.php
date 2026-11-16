@@ -31,7 +31,7 @@ $currentImage = $val('image_path');
       <label class="field field--span2">
         <span class="field__label">Tên nội bộ <em>*</em></span>
         <input class="field__input<?= $err('name') ? ' is-invalid' : '' ?>" type="text" name="name"
-               value="<?= e($val('name')) ?>" maxlength="120" required placeholder="Ví dụ: Slide 1 — Cổng nhà máy">
+               value="<?= e($val('name')) ?>" maxlength="120" required placeholder="Nhập tên banner để dễ quản lý">
         <?php if ($err('name')): ?><span class="field__error"><?= e($err('name')) ?></span><?php endif; ?>
       </label>
       <label class="field field--span2">
@@ -44,32 +44,32 @@ $currentImage = $val('image_path');
       </label>
       <label class="field field--span2">
         <span class="field__label">Tiêu đề hiển thị</span>
-        <input class="field__input" type="text" name="title" value="<?= e($val('title')) ?>" maxlength="220">
+        <input class="field__input" type="text" placeholder="Nhập tiêu đề hiển thị trên banner" name="title" value="<?= e($val('title')) ?>" maxlength="220">
       </label>
       <label class="field">
         <span class="field__label">Dòng phụ (eyebrow)</span>
         <input class="field__input" type="text" name="subtitle" value="<?= e($val('subtitle')) ?>" maxlength="255"
-               placeholder="Ví dụ: Chi nhánh Cai Lậy">
+               placeholder="Nhập tiêu đề phụ của banner">
       </label>
       <label class="field">
         <span class="field__label">Nhãn nút kêu gọi</span>
         <input class="field__input" type="text" name="cta_label" value="<?= e($val('cta_label')) ?>" maxlength="120"
-               placeholder="Ví dụ: Nộp hồ sơ ngay">
+               placeholder="Nhập chữ trên nút kêu gọi hành động">
       </label>
       <label class="field field--span2">
         <span class="field__label">Mô tả ngắn</span>
-        <textarea class="field__input" name="description" rows="2" maxlength="600"><?= e($val('description')) ?></textarea>
+        <textarea class="field__input" placeholder="Nhập nội dung hiển thị trên banner" name="description" rows="2" maxlength="600"><?= e($val('description')) ?></textarea>
         <?php if ($err('description')): ?><span class="field__error"><?= e($err('description')) ?></span><?php endif; ?>
       </label>
       <label class="field">
         <span class="field__label">Liên kết đích</span>
         <input class="field__input" type="text" name="link_url" value="<?= e($val('link_url')) ?>" maxlength="500"
-               placeholder="/apply hoặc https://…">
+               placeholder="Nhập đường dẫn đích của banner">
       </label>
       <label class="field">
         <span class="field__label">Nhãn link</span>
         <input class="field__input" type="text" name="link_label" value="<?= e($val('link_label')) ?>" maxlength="120"
-               placeholder="Ví dụ: Xem điều kiện">
+               placeholder="Nhập chữ hiển thị của liên kết">
       </label>
     </div>
   </section>
@@ -107,18 +107,18 @@ $currentImage = $val('image_path');
       <label class="field">
         <span class="field__label">Bắt đầu <span class="admin-muted">(dd/mm/yyyy HH:MM)</span></span>
         <input class="field__input<?= $err('starts_at') ? ' is-invalid' : '' ?>" type="text" name="starts_at" value="<?= e($startsAt) ?>"
-               placeholder="28/10/2026 08:00" autocomplete="off" data-datepicker="datetime">
+               placeholder="Nhập ngày giờ bắt đầu (dd/mm/yyyy HH:MM)" autocomplete="off" data-datepicker="datetime">
         <?php if ($err('starts_at')): ?><span class="field__error"><?= e($err('starts_at')) ?></span><?php endif; ?>
       </label>
       <label class="field">
         <span class="field__label">Kết thúc <span class="admin-muted">(dd/mm/yyyy HH:MM)</span></span>
         <input class="field__input<?= $err('ends_at') ? ' is-invalid' : '' ?>" type="text" name="ends_at" value="<?= e($endsAt) ?>"
-               placeholder="30/11/2026 23:59" autocomplete="off" data-datepicker="datetime">
+               placeholder="Nhập ngày giờ kết thúc (dd/mm/yyyy HH:MM)" autocomplete="off" data-datepicker="datetime">
         <?php if ($err('ends_at')): ?><span class="field__error"><?= e($err('ends_at')) ?></span><?php endif; ?>
       </label>
       <label class="field">
         <span class="field__label">Thứ tự hiển thị</span>
-        <input class="field__input" type="number" name="sort_order" value="<?= e($val('sort_order', '0')) ?>">
+        <input class="field__input" type="number" placeholder="Nhập thứ tự hiển thị" name="sort_order" value="<?= e($val('sort_order', '0')) ?>">
       </label>
       <label class="admin-cms-visibility">
         <span>Hiển thị trên website</span>

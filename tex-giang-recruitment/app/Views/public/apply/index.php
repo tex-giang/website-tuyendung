@@ -89,28 +89,28 @@ $page['robots'] = 'noindex, follow';
             <div>
               <label class="form-label" for="apply-fullname">Họ và tên <span class="req">*</span></label>
               <input type="text" id="apply-fullname" name="full_name" required autocomplete="name" maxlength="150"
-                     placeholder="Ví dụ: Lê Thị Mai" class="form-input<?= $err('full_name') ? ' is-invalid' : '' ?>"
+                     placeholder="Nhập họ và tên" class="form-input<?= $err('full_name') ? ' is-invalid' : '' ?>"
                      value="<?= e($val('full_name')) ?>">
               <?php if ($err('full_name')): ?><p class="field-error"><?= e($err('full_name')) ?></p><?php endif; ?>
             </div>
             <div>
               <label class="form-label" for="apply-phone">Số điện thoại <span class="req">*</span></label>
               <input type="tel" id="apply-phone" name="phone" required autocomplete="tel" inputmode="tel"
-                     placeholder="0912 345 678" class="form-input<?= $err('phone') ? ' is-invalid' : '' ?>"
+                     placeholder="Nhập số điện thoại" class="form-input<?= $err('phone') ? ' is-invalid' : '' ?>"
                      value="<?= e($val('phone')) ?>" data-phone-format>
               <?php if ($err('phone')): ?><p class="field-error"><?= e($err('phone')) ?></p><?php endif; ?>
             </div>
             <div>
               <label class="form-label" for="apply-email">Email (nếu có)</label>
               <input type="email" id="apply-email" name="email" autocomplete="email" maxlength="190"
-                     placeholder="email@gmail.com" class="form-input<?= $err('email') ? ' is-invalid' : '' ?>"
+                     placeholder="Nhập địa chỉ email" class="form-input<?= $err('email') ? ' is-invalid' : '' ?>"
                      value="<?= e($val('email')) ?>">
               <?php if ($err('email')): ?><p class="field-error"><?= e($err('email')) ?></p><?php endif; ?>
             </div>
             <div class="grid grid-cols-2 gap-3">
               <div>
                 <label class="form-label" for="apply-birth">Năm sinh</label>
-                <input type="number" id="apply-birth" name="birth_year" placeholder="1996"
+                <input type="number" id="apply-birth" name="birth_year" placeholder="Nhập năm sinh"
                        class="form-input<?= $err('birth_year') ? ' is-invalid' : '' ?>" value="<?= e($val('birth_year')) ?>">
                 <?php if ($err('birth_year')): ?><p class="field-error"><?= e($err('birth_year')) ?></p><?php endif; ?>
               </div>
@@ -126,7 +126,7 @@ $page['robots'] = 'noindex, follow';
             <div class="sm:col-span-2">
               <label class="form-label" for="apply-address">Địa chỉ hiện tại <span class="req">*</span></label>
               <input type="text" id="apply-address" name="address" required autocomplete="address-line1" maxlength="255"
-                     placeholder="Ấp/Xã, Huyện Châu Thành, Tỉnh Đồng Tháp"
+                     placeholder="Nhập địa chỉ hiện tại"
                      class="form-input<?= $err('address') ? ' is-invalid' : '' ?>" value="<?= e($val('address')) ?>">
               <p class="form-hint">Giúp ban tuyển dụng xếp bạn vào tuyến xe đưa rước gần nhất.</p>
               <?php if ($err('address')): ?><p class="field-error"><?= e($err('address')) ?></p><?php endif; ?>
@@ -172,7 +172,7 @@ $page['robots'] = 'noindex, follow';
           <legend class="form-group-title">Kinh nghiệm &amp; nguyện vọng</legend>
           <label class="form-label" for="apply-message">Giới thiệu ngắn (không bắt buộc)</label>
           <textarea id="apply-message" name="message" rows="4" class="form-input"
-                    placeholder="Kinh nghiệm may, vị trí từng làm, mong muốn thu nhập hoặc tuyến xe đưa đón…"><?= e($val('message')) ?></textarea>
+                    placeholder="Mô tả kinh nghiệm và mong muốn công việc"><?= e($val('message')) ?></textarea>
           <?php if ($err('message')): ?><p class="field-error"><?= e($err('message')) ?></p><?php endif; ?>
         </fieldset>
 

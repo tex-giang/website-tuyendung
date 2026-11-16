@@ -63,14 +63,14 @@ $oldJob = $val('job_slug');
         <div class="<?= $fieldClass('full_name') ?>" data-field="full_name">
           <label class="gf-label" for="gf-name">Họ và tên <span class="req">*</span></label>
           <input class="form-input" id="gf-name" name="full_name" type="text" autocomplete="name" maxlength="150"
-                 placeholder="Ví dụ: Nguyễn Thị Mai" value="<?= e($val('full_name')) ?>" required>
+                 placeholder="Nhập họ và tên" value="<?= e($val('full_name')) ?>" required>
           <p class="gf-error"><?= e($err('full_name') !== '' ? $err('full_name') : 'Vui lòng nhập họ tên đầy đủ.') ?></p>
         </div>
 
         <div class="<?= $fieldClass('phone') ?>" data-field="phone">
           <label class="gf-label" for="gf-phone">Số điện thoại <span class="req">*</span></label>
           <input class="form-input" id="gf-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel"
-                 placeholder="0912 345 678" value="<?= e($val('phone')) ?>" data-phone-format required>
+                 placeholder="Nhập số điện thoại" value="<?= e($val('phone')) ?>" data-phone-format required>
           <p class="gf-error"><?= e($err('phone') !== '' ? $err('phone') : 'Số di động Việt Nam chưa đúng, ví dụ 0912 345 678.') ?></p>
         </div>
       </div>

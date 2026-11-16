@@ -51,12 +51,12 @@
   if (form) {
     form.querySelectorAll('select').forEach(function (select) {
       select.addEventListener('change', function () {
-        if (!isMobile()) form.submit();
+        if (!isMobile()) form.requestSubmit();
       });
     });
   }
 
   sortForm?.querySelector('select')?.addEventListener('change', function () {
-    sortForm.submit();
+    sortForm.requestSubmit();
   });
 })();

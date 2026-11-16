@@ -1,6 +1,6 @@
 /**
  * TEX-GIANG RECRUITMENT — TIỆN ÍCH GIAO DIỆN DÙNG CHUNG
- * 1. Thanh thông báo: đóng và ghi nhớ trong phiên
+ * 1. Thanh thông báo: cho phép đóng trên trang đang xem
  * 2. Nav: hiện đường kẻ khi đã cuộn + đo chiều cao header vào biến CSS
  * 3. Cột bộ lọc: đồng bộ khoảng cách sticky theo chiều cao header thực tế
  * 4. Khối [data-reveal]: hiện dần khi cuộn tới, tắt khi người dùng giảm chuyển động
@@ -16,16 +16,9 @@
   var closeBtn = document.getElementById('announce-close');
 
   if (strip && closeBtn) {
-    if (sessionStorage.getItem('texgiang_announce') === '1') {
+    closeBtn.addEventListener('click', function () {
       strip.remove();
-    } else {
-      closeBtn.addEventListener('click', function () {
-        strip.remove();
-        strip = null;
-        syncHeaderHeight();
-        sessionStorage.setItem('texgiang_announce', '1');
-      });
-    }
+    });
   }
 
   /**

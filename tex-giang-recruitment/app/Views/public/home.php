@@ -76,7 +76,7 @@ for ($i = 1; $i <= 4; $i++) {
                  md:rounded-full md:border md:border-line md:bg-white md:p-1.5 md:transition-colors md:focus-within:border-accent">
       <label class="field max-md:rounded-xl max-md:bg-surface">
         <img src="<?= asset('images/icons/search.svg') ?>" alt="" aria-hidden="true" width="20" height="20" class="tg-icon">
-        <input type="text" name="q" placeholder="Vị trí, từ khoá — ví dụ: công nhân may, QC, IE" aria-label="Từ khoá tìm kiếm">
+        <input type="text" name="q" placeholder="Nhập tên vị trí hoặc từ khóa" aria-label="Từ khoá tìm kiếm">
       </label>
       <label class="field max-md:rounded-xl max-md:bg-surface">
         <img src="<?= asset('images/icons/geo-alt.svg') ?>" alt="" aria-hidden="true" width="20" height="20" class="tg-icon">
@@ -89,6 +89,14 @@ for ($i = 1; $i <= 4; $i++) {
       </label>
       <button type="submit" class="tg-btn tg-btn--primary h-11 rounded-full px-7">Tìm việc</button>
     </form>
+    <?php if (!empty($urgentJobs)): ?>
+    <div class="mx-auto mt-3 max-w-[1000px] text-right 2xl:max-w-[1080px]">
+      <a href="<?= e(url('jobs')) ?>" class="tg-link text-[14px]" data-open-urgent-dialog>
+        Tuyển gấp · <?= count($urgentJobs) ?> vị trí
+        <img src="<?= asset('images/icons/arrow-right.svg') ?>" alt="" aria-hidden="true" width="16" height="16" class="tg-icon">
+      </a>
+    </div>
+    <?php endif; ?>
   </div>
 </section>
 

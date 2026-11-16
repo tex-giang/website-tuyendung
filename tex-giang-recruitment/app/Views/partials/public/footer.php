@@ -61,17 +61,17 @@ $branchContacts = \App\Models\BranchContact::activeGrouped();
 
       <nav aria-label="Menu chân trang">
         <h2 class="text-[13px] font-semibold uppercase tracking-[0.12em] text-ink">Menu</h2>
-        <ul class="mt-4 space-y-2.5 text-[15px]">
+        <ul class="footer-menu-list mt-4 text-[15px]">
           <?php foreach ($footerMenuItems as $menuItem): ?>
           <li><a href="<?= e($menuItem['href']) ?>" class="text-muted transition-colors hover:text-accent"><?= e($menuItem['label']) ?></a></li>
           <?php endforeach; ?>
         </ul>
       </nav>
 
-      <div>
+      <div class="footer-visit-stats">
         <?php $footerStats = \App\Models\VisitStat::footer(); ?>
         <h2 class="text-[13px] font-semibold uppercase tracking-[0.12em] text-ink">Thống kê truy cập</h2>
-        <ul class="mt-4 space-y-2.5 text-[15px]">
+        <ul class="mt-4 text-[15px]">
           <li class="text-muted">Lượt hôm nay: <span class="font-semibold text-ink"><?= number_format((int) $footerStats['today'], 0, ',', '.') ?></span></li>
           <li class="text-muted">Lượt truy cập tháng: <span class="font-semibold text-ink"><?= number_format((int) $footerStats['month'], 0, ',', '.') ?></span></li>
           <li class="text-muted">Tổng truy cập: <span class="font-semibold text-ink"><?= number_format((int) $footerStats['total'], 0, ',', '.') ?></span></li>
@@ -93,12 +93,8 @@ $branchContacts = \App\Models\BranchContact::activeGrouped();
       </div>
     </div>
 
-    <div class="mt-10 flex flex-col gap-3 border-t border-line pt-6 text-[13px] text-muted sm:flex-row sm:items-center sm:justify-between">
+    <div class="mt-10 border-t border-line pt-6 text-[13px] text-muted">
       <p>© <?= date('Y') ?> <?= e(settings('legal_name', 'Công ty Cổ phần TEX-GIANG')) ?></p>
-      <p class="flex flex-wrap items-center gap-x-3 gap-y-1">
-        <span>Ảnh: TEX-GIANG</span>
-        <a href="<?= url('admin/login') ?>" class="transition-colors hover:text-accent">Cổng quản trị HR</a>
-      </p>
     </div>
   </div>
 </footer>
@@ -107,24 +103,29 @@ $branchContacts = \App\Models\BranchContact::activeGrouped();
   <button id="back-to-top" type="button" aria-label="Lên đầu trang" class="float-btn opacity-0 pointer-events-none">
     <img src="<?= asset('images/icons/arrow-up.svg') ?>" alt="" aria-hidden="true" width="20" height="20" class="tg-icon">
   </button>
+    <button type="button" class="float-btn float-btn--primary mobile-contact-trigger" data-open-contact-dialog
+          aria-haspopup="dialog" aria-label="Liên hệ tuyển dụng">
+    <img src="<?= asset('images/icons/telephone.svg') ?>" alt="" aria-hidden="true" width="20" height="20" class="tg-icon">
+    Liên hệ
+  </button>
   <?php if ($branches !== []): ?>
-  <button type="button" class="float-btn float-btn--primary" data-open-contact-dialog
+  <button type="button" class="float-btn float-btn--primary desktop-contact-trigger" data-open-contact-dialog
           aria-label="Liên hệ chi nhánh tuyển dụng" title="Liên hệ chi nhánh">
     <img src="<?= asset('images/icons/telephone.svg') ?>" alt="" aria-hidden="true" width="20" height="20" class="tg-icon text-[16px]">
   </button>
   <?php endif; ?>
   <a href="<?= e(settings('facebook', 'https://www.facebook.com/')) ?>" target="_blank" rel="noopener"
-     class="float-btn float-btn--facebook" aria-label="Fanpage Facebook TEX-GIANG" title="Fanpage Facebook">
+     class="float-btn float-btn--facebook desktop-contact-trigger" aria-label="Fanpage Facebook TEX-GIANG" title="Fanpage Facebook">
     <img src="<?= asset('images/icons/facebook.svg') ?>" alt="" aria-hidden="true" width="24" height="24" class="tg-icon float-btn__icon">
   </a>
   <?php $messengerUrl = messenger_url(); ?>
   <?php if ($messengerUrl !== ''): ?>
-  <a href="<?= e($messengerUrl) ?>" target="_blank" rel="noopener" class="float-btn float-btn--messenger" aria-label="Chat Messenger fanpage TEX-GIANG" title="Chat Messenger">
+  <a href="<?= e($messengerUrl) ?>" target="_blank" rel="noopener" class="float-btn float-btn--messenger desktop-contact-trigger" aria-label="Chat Messenger fanpage TEX-GIANG" title="Chat Messenger">
     <svg class="float-btn__icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="26" height="26"><path d="M12 0C5.373 0 0 4.974 0 11.111c0 3.498 1.744 6.614 4.469 8.654V24l4.088-2.242c1.092.3 2.246.464 3.443.464 6.627 0 12-4.974 12-11.111S18.627 0 12 0zm1.191 14.963l-3.055-3.26-5.963 3.26L10.732 8.6l3.131 3.26L19.752 8.6l-6.561 6.363z"/></svg>
   </a>
   <?php endif; ?>
   <?php if ($zalo !== ''): ?>
-  <a href="<?= e(zalo_url()) ?>" target="_blank" rel="noopener" class="float-btn float-btn--zalo" aria-label="Chat Zalo tuyển dụng" title="Chat Zalo">
+  <a href="<?= e(zalo_url()) ?>" target="_blank" rel="noopener" class="float-btn float-btn--zalo desktop-contact-trigger" aria-label="Chat Zalo tuyển dụng" title="Chat Zalo">
     <img src="<?= asset('images/icons/zalo.svg') ?>" alt="" aria-hidden="true" width="24" height="24" class="tg-icon float-btn__icon">
   </a>
   <?php endif; ?>
@@ -165,7 +166,6 @@ $branchContacts = \App\Models\BranchContact::activeGrouped();
   </div>
 </div>
 
-<?php if ($branches !== []): ?>
 <div id="contact-dialog" class="tg-modal hidden" role="dialog" aria-modal="true" aria-labelledby="contact-dialog-title" data-contact-dialog>
   <div class="relative flex max-h-[min(90vh,640px)] w-full max-w-[420px] flex-col overflow-hidden rounded-2xl bg-white">
     <div class="flex items-center justify-between gap-3 border-b border-line px-4 py-3">
@@ -197,10 +197,18 @@ $branchContacts = \App\Models\BranchContact::activeGrouped();
         <?php endif; ?>
       </section>
       <?php endforeach; ?>
+      <nav class="mobile-contact-links" aria-label="Kênh liên hệ trực tuyến">
+        <a class="tg-btn tg-btn--ghost" href="<?= e(settings('facebook', 'https://www.facebook.com/')) ?>" target="_blank" rel="noopener">Facebook</a>
+        <?php if ($messengerUrl !== ''): ?>
+        <a class="tg-btn tg-btn--ghost" href="<?= e($messengerUrl) ?>" target="_blank" rel="noopener">Messenger</a>
+        <?php endif; ?>
+        <?php if ($zalo !== ''): ?>
+        <a class="tg-btn tg-btn--ghost" href="<?= e(zalo_url()) ?>" target="_blank" rel="noopener">Zalo</a>
+        <?php endif; ?>
+      </nav>
     </div>
   </div>
 </div>
-<?php endif; ?>
 
 <script>
 (function () {
