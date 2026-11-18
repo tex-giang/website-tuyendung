@@ -204,4 +204,5 @@ foreach (($urgentJobs ?? []) as $uJob) {
 <script type="application/json" id="tg-urgent-jobs"
         data-icon-close="<?= e(asset('images/icons/x-lg.svg')) ?>"
         data-jobs-url="<?= e(url('jobs')) ?>"
+        data-auto-open-delay="<?= (int) setting_int('urgent_dialog_delay', 12) * 1000 ?>"
         data-apply-url="<?= e(url('apply')) ?>"><?= json_encode($urgentJson, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?></script>

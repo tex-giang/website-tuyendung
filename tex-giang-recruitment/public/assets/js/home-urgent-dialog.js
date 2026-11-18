@@ -85,6 +85,14 @@
 
   function open() {
     if (dialog.open) return;
+    // Thẻ nổi "Thưởng nóng" (góc dưới trái) và dialog này cùng chiếm lớp phủ:
+    // đóng thẻ nổi trước để không chồng hai thông báo một lúc.
+    var card = document.getElementById('recruitment-popup');
+    if (card && !card.classList.contains('hidden')) {
+      card.classList.add('hidden');
+      card.classList.remove('flex');
+      try { sessionStorage.setItem('texgiang_popup_seen', 'true'); } catch (_) {}
+    }
     document.body.classList.add('has-dialog');
     dialog.showModal();
     var closeButton = dialog.querySelector('[data-urgent-close]');
@@ -127,6 +135,39 @@
       event.preventDefault();
       open();
     });
+  }
+
+  /*
+   * Tự mở dialog sau một khoảng chờ — mặc định 12 giây, đọc từ
+   * data-auto-open-delay (0 = tắt, chỉ mở khi bấm link "Tuyển gấp").
+   *
+   * Chỉ mở một lần mỗi phiên: đóng rồi tải lại trang trong cùng phiên sẽ
+   * không bị chặn nữa. Không mở khi đang có dialog khác hoặc thẻ nổi
+   * "Thưởng nóng" đã hiện — tránh hai lớp phủ chồng nhau.
+   */
+  var AUTO_KEY = 'texgiang_urgent_seen';
+  var delayMs = parseInt(dataEl.getAttribute('data-auto-open-delay') || '0', 10);
+
+  function canAutoOpen() {
+    if (!delayMs || delayMs < 1000) return false;
+    try {
+      if (sessionStorage.getItem(AUTO_KEY)) return false;
+    } catch (_) {
+      return false; // trình duyệt chặn storage: không tự mở
+    }
+    if (document.body.classList.contains('has-dialog')) return false;
+    var card = document.getElementById('recruitment-popup');
+    if (card && !card.classList.contains('hidden')) return false;
+    return true;
+  }
+
+  if (delayMs > 0) {
+    window.setTimeout(function () {
+      if (typeof dialog.showModal !== 'function') return;
+      if (!canAutoOpen()) return;
+      try { sessionStorage.setItem(AUTO_KEY, '1'); } catch (_) {}
+      open();
+    }, delayMs);
   }
 
   window.TGUrgentDialog = { open: open, close: close };
