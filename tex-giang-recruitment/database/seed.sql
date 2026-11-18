@@ -101,7 +101,13 @@ INSERT INTO categories (slug, name, description, sort_order) VALUES
   ('qc',          'Kiểm soát chất lượng',    'QA/QC, kiểm phẩm, giám sát chất lượng',      2),
   ('ie',          'Kỹ thuật & định mức IE',  'Kỹ sư công nghiệp, định mức, mẫu rập',       3),
   ('maintenance', 'Bảo trì cơ điện',         'Bảo trì máy may, điện xưởng',                4),
-  ('office',      'Văn phòng & nhân sự',     'Kế toán, merchandiser, hành chính, lái xe',  5);
+  ('office',      'Văn phòng & nhân sự',     'Kế toán, merchandiser, hành chính, lái xe',  5),
+  ('xuong-in',    'Xưởng in',                'Thợ in thủ công, in máy, dán bán thành phẩm', 6),
+  ('phong-cat',   'Phòng cắt',               'Công nhân cắt Lazer, giác sơ đồ',              7),
+  ('may-mau',     'May mẫu',                 'Nhân viên may mẫu, phòng mẫu',                8),
+  ('ky-thuat-may', 'Kỹ thuật may',            'Kỹ thuật chuyền, hướng dẫn thao tác',         9),
+  ('bao-ve',      'Bảo vệ',                  'Bảo vệ cổng, tuần tra, an ninh nhà máy',     10),
+  ('ky-thuat',    'Kỹ thuật',                'Kỹ thuật thiết bị, bảo trì máy nhà máy',      11);
 
 -- 5. CHUYÊN MỤC TIN TỨC ----------------------------------------------------
 INSERT INTO post_categories (slug, name, sort_order) VALUES

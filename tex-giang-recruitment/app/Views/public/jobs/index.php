@@ -115,8 +115,8 @@ $end = min($result['page'] * $result['per_page'], $result['total']);
             <?php endforeach; ?>
             <label for="filter-sort" class="sr-only">Sắp xếp</label>
             <select id="filter-sort" name="sort" class="form-input w-auto py-2 text-[15px]">
-              <option value="newest"<?= $filters['sort'] === 'newest' ? ' selected' : '' ?>>Mới đăng trước</option>
-              <option value="urgent"<?= $filters['sort'] === 'urgent' ? ' selected' : '' ?>>Ưu tiên tuyển gấp</option>
+              <option value="newest"<?= $filters['sort'] === 'newest' ? ' selected' : '' ?>>Theo nhà máy · tin mới trước</option>
+              <option value="urgent"<?= $filters['sort'] === 'urgent' ? ' selected' : '' ?>>Theo nhà máy · tin gấp trước</option>
             </select>
           </form>
         </div>

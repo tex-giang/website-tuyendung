@@ -14,6 +14,12 @@ final class Job
                             LEFT JOIN branches b ON b.id = j.branch_id
                             LEFT JOIN categories c ON c.id = j.category_id';
 
+    /**
+     * Thứ tự nhà máy cố định: Tân Hương → Cai Lậy → Chợ Gạo
+     * (theo branches.sort_order). Dùng cho MỌI danh sách tin.
+     */
+    private const BRANCH_ORDER = 'b.sort_order ASC, b.id ASC';
+
     /** Điều kiện tin hiển thị công khai: đã đăng, chưa xoá, còn hạn. */
     private static function publicWhere(array $filters, array &$params): string
     {
@@ -49,11 +55,17 @@ final class Job
         return ' WHERE ' . implode(' AND ', $where);
     }
 
+    /**
+     * Danh sách công khai: LUÔN xếp theo nhà máy Tân Hương → Cai Lậy → Chợ Gạo.
+     * Trong mỗi nhà máy: tuỳ lựa chọn — tin gấp trước (sort=urgent) hoặc tin mới trước.
+     */
     private static function orderBy(array $filters): string
     {
-        return (($filters['sort'] ?? '') === 'urgent')
-            ? ' ORDER BY j.is_urgent DESC, COALESCE(j.posted_at, j.created_at) DESC, j.id DESC'
-            : ' ORDER BY COALESCE(j.posted_at, j.created_at) DESC, j.id DESC';
+        $afterBranch = (($filters['sort'] ?? '') === 'urgent')
+            ? 'j.is_urgent DESC, j.deadline IS NULL, j.deadline ASC, COALESCE(j.posted_at, j.created_at) DESC, j.id ASC'
+            : 'COALESCE(j.posted_at, j.created_at) DESC, j.id ASC';
+
+        return ' ORDER BY ' . self::BRANCH_ORDER . ', ' . $afterBranch;
     }
 
     /**
@@ -103,7 +115,7 @@ final class Job
         $stmt = Database::connection()->prepare(
             self::SELECT . " WHERE j.status = 'published' AND j.deleted_at IS NULL
                              AND (j.deadline IS NULL OR j.deadline >= CURDATE())
-                             ORDER BY COALESCE(j.posted_at, j.created_at) DESC, j.id DESC LIMIT :limit"
+                             ORDER BY b.sort_order ASC, b.id ASC, COALESCE(j.posted_at, j.created_at) DESC, j.id ASC LIMIT :limit"
         );
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->execute();
@@ -144,7 +156,7 @@ final class Job
             self::SELECT . " WHERE j.status = 'published' AND j.deleted_at IS NULL
                              AND (j.deadline IS NULL OR j.deadline >= CURDATE())
                              AND (j.is_urgent = 1 OR (j.deadline IS NOT NULL AND j.deadline <= DATE_ADD(CURDATE(), INTERVAL 7 DAY)))
-                             ORDER BY j.is_urgent DESC, j.deadline ASC, COALESCE(j.posted_at, j.created_at) DESC LIMIT :limit"
+                             ORDER BY b.sort_order ASC, b.id ASC, j.is_urgent DESC, j.deadline IS NULL, j.deadline ASC, COALESCE(j.posted_at, j.created_at) DESC, j.id ASC LIMIT :limit"
         );
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->execute();
@@ -165,7 +177,9 @@ final class Job
             $params[':category'] = (int) $job['category_id'];
         }
 
-        $stmt = Database::connection()->prepare($sql . ' ORDER BY COALESCE(j.posted_at, j.created_at) DESC LIMIT :limit');
+        $stmt = Database::connection()->prepare(
+            $sql . ' ORDER BY b.sort_order ASC, b.id ASC, COALESCE(j.posted_at, j.created_at) DESC, j.id ASC LIMIT :limit'
+        );
         foreach ($params as $key => $value) {
             $stmt->bindValue($key, $value, PDO::PARAM_INT);
         }
@@ -209,7 +223,8 @@ final class Job
         $page = min($page, $pages);
 
         $stmt = Database::connection()->prepare(
-            self::SELECT . $whereSql . ' ORDER BY j.updated_at DESC, j.id DESC LIMIT :limit OFFSET :offset'
+            self::SELECT . $whereSql
+                . ' ORDER BY ' . self::BRANCH_ORDER . ', j.updated_at DESC, j.id DESC LIMIT :limit OFFSET :offset'
         );
         foreach ($params as $key => $value) {
             $stmt->bindValue(':' . $key, $value);

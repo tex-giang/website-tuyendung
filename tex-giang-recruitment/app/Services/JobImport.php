@@ -188,6 +188,8 @@ final class JobImport
             ['1. Điền dữ liệu vào sheet "Tin tuyển dụng": mỗi dòng là một tin tuyển dụng.'],
             ['2. Cột có (*) là bắt buộc: Tiêu đề, Khu sản xuất, Mô tả công việc.'],
             ['3. Khu sản xuất: chọn Tân Hương / Cai Lậy / Chợ Gạo từ danh sách.'],
+            ['3b. Bộ phận: phải chọn đúng tên bộ phận đang có trên website (xem danh sách bên dưới).'],
+            ['    Bộ phận lạ sẽ bị báo lỗi "không nhận diện được bộ phận" khi import.'],
             ['4. Trạng thái: draft (bản nháp) hoặc published (đăng ngay). Để trống = draft.'],
             ['5. Ngày đăng / Hạn nộp: định dạng dd/mm/yyyy (ví dụ 31/12/2026).'],
             ['   Ngày đăng để trống = hôm nay. Hạn nộp để trống = chưa xác định (không giới hạn).'],
@@ -195,9 +197,38 @@ final class JobImport
             ['   Phần "Lương (hiển thị)" và "Khoảng lương" được TỰ SINH từ 2 cột này — không cần nhập.'],
             ['7. Dòng có tiêu đề bắt đầu bằng [MẪU] sẽ tự bỏ qua khi import.'],
             ['8. Lưu file .xlsx, rồi vào Admin → Tin tuyển dụng → Import template để tải lên.'],
-            [''],
             ['Lưu ý: không đổi tên dòng tiêu đề (dòng 1 của sheet dữ liệu).'],
         ];
+
+        $validations = [
+            ['range' => $letterOf('branch') . '2:' . $letterOf('branch') . $lastRow, 'options' => ['Tân Hương', 'Cai Lậy', 'Chợ Gạo']],
+            ['range' => $letterOf('status') . '2:' . $letterOf('status') . $lastRow, 'options' => ['draft', 'published']],
+            ['range' => $letterOf('is_urgent') . '2:' . $letterOf('is_urgent') . $lastRow, 'options' => ['0', '1']],
+        ];
+
+        // Danh sách bộ phận lấy từ DB: import chỉ nhận đúng tên có sẵn, nên cho chọn từ dropdown.
+        $categoryNames = [];
+        foreach (Category::all() as $categoryRow) {
+            $name = trim((string) ($categoryRow['name'] ?? ''));
+            if ($name !== '') {
+                $categoryNames[] = $name;
+            }
+        }
+        // Excel giới hạn danh sách nhúng trong công thức ~255 ký tự.
+        $categoryFormula = implode(',', $categoryNames);
+        if ($categoryNames !== [] && mb_strlen($categoryFormula) <= 240) {
+            $validations[] = [
+                'range'   => $letterOf('category') . '2:' . $letterOf('category') . $lastRow,
+                'options' => $categoryNames,
+            ];
+        }
+        if ($categoryNames !== []) {
+            $guide[] = [''];
+            $guide[] = ['Bộ phận đang có trên website (dùng đúng tên này):'];
+            foreach ($categoryNames as $categoryName) {
+                $guide[] = ['   • ' . $categoryName];
+            }
+        }
 
         return Xlsx::write([
             [
@@ -206,11 +237,7 @@ final class JobImport
                 'widths' => $widths,
                 'header' => true,
                 'freeze_row' => 1,
-                'validations' => [
-                    ['range' => $letterOf('branch') . '2:' . $letterOf('branch') . $lastRow, 'options' => ['Tân Hương', 'Cai Lậy', 'Chợ Gạo']],
-                    ['range' => $letterOf('status') . '2:' . $letterOf('status') . $lastRow, 'options' => ['draft', 'published']],
-                    ['range' => $letterOf('is_urgent') . '2:' . $letterOf('is_urgent') . $lastRow, 'options' => ['0', '1']],
-                ],
+                'validations' => $validations,
             ],
             [
                 'name' => 'Hướng dẫn',
