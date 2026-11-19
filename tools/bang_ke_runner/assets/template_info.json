@@ -1,0 +1,15 @@
+{
+  "source_filename": "template2.xlsx",
+  "source_sha256": "c7d9386ed14081754358d11c8152f853bbb929eea1ae4b1bdf4f216ff58d724c",
+  "sha256": "c7d9386ed14081754358d11c8152f853bbb929eea1ae4b1bdf4f216ff58d724c",
+  "size_bytes": 13733,
+  "preservation": "verbatim",
+  "format_preserved": true,
+  "contains_existing_data": false,
+  "first_data_rows": {
+    "KHAI THUE": 8,
+    "tong hop hoa don": 2,
+    "chi tiet hoa don": 2
+  },
+  "embedded_filename": "template.xlsx"
+}

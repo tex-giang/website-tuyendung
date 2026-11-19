@@ -3,3 +3,4 @@ build/
 dist/
 validation/
 *.spec
+template_authoring/node_modules/

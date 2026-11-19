@@ -26,10 +26,10 @@ final class TaxonomyController extends Controller
             'hint'     => 'Các khu sản xuất đang tuyển dụng, kèm địa chỉ, bản đồ và đầu mối liên hệ tuyển dụng.',
         ],
         'category' => [
-            'label'    => 'Khối phòng ban',
-            'singular' => 'khối phòng ban',
+            'label'    => 'Bộ phận tuyển dụng',
+            'singular' => 'bộ phận tuyển dụng',
             'model'    => Category::class,
-            'hint'     => 'Khối phòng ban dùng để phân loại tin tuyển dụng.',
+            'hint'     => 'Bộ phận tuyển dụng dùng để phân loại tin tuyển dụng. Mỗi bộ phận thuộc một Khối: Văn phòng hoặc Xí nghiệp.',
         ],
         'post-category' => [
             'label'    => 'Chuyên mục tin tức',
@@ -57,6 +57,7 @@ final class TaxonomyController extends Controller
             'types'          => self::TYPES,
             'rows'           => $rows,
             'usage'          => $usage,
+            'blocks'         => Category::BLOCKS,
             'branchContacts' => $type === 'branch' ? BranchContact::allGrouped() : [],
             'page'           => ['title' => 'Danh mục dùng chung | ' . settings('site_name'), 'nav' => 'categories'],
         ], 'layouts/admin');
@@ -146,6 +147,9 @@ final class TaxonomyController extends Controller
         if ($type === 'post-category' && PostCategory::postCount($recordId) > 0) {
             $this->formError('Không xoá được: còn ' . PostCategory::postCount($recordId) . ' bài viết thuộc chuyên mục này.', $this->listUrl($type), status: 409);
         }
+        if ($type === 'category' && Category::jobCount($recordId) > 0) {
+            $this->formError('Không xoá được: còn ' . Category::jobCount($recordId) . ' tin tuyển dụng thuộc bộ phận này. Hãy chuyển tin sang bộ phận khác trước.', $this->listUrl($type), status: 409);
+        }
 
         $model::delete($recordId);
         AuditLog::record('taxonomy.delete', $type, $recordId, ['name' => $record['name']]);
@@ -188,7 +192,7 @@ final class TaxonomyController extends Controller
         $errors = Session::pull('_errors', []);
 
         $values = $record ?? [
-            'id' => null, 'slug' => '', 'name' => '', 'address' => '', 'phone' => '',
+            'id' => null, 'slug' => '', 'block' => '', 'name' => '', 'address' => '', 'phone' => '',
             'map_url' => '', 'map_link' => '', 'description' => '', 'sort_order' => 0, 'is_active' => 1,
         ];
         if ($old !== []) {
@@ -210,6 +214,7 @@ final class TaxonomyController extends Controller
             'values'   => $values,
             'errors'   => $errors,
             'contacts' => $contacts,
+            'blocks'   => Category::BLOCKS,
             'page'     => [
                 'title' => ($record === null ? 'Thêm ' : 'Sửa ') . $config['singular'] . ' | ' . settings('site_name'),
                 'nav'   => 'categories',
@@ -276,6 +281,7 @@ final class TaxonomyController extends Controller
         $data = [
             'name'        => trim((string) ($post['name'] ?? '')),
             'slug'        => trim((string) ($post['slug'] ?? '')),
+            'block'       => trim((string) ($post['block'] ?? '')),
             'address'     => trim((string) ($post['address'] ?? '')),
             'phone'       => trim((string) ($post['phone'] ?? '')),
             'map_url'     => trim((string) ($post['map_url'] ?? '')),
@@ -286,6 +292,12 @@ final class TaxonomyController extends Controller
         ];
 
         $errors = [];
+        // Khối: chỉ áp dụng cho bộ phận tuyển dụng. Rỗng = dùng chung cho cả 2 Khối.
+        if ($type !== 'category') {
+            unset($data['block']);
+        } elseif ($data['block'] !== '' && !isset(Category::BLOCKS[$data['block']])) {
+            $errors['block'] = 'Khối không hợp lệ (chỉ nhận Văn phòng hoặc Xí nghiệp).';
+        }
         if (mb_strlen($data['name']) < 2 || mb_strlen($data['name']) > 120) {
             $errors['name'] = 'Tên danh mục 2–120 ký tự.';
         }

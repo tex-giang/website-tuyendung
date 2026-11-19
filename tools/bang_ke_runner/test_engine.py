@@ -6,7 +6,12 @@ import zipfile
 
 from openpyxl import Workbook, load_workbook
 
-from engine import process_file, datekey, invoice, taxid, rate, allocate, missing
+from engine import process_file as run_app, datekey, invoice, taxid, rate, allocate, missing
+
+
+def process_file(source, output, *args, **kwargs):
+    """Keep the full-workbook regression fixtures to test the calculation core."""
+    return run_app(source, output, *args, only_khai=False, **kwargs)
 
 
 KCOLS = dict(model=3, series=4, number=5, date=6, vendor=7, tax_id=8, item=9, unit=10, qty=11, price=12, amount=13, rate=14, vat=15)

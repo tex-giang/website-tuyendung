@@ -99,7 +99,8 @@
   visibility: hidden;
   pointer-events: none;
 }
-.tg-public #jobs-filter-form { display: grid; grid-template-columns: 1.4fr repeat(4,minmax(0,1fr)) auto; gap: 12px; align-items: end; padding: 20px; border-radius: 6px; background: #edf3ef; }
+.tg-public #jobs-filter-form { display: grid; grid-template-columns: minmax(0,1.6fr) minmax(0,1fr) minmax(0,1fr) minmax(0,1.2fr) auto; gap: 12px; align-items: end; padding: 20px; border-radius: 6px; background: #edf3ef; }
+/* Dòng tiêu đề "Bộ lọc" + link Xoá hết chiếm trọn hàng đầu. */
 #jobs-filter-form > div:first-child { grid-column: 1 / -1; }
 #jobs-filter-form .form-label { font-size: 14px; }
 #jobs-filter-form .form-input { padding-inline: 10px; font-size: 14px; height: 46px; }

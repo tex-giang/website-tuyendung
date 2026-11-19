@@ -8,6 +8,27 @@ use PDO;
 
 final class Job
 {
+    /**
+     * Khối tuyển dụng — CỐ ĐỊNH 2 giá trị, khớp ENUM('office','enterprise') của jobs.block.
+     * Đây là nguồn duy nhất cho nhãn hiển thị ở mọi tầng (form, bộ lọc, import).
+     */
+    public const BLOCKS = [
+        'office'     => 'Văn phòng',
+        'enterprise' => 'Xí nghiệp',
+    ];
+
+    public const DEFAULT_BLOCK = 'enterprise';
+
+    public static function blockLabel(?string $block): string
+    {
+        return self::BLOCKS[$block ?? ''] ?? ($block ?? '');
+    }
+
+    public static function blockValid(?string $block): bool
+    {
+        return $block !== null && isset(self::BLOCKS[$block]);
+    }
+
     private const SELECT = 'SELECT j.*, b.name AS branch_name, b.slug AS branch_slug, b.address AS branch_address, b.phone AS branch_phone,
                                    c.name AS category_name, c.slug AS category_slug
                             FROM jobs j
@@ -43,13 +64,13 @@ final class Job
             $where[] = 'b.slug = :branch';
             $params['branch'] = $filters['location'];
         }
+        if (($filters['block'] ?? '') !== '' && self::blockValid((string) $filters['block'])) {
+            $where[] = 'j.block = :block';
+            $params['block'] = $filters['block'];
+        }
         if (($filters['department'] ?? '') !== '') {
             $where[] = 'c.slug = :category';
             $params['category'] = $filters['department'];
-        }
-        if (($filters['salary'] ?? '') !== '') {
-            $where[] = 'j.salary_range = :salary';
-            $params['salary'] = $filters['salary'];
         }
 
         return ' WHERE ' . implode(' AND ', $where);
@@ -207,6 +228,10 @@ final class Job
             $where[] = 'j.status = :status';
             $params['status'] = $filters['status'];
         }
+        if (($filters['block'] ?? '') !== '' && self::blockValid((string) $filters['block'])) {
+            $where[] = 'j.block = :block';
+            $params['block'] = $filters['block'];
+        }
         // Phạm vi nhà máy của tài khoản đang đăng nhập.
         [$branchWhere, $branchParams] = \App\Core\Permissions::branchSql('j.branch_id');
         if ($branchWhere !== '') {
@@ -303,11 +328,11 @@ final class Job
         $pdo = Database::connection();
         $stmt = $pdo->prepare(
             'INSERT INTO jobs
-                (slug, code, branch_id, category_id, title, quantity, location, employment_type, experience,
+                (slug, code, branch_id, block, category_id, title, quantity, location, employment_type, experience,
                  salary_text, salary_min, salary_max, salary_range, description, requirements, benefits,
                  status, is_urgent, posted_at, deadline, meta_title, meta_description, sort_order, created_by)
              VALUES
-                (:slug, :code, :branch_id, :category_id, :title, :quantity, :location, :employment_type, :experience,
+                (:slug, :code, :branch_id, :block, :category_id, :title, :quantity, :location, :employment_type, :experience,
                  :salary_text, :salary_min, :salary_max, :salary_range, :description, :requirements, :benefits,
                  :status, :is_urgent, :posted_at, :deadline, :meta_title, :meta_description, :sort_order, :created_by)'
         );
@@ -319,7 +344,7 @@ final class Job
     {
         $stmt = Database::connection()->prepare(
             'UPDATE jobs SET
-                slug = :slug, code = :code, branch_id = :branch_id, category_id = :category_id, title = :title,
+                slug = :slug, code = :code, branch_id = :branch_id, block = :block, category_id = :category_id, title = :title,
                 quantity = :quantity, location = :location, employment_type = :employment_type, experience = :experience,
                 salary_text = :salary_text, salary_min = :salary_min, salary_max = :salary_max, salary_range = :salary_range,
                 description = :description, requirements = :requirements, benefits = :benefits,
@@ -398,12 +423,51 @@ final class Job
         return $counts;
     }
 
+    /**
+     * Số tin có jobs.block LỆCH với categories.block của bộ phận.
+     *
+     * Lệch là dữ liệu sai: bộ lọc theo Khối dùng jobs.block, còn số lượng trong
+     * dropdown bộ phận đếm theo categories.block → hai bên cho kết quả khác nhau.
+     * Admin hiện cảnh báo để người dùng biết mà sửa (hoặc chạy migration đồng bộ).
+     *
+     * $scopeToUser = true (mặc định): chỉ đếm trong phạm vi nhà máy của tài khoản
+     * đang đăng nhập — dùng cho cảnh báo trên giao diện. Truyền false khi cần con
+     * số toàn hệ thống (CLI, migration, kiểm tra dữ liệu) vì lúc đó không có phiên.
+     */
+    public static function countBlockMismatch(bool $scopeToUser = true): int
+    {
+        $where = '';
+        $params = [];
+        if ($scopeToUser) {
+            [$branchWhere, $branchParams] = \App\Core\Permissions::branchSql('j.branch_id');
+            if ($branchWhere !== '') {
+                $where = ' AND ' . $branchWhere;
+                $params = $branchParams;
+            }
+        }
+
+        $sql = 'SELECT COUNT(*) FROM jobs j
+                JOIN categories c ON c.id = j.category_id
+                WHERE j.deleted_at IS NULL
+                  AND c.block IS NOT NULL
+                  AND j.block <> c.block' . $where;
+        $stmt = Database::connection()->prepare($sql);
+        $stmt->execute($params);
+        return (int) $stmt->fetchColumn();
+    }
+
     private static function bindings(array $data, ?int $userId): array
     {
+        $block = (string) ($data['block'] ?? '');
+        if (!self::blockValid($block)) {
+            $block = self::DEFAULT_BLOCK;
+        }
+
         return [
             'slug'             => $data['slug'],
             'code'             => ($data['code'] ?? '') !== '' ? $data['code'] : null,
             'branch_id'        => (int) $data['branch_id'],
+            'block'            => $block,
             'category_id'      => !empty($data['category_id']) ? (int) $data['category_id'] : null,
             'title'            => $data['title'],
             'quantity'         => (int) ($data['quantity'] ?? 1),

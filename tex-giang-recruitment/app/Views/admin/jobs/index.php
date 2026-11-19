@@ -21,6 +21,15 @@ $listPager = true;
   </div>
 </div>
 
+<?php if (($blockMismatch ?? 0) > 0): ?>
+<div class="admin-alert admin-alert--error" role="alert">
+  <strong>Có <?= (int) $blockMismatch ?> tin bị lệch Khối với bộ phận.</strong>
+  Bộ lọc theo Khối dùng Khối của tin, còn số lượng trong dropdown bộ phận đếm theo Khối của bộ phận —
+  hai bên sẽ cho kết quả khác nhau. Mở từng tin và lưu lại để tự đồng bộ, hoặc chạy migration
+  <code>2026-11-19-dong-bo-khoi-tin-theo-bo-phan.sql</code>.
+</div>
+<?php endif; ?>
+
 <?php if (can('jobs', 'create')): ?>
 <details class="admin-import-panel">
   <summary class="admin-import-panel__summary">
@@ -63,6 +72,12 @@ $listPager = true;
       <option value="<?= e($key) ?>"<?= $filters['status'] === $key ? ' selected' : '' ?>><?= e($label) ?> (<?= (int) $counts[$key] ?>)</option>
       <?php endforeach; ?>
     </select>
+    <select id="job-filter-block" name="block" class="field__input admin-list-select" data-submit-onchange aria-label="Lọc theo Khối">
+      <option value="">Tất cả Khối</option>
+      <?php foreach ($blocks as $key => $label): ?>
+      <option value="<?= e($key) ?>"<?= $filters['block'] === $key ? ' selected' : '' ?>><?= e($label) ?></option>
+      <?php endforeach; ?>
+    </select>
     <noscript><button type="submit" class="btn btn-outline">Áp dụng</button></noscript>
   </form>
 
@@ -72,7 +87,7 @@ $listPager = true;
   <div class="admin-table-wrap">
     <table class="admin-table admin-table--jobs table table-hover align-middle" aria-labelledby="admin-list-title">
       <thead><tr>
-        <th scope="col">Mã tin</th><th scope="col">Tiêu đề</th><th scope="col">Khu sản xuất</th><th scope="col">Mức lương</th>
+        <th scope="col">Mã tin</th><th scope="col">Tiêu đề</th><th scope="col">Khu sản xuất</th><th scope="col">Khối</th><th scope="col">Mức lương</th>
         <th scope="col">Hạn nộp</th><th scope="col">Trạng thái</th><th scope="col">Cập nhật</th>
         <th scope="col" class="is-actions" aria-label="Thao tác"></th>
       </tr></thead>
@@ -86,6 +101,7 @@ $listPager = true;
             <span class="admin-muted"><?= e($job['category_name'] ?? 'Chưa phân bộ phận') ?><?= !empty($job['is_urgent']) ? ' · Tuyển gấp' : '' ?></span>
           </td>
           <td><?= e($job['branch_name'] ?? '—') ?></td>
+          <td><span class="admin-badge admin-badge--block"><?= e($blocks[$job['block']] ?? $job['block']) ?></span></td>
           <td><?= e(salary_short((string) $job['salary_text']) ?: 'Thoả thuận') ?></td>
           <td class="admin-nowrap"><?= e(vn_date($job['deadline'] ?: '') ?: 'Chưa xác định') ?></td>
           <td><span class="admin-badge <?= $statusBadge[$job['status']] ?? '' ?>"><?= e($statuses[$job['status']] ?? $job['status']) ?></span></td>

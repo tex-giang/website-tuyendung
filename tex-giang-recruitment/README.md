@@ -4,6 +4,33 @@ Website tuyển dụng của **Công ty Cổ phần TEX-GIANG (TGI)** — 3 khu 
 
 Dự án là bản chuyển từ site tĩnh sang **PHP thuần + PDO/MySQL**, giữ nguyên toàn bộ thiết kế (**Tailwind CSS build cục bộ**, Vanilla JS), thêm trang quản trị để **thêm/sửa/xoá** tin tuyển dụng và cấu hình website.
 
+## Cây phân cấp tuyển dụng
+
+```
+Nhà máy (branches)  →  Khối (jobs.block)  →  Bộ phận tuyển dụng (categories)  →  Việc làm (jobs)
+   Tân Hương             Văn phòng                Văn phòng & nhân sự               300 Công nhân may…
+   Cai Lậy               Xí nghiệp                Sản xuất may mặc                  Giám sát QC…
+   Chợ Gạo                                        Bảo vệ, Xưởng in…
+```
+
+**Khối là cố định, chỉ có 2 giá trị** — lưu bằng `ENUM('office','enterprise')`, không phải bảng riêng:
+
+| Giá trị | Nhãn | Ghi chú |
+|---|---|---|
+| `office` | Văn phòng | Hành chính, kế toán, nhân sự, bảo vệ… |
+| `enterprise` | Xí nghiệp | Sản xuất, QC, IE, bảo trì, xưởng in, cắt, may mẫu… |
+
+- `jobs.block` **NOT NULL** — mỗi tin bắt buộc thuộc một Khối.
+- `categories.block` **NULL được** — bộ phận để trống = dùng chung cho cả 2 Khối.
+- Form thêm tin lọc **Bộ phận theo Khối** đã chọn; khi lưu, `jobs.block` **tự đồng bộ theo `categories.block`** của bộ phận (bộ phận đã gán Khối là chuẩn), tránh sinh ra tin lệch Khối.
+- Dropdown **Bộ phận** chỉ hiện bộ phận **đang có tin**, kèm số lượng:
+  - Ngoài website (`/jobs`): đếm tin `published` + chưa xoá + còn hạn — khớp đúng kết quả lọc. Bộ phận 0 tin bị ẩn.
+  - Trong admin (form tin): đếm mọi tin chưa xoá (kể cả nháp), và luôn giữ bộ phận đang gán cho tin đang sửa.
+- Ngoài website, `/jobs?khoi=office` lọc theo Khối; đổi Khối sẽ nạp lại danh sách bộ phận tương ứng. Bộ phận hết tin trong URL sẽ tự được dọn khỏi URL.
+- Admin cảnh báo khi phát hiện tin **lệch Khối** so với bộ phận (dữ liệu cũ); sửa bằng cách mở tin và lưu lại, hoặc chạy migration đồng bộ.
+- Template import Excel có cột **Khối (Văn phòng/Xí nghiệp)**; để trống mặc định Xí nghiệp.
+
+
 ## Yêu cầu máy chủ
 
 | Thành phần | Yêu cầu |
@@ -25,7 +52,7 @@ tex-giang-recruitment/
 │   ├── Config/permissions.php ma trận phân quyền admin (module × vai trò)
 │   ├── Core/                  Env, Database (PDO), Router, Controller, Session, Csrf, Response, Permissions
 │   ├── Middleware/            Auth, Guest, Csrf, Can (phân quyền module)
-│   ├── Models/                Job, Application, Post, Banner, Setting, User, Branch, Category, PostCategory…
+│   ├── Models/                Job (kèm BLOCKS), Application, Post, Banner, Setting, User, Branch, Category (kèm BLOCKS)…
 │   ├── Controllers/           Public/{Home,Job,Page,Application}, Admin/{Auth,Dashboard,Job,Application,
 │   │                          Post,Banner,Content,Settings,Taxonomy,Contact,User,Profile,Audit}
 │   └── Views/                 layouts/ + partials/ + public/ + admin/
@@ -35,7 +62,7 @@ tex-giang-recruitment/
 │   ├── .htaccess              rewrite + header bảo mật
 │   └── assets/                css (đã build) · js · images · uploads (ảnh CMS)
 ├── routes/                    web.php (công khai) · admin.php (quản trị)
-├── database/                  schema.sql · seed.sql
+├── database/                  schema.sql · seed.sql · migrations/ (nâng cấp DB đã có dữ liệu)
 ├── storage/                   logs/ · uploads/cv (ngoài public)
 ├── tools/serve.ps1            server dev Windows
 ├── package.json · tailwind.config.cjs   build CSS (Node, chỉ dùng khi phát triển giao diện)
@@ -56,6 +83,31 @@ tex-giang-recruitment/
    mysql -u root -p --default-character-set=utf8mb4 tex_giang_recruitment < database/schema.sql
    mysql -u root -p --default-character-set=utf8mb4 tex_giang_recruitment < database/seed.sql
    ```
+
+   > **schema.sql đã bao gồm cấu trúc Khối mới nhất.** Chỉ chạy `migrations/` khi nâng cấp một database
+   > **đã có dữ liệu thật** (xem mục dưới).
+
+### Nâng cấp database đã có dữ liệu
+
+KHÔNG import lại `schema.sql` (file này DROP bảng). Chạy migration theo thứ tự thời gian:
+
+```bash
+# Chạy từng file, theo đúng thứ tự tên (ngày tăng dần)
+php -d extension=pdo_mysql -d extension=mbstring tools/run-sql.php database/migrations/<file>.sql
+```
+
+Các migration đều **idempotent** — chạy lại nhiều lần không lỗi, không mất dữ liệu.
+
+| Migration | Nội dung |
+|---|---|
+| `2026-11-07-branch-contacts.sql` … `2026-11-18-*.sql` | Đầu mối liên hệ, mã tin, hạn nộp, menu, nội dung trang, thống kê, lịch phỏng vấn, chuẩn hoá Cai Lậy, phân quyền, phạm vi nhà máy, Messenger |
+| `2026-11-19-khoi-tuyen-dung.sql` | **Khối tuyển dụng**: thêm `jobs.block` + `categories.block`, gỡ `department_id`/`enterprise_id`, xoá bảng `departments` và `enterprises`, bỏ quyền module treo |
+| `2026-11-19-dong-bo-khoi-tin-theo-bo-phan.sql` | **Đồng bộ Khối**: sửa mọi tin có `jobs.block` lệch với `categories.block` của bộ phận (dữ liệu cũ từ migration 2026-11-18) |
+
+> `tools/run-sql.php` là runner SQL tối giản (tách câu lệnh, bỏ comment) dùng khi máy không có
+> `mysql` client hoặc client thiếu plugin `caching_sha2_password`. Trên hosting Linux có sẵn
+> `mysql` thì import thẳng bằng phpMyAdmin cũng được.
+
 3. **Tạo file `.env`** từ `.env.example`, điền thông tin DB.
 4. **Chạy**:
    ```powershell
@@ -115,7 +167,7 @@ Mật khẩu     : Admin@123dev
 | Method | URL | Chức năng |
 |---|---|---|
 | GET | `/` | Trang chủ (hero slider, tìm kiếm, việc làm nổi bật, CTA) |
-| GET | `/jobs` | Danh sách + lọc khu/phòng ban/lương + sắp xếp + phân trang (server-side) |
+| GET | `/jobs` | Danh sách + lọc khu/**Khối**/bộ phận/lương + sắp xếp + phân trang (server-side) |
 | GET | `/jobs/{slug}` | Chi tiết tin, share, QR, tin tương tự |
 | GET/POST | `/apply` | Form ứng tuyển thật: validate server-side, upload CV ≤10MB vào `storage/uploads/cv` |
 | GET | `/apply/success` · `/apply/error` | Trang xác nhận (kèm mã hồ sơ) / trang lỗi |
@@ -144,7 +196,7 @@ Mật khẩu     : Admin@123dev
 | GET/POST | `/admin/content` | Soạn nội dung trang chủ (hero, giới thiệu, số liệu) |
 | GET/POST | `/admin/settings` | Cấu hình chung, liên hệ, mạng xã hội, SEO |
 | GET | `/admin/contact` · `/admin/contact/{id}` | Hộp thư liên hệ + chi tiết/xử lý |
-| GET | `/admin/categories` + `/{type}/{id}/edit` | Danh mục: khu sản xuất, khối phòng ban, chuyên mục tin tức |
+| GET | `/admin/categories` + `/{type}/{id}/edit` | Danh mục: khu sản xuất, bộ phận tuyển dụng (kèm Khối), chuyên mục tin tức |
 | GET | `/admin/users` (super_admin) | Quản lý tài khoản quản trị, đặt lại mật khẩu |
 | GET | `/admin/profile` | Hồ sơ cá nhân + đổi mật khẩu |
 | GET | `/admin/audit` | Nhật ký thao tác quản trị |

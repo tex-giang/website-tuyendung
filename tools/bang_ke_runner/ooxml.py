@@ -9,6 +9,7 @@ import bisect
 import copy
 import datetime as dt
 import math
+import io
 import operator
 import os
 from pathlib import Path
@@ -26,6 +27,9 @@ PKG = "http://schemas.openxmlformats.org/package/2006/relationships"
 Q = "{" + NS + "}"
 XML = "{http://www.w3.org/XML/1998/namespace}"
 PARSER = E.XMLParser(resolve_entities=False, no_network=True, huge_tree=True)
+VALUE_CELLS = E.XPath("./m:c[m:v or m:is or m:f]", namespaces={"m": NS})
+EMPTY_XML_CELLS = re.compile(rb"<(?P<p>(?:[A-Za-z_][\w.-]*:)?)c(?=[\s/>])[^<>]*?(?:/>|>\s*</(?P=p)c\s*>)")
+ROW_REFERENCE_TAGS = tuple(Q + name for name in ("mergeCell", "conditionalFormatting", "dataValidation", "hyperlink", "autoFilter", "selection", "pane"))
 
 
 class WorkbookError(Exception):
@@ -135,6 +139,9 @@ class Sheet:
         self.rows = {}
         self.changed = False
         self.original = True
+        self.revision = 0
+        self.has_formulas = False
+        self._reference_elements = None
 
     def cell(self, row, col, create=False):
         if not row or not col:
@@ -161,11 +168,14 @@ class Sheet:
         c = self.cell(row, col, True)
         c.value, c.formula, c.kind, c.dirty = value, None, None, True
         self.changed = True
+        self.revision += 1
 
     def set_formula(self, row, col, formula):
         c = self.cell(row, col, True)
         c.formula, c.dirty = formula.lstrip("="), True
         self.changed = True
+        self.has_formulas = True
+        self.revision += 1
 
     def last(self, col):
         return max((r for r, row in self.rows.items() if row.cells.get(col) and row.cells[col].value not in (None, "")), default=0)
@@ -180,6 +190,8 @@ class Sheet:
             if rowno > anchor:
                 self.rows[rowno + count] = self.rows.pop(rowno)
         for other in self.book.sheets.values():
+            if not other.has_formulas:
+                continue
             for row in other.rows.values():
                 for c in row.cells.values():
                     if c.formula:
@@ -201,11 +213,12 @@ class Sheet:
                     c.dirty = True
                 cells[col] = c
             self.rows[anchor + offset] = Row(cells, xml)
-        for e in self.tree.iter():
-            if e.tag in {Q + "mergeCell", Q + "conditionalFormatting", Q + "dataValidation", Q + "hyperlink", Q + "autoFilter", Q + "selection", Q + "pane"}:
-                for attr in ("ref", "sqref", "activeCell", "topLeftCell"):
-                    if e.get(attr):
-                        e.set(attr, shift_range(e.get(attr), anchor, count))
+        if self._reference_elements is None:
+            self._reference_elements = tuple(self.tree.iter(*ROW_REFERENCE_TAGS))
+        for e in self._reference_elements:
+            for attr in ("ref", "sqref", "activeCell", "topLeftCell"):
+                if e.get(attr):
+                    e.set(attr, shift_range(e.get(attr), anchor, count))
         for e in self.book.workbook.findall(".//" + Q + "definedName"):
             if e.text:
                 owner = ""
@@ -215,6 +228,7 @@ class Sheet:
         # Relationships that use row anchors must move with Excel's row insertions.
         self.book.shift_related(self, anchor, count)
         self.changed = True
+        self.revision += 1
 
     def ensure_tree(self):
         if self.tree is not None:
@@ -303,6 +317,7 @@ class Book:
             root = E.fromstring(self.zip.read("xl/sharedStrings.xml"), PARSER)
             self.strings = [text_value(e) for e in root]
         rels = {e.get("Id"): e.get("Target") for e in self.relationships}
+        column_cache = {}
         for se in self.workbook.find(Q + "sheets"):
             target = rels[se.get("{" + REL + "}id")]
             path = target.lstrip("/") if target.startswith("/") else "xl/" + target
@@ -310,17 +325,26 @@ class Book:
             progress(f"Đang đọc sheet {name}…", 10)
             sheet = Sheet(self, name, path)
             shared = {}
-            with self.zip.open(path) as stream:
+            # Compact the read-only view of styled blank cells before XML parsing.
+            # The original ZIP member is retained byte-for-byte for source export.
+            # Use the general parser unchanged for XML containing CDATA/comments
+            # so literal text that resembles markup can never be removed.
+            payload = self.zip.read(path)
+            if b"<![CDATA[" not in payload and b"<!--" not in payload:
+                payload = EMPTY_XML_CELLS.sub(b"", payload)
+            with io.BytesIO(payload) as stream:
                 for _, rowe in E.iterparse(stream, events=("end",), tag=Q + "row", resolve_entities=False, no_network=True, huge_tree=True):
                     r = int(rowe.get("r"))
                     cells = {}
-                    for e in rowe:
-                        if e.tag != Q + "c":
-                            continue
+                    # Excel often stores thousands of styled, empty cells per row.
+                    # Filter these in libxml2 rather than doing Python .find calls
+                    # for millions of blank cells. Preserve their XML at export.
+                    for e in VALUE_CELLS(rowe):
                         f = e.find(Q + "f")
-                        if e.find(Q + "v") is None and e.find(Q + "is") is None and f is None:
-                            continue
-                        col = colnum(re.match(r"[A-Z]+", e.get("r")).group())
+                        letters = e.get("r").rstrip("0123456789")
+                        col = column_cache.get(letters)
+                        if col is None:
+                            col = column_cache[letters] = colnum(letters)
                         c = parse_cell(e, self.strings)
                         if f is not None and f.get("t") == "shared":
                             si = f.get("si")
@@ -333,6 +357,8 @@ class Book:
                                 c.formula = rewrite_formula(form, name, name, 0, r - oldr, relative=True)
                         if f is not None and c.kind == "e":
                             self.formula_errors += 1
+                        if f is not None:
+                            sheet.has_formulas = True
                         cells[col] = c
                     if cells:
                         sheet.rows[r] = Row(cells)

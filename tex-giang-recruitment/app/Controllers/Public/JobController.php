@@ -11,12 +11,9 @@ use App\Models\Job;
 
 final class JobController extends Controller
 {
-    public const SALARY_RANGES = [
-        'under-8' => 'Dưới 8 triệu (học việc)',
-        '8-12'    => '8 – 12 triệu',
-        '12-18'   => '12 – 18 triệu',
-        'over-18' => 'Trên 18 triệu',
-    ];
+    // Bộ lọc mức lương đã bỏ khỏi trang /jobs (dùng thanh lọc ngang 4 ô).
+    // Cột jobs.salary_range vẫn được giữ và ghi khi lưu tin, để sau này có thể
+    // bật lại bộ lọc mà không cần migrate dữ liệu.
 
     public function index(): void
     {
@@ -25,8 +22,8 @@ final class JobController extends Controller
         $filters = [
             'q'          => trim((string) ($_GET['q'] ?? '')),
             'location'   => (string) ($_GET['location'] ?? ''),
+            'block'      => (string) ($_GET['khoi'] ?? ''),
             'department' => (string) ($_GET['department'] ?? ''),
-            'salary'     => (string) ($_GET['salary'] ?? ''),
             'sort'       => (string) ($_GET['sort'] ?? 'newest'),
         ];
 
@@ -34,11 +31,40 @@ final class JobController extends Controller
         if (!isset(Branch::options()[$filters['location']])) {
             $filters['location'] = '';
         }
-        if (!isset(Category::options()[$filters['department']])) {
-            $filters['department'] = '';
+        if (!Job::blockValid($filters['block'])) {
+            $filters['block'] = '';
         }
-        if (!isset(self::SALARY_RANGES[$filters['salary']])) {
-            $filters['salary'] = '';
+        $allCategories = Category::options();
+
+        // Dropdown Bộ phận: CHỈ hiện bộ phận đang có tin hiển thị công khai —
+        // tránh ứng viên chọn phải bộ phận trống rồi thấy 0 kết quả.
+        // KHÔNG hiện số lượng trong tên (showCount = false): chỉ hiện tên bộ phận
+        // cho gọn; con số vẫn dùng để quyết định bộ phận nào được hiện.
+        // Đếm theo đúng Khối đang chọn để danh sách khớp với kết quả lọc.
+        $categories = Category::optionsWithJobs(
+            $filters['block'] !== '' ? $filters['block'] : null,
+            null,
+            false
+        );
+
+        if (!isset($allCategories[$filters['department']])) {
+            $filters['department'] = '';
+        } elseif (!isset($categories[$filters['department']])) {
+            // Bộ phận đang lọc không còn tin hiển thị (hoặc không thuộc Khối đã chọn).
+            // Bỏ điều kiện VÀ dọn khỏi URL: nếu chỉ sửa biến nội bộ, URL vẫn giữ
+            // ?department=… nên lần lọc sau JS đọc lại và chip/lọc bị lệch.
+            $filters['department'] = '';
+            $cleanQuery = array_filter([
+                'q'          => $filters['q'],
+                'location'   => $filters['location'],
+                'khoi'       => $filters['block'],
+                'sort'       => $filters['sort'] !== 'newest' ? $filters['sort'] : '',
+                'page'       => ($_GET['page'] ?? '') !== '' && (int) $_GET['page'] > 1 ? (string) (int) $_GET['page'] : '',
+            ], static fn(string $value): bool => $value !== '');
+
+            if (!$this->isAjaxRequest()) {
+                $this->redirect(url('jobs') . ($cleanQuery === [] ? '' : '?' . http_build_query($cleanQuery)));
+            }
         }
         if (!in_array($filters['sort'], ['newest', 'urgent'], true)) {
             $filters['sort'] = 'newest';
@@ -57,19 +83,43 @@ final class JobController extends Controller
             ];
         }
 
-        $this->view('public/jobs/index', [
+        // Query giữ nguyên để phân trang / sắp xếp không mất bộ lọc (kể cả tên tham số cũ).
+        $query = [];
+        foreach (['q', 'location', 'department'] as $key) {
+            if ($filters[$key] !== '') {
+                $query[$key] = $filters[$key];
+            }
+        }
+        if ($filters['block'] !== '') {
+            $query['khoi'] = $filters['block'];
+        }
+        if ($filters['sort'] !== 'newest') {
+            $query['sort'] = $filters['sort'];
+        }
+
+        $viewData = [
             'result'      => $result,
             'filters'     => $filters,
+            'query'       => $query,
             'branches'    => Branch::options(),
-            'categories'  => Category::options(),
-            'salaryRanges' => self::SALARY_RANGES,
+            'blocks'      => Job::BLOCKS,
+            'categories'  => $categories,
+        ];
+
+        // Lọc/sắp xếp/phân trang bằng fetch: chỉ trả phần kết quả + form lọc,
+        // KHÔNG trả cả trang → trình duyệt không nhảy về đầu trang.
+        if (\App\Core\Response::wantsPublicFragment()) {
+            $this->viewFragment('partials/public/jobs-fragment', $viewData);
+        }
+
+        $this->view('public/jobs/index', $viewData + [
             'page'        => [
                 'title'       => 'Việc làm đang tuyển | ' . settings('site_name'),
                 'description' => 'Danh sách vị trí đang tuyển tại ' . settings('legal_name')
                     . ': công nhân may, QC, kỹ sư IE, kế toán, bảo trì.',
                 'body_class'  => 'tg-public page-jobs',
                 'nav'         => 'jobs',
-                // Drawer bộ lọc mobile + tự submit khi đổi select/sort.
+                // Drawer bộ lọc mobile + lọc tại chỗ bằng fetch (không nhảy đầu trang).
                 'scripts'     => ['jobs.js'],
                 'jsonld'      => [
                     Seo::itemList($listing, 'Việc làm đang tuyển tại ' . settings('legal_name')),

@@ -134,6 +134,7 @@ $initials = mb_strtoupper($initials !== '' ? $initials : 'TG', 'UTF-8');
 <script src="<?= asset('js/admin-ajax.js') ?>"></script>
 <script src="<?= asset('js/admin-shell.js') ?>"></script>
 <script src="<?= asset('js/admin-repeaters.js') ?>"></script>
+<script src="<?= asset('js/admin-job-block.js') ?>"></script>
 <script src="<?= asset('js/admin-datepicker.js') ?>"></script>
 </body>
 </html>

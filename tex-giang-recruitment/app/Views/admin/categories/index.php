@@ -23,7 +23,9 @@ $section = $types[$type];
   <?php else: ?>
   <div class="admin-table-wrap">
     <table class="admin-table admin-directory-table admin-directory-table--taxonomy" aria-label="<?= e($section['label']) ?>">
-      <thead><tr><th scope="col">Tên</th><th scope="col">Đường dẫn (slug)</th><th scope="col">Thông tin</th><th scope="col">Đang sử dụng</th><th scope="col">Hiển thị</th><th scope="col" class="is-actions"><span class="visually-hidden">Thao tác</span></th></tr></thead>
+      <thead><tr><th scope="col">Tên</th><th scope="col">Đường dẫn (slug)</th>
+        <?php if ($type === 'category'): ?><th scope="col">Khối</th><?php endif; ?>
+        <th scope="col">Thông tin</th><th scope="col">Đang sử dụng</th><th scope="col">Hiển thị</th><th scope="col" class="is-actions"><span class="visually-hidden">Thao tác</span></th></tr></thead>
       <tbody>
         <?php foreach ($rows as $row):
             $id = (int) $row['id'];
@@ -38,6 +40,16 @@ $section = $types[$type];
         <tr>
           <td class="admin-directory-name"><a class="admin-link" href="<?= $editUrl ?>"><?= e($itemName) ?></a></td>
           <td class="admin-mono" data-label="Đường dẫn"><?= e($row['slug']) ?></td>
+          <?php if ($type === 'category'): ?>
+          <td data-label="Khối">
+            <?php $rowBlock = (string) ($row['block'] ?? ''); ?>
+            <?php if ($rowBlock === ''): ?>
+            <span class="admin-muted">Dùng chung</span>
+            <?php else: ?>
+            <span class="admin-badge admin-badge--block"><?= e($blocks[$rowBlock] ?? $rowBlock) ?></span>
+            <?php endif; ?>
+          </td>
+          <?php endif; ?>
           <td data-label="Thông tin">
             <?php if ($type === 'branch'): ?>
             <span><?= e($row['address'] ?: '—') ?></span>

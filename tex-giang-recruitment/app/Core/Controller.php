@@ -45,6 +45,26 @@ abstract class Controller
         require BASE_PATH . '/app/Views/' . $view . '.php';
     }
 
+    /**
+     * Render MỘT PHẦN của trang để thay tại chỗ bằng fetch (bộ lọc, phân trang).
+     * Trả HTML thô + header đánh dấu, không kèm layout — JS tự chèn vào vùng đích.
+     */
+    protected function viewFragment(string $view, array $data = []): never
+    {
+        $viewFile = BASE_PATH . '/app/Views/' . $view . '.php';
+        if (!is_file($viewFile)) {
+            throw new \RuntimeException('Không tìm thấy view: ' . $view);
+        }
+
+        header('Content-Type: text/html; charset=utf-8');
+        header('X-Public-Fragment: 1');
+        header('Cache-Control: no-store');
+
+        extract($data, EXTR_SKIP);
+        require $viewFile;
+        exit;
+    }
+
     protected function json(array $data, int $status = 200): never
     {
         Response::json($data, $status);

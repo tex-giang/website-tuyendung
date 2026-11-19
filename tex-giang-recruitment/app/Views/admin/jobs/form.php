@@ -67,7 +67,7 @@ if ($deadline !== '') {
   <section class="admin-job-form__section" aria-labelledby="job-section-position">
     <div class="admin-job-form__intro">
       <h2 id="job-section-position">Vị trí tuyển dụng</h2>
-      <p>Khu sản xuất, bộ phận, số lượng và địa điểm làm việc.</p>
+      <p>Khu sản xuất, Khối, bộ phận, số lượng và địa điểm làm việc.</p>
     </div>
     <div class="field-grid admin-job-form__fields">
       <label class="field">
@@ -82,13 +82,38 @@ if ($deadline !== '') {
       </label>
 
       <label class="field">
-        <span class="field__label">Bộ phận</span>
-        <select class="field__input" name="category_id">
-          <option value="">Chọn bộ phận</option>
-          <?php foreach ($categories as $category): ?>
-          <option value="<?= (int) $category['id'] ?>"<?= (string) $val('category_id') === (string) $category['id'] ? ' selected' : '' ?>><?= e($category['name']) ?></option>
+        <span class="field__label">Khối <em>*</em></span>
+        <select class="field__input<?= isset($errors['block']) ? ' is-invalid' : '' ?>" name="block" required data-job-block>
+          <option value="" hidden>Chọn Khối</option>
+          <?php foreach ($blocks as $key => $label): ?>
+          <option value="<?= e($key) ?>"<?= $val('block') === $key ? ' selected' : '' ?>><?= e($label) ?></option>
           <?php endforeach; ?>
         </select>
+        <span class="admin-job-form__hint" id="job-block-hint">Khối cố định: Văn phòng hoặc Xí nghiệp. Bộ phận bên cạnh sẽ lọc theo Khối này.</span>
+        <?php if (isset($errors['block'])): ?><span class="field__error"><?= e($errors['block']) ?></span><?php endif; ?>
+      </label>
+
+      <label class="field">
+        <span class="field__label">Bộ phận</span>
+        <?php
+        // Chỉ hiện bộ phận đang có tin (kèm số tin) + bộ phận đang gán cho tin này.
+        // Bộ phận có data-block để JS lọc theo Khối đã chọn.
+        $selectedBlock = (string) $val('block');
+        ?>
+        <select class="field__input" name="category_id" data-job-category aria-describedby="job-block-hint">
+          <option value="">Chọn bộ phận</option>
+          <?php foreach ($categories as $category):
+              $categoryBlock = (string) ($category['block'] ?? '');
+              $matches = $selectedBlock === '' || $categoryBlock === '' || $categoryBlock === $selectedBlock;
+              $jobCount = (int) ($category['job_count'] ?? 0);
+          ?>
+          <option value="<?= (int) $category['id'] ?>"
+                  data-block="<?= e($categoryBlock) ?>"
+                  <?= $matches ? '' : 'hidden' ?>
+                  <?= (string) $val('category_id') === (string) $category['id'] ? ' selected' : '' ?>><?= e($category['name']) ?><?= $jobCount > 0 ? ' (' . $jobCount . ' tin)' : ' (chưa có tin)' ?><?= $categoryBlock === '' ? ' · dùng chung' : '' ?></option>
+          <?php endforeach; ?>
+        </select>
+        <?php if (isset($errors['category_id'])): ?><span class="field__error"><?= e($errors['category_id']) ?></span><?php endif; ?>
       </label>
 
       <label class="field">

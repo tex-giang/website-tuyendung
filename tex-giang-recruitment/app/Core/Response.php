@@ -18,6 +18,18 @@ final class Response
             && self::isAjaxRequest();
     }
 
+    /**
+     * Trang public xin RIÊNG phần nội dung (không header/footer) để thay tại chỗ
+     * bằng fetch — dùng cho bộ lọc /jobs, phân trang, sắp xếp.
+     * Khác wantsAdminFragment(): fragment public trả HTML thô, không bọc JSON.
+     */
+    public static function wantsPublicFragment(): bool
+    {
+        return ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET'
+            && ($_SERVER['HTTP_X_PUBLIC_FRAGMENT'] ?? '') === '1'
+            && self::isAjaxRequest();
+    }
+
     public static function json(array $data, int $status = 200): never
     {
         http_response_code($status);

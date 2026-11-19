@@ -36,9 +36,13 @@ final class JobController extends Controller
         $filters = [
             'q'      => trim((string) ($_GET['q'] ?? '')),
             'status' => (string) ($_GET['status'] ?? ''),
+            'block'  => (string) ($_GET['block'] ?? ''),
         ];
         if (!isset(self::STATUSES[$filters['status']])) {
             $filters['status'] = '';
+        }
+        if (!Job::blockValid($filters['block'])) {
+            $filters['block'] = '';
         }
 
         $result = Job::adminPaginate($filters, max(1, (int) ($_GET['page'] ?? 1)));
@@ -47,7 +51,9 @@ final class JobController extends Controller
             'result'   => $result,
             'filters'  => $filters,
             'statuses' => self::STATUSES,
+            'blocks'   => Job::BLOCKS,
             'counts'   => Job::countsByStatus(),
+            'blockMismatch' => Job::countBlockMismatch(),
             'page'     => ['title' => 'Tin tuyển dụng | ' . settings('site_name'), 'nav' => 'jobs'],
         ], 'layouts/admin');
     }
@@ -85,10 +91,11 @@ final class JobController extends Controller
 
         $id = Job::create($data, (int) Session::get('auth_id'));
         AuditLog::record('job.create', 'job', $id, ['title' => $data['title']]);
+        $message = 'Đã tạo tin tuyển dụng "' . $data['title'] . '".' . $this->blockSyncNote($data);
         if ($this->isAjaxRequest()) {
-            $this->jsonResult(true, 'Đã tạo tin tuyển dụng "' . $data['title'] . '".', url('admin/jobs'));
+            $this->jsonResult(true, $message, url('admin/jobs'));
         }
-        Session::flash('_success', 'Đã tạo tin tuyển dụng "' . $data['title'] . '".');
+        Session::flash('_success', $message);
         $this->redirect(url('admin/jobs'));
     }
 
@@ -113,10 +120,11 @@ final class JobController extends Controller
 
         Job::update($jobId, $data);
         AuditLog::record('job.update', 'job', $jobId, ['title' => $data['title']]);
+        $message = 'Đã cập nhật tin tuyển dụng.' . $this->blockSyncNote($data);
         if ($this->isAjaxRequest()) {
-            $this->jsonResult(true, 'Đã cập nhật tin tuyển dụng.', url('admin/jobs'));
+            $this->jsonResult(true, $message, url('admin/jobs'));
         }
-        Session::flash('_success', 'Đã cập nhật tin tuyển dụng.');
+        Session::flash('_success', $message);
         $this->redirect(url('admin/jobs'));
     }
 
@@ -262,9 +270,12 @@ final class JobController extends Controller
             $branchLookup[JobImport::norm((string) $branch['slug'])] = $branchId;
         }
         $categoryLookup = [];
+        $categoryBlocks = [];
         foreach (Category::all() as $category) {
-            $categoryLookup[JobImport::norm((string) $category['name'])] = (int) $category['id'];
-            $categoryLookup[JobImport::norm((string) $category['slug'])] = (int) $category['id'];
+            $categoryId = (int) $category['id'];
+            $categoryLookup[JobImport::norm((string) $category['name'])] = $categoryId;
+            $categoryLookup[JobImport::norm((string) $category['slug'])] = $categoryId;
+            $categoryBlocks[$categoryId] = (string) ($category['block'] ?? '');
         }
 
         $userId = (int) Session::get('auth_id');
@@ -297,12 +308,32 @@ final class JobController extends Controller
                 }
             }
 
+            // Khối: cột mới. Để trống → mặc định Xí nghiệp.
+            $blockValue = JobImport::block((string) ($row['block'] ?? ''));
+            $block = $blockValue !== '' ? $blockValue : Job::DEFAULT_BLOCK;
+            if (trim((string) ($row['block'] ?? '')) !== '' && $blockValue === '') {
+                $errors[] = 'Dòng ' . $line . ': Khối "' . trim((string) $row['block'])
+                    . '" không hợp lệ (chỉ nhận Văn phòng hoặc Xí nghiệp).';
+                continue;
+            }
+
+            // Bộ phận phải thuộc đúng Khối (bộ phận dùng chung block rỗng luôn hợp lệ).
+            if ($categoryId !== '') {
+                $ownBlock = $categoryBlocks[(int) $categoryId] ?? '';
+                if ($ownBlock !== '' && $ownBlock !== $block) {
+                    $errors[] = 'Dòng ' . $line . ': bộ phận "' . $categoryValue . '" thuộc Khối '
+                        . Job::blockLabel($ownBlock) . ', không khớp Khối ' . Job::blockLabel($block) . '.';
+                    continue;
+                }
+            }
+
             $quantity = trim((string) ($row['quantity'] ?? ''));
             $post = [
                 'title'            => trim((string) ($row['title'] ?? '')),
                 'slug'             => '',
                 'code'             => '',
                 'branch_id'        => (string) $branchId,
+                'block'            => $block,
                 'category_id'      => $categoryId,
                 'quantity'         => $quantity !== '' ? $quantity : '1',
                 'location'         => trim((string) ($row['location'] ?? '')),
@@ -387,7 +418,7 @@ final class JobController extends Controller
         $errors = Session::pull('_errors', []);
 
         $values = $job ?? [
-            'id' => null, 'slug' => '', 'code' => '', 'branch_id' => '', 'category_id' => '',
+            'id' => null, 'slug' => '', 'code' => '', 'branch_id' => '', 'block' => Job::DEFAULT_BLOCK, 'category_id' => '',
             'title' => '', 'quantity' => 1, 'location' => '', 'employment_type' => 'Toàn thời gian, chính thức',
             'experience' => '', 'salary_text' => '', 'salary_min' => '', 'salary_max' => '', 'salary_range' => '',
             'description' => '', 'requirements' => '', 'benefits' => '', 'status' => 'draft', 'is_urgent' => 0,
@@ -410,12 +441,29 @@ final class JobController extends Controller
             $values = array_merge($values, $old);
         }
 
+        // Dropdown Bộ phận: chỉ hiện bộ phận ĐANG CÓ TIN (kể cả tin nháp/chưa đăng),
+        // vì đây là form quản trị — bộ phận không có tin nào là danh mục chưa dùng.
+        // LUÔN giữ bộ phận đang gán cho tin này (kể cả khi nó chưa có tin khác),
+        // nếu không khi sửa tin cũ ô chọn sẽ rỗng và vô tình đổi bộ phận.
+        $categories = Category::withJobCounts();
+        $keepCategoryId = (int) ($values['category_id'] ?? 0);
+        if ($keepCategoryId > 0) {
+            $kept = Category::find($keepCategoryId);
+            if ($kept !== null && !in_array($keepCategoryId, array_map(
+                static fn(array $c): int => (int) $c['id'],
+                $categories
+            ), true)) {
+                array_unshift($categories, $kept + ['job_count' => 0]);
+            }
+        }
+
         $this->view('admin/jobs/form', [
             'job'        => $job,
             'values'     => $values,
             'errors'     => $errors,
             'branches'   => $this->branchOptionsForUser(),
-            'categories' => Category::all(),
+            'blocks'     => Job::BLOCKS,
+            'categories' => $categories,
             'statuses'   => self::STATUSES,
             'salaryRanges' => self::SALARY_RANGES,
             'page'       => [
@@ -436,6 +484,7 @@ final class JobController extends Controller
             'slug'             => trim((string) ($post['slug'] ?? '')),
             'code'             => trim((string) ($post['code'] ?? '')),
             'branch_id'        => (string) ($post['branch_id'] ?? ''),
+            'block'            => (string) ($post['block'] ?? ''),
             'category_id'      => (string) ($post['category_id'] ?? ''),
             'quantity'         => trim((string) ($post['quantity'] ?? '1')),
             'location'         => trim((string) ($post['location'] ?? '')),
@@ -475,6 +524,30 @@ final class JobController extends Controller
             $errors['branch_id'] = 'Chọn khu sản xuất.';
         } elseif (!Permissions::canAccessBranch((int) $data['branch_id'])) {
             $errors['branch_id'] = 'Bạn không có quyền chọn khu sản xuất này.';
+        }
+
+        // Khối là cố định: chỉ nhận 'office' hoặc 'enterprise'.
+        if (!Job::blockValid($data['block'])) {
+            $errors['block'] = 'Chọn Khối tuyển dụng (Văn phòng hoặc Xí nghiệp).';
+        }
+
+        // Bộ phận phải thuộc đúng Khối đã chọn (bộ phận dùng chung block = NULL luôn hợp lệ).
+        if ($data['category_id'] !== '') {
+            $category = Category::find((int) $data['category_id']);
+            if ($category === null) {
+                $errors['category_id'] = 'Bộ phận không tồn tại.';
+            } elseif (($category['block'] ?? null) !== null && (string) $category['block'] !== '') {
+                // Bộ phận đã gán Khối → Khối của BỘ PHẬN là chuẩn.
+                // Nếu người dùng chọn Khối khác, tự đồng bộ thay vì báo lỗi:
+                // tránh sinh ra tin lệch Khối (dropdown đếm theo bộ phận, lọc theo
+                // jobs.block → lệch sẽ ra kết quả 0 khó hiểu).
+                if (Job::blockValid($data['block']) && (string) $category['block'] !== $data['block']) {
+                    // Ghi nhớ để báo cho người dùng biết Khối đã được tự chỉnh.
+                    $data['_block_synced_from'] = (string) $data['block'];
+                    $data['_block_synced_to'] = (string) $category['block'];
+                    $data['block'] = (string) $category['block'];
+                }
+            }
         }
         if ((int) $data['quantity'] < 1) {
             $errors['quantity'] = 'Số lượng phải lớn hơn 0.';
@@ -577,5 +650,22 @@ final class JobController extends Controller
         Session::flash('_old', $data);
         Session::flash('_errors', $errors);
         Session::flash('_error', 'Vui lòng kiểm tra lại các trường được đánh dấu.');
+    }
+
+    /**
+     * Câu thông báo thêm khi Khối của tin bị tự đồng bộ theo Khối của bộ phận.
+     * Không có đồng bộ thì trả chuỗi rỗng.
+     *
+     * @param array<string, mixed> $data
+     */
+    private function blockSyncNote(array $data): string
+    {
+        $from = (string) ($data['_block_synced_from'] ?? '');
+        $to = (string) ($data['_block_synced_to'] ?? '');
+        if ($from === '' || $to === '') {
+            return '';
+        }
+        return ' Khối đã tự đổi sang "' . Job::blockLabel($to) . '" cho khớp bộ phận (bạn chọn "'
+            . Job::blockLabel($from) . '").';
     }
 }

@@ -131,6 +131,8 @@ CREATE TABLE branch_contacts (
 CREATE TABLE categories (
   id          SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
   slug        VARCHAR(80)  NOT NULL,
+  -- Khối tuyển dụng: CỐ ĐỊNH 2 giá trị. NULL = bộ phận dùng chung cho cả 2 Khối.
+  block       ENUM('office','enterprise') NULL,
   name        VARCHAR(120) NOT NULL,
   description VARCHAR(255) NULL,
   sort_order  SMALLINT NOT NULL DEFAULT 0,
@@ -138,13 +140,18 @@ CREATE TABLE categories (
   created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  UNIQUE KEY uq_categories_slug (slug)
+  UNIQUE KEY uq_categories_slug (slug),
+  KEY idx_categories_block (block)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ---------------------------------------------------------------------------
 -- 3. TIN TUYỂN DỤNG
 --    status : draft = bản nháp | published = đang đăng | paused = tạm dừng
 --             closed = đã đóng (hết hạn / tuyển đủ)
+--    block  : Khối tuyển dụng CỐ ĐỊNH — 'office' = Văn phòng,
+--             'enterprise' = Xí nghiệp. Cây phân cấp:
+--             Nhà máy (branches) → Khối (jobs.block) → Bộ phận tuyển
+--             (categories) → Việc làm (jobs).
 --    salary_range dùng cho bộ lọc mức lương trên trang danh sách.
 -- ---------------------------------------------------------------------------
 CREATE TABLE jobs (
@@ -152,6 +159,7 @@ CREATE TABLE jobs (
   slug             VARCHAR(220) NOT NULL,
   code             VARCHAR(20)  NULL,
   branch_id        SMALLINT UNSIGNED NOT NULL,
+  block            ENUM('office','enterprise') NOT NULL DEFAULT 'enterprise',
   category_id      SMALLINT UNSIGNED NULL,
   title            VARCHAR(220) NOT NULL,
   quantity         INT UNSIGNED NOT NULL DEFAULT 1,
@@ -182,6 +190,7 @@ CREATE TABLE jobs (
   UNIQUE KEY uq_jobs_code (code),
   KEY idx_jobs_status (status, posted_at),
   KEY idx_jobs_branch (branch_id),
+  KEY idx_jobs_block (block),
   KEY idx_jobs_category (category_id),
   KEY idx_jobs_salary (salary_range),
   KEY idx_jobs_deadline (deadline),

@@ -95,19 +95,20 @@ INSERT INTO branch_contacts (branch_id, full_name, title, phone, sort_order) VAL
   ((SELECT id FROM branches WHERE slug='cai-lay'),   'Anh Nguyên', 'Phụ trách tuyển dụng', '0938 583 943', 1),
   ((SELECT id FROM branches WHERE slug='cai-lay'),   'Chị Hằng',   'Phụ trách tuyển dụng', '0908 813 822', 2);
 
--- 4. KHỐI PHÒNG BAN --------------------------------------------------------
-INSERT INTO categories (slug, name, description, sort_order) VALUES
-  ('production',  'Sản xuất may mặc',        'Công nhân may, tổ trưởng chuyền, học nghề', 1),
-  ('qc',          'Kiểm soát chất lượng',    'QA/QC, kiểm phẩm, giám sát chất lượng',      2),
-  ('ie',          'Kỹ thuật & định mức IE',  'Kỹ sư công nghiệp, định mức, mẫu rập',       3),
-  ('maintenance', 'Bảo trì cơ điện',         'Bảo trì máy may, điện xưởng',                4),
-  ('office',      'Văn phòng & nhân sự',     'Kế toán, merchandiser, hành chính, lái xe',  5),
-  ('xuong-in',    'Xưởng in',                'Thợ in thủ công, in máy, dán bán thành phẩm', 6),
-  ('phong-cat',   'Phòng cắt',               'Công nhân cắt Lazer, giác sơ đồ',              7),
-  ('may-mau',     'May mẫu',                 'Nhân viên may mẫu, phòng mẫu',                8),
-  ('ky-thuat-may', 'Kỹ thuật may',            'Kỹ thuật chuyền, hướng dẫn thao tác',         9),
-  ('bao-ve',      'Bảo vệ',                  'Bảo vệ cổng, tuần tra, an ninh nhà máy',     10),
-  ('ky-thuat',    'Kỹ thuật',                'Kỹ thuật thiết bị, bảo trì máy nhà máy',      11);
+-- 4. BỘ PHẬN TUYỂN DỤNG -----------------------------------------------------
+-- block: Khối tuyển dụng cố định — 'office' = Văn phòng, 'enterprise' = Xí nghiệp.
+INSERT INTO categories (slug, block, name, description, sort_order) VALUES
+  ('production',  'enterprise', 'Sản xuất may mặc',        'Công nhân may, tổ trưởng chuyền, học nghề', 1),
+  ('qc',          'enterprise', 'Kiểm soát chất lượng',    'QA/QC, kiểm phẩm, giám sát chất lượng',      2),
+  ('ie',          'enterprise', 'Kỹ thuật & định mức IE',  'Kỹ sư công nghiệp, định mức, mẫu rập',       3),
+  ('maintenance', 'enterprise', 'Bảo trì cơ điện',         'Bảo trì máy may, điện xưởng',                4),
+  ('office',      'office',     'Văn phòng & nhân sự',     'Kế toán, merchandiser, hành chính, lái xe',  5),
+  ('xuong-in',    'enterprise', 'Xưởng in',                'Thợ in thủ công, in máy, dán bán thành phẩm', 6),
+  ('phong-cat',   'enterprise', 'Phòng cắt',               'Công nhân cắt Lazer, giác sơ đồ',              7),
+  ('may-mau',     'enterprise', 'May mẫu',                 'Nhân viên may mẫu, phòng mẫu',                8),
+  ('ky-thuat-may', 'enterprise', 'Kỹ thuật may',            'Kỹ thuật chuyền, hướng dẫn thao tác',         9),
+  ('bao-ve',      'office',     'Bảo vệ',                  'Bảo vệ cổng, tuần tra, an ninh nhà máy',     10),
+  ('ky-thuat',    'office',     'Kỹ thuật',                'Kỹ thuật thiết bị, bảo trì máy nhà máy',      11);
 
 -- 5. CHUYÊN MỤC TIN TỨC ----------------------------------------------------
 INSERT INTO post_categories (slug, name, sort_order) VALUES
@@ -170,13 +171,14 @@ INSERT INTO banners (name, type, title, subtitle, description, image_path, image
    NULL, NULL, NULL, '/apply', NULL, 'Đăng ký nhận thưởng', 1);
 
 -- 8. TIN TUYỂN DỤNG --------------------------------------------------------
+-- block phải khớp Khối của bộ phận (categories.block) hoặc để bộ phận dùng chung.
 INSERT INTO jobs
-  (slug, code, branch_id, category_id, title, quantity, location, employment_type, experience,
+  (slug, code, branch_id, block, category_id, title, quantity, location, employment_type, experience,
    salary_text, salary_min, salary_max, salary_range, description, requirements, benefits,
    status, is_urgent, posted_at, deadline, meta_title, meta_description, created_by)
 VALUES
   ('300-cong-nhan-may-chuyen-cong-nghiep', 'TD26-0001',
-   (SELECT id FROM branches WHERE slug='tan-huong'), (SELECT id FROM categories WHERE slug='production'),
+   (SELECT id FROM branches WHERE slug='tan-huong'), 'enterprise', (SELECT id FROM categories WHERE slug='production'),
    '300 Công nhân may chuyền công nghiệp (áo polo, jacket xuất khẩu)', 300,
    'Khu Tân Hương — Nhà máy 2', 'Toàn thời gian, chính thức', 'Không yêu cầu, có đào tạo',
    '8.000.000 - 16.000.000 VNĐ', 8000000, 16000000, '8-12',
@@ -189,7 +191,7 @@ VALUES
    (SELECT id FROM users WHERE username='admin')),
 
   ('giam-sat-kiem-pham-qc', 'TD26-0002',
-   (SELECT id FROM branches WHERE slug='tan-huong'), (SELECT id FROM categories WHERE slug='qc'),
+   (SELECT id FROM branches WHERE slug='tan-huong'), 'enterprise', (SELECT id FROM categories WHERE slug='qc'),
    '05 Giám sát kiểm phẩm chất lượng QC may mặc (QC Team Leader)', 5,
    'Khu Tân Hương — Nhà máy 1', 'Toàn thời gian, chính thức', 'Có kinh nghiệm QC may',
    '12.000.000 - 18.000.000 VNĐ', 12000000, 18000000, '12-18',
@@ -202,7 +204,7 @@ VALUES
    (SELECT id FROM users WHERE username='admin')),
 
   ('ky-su-cong-nghiep-ie', 'TD26-0003',
-   (SELECT id FROM branches WHERE slug='tan-huong'), (SELECT id FROM categories WHERE slug='ie'),
+   (SELECT id FROM branches WHERE slug='tan-huong'), 'enterprise', (SELECT id FROM categories WHERE slug='ie'),
    '02 Kỹ sư công nghiệp & định mức năng suất (IE Engineer)', 2,
    'Khu Tân Hương — Nhà máy 2', 'Toàn thời gian, chính thức', 'Có kinh nghiệm IE may mặc',
    '15.000.000 - 22.000.000 VNĐ', 15000000, 22000000, 'over-18',
@@ -215,7 +217,7 @@ VALUES
    (SELECT id FROM users WHERE username='admin')),
 
   ('quan-ly-don-hang-merchandiser', 'TD26-0004',
-   (SELECT id FROM branches WHERE slug='cai-lay'), (SELECT id FROM categories WHERE slug='office'),
+   (SELECT id FROM branches WHERE slug='cai-lay'), 'office', (SELECT id FROM categories WHERE slug='office'),
    '03 Chuyên viên quản lý đơn hàng ngành may (Merchandiser)', 3,
    'Khu Cai Lậy', 'Toàn thời gian, chính thức', 'Có kinh nghiệm merchandiser',
    '13.000.000 - 20.000.000 VNĐ', 13000000, 20000000, '12-18',
@@ -228,7 +230,7 @@ VALUES
    (SELECT id FROM users WHERE username='admin')),
 
   ('nhan-vien-bao-tri-may-may', 'TD26-0005',
-   (SELECT id FROM branches WHERE slug='tan-huong'), (SELECT id FROM categories WHERE slug='maintenance'),
+   (SELECT id FROM branches WHERE slug='tan-huong'), 'enterprise', (SELECT id FROM categories WHERE slug='maintenance'),
    '04 Nhân viên bảo trì máy may công nghiệp & điện xưởng', 4,
    'Khu Tân Hương', 'Toàn thời gian, chính thức', 'Có kinh nghiệm bảo trì máy may',
    '9.500.000 - 14.500.000 VNĐ', 9500000, 14500000, '8-12',
@@ -241,7 +243,7 @@ VALUES
    (SELECT id FROM users WHERE username='admin')),
 
   ('ke-toan-chi-phi-gia-thanh', 'TD26-0006',
-   (SELECT id FROM branches WHERE slug='cho-gao'), (SELECT id FROM categories WHERE slug='office'),
+   (SELECT id FROM branches WHERE slug='cho-gao'), 'office', (SELECT id FROM categories WHERE slug='office'),
    '02 Kế toán chi phí & giá thành may xuất khẩu', 2,
    'Khu Chợ Gạo', 'Toàn thời gian, chính thức', 'Có kinh nghiệm kế toán giá thành',
    '11.000.000 - 16.000.000 VNĐ', 11000000, 16000000, '8-12',
@@ -254,7 +256,7 @@ VALUES
    (SELECT id FROM users WHERE username='admin')),
 
   ('hoc-nghe-may-mien-phi', 'TD26-0007',
-   (SELECT id FROM branches WHERE slug='tan-huong'), (SELECT id FROM categories WHERE slug='production'),
+   (SELECT id FROM branches WHERE slug='tan-huong'), 'enterprise', (SELECT id FROM categories WHERE slug='production'),
    '100 Học nghề may miễn phí (được trợ cấp lương học việc)', 100,
    'Khu Tân Hương — trung tâm đào tạo', 'Toàn thời gian sau đào tạo', 'Không yêu cầu kinh nghiệm',
    'Hỗ trợ lương học việc + Cơm ca', NULL, NULL, 'under-8',
@@ -267,7 +269,7 @@ VALUES
    (SELECT id FROM users WHERE username='admin')),
 
   ('lai-xe-dua-don-cbcnv', 'TD26-0008',
-   (SELECT id FROM branches WHERE slug='tan-huong'), (SELECT id FROM categories WHERE slug='office'),
+   (SELECT id FROM branches WHERE slug='tan-huong'), 'office', (SELECT id FROM categories WHERE slug='office'),
    'Nhân viên lái xe đưa đón cán bộ công nhân viên (bằng D/E)', 2,
    'Khu Tân Hương — tuyến Châu Thành', 'Toàn thời gian, chính thức', 'Có giấy phép lái xe D/E',
    '9.000.000 - 11.000.000 VNĐ', 9000000, 11000000, '8-12',

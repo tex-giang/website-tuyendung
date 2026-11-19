@@ -29,6 +29,7 @@ final class JobImport
     public const COLUMNS = [
         'title'            => ['Tiêu đề (*)', ['tieu de', 'title', 'tieu de tin', 'ten tin']],
         'branch'           => ['Khu sản xuất (*)', ['khu san xuat', 'khu vuc', 'nha may', 'chi nhanh', 'branch', 'khu']],
+        'block'            => ['Khối (Văn phòng/Xí nghiệp)', ['khoi', 'khoi tuyen dung', 'block', 'van phong', 'xi nghiep']],
         'category'         => ['Bộ phận', ['bo phan', 'danh muc', 'nhom', 'category']],
         'quantity'         => ['Số lượng', ['so luong', 'quantity', 'sl']],
         'location'         => ['Địa điểm làm việc', ['dia diem lam viec', 'dia diem', 'noi lam viec', 'location']],
@@ -195,13 +196,16 @@ final class JobImport
             ['   Ngày đăng để trống = hôm nay. Hạn nộp để trống = chưa xác định (không giới hạn).'],
             ['6. Lương từ / Lương đến: số nguyên, đơn vị đồng (ví dụ 9000000).'],
             ['   Phần "Lương (hiển thị)" và "Khoảng lương" được TỰ SINH từ 2 cột này — không cần nhập.'],
-            ['7. Dòng có tiêu đề bắt đầu bằng [MẪU] sẽ tự bỏ qua khi import.'],
-            ['8. Lưu file .xlsx, rồi vào Admin → Tin tuyển dụng → Import template để tải lên.'],
+            ['7. Khối: chỉ nhận "Văn phòng" hoặc "Xí nghiệp". Để trống = mặc định Xí nghiệp.'],
+            ['   Bộ phận được chọn phải thuộc đúng Khối, nếu không dòng đó bị bỏ qua.'],
+            ['8. Dòng có tiêu đề bắt đầu bằng [MẪU] sẽ tự bỏ qua khi import.'],
+            ['9. Lưu file .xlsx, rồi vào Admin → Tin tuyển dụng → Import template để tải lên.'],
             ['Lưu ý: không đổi tên dòng tiêu đề (dòng 1 của sheet dữ liệu).'],
         ];
 
         $validations = [
             ['range' => $letterOf('branch') . '2:' . $letterOf('branch') . $lastRow, 'options' => ['Tân Hương', 'Cai Lậy', 'Chợ Gạo']],
+            ['range' => $letterOf('block') . '2:' . $letterOf('block') . $lastRow, 'options' => array_values(\App\Models\Job::BLOCKS)],
             ['range' => $letterOf('status') . '2:' . $letterOf('status') . $lastRow, 'options' => ['draft', 'published']],
             ['range' => $letterOf('is_urgent') . '2:' . $letterOf('is_urgent') . $lastRow, 'options' => ['0', '1']],
         ];
@@ -250,7 +254,7 @@ final class JobImport
 
     /** Độ rộng cột Excel cho từng cột template. */
     private const TEMPLATE_WIDTHS = [
-        'title' => 42, 'branch' => 18, 'category' => 24, 'quantity' => 10,
+        'title' => 42, 'branch' => 18, 'block' => 22, 'category' => 24, 'quantity' => 10,
         'location' => 30, 'employment_type' => 24, 'experience' => 20,
         'salary_min' => 16, 'salary_max' => 16, 'description' => 60,
         'requirements' => 55, 'benefits' => 55, 'posted_at' => 18, 'deadline' => 18,
@@ -267,6 +271,7 @@ final class JobImport
         return [
             'title' => '[MẪU] Nhân viên vận hành máy may',
             'branch' => 'Tân Hương',
+            'block' => 'Xí nghiệp',
             'category' => 'Sản xuất may mặc',
             'quantity' => 10,
             'location' => 'Khu Tân Hương — Nhà máy 2',
@@ -462,6 +467,27 @@ final class JobImport
         }
 
         return '';
+    }
+
+    /**
+     * Chuẩn hoá Khối từ nhiều cách ghi về enum của DB.
+     * Chấp nhận: "Văn phòng", "van phong", "office", "Xí nghiệp", "xi nghiep", "enterprise".
+     * Không nhận diện được → '' để JobController dùng mặc định.
+     */
+    public static function block(string $value): string
+    {
+        $value = self::norm($value);
+        if ($value === '') {
+            return '';
+        }
+
+        return match (true) {
+            str_contains($value, 'van phong') || str_contains($value, 'office')
+                || str_contains($value, 'hanh chinh') || str_contains($value, 'khoi van phong') => 'office',
+            str_contains($value, 'xi nghiep') || str_contains($value, 'enterprise')
+                || str_contains($value, 'xuong') || str_contains($value, 'san xuat') => 'enterprise',
+            default => '',
+        };
     }
 
     /** Chuẩn hoá trạng thái: draft/published/…; mặc định draft. */

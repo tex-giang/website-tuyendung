@@ -904,6 +904,8 @@ select.field__input {
 .admin-badge--closed, .admin-badge--interview { background: #EDF0FC; color: #2F3F8F; }
 .admin-badge--rejected { background: #FDECEA; color: #8F2C20; }
 .admin-badge--expired { border: 1px solid #F2D6A8; background: #FFF7EA; color: #A9560B; }
+/* Khối tuyển dụng: 2 giá trị cố định, màu trung tính để không lẫn với trạng thái. */
+.admin-badge--block { border: 1px solid var(--line, #E3E8E4); background: #FFFFFF; color: #42544B; font-weight: 600; }
 
 /* 12. Phân trang ---------------------------------------------------------- */
 .admin-pager {

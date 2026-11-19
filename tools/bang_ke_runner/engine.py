@@ -15,8 +15,9 @@ import tempfile
 import unicodedata
 
 from ooxml import Book, WorkbookError, FormulaError, Q, E, Cell, colname, xround
+from pandas_index import InvoiceIndex
 
-VERSION = "1.0.0"
+VERSION = "1.6.2"
 FIELDS = ("model", "series", "number", "date", "vendor", "tax_id", "item", "unit", "qty", "price", "amount", "rate", "vat")
 ALIASES = {
     "model": ["MAU SO"], "series": ["KY HIEU", "KY HIEU HOA DON"],
@@ -162,6 +163,7 @@ def canon(v, places):
 class Layout:
     def __init__(self, sheet, role):
         self.sheet, self.role, self.cols = sheet, role, {}
+        self._index = None
         limit = 20 if role == "K" else 15
         bottom = 0
         aliases = {**ALIASES, **(K_ALIASES if role == "K" else {})}
@@ -219,6 +221,8 @@ class Layout:
         return self.sheet.cell(row, self.cols[field]).formula is not None
 
     def parts(self, row, kind="full"):
+        if self._index is not None and self._index.revision == self.sheet.revision and row in self._index.parts[kind]:
+            return self._index.parts[kind][row]
         model, series = compact(self.get(row, "model")), compact(self.get(row, "series"))
         num, day, tid = invoice(self.get(row, "number")), datekey(self.get(row, "date")), taxid(self.get(row, "tax_id"))
         if kind == "core":
@@ -228,24 +232,37 @@ class Layout:
         return series, num, day, tid
 
     def key(self, row, kind="full"):
+        if self._index is not None and self._index.revision == self.sheet.revision and row in self._index.keys[kind]:
+            return self._index.keys[kind][row]
         return "|".join(self.parts(row, kind))
 
     def valid(self, row, kind="full"):
+        if self._index is not None and self._index.revision == self.sheet.revision and row in self._index.valid[kind]:
+            return self._index.valid[kind][row]
         return all(self.parts(row, kind))
+
+    def prepare_index(self):
+        if self._index is None or self._index.revision != self.sheet.revision:
+            self._index = InvoiceIndex(
+                self, {"model": compact, "series": compact, "number": invoice, "date": datekey, "tax_id": taxid},
+                number, missing,
+            )
+        return self._index
 
     def data_rows(self):
         return [r for r in sorted(self.sheet.rows) if self.first <= r <= self.last and not blank(self.get(r, "number"))]
 
 
 def groups(layout, require_full=False):
-    result = defaultdict(list)
-    for r in layout.data_rows():
-        if not require_full or layout.valid(r):
-            result[layout.key(r)].append(r)
-    return dict(result)
+    table = layout.prepare_index()
+    return table.groups_valid if require_full else table.group_rows
 
 
 def sum_field(layout, rows, field):
+    if layout._index is not None and layout._index.revision == layout.sheet.revision:
+        cached = layout._index.sum_for(rows, field)
+        if cached is not None:
+            return cached
     values = [layout.get(r, field) for r in rows]
     return sum(number(v) for v in values if not missing(v)), any(not missing(v) for v in values)
 
@@ -418,11 +435,8 @@ class Runner:
         k, d, s, st = self.k, self.d, self.s, self.stats
         kg, dg, sg = groups(k), groups(d), groups(s, True)
         amount_before, vat_before = self.total("amount"), self.total("vat")
-        core, alternative = defaultdict(list), defaultdict(list)
-        for r in d.data_rows():
-            for kind, index in (("core", core), ("fallback", alternative)):
-                if d.valid(r, kind) and d.key(r) not in index[d.key(r, kind)]:
-                    index[d.key(r, kind)].append(d.key(r))
+        core = d.prepare_index().candidates("core")
+        alternative = d.prepare_index().candidates("fallback")
         self.progress("Đang đối chiếu hóa đơn…", 35)
         resolved, owners = {}, {}
         for key, krs in kg.items():
@@ -741,13 +755,15 @@ class Runner:
         filt.set("ref", f"A1:{colname(len(headers))}{row-1}")
 
 
-def process_file(source, output, progress=lambda *_: None):
+def process_file(source, output, progress=lambda *_: None, *, only_khai=True):
     source, output = Path(source).resolve(), Path(output).resolve()
     if source.suffix.lower() not in (".xlsx", ".xlsm"):
         raise WorkbookError("Chỉ hỗ trợ tệp .xlsx và .xlsm. Hãy chuyển .xls/.xlsb sang .xlsx trước.")
     if source == output:
         raise WorkbookError("Chọn tên tệp kết quả khác tệp đầu vào.")
-    if output.suffix.lower() != source.suffix.lower():
+    if only_khai and output.suffix.lower() != ".xlsx":
+        raise WorkbookError("Chọn tệp kết quả .xlsx; kết quả chỉ có một sheet KHAI THUE.")
+    if not only_khai and output.suffix.lower() != source.suffix.lower():
         raise WorkbookError(f"Giữ đuôi {source.suffix} cho tệp kết quả để bảo toàn nội dung gốc.")
     if not source.is_file():
         raise WorkbookError("Không tìm thấy tệp đầu vào.")
@@ -762,9 +778,18 @@ def process_file(source, output, progress=lambda *_: None):
             raise WorkbookError("Tệp đầu vào vừa được thay đổi. Lưu tệp rồi chạy lại.")
         book = Book(snapshot, progress)
         try:
-            result = Runner(book, source.name, progress).run()
+            runner = Runner(book, source.name, progress)
+            result = runner.run()
+            issue_fields = ("khai_key", "detail_key", "action", "reason", "khai_rows", "detail_rows")
+            result["issues"] = [dict(zip(issue_fields, row)) for row in runner.issues]
             progress("Đang lưu và kiểm tra tệp kết quả…", 85)
-            book.save(output)
+            if only_khai:
+                from single_sheet import save_khai_only
+                result["export_notes"] = save_khai_only(book, runner.k.sheet, output)
+                result["output_sheets"] = [runner.k.sheet.name]
+            else:
+                book.save(output)
+                result["output_sheets"] = list(book.sheets)
         finally:
             book.close()
     result["output"] = str(output)

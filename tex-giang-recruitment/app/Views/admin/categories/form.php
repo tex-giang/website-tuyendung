@@ -69,6 +69,21 @@ if ($mapLink === '' && trim($val('address')) !== '') {
         $renderField('name', 'Tên', 120);
         $renderField('slug', 'Đường dẫn (slug)', 80, hint: 'Để trống để tự tạo từ tên.');
         if ($type === 'category') {
+            // Bộ phận tuyển dụng phải thuộc một Khối; để trống = dùng chung cả 2 Khối.
+            $blockError = (string) ($errors['block'] ?? '');
+            ?>
+            <label class="field">
+              <span class="field__label">Khối</span>
+              <select class="field__input<?= $blockError !== '' ? ' is-invalid' : '' ?>" name="block">
+                <option value=""<?= $val('block') === '' ? ' selected' : '' ?>>Dùng chung cho cả 2 Khối</option>
+                <?php foreach ($blocks as $key => $label): ?>
+                <option value="<?= e($key) ?>"<?= $val('block') === $key ? ' selected' : '' ?>><?= e($label) ?></option>
+                <?php endforeach; ?>
+              </select>
+              <span class="admin-muted">Chọn Khối để bộ phận chỉ hiện khi thêm tin thuộc Khối đó.</span>
+              <?php if ($blockError !== ''): ?><span class="field__error"><?= e($blockError) ?></span><?php endif; ?>
+            </label>
+            <?php
             $renderField('description', 'Thông tin mô tả', 255, 'textarea', true);
         }
         $renderField('sort_order', 'Thứ tự hiển thị', 0, 'number');
