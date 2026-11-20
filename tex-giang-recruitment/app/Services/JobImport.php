@@ -27,6 +27,7 @@ final class JobImport
      * @var array<string, array{0: string, 1: list<string>}>
      */
     public const COLUMNS = [
+        'code'             => ['Mã tin', ['ma tin', 'ma', 'code', 'job code', 'ma tin tuyen dung', 'ma tuyen dung']],
         'title'            => ['Tiêu đề (*)', ['tieu de', 'title', 'tieu de tin', 'ten tin']],
         'branch'           => ['Khu sản xuất (*)', ['khu san xuat', 'khu vuc', 'nha may', 'chi nhanh', 'branch', 'khu']],
         'block'            => ['Khối (Văn phòng/Xí nghiệp)', ['khoi', 'khoi tuyen dung', 'block', 'van phong', 'xi nghiep']],
@@ -142,6 +143,8 @@ final class JobImport
             '# Hướng dẫn:',
             '#  - Giữ nguyên dòng tiêu đề (dòng bắt đầu bằng "Tiêu đề (*)").',
             '#  - Mỗi dòng bên dưới là 1 tin tuyển dụng. Cột có (*) là bắt buộc.',
+            '#  - Mã tin: để trống = tạo tin mới; điền mã đang có (VD TD26-0001) = cập nhật tin đó.',
+            '#    Khi cập nhật: Trạng thái / Ngày đăng để trống = giữ nguyên giá trị hiện tại của tin.',
             '#  - Khu sản xuất: ghi tên (Tân Hương / Cai Lậy / Chợ Gạo) hoặc slug (tan-huong / cai-lay / cho-gao).',
             '#  - Trạng thái: draft (bản nháp) hoặc published (đăng ngay). Để trống = draft.',
             '#  - Ngày đăng: để trống = HÔM NAY. Hạn nộp: để trống = CHƯA XÁC ĐỊNH (không giới hạn).',
@@ -188,6 +191,10 @@ final class JobImport
             [''],
             ['1. Điền dữ liệu vào sheet "Tin tuyển dụng": mỗi dòng là một tin tuyển dụng.'],
             ['2. Cột có (*) là bắt buộc: Tiêu đề, Khu sản xuất, Mô tả công việc.'],
+            ['2b. Mã tin: để trống = tạo tin mới; điền mã đang có (VD TD26-0001) = cập nhật tin đó.'],
+            ['    Khi cập nhật: Trạng thái / Ngày đăng để trống = giữ nguyên giá trị hiện tại;'],
+            ['    slug/URL công khai, lượt xem và hồ sơ ứng tuyển của tin được giữ nguyên.'],
+            ['    Muốn có sẵn mã tin để sửa: Admin → Tin tuyển dụng → "Xuất tin hiện có".'],
             ['3. Khu sản xuất: chọn Tân Hương / Cai Lậy / Chợ Gạo từ danh sách.'],
             ['3b. Bộ phận: phải chọn đúng tên bộ phận đang có trên website (xem danh sách bên dưới).'],
             ['    Bộ phận lạ sẽ bị báo lỗi "không nhận diện được bộ phận" khi import.'],
@@ -254,9 +261,9 @@ final class JobImport
 
     /** Độ rộng cột Excel cho từng cột template. */
     private const TEMPLATE_WIDTHS = [
-        'title' => 42, 'branch' => 18, 'block' => 22, 'category' => 24, 'quantity' => 10,
+        'code' => 14, 'title' => 42, 'branch' => 18, 'block' => 22, 'category' => 24, 'quantity' => 10,
         'location' => 30, 'employment_type' => 24, 'experience' => 20,
-        'salary_min' => 16, 'salary_max' => 16, 'description' => 60,
+        'salary_text' => 24, 'salary_range' => 16, 'salary_min' => 16, 'salary_max' => 16, 'description' => 60,
         'requirements' => 55, 'benefits' => 55, 'posted_at' => 18, 'deadline' => 18,
         'status' => 20, 'is_urgent' => 14, 'meta_title' => 34, 'meta_description' => 44,
     ];
@@ -269,6 +276,7 @@ final class JobImport
     private static function sampleRow(): array
     {
         return [
+            'code' => '',
             'title' => '[MẪU] Nhân viên vận hành máy may',
             'branch' => 'Tân Hương',
             'block' => 'Xí nghiệp',
@@ -289,6 +297,158 @@ final class JobImport
             'meta_title' => '',
             'meta_description' => '',
         ];
+    }
+
+    // ------------------------------------------------------------------ EXPORT
+
+    /**
+     * Dựng các dòng export từ danh sách tin (đã JOIN branch_name, category_name).
+     * Dùng ĐẦY ĐỦ COLUMNS (kể cả Lương hiển thị / Khoảng lương) để giữ nguyên
+     * giá trị tuỳ chỉnh khi import lại — file xuất ra import được ngay (upsert theo Mã tin).
+     *
+     * @param list<array<string, mixed>> $jobs
+     * @return list<array<string, string|int>>
+     */
+    public static function exportRows(array $jobs): array
+    {
+        $rows = [];
+        foreach ($jobs as $job) {
+            $rows[] = [
+                'code'             => (string) ($job['code'] ?? ''),
+                'title'            => (string) ($job['title'] ?? ''),
+                'branch'           => (string) ($job['branch_name'] ?? ''),
+                'block'            => \App\Models\Job::blockLabel($job['block'] ?? null),
+                'category'         => (string) ($job['category_name'] ?? ''),
+                'quantity'         => (int) ($job['quantity'] ?? 1),
+                'location'         => (string) ($job['location'] ?? ''),
+                'employment_type'  => (string) ($job['employment_type'] ?? ''),
+                'experience'       => (string) ($job['experience'] ?? ''),
+                'salary_text'      => (string) ($job['salary_text'] ?? ''),
+                'salary_min'       => ($job['salary_min'] ?? '') !== '' && $job['salary_min'] !== null ? (int) $job['salary_min'] : '',
+                'salary_max'       => ($job['salary_max'] ?? '') !== '' && $job['salary_max'] !== null ? (int) $job['salary_max'] : '',
+                'salary_range'     => (string) ($job['salary_range'] ?? ''),
+                'description'      => (string) ($job['description'] ?? ''),
+                'requirements'     => (string) ($job['requirements'] ?? ''),
+                'benefits'         => (string) ($job['benefits'] ?? ''),
+                'posted_at'        => self::exportDateTime($job['posted_at'] ?? null),
+                'deadline'         => self::exportDate($job['deadline'] ?? null),
+                'status'           => (string) ($job['status'] ?? 'draft'),
+                'is_urgent'        => (int) ($job['is_urgent'] ?? 0),
+                'meta_title'       => (string) ($job['meta_title'] ?? ''),
+                'meta_description' => (string) ($job['meta_description'] ?? ''),
+            ];
+        }
+        return $rows;
+    }
+
+    /**
+     * File Excel tin hiện có: sheet 1 "Tin tuyển dụng" (header + dữ liệu, có Mã tin),
+     * sheet 2 "Hướng dẫn" cách sửa và import lại.
+     *
+     * @param list<array<string, mixed>> $jobs
+     */
+    public static function exportXlsx(array $jobs): string
+    {
+        $headers = [];
+        $widths = [];
+        foreach (self::COLUMNS as $key => [$label]) {
+            $headers[] = $label;
+            $widths[] = self::TEMPLATE_WIDTHS[$key] ?? 20;
+        }
+
+        $rows = [$headers];
+        foreach (self::exportRows($jobs) as $row) {
+            $values = [];
+            foreach (array_keys(self::COLUMNS) as $key) {
+                $values[] = $row[$key] ?? '';
+            }
+            $rows[] = $values;
+        }
+
+        $guide = [
+            ['HƯỚNG DẪN SỬA TIN TUYỂN DỤNG — TEX-GIANG'],
+            [''],
+            ['File này chứa các tin tuyển dụng HIỆN CÓ trên website (kèm Mã tin).'],
+            ['1. Sửa trực tiếp nội dung từng dòng trong sheet "Tin tuyển dụng".'],
+            ['2. Giữ nguyên cột Mã tin và dòng tiêu đề:'],
+            ['   - Dòng CÒN mã tin (VD TD26-0001) → import sẽ CẬP NHẬT tin đó.'],
+            ['   - Dòng bị XOÁ mã tin → import sẽ TẠO TIN MỚI (tin cũ vẫn còn).'],
+            ['   - Muốn thêm tin mới: điền dòng mới, để trống Mã tin.'],
+            ['3. Khi cập nhật, để trống Trạng thái / Ngày đăng = giữ nguyên giá trị hiện tại.'],
+            ['   Slug/URL công khai, lượt xem và hồ sơ ứng tuyển luôn được giữ nguyên.'],
+            ['4. Không xoá dòng tiêu đề; mỗi dòng là một tin; cột (*) là bắt buộc.'],
+            ['5. Ngày ghi dạng dd/mm/yyyy (Ngày đăng kèm giờ: dd/mm/yyyy HH:MM).'],
+            ['   Lương từ/đến: số nguyên đầy đủ đơn vị đồng (VD 9000000, không ghi "9 triệu").'],
+            ['6. Bộ phận phải đúng tên đang có trên website; Khối phải khớp Khối của bộ phận.'],
+            ['7. Lưu file .xlsx rồi vào Admin → Tin tuyển dụng → Import template để tải lên.'],
+            ['   Kết quả import báo rõ: tạo mới bao nhiêu tin, cập nhật bao nhiêu tin, dòng nào lỗi.'],
+            ['Lưu ý: import không tự xoá tin — muốn gỡ tin nào, xoá trong Admin (xoá mềm, giữ hồ sơ).'],
+        ];
+
+        return Xlsx::write([
+            [
+                'name' => 'Tin tuyển dụng',
+                'rows' => $rows,
+                'widths' => $widths,
+                'header' => true,
+                'freeze_row' => 1,
+            ],
+            [
+                'name' => 'Hướng dẫn',
+                'rows' => $guide,
+                'widths' => [100],
+                'header' => false,
+            ],
+        ]);
+    }
+
+    /**
+     * Bản CSV của file tin hiện có (UTF-8, phân cách ";", controller tự thêm BOM).
+     *
+     * @param list<array<string, mixed>> $jobs
+     */
+    public static function exportCsv(array $jobs): string
+    {
+        $headers = [];
+        foreach (self::COLUMNS as [$label]) {
+            $headers[] = $label;
+        }
+
+        $lines = [
+            '# XUẤT TIN TUYỂN DỤNG HIỆN CÓ — TEX-GIANG',
+            '# Sửa nội dung rồi import lại: dòng còn Mã tin = cập nhật tin đó; xoá Mã tin = tạo tin mới.',
+            '# Giữ nguyên dòng tiêu đề. Ngày dạng dd/mm/yyyy. Lương ghi số đầy đủ (VD 9000000).',
+            self::csvLine($headers),
+        ];
+        foreach (self::exportRows($jobs) as $row) {
+            $values = [];
+            foreach (array_keys(self::COLUMNS) as $key) {
+                $values[] = $row[$key] ?? '';
+            }
+            $lines[] = self::csvLine($values);
+        }
+
+        return implode("\r\n", $lines) . "\r\n";
+    }
+
+    /** Ngày giờ DB -> dd/mm/yyyy HH:MM cho file export (import đọc lại được). */
+    private static function exportDateTime(?string $value): string
+    {
+        if ($value === null || trim($value) === '') {
+            return '';
+        }
+        $ts = strtotime($value);
+        return $ts === false ? '' : date('d/m/Y H:i', $ts);
+    }
+
+    /** Ngày DB -> dd/mm/yyyy cho file export. */
+    private static function exportDate(?string $value): string
+    {
+        if ($value === null || trim($value) === '') {
+            return '';
+        }
+        $ts = strtotime($value);
+        return $ts === false ? '' : date('d/m/Y', $ts);
     }
 
     /**
@@ -499,6 +659,7 @@ final class JobImport
         }
 
         return match (true) {
+            str_contains($value, 'het han') || str_contains($value, 'expired') => 'expired',
             str_contains($value, 'tam dung') || str_contains($value, 'pause') => 'paused',
             str_contains($value, 'dong') || str_contains($value, 'close') => 'closed',
             str_contains($value, 'published') || str_contains($value, 'publish') => 'published',

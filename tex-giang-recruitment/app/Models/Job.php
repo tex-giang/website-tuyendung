@@ -268,6 +268,14 @@ final class Job
         return $stmt->fetch() ?: null;
     }
 
+    /** Tìm tin chưa xoá theo mã tin (TD26-xxxx) — dùng cho import cập nhật. */
+    public static function findByCode(string $code): ?array
+    {
+        $stmt = Database::connection()->prepare(self::SELECT . ' WHERE j.code = :code AND j.deleted_at IS NULL LIMIT 1');
+        $stmt->execute(['code' => $code]);
+        return $stmt->fetch() ?: null;
+    }
+
     public static function slugExists(string $slug, ?int $exceptId = null): bool
     {
         $sql = 'SELECT COUNT(*) FROM jobs WHERE slug = :slug' . ($exceptId !== null ? ' AND id <> :id' : '');

@@ -14,6 +14,7 @@ $listPager = true;
     <p class="admin-sub">Quản lý các vị trí đang tuyển tại các khu sản xuất.</p>
   </div>
   <div class="admin-head-actions">
+    <a href="<?= url('admin/jobs/export') ?>" class="btn btn-outline" title="Xuất Excel toàn bộ tin hiện có (kèm Mã tin) để sửa và import lại"><i class="bi bi-download" aria-hidden="true"></i> Xuất tin hiện có</a>
     <?php if (can('jobs', 'create')): ?>
     <a href="<?= url('admin/jobs/template') ?>" class="btn btn-outline"><i class="bi bi-file-earmark-excel" aria-hidden="true"></i> Tải template Excel</a>
     <a href="<?= url('admin/jobs/create') ?>" class="btn btn-primary"><i class="bi bi-plus-lg" aria-hidden="true"></i> Thêm tin tuyển dụng</a>
@@ -36,15 +37,16 @@ $listPager = true;
     <span class="admin-import-panel__icon" aria-hidden="true"><i class="bi bi-upload"></i></span>
     <span>
       <span class="admin-import-panel__title">Import tin tuyển dụng từ template Excel</span>
-      <span class="admin-import-panel__hint">Tải file .xlsx mẫu, điền thông tin rồi upload lại để tạo nhiều tin cùng lúc</span>
+      <span class="admin-import-panel__hint">Dòng có Mã tin → cập nhật tin đó; dòng trống Mã tin → tạo tin mới</span>
     </span>
     <span class="admin-import-panel__chevron" aria-hidden="true"><i class="bi bi-chevron-down"></i></span>
   </summary>
   <div class="admin-import-panel__body">
     <ol class="admin-import-panel__steps">
-      <li>Tải <a href="<?= url('admin/jobs/template') ?>" class="admin-link">file template Excel (.xlsx)</a> và mở bằng Excel.</li>
-      <li>Điền sheet <strong>“Tin tuyển dụng”</strong> — mỗi dòng là một tin (giữ nguyên dòng tiêu đề; cột có (*) là bắt buộc).</li>
-      <li>Lưu file .xlsx rồi upload ở bên dưới — tin nhập vào mặc định là bản nháp nếu cột Trạng thái để trống.</li>
+      <li>Tạo mới: tải <a href="<?= url('admin/jobs/template') ?>" class="admin-link">file template Excel (.xlsx)</a>. Sửa tin đã có: bấm <a href="<?= url('admin/jobs/export') ?>" class="admin-link">Xuất tin hiện có</a> — file điền sẵn Mã tin và nội dung.</li>
+      <li>Điền/sửa sheet <strong>“Tin tuyển dụng”</strong> — mỗi dòng là một tin (giữ nguyên dòng tiêu đề; cột có (*) là bắt buộc).</li>
+      <li><strong>Mã tin:</strong> để trống = tạo mới; giữ mã đang có (VD <code>TD26-0001</code>) = cập nhật tin đó. Khi cập nhật, Trạng thái / Ngày đăng để trống = giữ nguyên giá trị hiện tại; URL công khai và hồ sơ ứng tuyển không đổi.</li>
+      <li>Lưu file .xlsx rồi upload ở bên dưới — tin tạo mới mặc định là bản nháp nếu cột Trạng thái để trống.</li>
     </ol>
     <form method="POST" action="<?= url('admin/jobs/import') ?>" enctype="multipart/form-data" class="admin-import-form">
       <?= csrf_field() ?>

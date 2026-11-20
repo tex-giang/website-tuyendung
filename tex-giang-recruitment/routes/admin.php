@@ -67,6 +67,7 @@ $router->get('/admin/jobs', [JobController::class, 'index'], $guard('jobs'));
 $router->get('/admin/jobs/create', [JobController::class, 'create'], $guard('jobs', 'create'));
 $router->post('/admin/jobs/create', [JobController::class, 'store'], $guard('jobs', 'create'));
 $router->get('/admin/jobs/template', [JobController::class, 'template'], $guard('jobs'));
+$router->get('/admin/jobs/export', [JobController::class, 'export'], $guard('jobs'));
 $router->post('/admin/jobs/import', [JobController::class, 'import'], $guard('jobs', 'create'));
 $router->get('/admin/jobs/{id}/edit', [JobController::class, 'edit'], $guard('jobs', 'update'));
 $router->post('/admin/jobs/{id}/edit', [JobController::class, 'update'], $guard('jobs', 'update'));

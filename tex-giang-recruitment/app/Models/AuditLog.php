@@ -11,6 +11,8 @@ final class AuditLog
         'auth.login' => 'Đăng nhập', 'auth.login_failed' => 'Đăng nhập thất bại', 'auth.logout' => 'Đăng xuất',
         'job.create' => 'Tạo tin', 'job.update' => 'Sửa tin', 'job.status' => 'Đổi trạng thái tin',
         'job.duplicate' => 'Nhân bản tin', 'job.delete' => 'Xóa tin',
+        'job.import' => 'Import tin (tạo mới)', 'job.import_update' => 'Import tin (cập nhật)',
+        'job.import.batch' => 'Import tin hàng loạt', 'job.export' => 'Xuất tin ra Excel',
         'application.status' => 'Đổi trạng thái hồ sơ', 'application.cv_download' => 'Tải CV',
         'application.appointment' => 'Lưu lịch phỏng vấn', 'application.note' => 'Thêm ghi chú hồ sơ',
         'post.create' => 'Tạo bài viết', 'post.update' => 'Sửa bài viết', 'post.status' => 'Đổi trạng thái bài',

@@ -212,6 +212,48 @@ final class JobController extends Controller
         exit;
     }
 
+    /**
+     * Xuất tin hiện có (trong phạm vi nhà máy của tài khoản) ra Excel/CSV,
+     * điền sẵn Mã tin + nội dung để sửa và import lại theo hướng cập nhật.
+     * Hỗ trợ ?format=csv cho máy không có extension zip.
+     */
+    public function export(): void
+    {
+        // adminPaginate đã áp phạm vi nhà máy + lọc tin chưa xoá.
+        $jobs = Job::adminPaginate([], 1, 5000)['items'];
+        AuditLog::record('job.export', 'job', null, ['count' => count($jobs)]);
+
+        $stamp = date('Ymd');
+        $format = strtolower(trim((string) ($_GET['format'] ?? 'xlsx')));
+
+        $sendCsv = static function () use ($jobs, $stamp): never {
+            $csv = JobImport::exportCsv($jobs);
+            header('Content-Type: text/csv; charset=utf-8');
+            header('Content-Disposition: attachment; filename="tin-tuyen-dung-hien-co-' . $stamp . '.csv"');
+            header('Cache-Control: no-store, max-age=0');
+            echo "\xEF\xBB\xBF" . $csv;
+            exit;
+        };
+
+        if ($format === 'csv' || !class_exists(\ZipArchive::class)) {
+            $sendCsv();
+        }
+
+        try {
+            $xlsx = JobImport::exportXlsx($jobs);
+        } catch (\Throwable $exception) {
+            error_log('[JOB-EXPORT] ' . $exception->getMessage());
+            $sendCsv();
+        }
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="tin-tuyen-dung-hien-co-' . $stamp . '.xlsx"');
+        header('Content-Length: ' . strlen($xlsx));
+        header('Cache-Control: no-store, max-age=0');
+        echo $xlsx;
+        exit;
+    }
+
     /** Import danh sách tin từ file Excel (.xlsx) hoặc CSV (theo template). */
     public function import(): void
     {
@@ -280,6 +322,7 @@ final class JobController extends Controller
 
         $userId = (int) Session::get('auth_id');
         $created = 0;
+        $updated = 0;
         $errors = [];
 
         foreach ($rows as $row) {
@@ -327,11 +370,35 @@ final class JobController extends Controller
                 }
             }
 
+            // Mã tin: có mã trùng tin đang tồn tại => CẬP NHẬT; trống => tạo mới.
+            // Mã sai định dạng / không tồn tại => báo lỗi, không âm thầm tạo tin mới.
+            $code = trim((string) ($row['code'] ?? ''));
+            $existing = null;
+            if ($code !== '') {
+                if (preg_match('/^TD\d{2}-\d{4}$/', $code) !== 1) {
+                    $errors[] = 'Dòng ' . $line . ': mã tin "' . $code . '" không đúng định dạng TD26-0001.';
+                    continue;
+                }
+                $existing = Job::findByCode($code);
+                if ($existing === null) {
+                    $errors[] = 'Dòng ' . $line . ': mã tin "' . $code . '" không tồn tại hoặc tin đã xoá. Kiểm tra lại mã, hoặc để trống Mã tin để tạo tin mới.';
+                    continue;
+                }
+                if (!Permissions::canAccessBranch((int) $existing['branch_id'])) {
+                    $errors[] = 'Dòng ' . $line . ': bạn không có quyền sửa tin "' . $code . '" (ngoài phạm vi nhà máy).';
+                    continue;
+                }
+                if (!Permissions::currentCan('jobs', 'update')) {
+                    $errors[] = 'Dòng ' . $line . ': bạn chỉ có quyền tạo mới, không có quyền sửa tin "' . $code . '".';
+                    continue;
+                }
+            }
+
             $quantity = trim((string) ($row['quantity'] ?? ''));
             $post = [
                 'title'            => trim((string) ($row['title'] ?? '')),
                 'slug'             => '',
-                'code'             => '',
+                'code'             => $code,
                 'branch_id'        => (string) $branchId,
                 'block'            => $block,
                 'category_id'      => $categoryId,
@@ -355,27 +422,59 @@ final class JobController extends Controller
                 'sort_order'       => '0',
             ];
 
-            [$data, $rowErrors] = $this->validate($post, null);
+            $existingId = $existing !== null ? (int) $existing['id'] : null;
+            [$data, $rowErrors] = $this->validate($post, $existingId);
             if ($rowErrors !== []) {
                 $messages = array_slice(array_values($rowErrors), 0, 2);
                 $errors[] = 'Dòng ' . $line . ': ' . implode(' ', $messages);
                 continue;
             }
 
+            if ($existing !== null) {
+                // Cập nhật: giữ slug/URL công khai (import không có cột slug,
+                // validate tự sinh slug theo tiêu đề mới — phải ghi đè lại slug cũ).
+                $data['slug'] = (string) $existing['slug'];
+                // Ngày đăng để trống trong file = giữ ngày đăng cũ, không đặt về hôm nay.
+                if (trim((string) ($row['posted_at'] ?? '')) === '') {
+                    $data['posted_at'] = (string) ($existing['posted_at'] ?? '') !== ''
+                        ? (string) $existing['posted_at']
+                        : date('Y-m-d H:i:s');
+                }
+                // Trạng thái để trống = giữ trạng thái hiện tại, không hạ tin đang đăng về nháp.
+                if (trim((string) ($row['status'] ?? '')) === '') {
+                    $data['status'] = (string) $existing['status'];
+                }
+                // Import không có cột sort_order — giữ thứ tự hiện tại của tin.
+                $data['sort_order'] = (int) ($existing['sort_order'] ?? 0);
+            }
+
             try {
-                $jobId = Job::create($data, $userId);
-                AuditLog::record('job.import', 'job', $jobId, ['title' => $data['title']]);
-                $created++;
+                if ($existing !== null) {
+                    Job::update((int) $existing['id'], $data);
+                    AuditLog::record('job.import_update', 'job', (int) $existing['id'], ['code' => $code, 'title' => $data['title']]);
+                    $updated++;
+                } else {
+                    $jobId = Job::create($data, $userId);
+                    AuditLog::record('job.import', 'job', $jobId, ['title' => $data['title']]);
+                    $created++;
+                }
             } catch (\Throwable $exception) {
                 error_log('[JOB-IMPORT] ' . $exception->getMessage());
                 $errors[] = 'Dòng ' . $line . ': lỗi lưu database.';
             }
         }
 
-        AuditLog::record('job.import.batch', 'job', null, ['created' => $created, 'failed' => count($errors)]);
+        AuditLog::record('job.import.batch', 'job', null, ['created' => $created, 'updated' => $updated, 'failed' => count($errors)]);
 
+        $summary = [];
         if ($created > 0) {
-            Session::flash('_success', 'Đã import ' . $created . ' tin tuyển dụng từ template.');
+            $summary[] = 'tạo mới ' . $created . ' tin';
+        }
+        if ($updated > 0) {
+            $summary[] = 'cập nhật ' . $updated . ' tin';
+        }
+        if ($summary !== []) {
+            Session::flash('_success', 'Đã import: ' . implode(', ', $summary) . '.');
         }
         if ($errors !== []) {
             Session::flash(

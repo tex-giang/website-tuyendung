@@ -180,6 +180,9 @@ Mật khẩu     : Admin@123dev
 | POST | `/admin/logout` | Đăng xuất |
 | GET | `/admin/dashboard` | KPI thật từ DB, hồ sơ mới nhất |
 | GET | `/admin/jobs` | Danh sách tin, lọc trạng thái |
+| GET | `/admin/jobs/template` | Tải template Excel/CSV để import hàng loạt |
+| GET | `/admin/jobs/export` | Xuất tin hiện có (kèm Mã tin) ra Excel/CSV để sửa và import cập nhật |
+| POST | `/admin/jobs/import` | Import hàng loạt: dòng trống Mã tin → tạo mới; dòng có mã tồn tại → cập nhật |
 | GET/POST | `/admin/jobs/create` | Thêm tin |
 | GET/POST | `/admin/jobs/{id}/edit` | Sửa tin |
 | POST | `/admin/jobs/{id}/status` | Đổi trạng thái nhanh |

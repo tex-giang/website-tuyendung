@@ -432,18 +432,33 @@ trả về 403.
 - Bảng phân quyền chỉ hiện các module khai báo trong `app/Config/permissions.php`
   (thêm menu mới thì thêm module vào file đó để màn hình phân quyền biết).
 
-## Import tin tuyển dụng từ Excel (hàng loạt)
+## Import tin tuyển dụng từ Excel (hàng loạt — tạo mới & cập nhật)
 
-- Vào **Tuyển dụng → Tin tuyển dụng** → bấm **Tải template Excel** để lấy file `.xlsx`.
+- Vào **Tuyển dụng → Tin tuyển dụng** → bấm **Tải template Excel** để lấy file `.xlsx` (tạo mới),
+  hoặc **Xuất tin hiện có** để lấy file điền sẵn **Mã tin** + nội dung các tin đang có (sửa/cập nhật).
 - File gồm 2 sheet: **Tin tuyển dụng** (nhập liệu) và **Hướng dẫn**.
 - Mỗi dòng ở sheet dữ liệu là một tin; các cột có `(*)` là bắt buộc (Tiêu đề, Khu sản xuất, Mô tả công việc).
-- Ngày đăng / Hạn nộp nhập theo định dạng **DD/MM/YYYY** (vd `31/12/2026`); Ngày đăng để trống = hôm nay,
+- **Cột Mã tin quyết định tạo mới hay cập nhật:**
+  - Để trống → **tạo tin mới** (mã tin và slug tự sinh).
+  - Điền mã đang tồn tại (vd `TD26-0001`) → **cập nhật tin đó**: giữ nguyên id, slug/URL công khai,
+    lượt xem và toàn bộ hồ sơ ứng tuyển liên quan.
+  - Mã sai định dạng hoặc không tồn tại → dòng bị báo lỗi, không âm thầm tạo tin mới.
+  - Khi cập nhật: **Trạng thái / Ngày đăng để trống = giữ nguyên giá trị hiện tại** của tin
+    (không hạ tin đang đăng về nháp, không đặt lại ngày đăng về hôm nay).
+- Ngày đăng / Hạn nộp nhập theo định dạng **DD/MM/YYYY** (vd `31/12/2026`); với tin tạo mới: Ngày đăng để trống = hôm nay,
   Hạn nộp để trống = “Chưa xác định” (không giới hạn).
-- Các cột có danh sách chọn sẵn: Khu sản xuất (Tân Hương / Cai Lậy / Chợ Gạo), Trạng thái, Tin ưu tiên.
+- Các cột có danh sách chọn sẵn: Khu sản xuất (Tân Hương / Cai Lậy / Chợ Gạo), Khối, Bộ phận, Trạng thái, Tin ưu tiên.
 - **Chỉ cần nhập Lương từ / Lương đến**: cột *Lương hiển thị* và *Khoảng lương* được **tự sinh** khi lưu
   (vd `9000000`, `12000000` → “9.000.000 - 12.000.000 VNĐ” và khoảng `8-12`). Nếu cần hiển thị khác thì nhập đè.
+  File **Xuất tin hiện có** giữ sẵn 2 cột này để không mất giá trị tuỳ chỉnh khi cập nhật.
 - Mở panel **Import tin tuyển dụng từ template** → chọn file `.xlsx` (hoặc `.csv`) → **Import**.
-- Tin nhập vào mặc định **Bản nháp** nếu cột Trạng thái để trống; mã tin và slug tự sinh.
+- Tin **tạo mới** mặc định **Bản nháp** nếu cột Trạng thái để trống.
 - Dòng ví dụ `[MẪU]` tự bỏ qua. Giới hạn **300 dòng / 3 MB** mỗi lần.
-- Dòng lỗi được báo theo số dòng (sai khu, thiếu mô tả, sai ngày…); các dòng hợp lệ vẫn được tạo.
-- Nếu máy không có Excel, có thể tải bản CSV (`/admin/jobs/template?format=csv`) — nội dung tương đương.
+- Dòng lỗi được báo theo số dòng (sai khu, thiếu mô tả, sai ngày, mã tin không tồn tại…); các dòng hợp lệ vẫn được xử lý.
+  Kết quả báo rõ: **tạo mới bao nhiêu tin, cập nhật bao nhiêu tin**.
+- Cập nhật qua import đòi hỏi quyền `jobs.update` và phạm vi nhà máy của cả tin cũ lẫn khu mới;
+  audit log ghi riêng `job.import_update` cho từng tin cập nhật.
+- **Import không tự xoá tin** — muốn gỡ tin nào, xoá trong Admin (xoá mềm, giữ hồ sơ).
+- Nếu máy không có Excel, có thể tải bản CSV (`/admin/jobs/template?format=csv`, `/admin/jobs/export?format=csv`) — nội dung tương đương.
+- Quy trình thu thập qua Google Drive: xuất tin hiện có → upload lên Drive → mở bằng Google Sheets →
+  chia sẻ cho đầu mối các nhà máy sửa → tải xuống `.xlsx` → import lại. Giữ nguyên cột Mã tin và dòng tiêu đề.
