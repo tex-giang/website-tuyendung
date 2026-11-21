@@ -447,7 +447,7 @@ trả về 403.
     (không hạ tin đang đăng về nháp, không đặt lại ngày đăng về hôm nay).
 - Ngày đăng / Hạn nộp nhập theo định dạng **DD/MM/YYYY** (vd `31/12/2026`); với tin tạo mới: Ngày đăng để trống = hôm nay,
   Hạn nộp để trống = “Chưa xác định” (không giới hạn).
-- Các cột có danh sách chọn sẵn: Khu sản xuất (Tân Hương / Cai Lậy / Chợ Gạo), Khối, Bộ phận, Trạng thái, Tin ưu tiên.
+- Các cột có danh sách chọn sẵn (dropdown, hoạt động cả trong Excel lẫn Google Sheets): Khu sản xuất, Khối, Bộ phận, Trạng thái, Tin ưu tiên — có ở **cả file template lẫn file Xuất tin hiện có**, phủ tới dòng 301 để thêm dòng mới vẫn chọn được. Riêng file xuất nhận đủ 5 trạng thái (draft/published/paused/closed/expired).
 - **Chỉ cần nhập Lương từ / Lương đến**: cột *Lương hiển thị* và *Khoảng lương* được **tự sinh** khi lưu
   (vd `9000000`, `12000000` → “9.000.000 - 12.000.000 VNĐ” và khoảng `8-12`). Nếu cần hiển thị khác thì nhập đè.
   File **Xuất tin hiện có** giữ sẵn 2 cột này để không mất giá trị tuỳ chỉnh khi cập nhật.

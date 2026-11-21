@@ -380,10 +380,57 @@ final class JobImport
             ['5. Ngày ghi dạng dd/mm/yyyy (Ngày đăng kèm giờ: dd/mm/yyyy HH:MM).'],
             ['   Lương từ/đến: số nguyên đầy đủ đơn vị đồng (VD 9000000, không ghi "9 triệu").'],
             ['6. Bộ phận phải đúng tên đang có trên website; Khối phải khớp Khối của bộ phận.'],
-            ['7. Lưu file .xlsx rồi vào Admin → Tin tuyển dụng → Import template để tải lên.'],
+            ['7. Các cột Khu sản xuất, Khối, Bộ phận, Trạng thái, Tin ưu tiên có DROPDOWN chọn sẵn'],
+            ['   (hoạt động trong Excel và Google Sheets — bấm vào ô sẽ hiện danh sách).'],
+            ['8. Lưu file .xlsx rồi vào Admin → Tin tuyển dụng → Import template để tải lên.'],
             ['   Kết quả import báo rõ: tạo mới bao nhiêu tin, cập nhật bao nhiêu tin, dòng nào lỗi.'],
             ['Lưu ý: import không tự xoá tin — muốn gỡ tin nào, xoá trong Admin (xoá mềm, giữ hồ sơ).'],
         ];
+
+        // Dropdown chọn nhanh giống template — Google Sheets giữ nguyên khi upload file .xlsx.
+        // Lấy danh mục từ DB; không có DB (CLI/test) thì dùng danh sách cố định, không hỏng export.
+        $branchNames = [];
+        $categoryNames = [];
+        try {
+            foreach (\App\Models\Branch::all() as $branchRow) {
+                $name = trim((string) ($branchRow['name'] ?? ''));
+                if ($name !== '') {
+                    $branchNames[] = $name;
+                }
+            }
+            foreach (\App\Models\Category::all() as $categoryRow) {
+                $name = trim((string) ($categoryRow['name'] ?? ''));
+                if ($name !== '') {
+                    $categoryNames[] = $name;
+                }
+            }
+        } catch (\Throwable $e) {
+            $categoryNames = [];
+        }
+        if ($branchNames === []) {
+            $branchNames = ['Tân Hương', 'Cai Lậy', 'Chợ Gạo'];
+        }
+
+        $columnIndex = array_flip(array_keys(self::COLUMNS));
+        $letterOf = static fn(string $key): string => chr(65 + (int) ($columnIndex[$key] ?? 0));
+        // Phủ tới dòng 301 (MAX_ROWS + 1) để người dùng THÊM dòng mới vẫn có dropdown.
+        $lastRow = self::MAX_ROWS + 1;
+
+        $validations = [
+            ['range' => $letterOf('branch') . '2:' . $letterOf('branch') . $lastRow, 'options' => $branchNames],
+            ['range' => $letterOf('block') . '2:' . $letterOf('block') . $lastRow, 'options' => array_values(\App\Models\Job::BLOCKS)],
+            // File export chứa cả tin paused/closed/expired — nhận đủ 5 trạng thái,
+            // khác template (chỉ draft/published cho tin mới).
+            ['range' => $letterOf('status') . '2:' . $letterOf('status') . $lastRow, 'options' => ['draft', 'published', 'paused', 'closed', 'expired']],
+            ['range' => $letterOf('is_urgent') . '2:' . $letterOf('is_urgent') . $lastRow, 'options' => ['0', '1']],
+        ];
+        // Excel giới hạn danh sách nhúng trong công thức ~255 ký tự.
+        if ($categoryNames !== [] && mb_strlen(implode(',', $categoryNames)) <= 240) {
+            $validations[] = [
+                'range' => $letterOf('category') . '2:' . $letterOf('category') . $lastRow,
+                'options' => $categoryNames,
+            ];
+        }
 
         return Xlsx::write([
             [
@@ -392,6 +439,7 @@ final class JobImport
                 'widths' => $widths,
                 'header' => true,
                 'freeze_row' => 1,
+                'validations' => $validations,
             ],
             [
                 'name' => 'Hướng dẫn',
