@@ -124,6 +124,12 @@ final class PageController extends Controller
                 'body_class'  => 'tg-public page-news-detail',
                 'nav'         => 'news',
                 'og_image'    => $post['image_path'] ?? null,
+                'og_type'     => 'article',
+                'article'     => [
+                    'published' => date('c', strtotime((string) ($post['published_at'] ?: $post['created_at'] ?? 'now')) ?: time()),
+                    'modified'  => date('c', strtotime((string) ($post['updated_at'] ?? 'now')) ?: time()),
+                    'section'   => (string) ($post['category_name'] ?? ''),
+                ],
                 'scripts'     => ['news-lightbox.js'],
                 'jsonld'      => [
                     Seo::article($post),

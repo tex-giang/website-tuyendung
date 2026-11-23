@@ -44,6 +44,11 @@ final class SettingsController extends Controller
             'fields' => [
                 'seo_title'       => ['Tiêu đề SEO', 'text', 220],
                 'seo_description' => ['Mô tả SEO', 'textarea', 320],
+                'seo_google_verification'          => ['Mã xác minh Google Search Console', 'text', 200],
+                'seo_bing_verification'            => ['Mã xác minh Bing Webmaster (msvalidate.01)', 'text', 200],
+                'seo_facebook_domain_verification' => ['Mã xác minh tên miền Facebook', 'text', 200],
+                'seo_zalo_verification'            => ['Mã xác minh Zalo (zalo-platform-site-verification)', 'text', 200],
+                'seo_facebook_app_id'              => ['Facebook App ID (tuỳ chọn)', 'text', 40],
             ],
         ],
     ];

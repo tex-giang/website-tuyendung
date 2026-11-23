@@ -16,11 +16,25 @@ $scripts = $page['scripts'] ?? [];
   <meta name="description" content="<?= e($page['description'] ?? settings('seo_description', '')) ?>">
   <meta property="og:title" content="<?= e($page['og_title'] ?? ($page['title'] ?? settings('seo_title', ''))) ?>">
   <meta property="og:description" content="<?= e($page['description'] ?? settings('seo_description', '')) ?>">
-  <meta property="og:type" content="website">
+  <meta property="og:type" content="<?= e($page['og_type'] ?? 'website') ?>">
   <meta property="og:locale" content="vi_VN">
   <?php if (!empty($page['robots'])): ?>
   <meta name="robots" content="<?= e($page['robots']) ?>">
+  <?php else: ?>
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
   <?php endif; ?>
+  <?php
+  // Mã xác minh chủ sở hữu website — nhập ở Quản trị > Cài đặt > SEO.
+  $verifyTags = [
+      'google-site-verification'         => settings('seo_google_verification'),
+      'msvalidate.01'                    => settings('seo_bing_verification'),
+      'facebook-domain-verification'     => settings('seo_facebook_domain_verification'),
+      'zalo-platform-site-verification'  => settings('seo_zalo_verification'),
+  ];
+  foreach ($verifyTags as $verifyName => $verifyValue):
+      if (trim($verifyValue) === '') { continue; } ?>
+  <meta name="<?= e($verifyName) ?>" content="<?= e(trim($verifyValue)) ?>">
+  <?php endforeach; ?>
 
   <?php
   // Canonical bỏ toàn bộ query string (?page=, ?chuyen-muc=, utm_*) để Google
@@ -30,18 +44,35 @@ $scripts = $page['scripts'] ?? [];
 
   // og:image BẮT BUỘC là URL tuyệt đối, nếu không Facebook/Zalo không tải được ảnh.
   $ogImageRaw = trim((string) ($page['og_image'] ?? ''));
+  // Ảnh mặc định 1200x630 (tỉ lệ 1.91:1 chuẩn Facebook/Zalo); ảnh bài viết tự có kích thước riêng.
   $ogImageUrl = $ogImageRaw === ''
-      ? \App\Core\Seo::absolute('assets/images/favicons/icon-512.png')
+      ? \App\Core\Seo::absolute('assets/images/og-default.jpg')
       : \App\Core\Seo::absolute(asset($ogImageRaw));
+  $ogIsDefault = $ogImageRaw === '';
+  $ogTitle = $page['og_title'] ?? ($page['title'] ?? settings('seo_title', ''));
+  $ogDesc = $page['description'] ?? settings('seo_description', '');
   ?>
   <link rel="canonical" href="<?= e($canonicalUrl) ?>">
   <meta property="og:url" content="<?= e($canonicalUrl) ?>">
   <meta property="og:site_name" content="<?= e(settings('site_name')) ?>">
   <meta property="og:image" content="<?= e($ogImageUrl) ?>">
-  <meta property="og:image:width" content="512">
-  <meta property="og:image:height" content="512">
+  <meta property="og:image:alt" content="<?= e($ogTitle) ?>">
+  <?php if ($ogIsDefault): ?>
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <?php endif; ?>
+  <?php if (settings('seo_facebook_app_id') !== ''): ?>
+  <meta property="fb:app_id" content="<?= e(settings('seo_facebook_app_id')) ?>">
+  <?php endif; ?>
+  <?php if (!empty($page['article'])): ?>
+  <meta property="article:published_time" content="<?= e((string) ($page['article']['published'] ?? '')) ?>">
+  <meta property="article:modified_time" content="<?= e((string) ($page['article']['modified'] ?? '')) ?>">
+  <meta property="article:section" content="<?= e((string) ($page['article']['section'] ?? '')) ?>">
+  <?php endif; ?>
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="<?= e($page['og_title'] ?? ($page['title'] ?? settings('seo_title', ''))) ?>">
+  <meta name="twitter:title" content="<?= e($ogTitle) ?>">
+  <meta name="twitter:description" content="<?= e($ogDesc) ?>">
   <meta name="twitter:image" content="<?= e($ogImageUrl) ?>">
   <meta name="theme-color" content="#087A55">
 
