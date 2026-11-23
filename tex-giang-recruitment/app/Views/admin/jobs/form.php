@@ -179,7 +179,7 @@ if ($deadline !== '') {
   <section class="admin-job-form__section" aria-labelledby="job-section-content">
     <div class="admin-job-form__intro">
       <h2 id="job-section-content">Nội dung tin</h2>
-      <p>Mô tả công việc, yêu cầu ứng viên và quyền lợi.</p>
+      <p>Mô tả công việc, yêu cầu ứng viên, hồ sơ xin việc và quyền lợi.</p>
     </div>
     <div class="field-grid admin-job-form__fields">
       <label class="field field--span2">
@@ -190,6 +190,11 @@ if ($deadline !== '') {
       <label class="field field--span2">
         <span class="field__label">Yêu cầu ứng viên</span>
         <textarea class="field__input" placeholder="Nhập các yêu cầu đối với ứng viên" name="requirements" rows="4"><?= e($val('requirements')) ?></textarea>
+      </label>
+      <label class="field field--span2">
+        <span class="field__label">Hồ sơ xin việc</span>
+        <textarea class="field__input" placeholder="Mỗi dòng 1 giấy tờ ứng viên cần chuẩn bị (VD: Đơn xin việc, Sơ yếu lý lịch, CCCD photo…)" name="application_documents" rows="4"><?= e($val('application_documents')) ?></textarea>
+        <span class="admin-job-form__hint">Hiển thị thành mục “Hồ sơ xin việc” ở trang chi tiết tin. Để trống nếu không yêu cầu giấy tờ riêng.</span>
       </label>
       <label class="field field--span2">
         <span class="field__label">Quyền lợi</span>

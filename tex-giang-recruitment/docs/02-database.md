@@ -49,6 +49,7 @@ File: `database/schema.sql` (DDL) + `database/seed.sql` (dữ liệu khởi tạ
 - Nội dung nhiều dòng quy ước:
   - `description`, `requirements`: mỗi dòng = một bullet.
   - `benefits`: mỗi dòng `Tiêu đề | Mô tả` → render thành card 2 cột.
+  - `application_documents` (LONGTEXT, migration 2026-11-23): Hồ sơ xin việc — mỗi dòng = 1 giấy tờ ứng viên cần chuẩn bị; hiển thị mục "Hồ sơ xin việc" ở trang chi tiết tin, ẩn khi để trống. Có trong form admin + cột "Hồ sơ xin việc" của template/import/export Excel.
 - `views`, `sort_order`, `is_urgent` phục vụ hiển thị/ưu tiên.
 
 ### `applications`

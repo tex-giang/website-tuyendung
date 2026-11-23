@@ -413,6 +413,7 @@ final class JobController extends Controller
                 'description'      => trim((string) ($row['description'] ?? '')),
                 'requirements'     => trim((string) ($row['requirements'] ?? '')),
                 'benefits'         => trim((string) ($row['benefits'] ?? '')),
+                'application_documents' => trim((string) ($row['application_documents'] ?? '')),
                 'status'           => JobImport::status((string) ($row['status'] ?? '')),
                 'is_urgent'        => JobImport::flag((string) ($row['is_urgent'] ?? '')),
                 'posted_at'        => JobImport::dateTime((string) ($row['posted_at'] ?? '')),
@@ -520,7 +521,7 @@ final class JobController extends Controller
             'id' => null, 'slug' => '', 'code' => '', 'branch_id' => '', 'block' => Job::DEFAULT_BLOCK, 'category_id' => '',
             'title' => '', 'quantity' => 1, 'location' => '', 'employment_type' => 'Toàn thời gian, chính thức',
             'experience' => '', 'salary_text' => '', 'salary_min' => '', 'salary_max' => '', 'salary_range' => '',
-            'description' => '', 'requirements' => '', 'benefits' => '', 'status' => 'draft', 'is_urgent' => 0,
+            'description' => '', 'requirements' => '', 'benefits' => '', 'application_documents' => '', 'status' => 'draft', 'is_urgent' => 0,
             'posted_at' => '', 'deadline' => '', 'meta_title' => '', 'meta_description' => '', 'sort_order' => 0,
         ];
         if ($source !== null) {
@@ -596,6 +597,7 @@ final class JobController extends Controller
             'description'      => trim((string) ($post['description'] ?? '')),
             'requirements'     => trim((string) ($post['requirements'] ?? '')),
             'benefits'         => trim((string) ($post['benefits'] ?? '')),
+            'application_documents' => trim((string) ($post['application_documents'] ?? '')),
             'status'           => (string) ($post['status'] ?? 'draft'),
             'is_urgent'        => !empty($post['is_urgent']) ? 1 : 0,
             'posted_at'        => trim((string) ($post['posted_at'] ?? '')),

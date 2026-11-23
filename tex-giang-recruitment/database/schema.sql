@@ -153,6 +153,8 @@ CREATE TABLE categories (
 --             Nhà máy (branches) → Khối (jobs.block) → Bộ phận tuyển
 --             (categories) → Việc làm (jobs).
 --    salary_range dùng cho bộ lọc mức lương trên trang danh sách.
+--    application_documents: Hồ sơ xin việc — giấy tờ ứng viên cần chuẩn bị,
+--             mỗi dòng 1 giấy tờ, hiển thị ở trang chi tiết tin.
 -- ---------------------------------------------------------------------------
 CREATE TABLE jobs (
   id               BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -173,6 +175,7 @@ CREATE TABLE jobs (
   description      MEDIUMTEXT NOT NULL,
   requirements     MEDIUMTEXT NULL,
   benefits         MEDIUMTEXT NULL,
+  application_documents LONGTEXT NULL,
   status           ENUM('draft','published','paused','closed','expired') NOT NULL DEFAULT 'draft',
   is_urgent        TINYINT(1) NOT NULL DEFAULT 0,
   posted_at        DATETIME NULL,

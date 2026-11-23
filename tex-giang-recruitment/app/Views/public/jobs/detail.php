@@ -5,6 +5,7 @@ $chip = job_chip($job);
 $applyUrl = url('apply?job=' . urlencode((string) $job['slug']));
 $descriptionLines = text_lines($job['description'] ?? '');
 $requirementLines = text_lines($job['requirements'] ?? '');
+$documentLines = text_lines($job['application_documents'] ?? '');
 $benefitCards = benefit_items($job['benefits'] ?? '');
 $summary = ($job['meta_description'] ?? '') !== '' ? (string) $job['meta_description'] : excerpt((string) $job['description'], 220);
 ?>
@@ -72,6 +73,18 @@ $summary = ($job['meta_description'] ?? '') !== '' ? (string) $job['meta_descrip
         <h2 class="text-[clamp(1.375rem,2.4vw,1.75rem)] font-medium leading-[1.25] text-ink" data-reveal>Yêu cầu ứng viên</h2>
         <ul class="mt-5 space-y-3 text-[16px] leading-[1.7] text-muted">
           <?php foreach ($requirementLines as $line): ?>
+          <li class="flex gap-3"><span aria-hidden="true" class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-accent"></span> <?= e($line) ?></li>
+          <?php endforeach; ?>
+        </ul>
+      </div>
+      <?php endif; ?>
+
+      <?php if ($documentLines !== []): ?>
+      <div>
+        <h2 class="text-[clamp(1.375rem,2.4vw,1.75rem)] font-medium leading-[1.25] text-ink" data-reveal>Hồ sơ xin việc</h2>
+        <p class="mt-2 text-[14px] text-muted">Ứng viên chuẩn bị các giấy tờ sau khi nộp hồ sơ / đến phỏng vấn:</p>
+        <ul class="mt-4 space-y-3 text-[16px] leading-[1.7] text-muted">
+          <?php foreach ($documentLines as $line): ?>
           <li class="flex gap-3"><span aria-hidden="true" class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-accent"></span> <?= e($line) ?></li>
           <?php endforeach; ?>
         </ul>

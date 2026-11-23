@@ -337,11 +337,11 @@ final class Job
         $stmt = $pdo->prepare(
             'INSERT INTO jobs
                 (slug, code, branch_id, block, category_id, title, quantity, location, employment_type, experience,
-                 salary_text, salary_min, salary_max, salary_range, description, requirements, benefits,
+                 salary_text, salary_min, salary_max, salary_range, description, requirements, benefits, application_documents,
                  status, is_urgent, posted_at, deadline, meta_title, meta_description, sort_order, created_by)
              VALUES
                 (:slug, :code, :branch_id, :block, :category_id, :title, :quantity, :location, :employment_type, :experience,
-                 :salary_text, :salary_min, :salary_max, :salary_range, :description, :requirements, :benefits,
+                 :salary_text, :salary_min, :salary_max, :salary_range, :description, :requirements, :benefits, :application_documents,
                  :status, :is_urgent, :posted_at, :deadline, :meta_title, :meta_description, :sort_order, :created_by)'
         );
         $stmt->execute(self::bindings($data, $userId));
@@ -356,6 +356,7 @@ final class Job
                 quantity = :quantity, location = :location, employment_type = :employment_type, experience = :experience,
                 salary_text = :salary_text, salary_min = :salary_min, salary_max = :salary_max, salary_range = :salary_range,
                 description = :description, requirements = :requirements, benefits = :benefits,
+                application_documents = :application_documents,
                 status = :status, is_urgent = :is_urgent, posted_at = :posted_at, deadline = :deadline,
                 meta_title = :meta_title, meta_description = :meta_description, sort_order = :sort_order
              WHERE id = :id'
@@ -489,6 +490,7 @@ final class Job
             'description'      => $data['description'],
             'requirements'     => ($data['requirements'] ?? '') !== '' ? $data['requirements'] : null,
             'benefits'         => ($data['benefits'] ?? '') !== '' ? $data['benefits'] : null,
+            'application_documents' => ($data['application_documents'] ?? '') !== '' ? $data['application_documents'] : null,
             'status'           => $data['status'],
             'is_urgent'        => !empty($data['is_urgent']) ? 1 : 0,
             'posted_at'        => ($data['posted_at'] ?? '') !== '' ? $data['posted_at'] : null,
