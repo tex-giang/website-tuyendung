@@ -147,6 +147,15 @@ final class ApplicationController extends Controller
         $old = Session::pull('_quick_old', []);
         $errors = Session::pull('_quick_errors', []);
 
+        // Banner hero lấy đúng danh sách đang hiện ở trang chủ (bảng banners).
+        // Chỉ dùng banner có tệp ảnh thực trên máy chủ — tránh khung ảnh trống khi
+        // dữ liệu DB còn trỏ tới ảnh chưa upload/khiêng sang môi trường khác.
+        $heroBanners = array_values(array_filter(
+            \App\Models\Banner::activeByType('hero'),
+            static fn(array $banner): bool => (string) ($banner['image_path'] ?? '') !== ''
+                && is_file(BASE_PATH . '/public/' . ltrim((string) $banner['image_path'], '/'))
+        ));
+
         $this->view('public/ung-tuyen', [
             'branches' => $branches,
             'jobData'  => $jobData,
@@ -154,8 +163,7 @@ final class ApplicationController extends Controller
             'errors'   => $errors,
             'done'     => $done,
             'last'     => $last,
-            // Banner hero lấy đúng danh sách đang hiện ở trang chủ (bảng banners).
-            'heroBanners' => \App\Models\Banner::activeByType('hero'),
+            'heroBanners' => $heroBanners,
             'branchContacts' => \App\Models\BranchContact::activeGrouped(),
             'page'     => [
                 'title'       => 'Nộp hồ sơ ứng tuyển | ' . settings('site_name'),

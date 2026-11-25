@@ -1012,7 +1012,9 @@ dialog.urgent-dialog > div {
   border-radius: 10px;
   background: #eaf6f0;
 }
-.gf-banner img { display: block; width: 100%; height: auto; }
+/* Chỉ ảnh trực tiếp của khung banner tĩnh — KHÔNG đụng ảnh bên trong slider
+   (ảnh slider dùng height:100% + object-fit của .hero-slider__img). */
+.gf-banner > img { display: block; width: 100%; height: auto; }
 @media (max-width: 639px) { .gf-banner { margin-bottom: 18px; } }
 
 /* Banner dạng slider (dùng lại hero-slider trang chủ) — bỏ bo góc/overflow của khung ảnh đơn */
@@ -1022,7 +1024,16 @@ dialog.urgent-dialog > div {
   border-radius: 0;
   background: transparent;
 }
-@media (max-width: 639px) { .gf-banner--slider { margin-bottom: 18px; } }
+@media (max-width: 639px) {
+  .gf-banner--slider { margin-bottom: 18px; }
+  /* Mobile: giữ đúng tỉ lệ ảnh banner (2048×768) thay vì khung 16/9 của trang chủ,
+     tránh dải trống/dải nền tối ở đáy banner. */
+  .gf-banner--slider .hero-slider__viewport {
+    aspect-ratio: 2048 / 768;
+    border-radius: 12px;
+  }
+  .gf-banner--slider .hero-slider__img { object-fit: cover; }
+}
 
 .gf-title {
   margin: 0;
