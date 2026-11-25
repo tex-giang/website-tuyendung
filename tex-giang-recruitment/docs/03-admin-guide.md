@@ -55,7 +55,7 @@ Bốn loại, đúng vị trí ngoài website:
 
 | Loại | Vị trí hiển thị |
 |---|---|
-| `hero` | Slide ảnh đầu trang chủ (bắt buộc có ảnh) |
+| `hero` | Slide ảnh đầu trang chủ — và cũng là slider đầu trang nộp hồ sơ nhanh `/tuyen-dung` |
 | `notice` | Dải thông báo mảnh dưới header |
 | `popup` | Thẻ nổi góc trái |
 | `ad` | Dải CTA nền xanh giữa trang chủ |

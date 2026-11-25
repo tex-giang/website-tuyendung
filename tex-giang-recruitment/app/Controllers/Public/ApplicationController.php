@@ -154,12 +154,15 @@ final class ApplicationController extends Controller
             'errors'   => $errors,
             'done'     => $done,
             'last'     => $last,
+            // Banner hero lấy đúng danh sách đang hiện ở trang chủ (bảng banners).
+            'heroBanners' => \App\Models\Banner::activeByType('hero'),
+            'branchContacts' => \App\Models\BranchContact::activeGrouped(),
             'page'     => [
                 'title'       => 'Nộp hồ sơ ứng tuyển | ' . settings('site_name'),
                 'description' => 'Nộp hồ sơ ứng tuyển TEX-GIANG trong 1 phút: họ tên, số điện thoại, nhà máy và vị trí mong muốn.',
                 'body_class'  => 'tg-public gf-page',
                 'robots'      => 'noindex',
-                'scripts'     => ['quick-apply.js'],
+                'scripts'     => ['quick-apply.js', 'home-slider.js'],
             ],
         ], 'layouts/standalone');
     }

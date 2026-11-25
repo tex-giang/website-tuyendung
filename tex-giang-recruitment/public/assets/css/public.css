@@ -1015,6 +1015,15 @@ dialog.urgent-dialog > div {
 .gf-banner img { display: block; width: 100%; height: auto; }
 @media (max-width: 639px) { .gf-banner { margin-bottom: 18px; } }
 
+/* Banner dạng slider (dùng lại hero-slider trang chủ) — bỏ bo góc/overflow của khung ảnh đơn */
+.gf-banner--slider {
+  margin: 0 0 22px;
+  overflow: visible;
+  border-radius: 0;
+  background: transparent;
+}
+@media (max-width: 639px) { .gf-banner--slider { margin-bottom: 18px; } }
+
 .gf-title {
   margin: 0;
   font-size: clamp(1.75rem, 4.6vw, 2.25rem);

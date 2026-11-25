@@ -16,10 +16,6 @@ $fieldClass = static fn(string $key): string => 'gf-field' . ($err($key) !== '' 
 $oldBranch = $val('branch_slug');
 $oldJob = $val('job_slug');
 ?>
-  <a class="gf-brand" href="<?= url('') ?>" aria-label="TEX-GIANG — về trang tuyển dụng">
-    <img src="<?= asset('images/logo-tgi-mark.webp') ?>" alt="TEX-GIANG" width="80" height="34">
-  </a>
-
   <div class="gf-card">
     <?php if (!empty($done)): ?>
     <div class="gf-success">
@@ -37,6 +33,37 @@ $oldJob = $val('job_slug');
     </div>
     <?php else: ?>
 
+    <?php if ($heroBanners !== []): ?>
+    <div class="gf-banner gf-banner--slider">
+      <div class="hero-slider" data-hero-slider aria-roledescription="carousel" aria-label="Hình ảnh nhà máy và môi trường làm việc TEX-GIANG">
+        <div class="hero-slider__viewport">
+          <div class="hero-slider__track" data-slider-track>
+            <?php foreach ($heroBanners as $index => $banner): ?>
+            <div class="hero-slider__slide" data-slide>
+              <img class="hero-slider__img"
+                   src="<?= asset((string) $banner['image_path']) ?>"
+                   <?php if (!empty($banner['image_path_small'])): ?>srcset="<?= asset((string) $banner['image_path_small']) ?> 800w, <?= asset((string) $banner['image_path']) ?> 2048w"
+                   sizes="(max-width: 760px) 100vw, 720px"<?php endif; ?>
+                   alt="<?= e($banner['image_alt'] ?? '') ?>" width="2048" height="768"
+                   <?= $index === 0 ? 'fetchpriority="high"' : 'loading="lazy"' ?>>
+            </div>
+            <?php endforeach; ?>
+          </div>
+
+          <?php if (count($heroBanners) > 1): ?>
+          <button type="button" class="hero-slider__btn hero-slider__btn--prev" data-slider-prev aria-label="Ảnh trước">
+            <img src="<?= asset('images/icons/arrow-right.svg') ?>" alt="" aria-hidden="true" width="18" height="18">
+          </button>
+          <button type="button" class="hero-slider__btn hero-slider__btn--next" data-slider-next aria-label="Ảnh tiếp theo">
+            <img src="<?= asset('images/icons/arrow-right.svg') ?>" alt="" aria-hidden="true" width="18" height="18">
+          </button>
+          <div class="hero-slider__dots" data-slider-dots role="group" aria-label="Chọn ảnh"></div>
+          <?php endif; ?>
+        </div>
+        <p class="sr-only" data-slider-live aria-live="polite"></p>
+      </div>
+    </div>
+    <?php else: ?>
     <figure class="gf-banner">
       <img src="<?= asset('images/banner-texgiang.webp') ?>"
            srcset="<?= asset('images/banner-texgiang-800.webp') ?> 800w, <?= asset('images/banner-texgiang.webp') ?> 2048w"
@@ -44,6 +71,7 @@ $oldJob = $val('job_slug');
            alt="Nhà máy Tân Hương 2 — Công ty Cổ phần TEX-GIANG"
            width="2048" height="768" fetchpriority="high">
     </figure>
+    <?php endif; ?>
 
     <header class="gf-head">
       <h1 class="gf-title">Nộp hồ sơ ứng tuyển</h1>
@@ -127,10 +155,12 @@ $oldJob = $val('job_slug');
   </div>
 
   <p class="gf-foot">
-    Cần hỗ trợ? <a href="<?= url('contact') ?>">Liên hệ ban tuyển dụng</a> (giờ hành chính)
+    Cần hỗ trợ? <a href="<?= url('contact') ?>" data-open-contact-dialog aria-haspopup="dialog">Liên hệ ban tuyển dụng</a> (giờ hành chính)
     <?php if (zalo_url() !== ''): ?>
     hoặc <a href="<?= e(zalo_url()) ?>" target="_blank" rel="noopener">chat Zalo</a>
     <?php endif; ?>
     <span class="gf-foot__sep" aria-hidden="true">·</span>
     <a href="<?= url('') ?>">Về trang tuyển dụng</a>
   </p>
+
+<?php require BASE_PATH . '/app/Views/partials/public/branch-contact-dialog.php'; ?>
