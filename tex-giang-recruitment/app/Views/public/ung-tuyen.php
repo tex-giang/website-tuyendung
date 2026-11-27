@@ -128,7 +128,6 @@ $oldJob = $val('job_slug');
             <?= e($job['title']) ?><?= $job['salary'] !== '' ? ' — ' . e($job['salary']) : '' ?>
           </option>
           <?php endforeach; ?>
-          <option value="khac"<?= $oldJob === 'khac' ? ' selected' : '' ?>>Vị trí khác — ghi rõ khi nhân sự gọi</option>
         </select>
         <p class="gf-hint" id="gf-position-hint">Chọn nhà máy trước để xem vị trí đang tuyển tại khu đó.</p>
         <p class="gf-error"><?= e($err('job_slug') !== '' ? $err('job_slug') : 'Chọn vị trí bạn muốn ứng tuyển.') ?></p>

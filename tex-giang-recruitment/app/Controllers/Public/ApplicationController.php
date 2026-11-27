@@ -208,7 +208,10 @@ final class ApplicationController extends Controller
         $job = null;
         if ($data['job_slug'] === '') {
             $errors['job_slug'] = 'Chọn vị trí bạn muốn ứng tuyển.';
-        } elseif ($data['job_slug'] !== 'khac') {
+        } elseif ($data['job_slug'] === 'khac') {
+            // Đã bỏ lựa chọn "Vị trí khác" trên form; trang cũ còn cache có thể gửi lên.
+            $errors['job_slug'] = 'Vui lòng chọn một vị trí cụ thể đang tuyển tại nhà máy này.';
+        } else {
             $job = Job::findPublishedBySlug($data['job_slug']);
             if ($job === null) {
                 $errors['job_slug'] = 'Vị trí đã chọn không còn tuyển. Vui lòng chọn lại.';

@@ -21,8 +21,7 @@
       value: option.value,
       label: option.textContent.trim(),
       branch: option.getAttribute('data-branch') || '',
-      isPlaceholder: option.value === '',
-      isOther: option.value === 'khac'
+      isPlaceholder: option.value === ''
     };
   });
 
@@ -47,14 +46,14 @@
         select.appendChild(placeholder);
         return;
       }
-      if (!item.isOther && (!branch || item.branch !== branch)) return;
+      if (!branch || item.branch !== branch) return;
 
       var option = document.createElement('option');
       option.value = item.value;
       option.textContent = item.label;
       if (item.branch) option.setAttribute('data-branch', item.branch);
       select.appendChild(option);
-      if (!item.isOther) matched++;
+      matched++;
     });
 
     select.disabled = !branch;
@@ -67,7 +66,7 @@
       if (!branch) {
         hint.textContent = 'Chọn nhà máy trước để xem vị trí đang tuyển tại khu đó.';
       } else if (matched === 0) {
-        hint.textContent = 'Nhà máy này chưa có vị trí đang tuyển — chọn “Vị trí khác” hoặc nhà máy khác.';
+        hint.textContent = 'Nhà máy này chưa có vị trí đang tuyển — vui lòng chọn nhà máy khác hoặc liên hệ ban tuyển dụng.';
       } else {
         hint.textContent = matched + ' vị trí đang tuyển tại nhà máy này.';
       }
