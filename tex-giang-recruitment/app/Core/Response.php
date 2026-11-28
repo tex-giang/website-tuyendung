@@ -8,7 +8,13 @@ final class Response
     public static function isAjaxRequest(): bool
     {
         return strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'xmlhttprequest'
-            || str_contains(strtolower($_SERVER['HTTP_ACCEPT'] ?? ''), 'application/json');
+            || str_contains(strtolower($_SERVER['HTTP_ACCEPT'] ?? ''), 'application/json')
+            || self::isAdminApiRequest();
+    }
+
+    public static function isAdminApiRequest(): bool
+    {
+        return str_starts_with(current_path(), '/admin/api/');
     }
 
     public static function wantsAdminFragment(): bool

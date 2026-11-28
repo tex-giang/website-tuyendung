@@ -67,8 +67,13 @@ function current_path(): string
 {
     $base = rtrim((string) env('APP_BASE', ''), '/');
     $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
-    if ($base !== '' && str_starts_with($path, $base)) {
+    if ($base !== '' && ($path === $base || str_starts_with($path, $base . '/'))) {
         $path = substr($path, strlen($base)) ?: '/';
+    } elseif ($base === '' && ($path === '/public' || $path === '/public/index.php')) {
+        $path = '/';
+    } elseif ($base === '' && str_starts_with($path, '/public/')) {
+        // Hosting dùng thư mục cha làm DocumentRoot có thể phục vụ đường dẫn /public/...
+        $path = substr($path, strlen('/public'));
     }
     return '/' . trim($path, '/');
 }

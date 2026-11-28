@@ -19,8 +19,11 @@ final class Application
     private const SELECT = 'SELECT a.*, j.title AS job_title, j.slug AS job_slug, j.code AS job_code
                             FROM applications a LEFT JOIN jobs j ON j.id = a.job_id';
 
-    /** @return array{items: array<int, array<string, mixed>>, total: int, pages: int, page: int} */
-    public static function paginate(array $filters = [], int $page = 1, int $perPage = 15): array
+    /**
+     * @param array{id: int, role: string}|null $user Tài khoản đã xác thực ngoài phiên quản trị
+     * @return array{items: array<int, array<string, mixed>>, total: int, pages: int, page: int, per_page: int}
+     */
+    public static function paginate(array $filters = [], int $page = 1, int $perPage = 15, ?array $user = null): array
     {
         $page = max(1, $page);
         $where = ['1 = 1'];
@@ -42,7 +45,7 @@ final class Application
             $params['job_id'] = (int) $filters['job_id'];
         }
         // Phạm vi nhà máy: lọc theo nhà máy của tin tuyển dụng.
-        [$branchWhere, $branchParams] = \App\Core\Permissions::branchSql('j.branch_id');
+        [$branchWhere, $branchParams] = \App\Core\Permissions::branchSql('j.branch_id', $user);
         if ($branchWhere !== '') {
             $where[] = $branchWhere;
             $params = array_merge($params, $branchParams);

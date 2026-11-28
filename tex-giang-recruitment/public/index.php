@@ -4,6 +4,7 @@
  */
 declare(strict_types=1);
 
+use App\Core\Response;
 use App\Core\Router;
 
 require dirname(__DIR__) . '/app/bootstrap.php';
@@ -12,6 +13,9 @@ $router = new Router();
 
 $router->setNotFound(static function (int $code): void {
     http_response_code($code);
+    if (Response::isAdminApiRequest()) {
+        Response::json(['ok' => false, 'code' => 'not_found', 'message' => 'Đường dẫn API không tồn tại.'], $code);
+    }
     $page = [
         'title'       => 'Không tìm thấy trang | ' . settings('site_name'),
         'description' => '',
@@ -40,20 +44,7 @@ require BASE_PATH . '/routes/web.php';
 require BASE_PATH . '/routes/admin.php';
 
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-$uri = $_SERVER['REQUEST_URI'] ?? '/';
-$base = rtrim((string) env('APP_BASE', ''), '/');
-$path = parse_url($uri, PHP_URL_PATH) ?: '/';
-if ($base !== '' && str_starts_with($path, $base)) {
-    $path = substr($path, strlen($base)) ?: '/';
-}
-
-// Hosting trỏ DocumentRoot vào thư mục cha (truy cập qua /public/...):
-// tự bỏ tiền tố /public để website vẫn chạy đúng như ở domain gốc.
-if ($base === '' && ($path === '/public' || $path === '/public/index.php')) {
-    $path = '/';
-} elseif ($base === '' && str_starts_with($path, '/public/')) {
-    $path = substr($path, strlen('/public')) ?: '/';
-}
+$path = current_path();
 
 header('Content-Language: vi');
 

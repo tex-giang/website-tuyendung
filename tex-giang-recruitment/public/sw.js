@@ -3,6 +3,7 @@
  * Không cache HTML để tránh hiển thị nội dung cũ.
  */
 const VERSION = 'tg-v1';
+const adminPath = new URL('admin', self.registration.scope).pathname;
 
 self.addEventListener('install', () => {
   self.skipWaiting();
@@ -22,7 +23,8 @@ self.addEventListener('fetch', (event) => {
     return;
   }
   // HTML và API: luôn lấy mạng (không cache) — tránh nội dung lỗi thời.
-  if (request.mode === 'navigate' || url.pathname.startsWith('/admin')) {
+  if (request.mode === 'navigate' || url.pathname.startsWith('/admin')
+      || url.pathname === adminPath || url.pathname.startsWith(adminPath + '/')) {
     return;
   }
   // Tài nguyên tĩnh: ưu tiên cache, cập nhật ngầm.

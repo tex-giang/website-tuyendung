@@ -236,12 +236,17 @@ final class Permissions
         if ($role === null) {
             return self::$branchIds = [];
         }
+        return self::$branchIds = self::branchIdsForUser((int) Session::get('auth_id', 0), $role);
+    }
+
+    /** @return int[]|null Phạm vi của tài khoản đã được xác thực. null = toàn bộ nhà máy. */
+    private static function branchIdsForUser(int $userId, string $role): ?array
+    {
         if ($role === 'super_admin') {
-            return self::$branchIds = null;
+            return null;
         }
-        $userId = (int) Session::get('auth_id', 0);
         if ($userId <= 0) {
-            return self::$branchIds = [];
+            return [];
         }
 
         $roleIds = self::roleBranchIds($role);
@@ -249,12 +254,12 @@ final class Permissions
 
         // Kết hợp: toàn bộ + danh sách = danh sách; hai danh sách = giao nhau.
         if ($roleIds === null) {
-            return self::$branchIds = $userIds;
+            return $userIds;
         }
         if ($userIds === null) {
-            return self::$branchIds = $roleIds;
+            return $roleIds;
         }
-        return self::$branchIds = array_values(array_intersect($roleIds, $userIds));
+        return array_values(array_intersect($roleIds, $userIds));
     }
 
     /** @return int[]|null Phạm vi nhà máy của vai trò; null = tất cả */
@@ -304,11 +309,12 @@ final class Permissions
      * Điều kiện SQL cho cột nhà máy (không kèm tiền tố AND).
      * Trả ['', []] nếu không giới hạn; ['1 = 0', []] nếu không có nhà máy nào.
      *
+     * @param array{id: int, role: string}|null $user Tài khoản đã xác thực ngoài phiên quản trị
      * @return array{0:string, 1:array<string,int>}
      */
-    public static function branchSql(string $column): array
+    public static function branchSql(string $column, ?array $user = null): array
     {
-        $ids = self::branchIds();
+        $ids = $user === null ? self::branchIds() : self::branchIdsForUser($user['id'], $user['role']);
         if ($ids === null) {
             return ['', []];
         }

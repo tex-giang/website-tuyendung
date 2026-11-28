@@ -189,6 +189,7 @@ Mật khẩu     : Admin@123dev
 | POST | `/admin/jobs/{id}/duplicate` | Nhân bản thành bản nháp |
 | POST | `/admin/jobs/{id}/delete` | Xoá mềm (giữ hồ sơ ứng tuyển) |
 | GET | `/admin/applications` | Hồ sơ ứng tuyển: tìm, lọc trạng thái/vị trí, phân trang |
+| GET | `/admin/api/applications/new` | Danh sách và tổng số hồ sơ đang ở trạng thái “Mới nhận” (JSON) |
 | GET | `/admin/applications/{id}` | Chi tiết hồ sơ + timeline + ghi chú + lịch phỏng vấn |
 | POST | `/admin/applications/{id}/status` | Đổi trạng thái, ghi lịch sử |
 | GET | `/admin/applications/{id}/cv` | Tải CV (chỉ khi đăng nhập, file ngoài public) |
@@ -203,6 +204,50 @@ Mật khẩu     : Admin@123dev
 | GET | `/admin/users` (super_admin) | Quản lý tài khoản quản trị, đặt lại mật khẩu |
 | GET | `/admin/profile` | Hồ sơ cá nhân + đổi mật khẩu |
 | GET | `/admin/audit` | Nhật ký thao tác quản trị |
+
+### API hồ sơ mới
+
+Gọi `GET /admin/api/applications/new?page=1&per_page=20` bằng phiên đăng nhập quản trị hoặc Bearer token của tích hợp. Tài khoản tương ứng cần quyền xem **Hồ sơ ứng tuyển**. API áp dụng phạm vi nhà máy của tài khoản.
+
+- `total` là tổng số hồ sơ đang ở trạng thái “Mới nhận” trong phạm vi được cấp quyền. Số này giảm khi nhân sự chuyển hồ sơ sang trạng thái khác.
+- `items` chứa hồ sơ của trang hiện tại theo thời gian nộp mới nhất, gồm mã hồ sơ, vị trí ứng tuyển, trạng thái và thời gian nộp. Hồ sơ chưa gắn tin tuyển dụng có `job_id` và `job_title` bằng `null`.
+- `page` mặc định là 1. `per_page` mặc định là 20 và nhận giá trị từ 1 đến 100. Kết quả trả `page`, `per_page` và `pages`. Trang vượt phạm vi trả trang cuối. Khi chưa có hồ sơ, `total` là 0 và `items` là mảng rỗng.
+- Lỗi trả JSON với `ok: false`, `code` và `message`. HTTP 400 nếu tham số phân trang sai, 401 nếu thiếu xác thực hoặc thông tin xác thực không còn hiệu lực và 403 nếu thiếu quyền xem hồ sơ.
+
+#### Cấu hình ứng dụng bên ngoài
+
+Nếu hosting đã có bản endpoint dùng phiên quản trị, cập nhật các tệp sau theo thứ tự để bật hỗ trợ Bearer.
+
+- `app/Middleware/ApplicationApiAuth.php`, `app/Middleware/AuthMiddleware.php`, `app/Core/Permissions.php`, `app/Models/Application.php`
+- `app/Controllers/Admin/ApplicationController.php` và `public/.htaccess` theo hướng dẫn Apache bên dưới
+- `routes/admin.php`, rồi `app/bootstrap.php`
+
+1. Chọn tài khoản riêng cho tích hợp, cấp quyền xem **Hồ sơ ứng tuyển** và giới hạn nhà máy theo nhu cầu. Lấy ID từ URL chỉnh sửa tài khoản `/admin/users/{id}/edit`.
+2. Chạy lệnh sau trong Terminal của cPanel hoặc shell có PHP để tạo token và bản băm.
+
+   ```bash
+   php -r '$token = bin2hex(random_bytes(32)); echo "TOKEN=", $token, PHP_EOL, "APPLICATIONS_API_TOKEN_SHA256=", hash("sha256", $token), PHP_EOL;'
+   ```
+
+3. Cập nhật `.env` của website đang chạy với `APPLICATIONS_API_USER_ID` là ID ở bước 1 và `APPLICATIONS_API_TOKEN_SHA256` là bản băm ở bước 2. Lưu giá trị `TOKEN` trong cấu hình bảo mật của backend ứng dụng bên ngoài.
+4. Từ backend bên ngoài, gọi bằng HTTPS và đọc `total` từ JSON. Ví dụ với biến môi trường `TEX_GIANG_APPLICATIONS_TOKEN` chứa token.
+
+   ```bash
+   curl --fail-with-body \
+     -H "Authorization: Bearer $TEX_GIANG_APPLICATIONS_TOKEN" \
+     'https://tuyendung.example.com/admin/api/applications/new?page=1&per_page=20'
+   ```
+
+Mỗi website cấu hình một token cho endpoint này. Đổi bản băm trong `.env` để thay token hoặc để trống để thu hồi. Khóa tài khoản tích hợp cũng vô hiệu hóa token. Với ứng dụng web hoặc mobile, backend của ứng dụng giữ token và gọi API.
+
+Apache có quy tắc chuyển header trong `public/.htaccess`. Nếu hosting dùng bản tùy chỉnh, thêm hai dòng dưới vào khối `mod_rewrite` trước quy tắc chuyển request về `index.php`.
+
+```apache
+RewriteCond %{HTTP:Authorization} !^$
+RewriteRule ^admin/api/applications/new/?$ - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+```
+
+Xem [đặc tả OpenAPI](docs/openapi.yaml).
 
 ### Phân quyền admin
 

@@ -25,7 +25,9 @@ final class AuthMiddleware
 
         if (!Session::check()) {
             if (Response::isAjaxRequest()) {
-                if (!is_post()) {
+                if (Response::isAdminApiRequest()) {
+                    header('WWW-Authenticate: Bearer realm="applications"');
+                } elseif (!is_post()) {
                     Session::put('_intended', current_path());
                 }
                 Response::json([

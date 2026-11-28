@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace App\Controllers\Admin;
 
 use App\Core\Controller;
+use App\Core\Database;
 use App\Core\Session;
+use App\Middleware\ApplicationApiAuth;
 use App\Models\Application;
 use App\Models\AuditLog;
 use App\Models\Job;
@@ -12,6 +14,35 @@ use App\Services\UploadService;
 
 final class ApplicationController extends Controller
 {
+    public function newApplications(): never
+    {
+        $integrationUser = ApplicationApiAuth::authorize();
+        $page = filter_var($_GET['page'] ?? '1', FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+        $perPage = filter_var($_GET['per_page'] ?? '20', FILTER_VALIDATE_INT, [
+            'options' => ['min_range' => 1, 'max_range' => 100],
+        ]);
+        if ($page === false || $perPage === false) {
+            $this->json([
+                'ok' => false,
+                'code' => 'invalid_pagination',
+                'message' => 'page phải là số nguyên dương, per_page phải là số nguyên từ 1 đến 100.',
+            ], 400);
+        }
+
+        $result = Database::transaction(
+            static fn(): array => Application::paginate(['status' => 'new'], $page, $perPage, $integrationUser)
+        );
+        $result['items'] = array_map(static fn(array $application): array => [
+            'id' => (int) $application['id'],
+            'job_id' => $application['job_id'] !== null ? (int) $application['job_id'] : null,
+            'job_title' => $application['job_title'],
+            'status' => $application['status'],
+            'created_at' => $application['created_at'],
+        ], $result['items']);
+
+        $this->json(['ok' => true] + $result);
+    }
+
     public function index(): void
     {
         $filters = [

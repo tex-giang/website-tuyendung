@@ -13,6 +13,10 @@ DirectoryIndex index.php
     # Chặn file ẩn (.env, .git, ...)
     RewriteRule (^|/)\. - [F,L]
 
+    # Giữ header Bearer khi chuyển route API vào PHP CGI/FastCGI.
+    RewriteCond %{HTTP:Authorization} !^$
+    RewriteRule ^admin/api/applications/new/?$ - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
     # Chuyển mọi request không phải file/thư mục thật về index.php
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d

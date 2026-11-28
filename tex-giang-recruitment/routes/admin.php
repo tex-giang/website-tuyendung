@@ -76,6 +76,7 @@ $router->post('/admin/jobs/{id}/duplicate', [JobController::class, 'duplicate'],
 $router->post('/admin/jobs/{id}/delete', [JobController::class, 'destroy'], $guard('jobs', 'delete'));
 
 // Hồ sơ ứng tuyển
+$router->get('/admin/api/applications/new', [ApplicationController::class, 'newApplications']);
 $router->get('/admin/applications', [ApplicationController::class, 'index'], $guard('applications'));
 $router->get('/admin/applications/{id}', [ApplicationController::class, 'show'], $guard('applications'));
 $router->post('/admin/applications/{id}/status', [ApplicationController::class, 'updateStatus'], $guard('applications', 'update'));

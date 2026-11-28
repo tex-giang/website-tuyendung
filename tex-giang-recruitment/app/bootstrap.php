@@ -39,6 +39,9 @@ set_exception_handler(static function (Throwable $e): void {
     error_log('[TEX-GIANG] ' . $e::class . ': ' . $e->getMessage()
         . ' in ' . $e->getFile() . ':' . $e->getLine());
     http_response_code(500);
+    if (\App\Core\Response::isAdminApiRequest()) {
+        \App\Core\Response::json(['ok' => false, 'code' => 'server_error', 'message' => 'Máy chủ chưa xử lý xong yêu cầu. Vui lòng thử lại.'], 500);
+    }
     if (str_starts_with(current_path(), '/admin') && \App\Core\Response::isAjaxRequest()) {
         \App\Core\Response::json(['ok' => false, 'message' => 'Máy chủ chưa xử lý xong yêu cầu. Vui lòng kiểm tra dữ liệu trước khi thử lại.'], 500);
     }
@@ -60,4 +63,7 @@ set_exception_handler(static function (Throwable $e): void {
     }
 });
 
-\App\Core\Session::start();
+// API quản trị chỉ mở phiên khi dùng cookie. Bearer không cần tạo phiên PHP.
+if (!\App\Core\Response::isAdminApiRequest()) {
+    \App\Core\Session::start();
+}
